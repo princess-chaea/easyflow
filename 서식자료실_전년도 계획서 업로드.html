@@ -130,6 +130,73 @@
                 scroll-behavior: auto !important;
             }
         }
+
+        /* 전년도 계획서 업로드 페이지 전용 스타일 */
+        .page-header { margin-bottom: 24px; }
+        .page-header h2 { font-size: 26px; font-weight: 700; color: #111214; margin-bottom: 8px; }
+        .page-header p { font-size: 15px; color: #4e535e; }
+
+        .card { background: #ffffff; border: 1px solid #e5e8eb; border-radius: 16px; padding: 32px; margin-bottom: 24px; }
+
+        .upload-zone { border: 2px dashed #c9ccd3; border-radius: 12px; padding: 48px 24px; text-align: center; transition: all 0.2s ease; }
+        .upload-zone.dragover { border-color: #003893; background: rgba(0, 56, 147, 0.04); }
+        .upload-icon { font-size: 40px; margin-bottom: 12px; }
+        .upload-text { font-size: 16px; font-weight: 600; color: #111214; margin-bottom: 4px; }
+        .upload-subtext { font-size: 13px; color: #868b94; margin-bottom: 20px; }
+        .btn-upload { background: #003893; color: #fff; border: none; padding: 10px 24px; border-radius: 999px; font-size: 14px; font-weight: 700; cursor: pointer; transition: background 0.2s; }
+        .btn-upload:hover { background: #002463; }
+
+        .progress-section { display: none; margin-top: 24px; padding-top: 24px; border-top: 1px solid #e5e8eb; }
+        .progress-header { display: flex; justify-content: space-between; font-size: 13px; font-weight: 600; color: #111214; margin-bottom: 8px; }
+        .progress-bar-bg { background: #f2f4f6; border-radius: 999px; height: 8px; overflow: hidden; }
+        .progress-bar-fill { background: #003893; height: 100%; width: 0%; border-radius: 999px; transition: width 0.1s linear; }
+        .progress-status-text { font-size: 12px; color: #868b94; margin-top: 8px; }
+
+        .preview-container { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        @media (max-width: 900px) { .preview-container { grid-template-columns: 1fr; } }
+        .preview-box { border: 1px solid #e5e8eb; border-radius: 12px; padding: 20px; background: #f8f9fa; }
+        .preview-box.after { background: #f5f8ff; border-color: #c7d3f0; }
+        .preview-header { font-size: 13px; font-weight: 700; color: #003893; margin-bottom: 12px; }
+        .document-mockup { font-size: 13px; }
+        .mockup-row { margin-bottom: 10px; line-height: 1.6; }
+        .placeholder-text { color: #868b94; font-style: italic; }
+        .result-text { color: #111214; font-weight: 600; }
+
+        .input-group { margin-bottom: 14px; }
+        .input-group label { display: block; font-size: 12px; font-weight: 700; color: #4e535e; margin-bottom: 4px; }
+        .input-group input { width: 100%; padding: 10px 12px; border: 1px solid #e5e8eb; border-radius: 8px; font-size: 14px; box-sizing: border-box; }
+        .input-group input:focus { outline: none; border-color: #003893; }
+
+        .date-input-wrapper { position: relative; }
+        .calendar-icon-btn { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); cursor: pointer; }
+        .custom-calendar-popup { display: none; position: absolute; top: 110%; left: 0; z-index: 30; background: #fff; border: 1px solid #e5e8eb; border-radius: 12px; box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12); padding: 12px; width: 260px; }
+        .calendar-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; font-weight: 700; }
+        .calendar-header button { background: none; border: none; cursor: pointer; font-size: 14px; padding: 4px 8px; }
+        .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; text-align: center; font-size: 12px; }
+        .day-name { color: #868b94; font-weight: 700; padding: 4px 0; }
+        .day-name.sun { color: #df2c2c; }
+        .day-name.sat { color: #003893; }
+        .day-cell { padding: 6px 0; border-radius: 6px; cursor: pointer; }
+        .day-cell:hover { background: #f2f4f6; }
+        .day-cell.empty { cursor: default; }
+
+        .btn-convert { width: 100%; margin-top: 16px; background: #003893; color: #fff; border: none; padding: 12px; border-radius: 999px; font-size: 14px; font-weight: 700; cursor: pointer; transition: background 0.2s; }
+        .btn-convert:disabled { opacity: 0.6; cursor: not-allowed; }
+        .btn-convert:hover:not(:disabled) { background: #002463; }
+
+        .live-preview-card { background: #fff; border: 1px solid #e5e8eb; border-radius: 16px; padding: 32px; margin-top: 24px; }
+        .live-preview-title { font-size: 15px; font-weight: 700; color: #111214; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid #e5e8eb; }
+        .doc-paper { background: #fff; border: 1px solid #e5e8eb; padding: 32px; font-family: 'KerisBaeum', sans-serif; }
+        .doc-header-text { text-align: center; font-size: 18px; font-weight: 700; margin-bottom: 24px; }
+        .doc-body { font-size: 14px; line-height: 1.9; color: #111214; }
+        .highlight-preview { background: rgba(0, 56, 147, 0.08); color: #003893; font-weight: 700; padding: 0 4px; border-radius: 4px; }
+        .doc-footer { text-align: right; margin-top: 32px; font-size: 14px; }
+
+        .result-download-card { margin-top: 24px; background: #f0f7ff; border: 1px solid #b3c5ff; border-radius: 16px; padding: 24px; text-align: center; display: none; }
+        .result-download-card h4 { font-size: 16px; font-weight: 700; color: #003893; margin-bottom: 8px; }
+        .result-download-card p { font-size: 13px; color: #4e535e; margin-bottom: 16px; }
+        .btn-download-file { background: #003893; color: #fff; border: none; padding: 12px 28px; border-radius: 999px; font-size: 14px; font-weight: 700; cursor: pointer; transition: background 0.2s; }
+        .btn-download-file:hover { background: #002463; }
     </style>
 <script id="tailwind-config">
         tailwind.config = {
@@ -310,7 +377,7 @@
 </div>
 </div>
 </nav>
-<main class="container"><div class="w-full max-w-[1600px] mx-auto px-lg py-xl flex flex-col md:flex-row gap-xl" id="global-layout-wrapper">
+<main class="pt-[64px] min-h-screen"><div class="w-full max-w-[1600px] mx-auto px-lg py-xl flex flex-col md:flex-row gap-xl" id="global-layout-wrapper">
 <!-- Added background, padding, and rounded corners for the left menu area -->
 
 <aside class="w-[220px] shrink-0 bg-surface-soft p-lg rounded-2xl hidden md:block" id="main-lnb">
