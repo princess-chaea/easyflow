@@ -348,15 +348,32 @@
                     자세히 보기 <span class="material-symbols-outlined ml-xs group-hover:translate-x-1 transition-transform">arrow_forward</span>
 </div>
 </div>
-<div class="p-xl rounded-2xl bg-primary-container text-white flex flex-col justify-between group cursor-pointer">
-<div>
-<span class="material-symbols-outlined text-4xl mb-sm" style="font-variation-settings: 'FILL' 1;">contact_support</span>
-<h3 class="text-xl font-bold mb-xs">1:1 문의 내역</h3>
-<p class="text-on-primary-container">이전 문의 사항과 답변 상태를 실시간으로 확인할 수 있습니다.</p>
+<div class="p-xl rounded-2xl bg-surface-dark text-white flex flex-col gap-lg relative overflow-hidden">
+<div class="relative z-10">
+<div class="flex justify-between items-start mb-base">
+<h3 class="text-xl font-bold">1:1 문의 현황</h3>
+<span class="px-xs py-1 rounded bg-primary-container text-white font-caption-strong text-caption-strong status-pulse">진행중 2건</span>
 </div>
-<div class="mt-xl flex items-center font-semibold">
-                    내역 확인 <span class="material-symbols-outlined ml-xs group-hover:translate-x-1 transition-transform">history</span>
+<div class="space-y-md">
+<div class="flex items-center gap-base group cursor-pointer">
+<div class="flex-grow">
+<p class="font-body-sm text-body-sm truncate group-hover:text-primary-fixed transition-colors">나이스 데이터 연동 오류 문의...</p>
+<span class="font-caption text-caption text-muted">2024.05.20 | 접수완료</span>
 </div>
+<span class="material-symbols-outlined text-muted group-hover:translate-x-1 transition-transform">chevron_right</span>
+</div>
+<div class="flex items-center gap-base group cursor-pointer">
+<div class="flex-grow">
+<p class="font-body-sm text-body-sm truncate group-hover:text-primary-fixed transition-colors">AI Cockpit 대시보드 권한 설정...</p>
+<span class="font-caption text-caption text-secondary">2024.05.18 | 답변완료</span>
+</div>
+<span class="material-symbols-outlined text-muted group-hover:translate-x-1 transition-transform">chevron_right</span>
+</div>
+</div>
+</div>
+<button class="relative z-10 w-full py-sm bg-white text-ink font-button text-button rounded-full hover:bg-surface-container-high transition-colors" onclick="openModal()">새 문의 작성하기</button>
+<!-- Decorative element -->
+<div class="absolute -bottom-10 -right-10 w-40 h-40 bg-primary opacity-20 blur-3xl"></div>
 </div>
 </div>
 <div class="mt-lg p-xl rounded-2xl bg-surface-container-low border border-outline-variant text-center">
