@@ -339,7 +339,7 @@
      상단 네비게이션 (팀 전체 통일 — stitch 원본 code.html 구조 동일)
      ══════════════════════════════════════════════════════════════════ -->
 <!-- 전체 메뉴 패널 (lg 미만) -->
-<main class="pt-[64px] min-h-screen" id="main"><div class="w-full max-w-[1920px] mx-auto px-lg py-xl flex flex-col md:flex-row gap-xl" id="global-layout-wrapper">
+<main class="pt-[64px] min-h-screen" id="main"><div class="w-full max-w-[1600px] mx-auto px-lg py-xl flex flex-col md:flex-row gap-xl" id="global-layout-wrapper">
 <!-- Reduced width to w-[180px] to minimize left spacing -->
 <!-- Added background, padding, and rounded corners for the left menu area -->
 
@@ -4246,7 +4246,7 @@
       }
     }
     document.getElementById('btnDeptEdit').addEventListener('click', openDeptModal);
-    document.getElementById('btnLegendEdit').addEventListener('click', openDeptModal);
+    if(document.getElementById('btnLegendEdit')) document.getElementById('btnLegendEdit').addEventListener('click', openDeptModal);
     document.getElementById('btnCloseDept').addEventListener('click', closeDeptModal);
     document.getElementById('btnDeptDone').addEventListener('click', closeDeptModal);
     document.getElementById('deptScrim').addEventListener('click', closeDeptModal);
