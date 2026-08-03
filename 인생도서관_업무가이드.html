@@ -165,7 +165,7 @@
 <a class="font-nav-link text-nav-link transition-colors h-[64px] flex items-center gap-xxs whitespace-nowrap group-hover/col:text-primary group-hover/col:font-bold text-primary font-bold border-b-2 border-primary" href="인생도서관_통합 지능형 업무지원 메인.html">
                 인생 도서관 <span class="material-symbols-outlined text-[18px]">expand_more</span>
 </a>
-<div class="absolute top-[64px] left-1/2 -translate-x-1/2 pt-md pb-md min-w-[160px] flex flex-col items-center gap-sm opacity-0 invisible group-hover/mega:opacity-100 group-hover/mega:visible transition-all duration-200 z-50 group-hover/col:bg-surface-container h-[290px] rounded-b-lg"><a class="font-nav-link text-[16px] text-on-surface-variant hover:text-primary transition-colors whitespace-nowrap px-sm py-1 w-full text-center" href="인생도서관_통합 지능형 업무지원 메인.html">인생 도서관 홈</a><a class="font-nav-link text-[16px] text-on-surface-variant hover:text-primary transition-colors whitespace-nowrap px-sm py-1 w-full text-center" href="AI업무어시스턴트_챗봇.html">AI 상담 (챗봇)</a><a class="font-nav-link text-[16px] text-on-surface-variant hover:text-primary transition-colors whitespace-nowrap px-sm py-1 w-full text-center" href="인생도서관_장학사 및 업무담당자 통합 대시보드.html">통합 대시보드</a><a class="font-nav-link text-[16px] text-on-surface-variant hover:text-primary transition-colors whitespace-nowrap px-sm py-1 w-full text-center" href="인생도서관_상담결과리포트.html">상담 결과 리포트</a><a class="font-nav-link text-[16px] text-on-surface-variant hover:text-primary transition-colors whitespace-nowrap px-sm py-1 w-full text-center" href="인생도서관_인사관리업무상세가이드.html">인사관리 가이드</a><a class="font-nav-link text-[16px] text-on-surface-variant hover:text-primary transition-colors whitespace-nowrap px-sm py-1 w-full text-center" href="인생도서관_마이페이지.html">나의 멘토링</a></div>
+<div class="absolute top-[64px] left-1/2 -translate-x-1/2 pt-md pb-md min-w-[160px] flex flex-col items-center gap-sm opacity-0 invisible group-hover/mega:opacity-100 group-hover/mega:visible transition-all duration-200 z-50 group-hover/col:bg-surface-container h-[290px] rounded-b-lg"><a class="font-nav-link text-[16px] text-on-surface-variant hover:text-primary transition-colors whitespace-nowrap px-sm py-1 w-full text-center" href="인생도서관_통합 지능형 업무지원 메인.html">인생 도서관 홈</a><a class="font-nav-link text-[16px] text-on-surface-variant hover:text-primary transition-colors whitespace-nowrap px-sm py-1 w-full text-center" href="AI업무어시스턴트_챗봇.html">AI 상담 (챗봇)</a><a class="font-nav-link text-[16px] text-on-surface-variant hover:text-primary transition-colors whitespace-nowrap px-sm py-1 w-full text-center" href="인생도서관_업무가이드.html">업무 가이드</a><a class="font-nav-link text-[16px] text-on-surface-variant hover:text-primary transition-colors whitespace-nowrap px-sm py-1 w-full text-center" href="인생도서관_마이페이지.html">나의 멘토링</a><a class="font-nav-link text-[16px] text-on-surface-variant hover:text-primary transition-colors whitespace-nowrap px-sm py-1 w-full text-center" href="인생도서관_멘토상담함.html">멘토 상담함</a><a class="font-nav-link text-[16px] text-on-surface-variant hover:text-primary transition-colors whitespace-nowrap px-sm py-1 w-full text-center" href="인생도서관_장학사 및 업무담당자 통합 대시보드.html">통합 대시보드</a></div>
 </div>
 <div class="relative h-full flex flex-col justify-start group/col">
 <a class="font-nav-link text-nav-link transition-colors h-[64px] flex items-center gap-xxs whitespace-nowrap group-hover/col:text-primary group-hover/col:font-bold text-on-surface-variant hover:text-primary" href="서식자료실_통합검색.html">
@@ -212,12 +212,12 @@
                 <nav class="flex items-center gap-xs text-primary-fixed mb-sm font-caption text-caption">
                     <span class="">인생 도서관</span>
                     <span class="material-symbols-outlined text-[14px]" data-icon="chevron_right">chevron_right</span>
-                    <span class="text-white font-caption-strong">인사·관리 업무</span>
+                    <span class="text-white font-caption-strong" id="guideBreadcrumb">인사·관리 업무</span>
                 </nav>
                 <div class="flex flex-col md:flex-row md:items-end justify-between gap-base">
                     <div>
-                        <h2 class="font-display-lg text-display-lg mb-xs">인사·관리 업무 가이드</h2>
-                        <p class="font-body-md text-body-md opacity-90">교원의 복무, 인사, 성과 평가를 위한 지능형 업무 지원 시스템</p>
+                        <h2 class="font-display-lg text-display-lg mb-xs" id="guideTitle">인사·관리 업무 가이드</h2>
+                        <p class="font-body-md text-body-md opacity-90" id="guideSubtitle">교원의 복무, 인사, 성과 평가를 위한 지능형 업무 지원 시스템</p>
                     </div>
                     <div
                         class="flex items-center gap-xs font-number-display text-number-display bg-white/10 px-base py-xs rounded-lg backdrop-blur-md">
@@ -227,24 +227,52 @@
                 </div>
             </div>
         </section>
-        <!-- Content Area -->
-        <div class="max-w-[1600px] mx-auto px-lg py-xl">
+        <!-- Standard Section Layout -->
+        <div class="max-w-[1600px] mx-auto px-lg py-xl flex flex-col md:flex-row gap-xl" id="global-layout-wrapper">
+        <aside class="w-[220px] shrink-0 bg-surface-soft p-lg -ml-lg rounded-2xl hidden md:block" id="main-lnb">
+        <h2 class="font-nav-link text-[22px] font-bold text-ink mb-md pb-sm border-b-2 border-ink">인생 도서관</h2>
+        <ul class="flex flex-col gap-1">
+        <li><a class="font-nav-link block px-sm py-sm rounded-lg transition-colors text-[16px] text-on-surface-variant hover:bg-surface hover:text-ink" href="인생도서관_통합 지능형 업무지원 메인.html">인생 도서관 홈</a></li>
+        <li><a class="font-nav-link block px-sm py-sm rounded-lg transition-colors text-[16px] text-on-surface-variant hover:bg-surface hover:text-ink" href="AI업무어시스턴트_챗봇.html">AI 상담 (챗봇)</a></li>
+        <li><a class="font-nav-link block px-sm py-sm rounded-lg transition-colors text-[16px] bg-primary text-white font-bold" href="인생도서관_업무가이드.html">업무 가이드</a></li>
+        <li><a class="font-nav-link block px-sm py-sm rounded-lg transition-colors text-[16px] text-on-surface-variant hover:bg-surface hover:text-ink" href="인생도서관_마이페이지.html">나의 멘토링</a></li>
+        <li><a class="font-nav-link block px-sm py-sm rounded-lg transition-colors text-[16px] text-on-surface-variant hover:bg-surface hover:text-ink" href="인생도서관_멘토상담함.html">멘토 상담함</a></li>
+        <li><a class="font-nav-link block px-sm py-sm rounded-lg transition-colors text-[16px] text-on-surface-variant hover:bg-surface hover:text-ink" href="인생도서관_장학사 및 업무담당자 통합 대시보드.html">통합 대시보드</a></li>
+        </ul>
+        </aside>
+        <div class="flex-1 min-w-0">
             <div class="grid grid-cols-1 md:grid-cols-12 gap-xl">
-                <!-- Sidebar -->
+                <!-- Category Sidebar -->
                 <aside class="md:col-span-3">
-                    <nav class="flex flex-col gap-xs sticky top-[88px]">
-                        <button
-                            class="flex items-center justify-between w-full p-base rounded-xl transition-all text-left bg-primary text-white shadow-lg">
-                            <span class="font-title-sm text-title-sm">복무·휴가 처리</span>
+                    <nav class="flex flex-col gap-xs sticky top-[88px]" id="categoryNav">
+                        <button data-cat="kinder" onclick="switchGuideCategory('kinder', this)"
+                            class="cat-btn flex items-center justify-between w-full p-base rounded-xl transition-all text-left bg-white border border-hairline text-on-surface-variant hover:border-primary-disabled">
+                            <span class="font-title-sm text-title-sm">유치원 업무</span>
+                        </button>
+                        <button data-cat="elem" onclick="switchGuideCategory('elem', this)"
+                            class="cat-btn flex items-center justify-between w-full p-base rounded-xl transition-all text-left bg-white border border-hairline text-on-surface-variant hover:border-primary-disabled">
+                            <span class="font-title-sm text-title-sm">초등 업무</span>
+                        </button>
+                        <button data-cat="mid" onclick="switchGuideCategory('mid', this)"
+                            class="cat-btn flex items-center justify-between w-full p-base rounded-xl transition-all text-left bg-white border border-hairline text-on-surface-variant hover:border-primary-disabled">
+                            <span class="font-title-sm text-title-sm">중등 업무</span>
+                        </button>
+                        <button data-cat="hr" onclick="switchGuideCategory('hr', this)"
+                            class="cat-btn flex items-center justify-between w-full p-base rounded-xl transition-all text-left bg-primary text-white shadow-lg">
+                            <span class="font-title-sm text-title-sm">인사·관리 업무</span>
                             <span class="material-symbols-outlined" data-icon="arrow_right_alt">arrow_right_alt</span>
                         </button>
-                        <button
-                            class="flex items-center justify-between w-full p-base rounded-xl transition-all text-left bg-white border border-hairline text-on-surface-variant hover:border-primary-disabled">
-                            <span class="font-title-sm text-title-sm">인사기록·전보</span>
+                        <button data-cat="counsel" onclick="switchGuideCategory('counsel', this)"
+                            class="cat-btn flex items-center justify-between w-full p-base rounded-xl transition-all text-left bg-white border border-hairline text-on-surface-variant hover:border-primary-disabled">
+                            <span class="font-title-sm text-title-sm">사서·상담·특수 업무</span>
                         </button>
-                        <button
-                            class="flex items-center justify-between w-full p-base rounded-xl transition-all text-left bg-white border border-hairline text-on-surface-variant hover:border-primary-disabled">
-                            <span class="font-title-sm text-title-sm">성과·근무 평가</span>
+                        <button data-cat="health" onclick="switchGuideCategory('health', this)"
+                            class="cat-btn flex items-center justify-between w-full p-base rounded-xl transition-all text-left bg-white border border-hairline text-on-surface-variant hover:border-primary-disabled">
+                            <span class="font-title-sm text-title-sm">보건·영양 업무</span>
+                        </button>
+                        <button data-cat="admin" onclick="switchGuideCategory('admin', this)"
+                            class="cat-btn flex items-center justify-between w-full p-base rounded-xl transition-all text-left bg-white border border-hairline text-on-surface-variant hover:border-primary-disabled">
+                            <span class="font-title-sm text-title-sm">행정실 업무</span>
                         </button>
                         <div class="mt-xl p-lg rounded-xl bg-surface-container-high border border-hairline">
                             <p
@@ -258,7 +286,8 @@
                     </nav>
                 </aside>
                 <!-- Main Content -->
-                <div class="md:col-span-9 flex flex-col gap-xl">
+                <div class="md:col-span-9 flex flex-col gap-xl" id="guideContentArea">
+                <div data-cat-content="hr" class="flex flex-col gap-xl">
                     <!-- 1. Process Section -->
                     <section class="bg-white rounded-xl border border-hairline p-xl">
                         <div class="flex items-center gap-sm mb-lg">
@@ -472,9 +501,190 @@
                         </div>
                     </section>
                 </div>
+                <div data-cat-content="kinder" class="flex flex-col gap-xl" style="display:none">
+                    <section class="bg-white rounded-xl border border-hairline p-xl">
+                        <div class="flex items-center gap-sm mb-lg">
+                            <div class="w-10 h-10 rounded-full bg-primary-fixed flex items-center justify-center"><span class="material-symbols-outlined text-primary">child_care</span></div>
+                            <h3 class="font-title-lg text-title-lg text-primary">유치원 업무 주요 절차</h3>
+                        </div>
+                        <ul class="space-y-sm font-body-sm text-body-sm">
+                            <li class="flex items-start gap-xs"><span class="material-symbols-outlined text-primary text-[18px] mt-0.5">check</span>원아 모집 공고 및 학급 편성 계획 수립</li>
+                            <li class="flex items-start gap-xs"><span class="material-symbols-outlined text-primary text-[18px] mt-0.5">check</span>누리과정 연간 운영계획 수립 및 나이스 등록</li>
+                            <li class="flex items-start gap-xs"><span class="material-symbols-outlined text-primary text-[18px] mt-0.5">check</span>급식·안전 점검 및 학부모 상담 일정 관리</li>
+                        </ul>
+                        <div class="mt-lg p-lg bg-surface-soft rounded-xl border-l-4 border-primary">
+                            <h4 class="font-title-sm text-title-sm mb-sm flex items-center gap-xs"><span class="material-symbols-outlined text-primary">task_alt</span>체크리스트</h4>
+                            <ul class="space-y-base font-body-sm text-body-sm">
+                                <li class="flex items-start gap-xs"><input class="mt-1 rounded text-primary focus:ring-primary" type="checkbox"><span>정원 초과 시 대기자 명부와 우선순위 기준을 안내했는가?</span></li>
+                                <li class="flex items-start gap-xs"><input class="mt-1 rounded text-primary focus:ring-primary" type="checkbox"><span>방과후과정 운영비 정산 증빙을 첨부했는가?</span></li>
+                            </ul>
+                        </div>
+                    </section>
+                    <section class="bg-white rounded-xl border border-hairline p-xl">
+                        <h3 class="font-title-lg text-title-lg text-secondary mb-lg flex items-center gap-sm"><span class="material-symbols-outlined text-secondary">quiz</span>자주 묻는 질문</h3>
+                        <details class="group bg-surface-container-lowest border border-hairline rounded-lg overflow-hidden mb-xs"><summary class="list-none p-base flex justify-between items-center cursor-pointer hover:bg-surface-soft"><span class="font-title-sm text-title-sm">원아 정원 초과 시 처리 방법은?</span><span class="material-symbols-outlined group-open:rotate-180 transition-transform">expand_more</span></summary><div class="p-base bg-white border-t border-hairline font-body-sm text-body-sm text-on-surface-variant">대기자 명부를 작성하여 우선순위(형제자매, 거주지 등) 기준에 따라 순차 배정하며, 학운위 심의를 거쳐 확정합니다.</div></details>
+                        <details class="group bg-surface-container-lowest border border-hairline rounded-lg overflow-hidden"><summary class="list-none p-base flex justify-between items-center cursor-pointer hover:bg-surface-soft"><span class="font-title-sm text-title-sm">방과후과정 운영비 정산은 언제 하나요?</span><span class="material-symbols-outlined group-open:rotate-180 transition-transform">expand_more</span></summary><div class="p-base bg-white border-t border-hairline font-body-sm text-body-sm text-on-surface-variant">분기별로 정산하며, 증빙서류는 정산일로부터 5일 이내 행정실에 제출합니다.</div></details>
+                    </section>
+                </div>
+                <div data-cat-content="elem" class="flex flex-col gap-xl" style="display:none">
+                    <section class="bg-white rounded-xl border border-hairline p-xl">
+                        <div class="flex items-center gap-sm mb-lg">
+                            <div class="w-10 h-10 rounded-full bg-primary-fixed flex items-center justify-center"><span class="material-symbols-outlined text-primary">school</span></div>
+                            <h3 class="font-title-lg text-title-lg text-primary">초등 업무 주요 절차</h3>
+                        </div>
+                        <ul class="space-y-sm font-body-sm text-body-sm">
+                            <li class="flex items-start gap-xs"><span class="material-symbols-outlined text-primary text-[18px] mt-0.5">check</span>학습부진아 지도계획 수립 및 나이스 등록</li>
+                            <li class="flex items-start gap-xs"><span class="material-symbols-outlined text-primary text-[18px] mt-0.5">check</span>학교생활기록부 작성 및 정정 관리</li>
+                            <li class="flex items-start gap-xs"><span class="material-symbols-outlined text-primary text-[18px] mt-0.5">check</span>방과후학교·돌봄교실 운영 및 강사 관리</li>
+                        </ul>
+                        <div class="mt-lg p-lg bg-surface-soft rounded-xl border-l-4 border-primary">
+                            <h4 class="font-title-sm text-title-sm mb-sm flex items-center gap-xs"><span class="material-symbols-outlined text-primary">task_alt</span>체크리스트</h4>
+                            <ul class="space-y-base font-body-sm text-body-sm">
+                                <li class="flex items-start gap-xs"><input class="mt-1 rounded text-primary focus:ring-primary" type="checkbox"><span>생활기록부 정정 시 정정대장에 사유를 기재했는가?</span></li>
+                                <li class="flex items-start gap-xs"><input class="mt-1 rounded text-primary focus:ring-primary" type="checkbox"><span>방과후강사 계약 갱신 서류를 기한 내 제출했는가?</span></li>
+                            </ul>
+                        </div>
+                    </section>
+                    <section class="bg-white rounded-xl border border-hairline p-xl">
+                        <h3 class="font-title-lg text-title-lg text-secondary mb-lg flex items-center gap-sm"><span class="material-symbols-outlined text-secondary">quiz</span>자주 묻는 질문</h3>
+                        <details class="group bg-surface-container-lowest border border-hairline rounded-lg overflow-hidden mb-xs"><summary class="list-none p-base flex justify-between items-center cursor-pointer hover:bg-surface-soft"><span class="font-title-sm text-title-sm">생활기록부 정정 절차는?</span><span class="material-symbols-outlined group-open:rotate-180 transition-transform">expand_more</span></summary><div class="p-base bg-white border-t border-hairline font-body-sm text-body-sm text-on-surface-variant">정정대장에 사유를 기재하고 학교생활기록부 정정위원회 심의를 거쳐 나이스에서 정정합니다.</div></details>
+                        <details class="group bg-surface-container-lowest border border-hairline rounded-lg overflow-hidden"><summary class="list-none p-base flex justify-between items-center cursor-pointer hover:bg-surface-soft"><span class="font-title-sm text-title-sm">방과후강사 계약 갱신은 어떻게 하나요?</span><span class="material-symbols-outlined group-open:rotate-180 transition-transform">expand_more</span></summary><div class="p-base bg-white border-t border-hairline font-body-sm text-body-sm text-on-surface-variant">기존 계약 만료 30일 전 강사 평가 결과를 반영하여 갱신 여부를 결정하고 표준계약서를 재작성합니다.</div></details>
+                    </section>
+                </div>
+                <div data-cat-content="mid" class="flex flex-col gap-xl" style="display:none">
+                    <section class="bg-white rounded-xl border border-hairline p-xl">
+                        <div class="flex items-center gap-sm mb-lg">
+                            <div class="w-10 h-10 rounded-full bg-primary-fixed flex items-center justify-center"><span class="material-symbols-outlined text-primary">menu_book</span></div>
+                            <h3 class="font-title-lg text-title-lg text-primary">중등 업무 주요 절차</h3>
+                        </div>
+                        <ul class="space-y-sm font-body-sm text-body-sm">
+                            <li class="flex items-start gap-xs"><span class="material-symbols-outlined text-primary text-[18px] mt-0.5">check</span>고교학점제 수강신청 및 이수학점 관리</li>
+                            <li class="flex items-start gap-xs"><span class="material-symbols-outlined text-primary text-[18px] mt-0.5">check</span>내신 성적 처리 및 정정 관리</li>
+                            <li class="flex items-start gap-xs"><span class="material-symbols-outlined text-primary text-[18px] mt-0.5">check</span>진로·진학 상담 및 생활지도 기록</li>
+                        </ul>
+                        <div class="mt-lg p-lg bg-surface-soft rounded-xl border-l-4 border-primary">
+                            <h4 class="font-title-sm text-title-sm mb-sm flex items-center gap-xs"><span class="material-symbols-outlined text-primary">task_alt</span>체크리스트</h4>
+                            <ul class="space-y-base font-body-sm text-body-sm">
+                                <li class="flex items-start gap-xs"><input class="mt-1 rounded text-primary focus:ring-primary" type="checkbox"><span>고교학점제 이수학점 미달 학생 명단을 확인했는가?</span></li>
+                                <li class="flex items-start gap-xs"><input class="mt-1 rounded text-primary focus:ring-primary" type="checkbox"><span>성적 정정 신청서에 담당교사 확인 서명이 있는가?</span></li>
+                            </ul>
+                        </div>
+                    </section>
+                    <section class="bg-white rounded-xl border border-hairline p-xl">
+                        <h3 class="font-title-lg text-title-lg text-secondary mb-lg flex items-center gap-sm"><span class="material-symbols-outlined text-secondary">quiz</span>자주 묻는 질문</h3>
+                        <details class="group bg-surface-container-lowest border border-hairline rounded-lg overflow-hidden mb-xs"><summary class="list-none p-base flex justify-between items-center cursor-pointer hover:bg-surface-soft"><span class="font-title-sm text-title-sm">고교학점제 이수학점 미달 시 어떻게 하나요?</span><span class="material-symbols-outlined group-open:rotate-180 transition-transform">expand_more</span></summary><div class="p-base bg-white border-t border-hairline font-body-sm text-body-sm text-on-surface-variant">보충학습 프로그램을 이수하도록 안내하고, 다음 학기 재이수 계획을 학생·학부모와 함께 수립합니다.</div></details>
+                        <details class="group bg-surface-container-lowest border border-hairline rounded-lg overflow-hidden"><summary class="list-none p-base flex justify-between items-center cursor-pointer hover:bg-surface-soft"><span class="font-title-sm text-title-sm">성적 정정 신청 기한은?</span><span class="material-symbols-outlined group-open:rotate-180 transition-transform">expand_more</span></summary><div class="p-base bg-white border-t border-hairline font-body-sm text-body-sm text-on-surface-variant">성적 확정 공고일로부터 7일 이내이며, 기한 경과 후에는 성적정정위원회 심의가 필요합니다.</div></details>
+                    </section>
+                </div>
+                <div data-cat-content="counsel" class="flex flex-col gap-xl" style="display:none">
+                    <section class="bg-white rounded-xl border border-hairline p-xl">
+                        <div class="flex items-center gap-sm mb-lg">
+                            <div class="w-10 h-10 rounded-full bg-primary-fixed flex items-center justify-center"><span class="material-symbols-outlined text-primary">psychology</span></div>
+                            <h3 class="font-title-lg text-title-lg text-primary">사서·상담·특수 업무 주요 절차</h3>
+                        </div>
+                        <ul class="space-y-sm font-body-sm text-body-sm">
+                            <li class="flex items-start gap-xs"><span class="material-symbols-outlined text-primary text-[18px] mt-0.5">check</span>도서관 장서 관리 및 대출·반납 시스템 운영</li>
+                            <li class="flex items-start gap-xs"><span class="material-symbols-outlined text-primary text-[18px] mt-0.5">check</span>Wee클래스 상담 운영 및 상담기록 관리</li>
+                            <li class="flex items-start gap-xs"><span class="material-symbols-outlined text-primary text-[18px] mt-0.5">check</span>특수교육대상자 개별화교육계획(IEP) 수립</li>
+                        </ul>
+                        <div class="mt-lg p-lg bg-surface-soft rounded-xl border-l-4 border-primary">
+                            <h4 class="font-title-sm text-title-sm mb-sm flex items-center gap-xs"><span class="material-symbols-outlined text-primary">task_alt</span>체크리스트</h4>
+                            <ul class="space-y-base font-body-sm text-body-sm">
+                                <li class="flex items-start gap-xs"><input class="mt-1 rounded text-primary focus:ring-primary" type="checkbox"><span>Wee클래스 상담 기록을 비밀유지 원칙에 따라 보관했는가?</span></li>
+                                <li class="flex items-start gap-xs"><input class="mt-1 rounded text-primary focus:ring-primary" type="checkbox"><span>특수교육대상자 IEP를 학기 초 학부모와 협의했는가?</span></li>
+                            </ul>
+                        </div>
+                    </section>
+                    <section class="bg-white rounded-xl border border-hairline p-xl">
+                        <h3 class="font-title-lg text-title-lg text-secondary mb-lg flex items-center gap-sm"><span class="material-symbols-outlined text-secondary">quiz</span>자주 묻는 질문</h3>
+                        <details class="group bg-surface-container-lowest border border-hairline rounded-lg overflow-hidden mb-xs"><summary class="list-none p-base flex justify-between items-center cursor-pointer hover:bg-surface-soft"><span class="font-title-sm text-title-sm">Wee클래스 상담 기록 보관 기간은?</span><span class="material-symbols-outlined group-open:rotate-180 transition-transform">expand_more</span></summary><div class="p-base bg-white border-t border-hairline font-body-sm text-body-sm text-on-surface-variant">졸업 후 5년간 보관하며, 비밀유지 원칙에 따라 별도 잠금장치가 있는 곳에 보관합니다.</div></details>
+                        <details class="group bg-surface-container-lowest border border-hairline rounded-lg overflow-hidden"><summary class="list-none p-base flex justify-between items-center cursor-pointer hover:bg-surface-soft"><span class="font-title-sm text-title-sm">특수교육 대상자 선정 절차는?</span><span class="material-symbols-outlined group-open:rotate-180 transition-transform">expand_more</span></summary><div class="p-base bg-white border-t border-hairline font-body-sm text-body-sm text-on-surface-variant">진단·평가 의뢰 후 특수교육운영위원회 심사를 거쳐 대상자로 선정되며, 매년 재평가가 이루어집니다.</div></details>
+                    </section>
+                </div>
+                <div data-cat-content="health" class="flex flex-col gap-xl" style="display:none">
+                    <section class="bg-white rounded-xl border border-hairline p-xl">
+                        <div class="flex items-center gap-sm mb-lg">
+                            <div class="w-10 h-10 rounded-full bg-primary-fixed flex items-center justify-center"><span class="material-symbols-outlined text-primary">health_and_safety</span></div>
+                            <h3 class="font-title-lg text-title-lg text-primary">보건·영양 업무 주요 절차</h3>
+                        </div>
+                        <ul class="space-y-sm font-body-sm text-body-sm">
+                            <li class="flex items-start gap-xs"><span class="material-symbols-outlined text-primary text-[18px] mt-0.5">check</span>학생 건강검진 계획 수립 및 결과 관리</li>
+                            <li class="flex items-start gap-xs"><span class="material-symbols-outlined text-primary text-[18px] mt-0.5">check</span>급식 위생 점검 및 식품알레르기 관리대장 운영</li>
+                            <li class="flex items-start gap-xs"><span class="material-symbols-outlined text-primary text-[18px] mt-0.5">check</span>감염병 발생 시 보고 및 대응 절차</li>
+                        </ul>
+                        <div class="mt-lg p-lg bg-surface-soft rounded-xl border-l-4 border-primary">
+                            <h4 class="font-title-sm text-title-sm mb-sm flex items-center gap-xs"><span class="material-symbols-outlined text-primary">task_alt</span>체크리스트</h4>
+                            <ul class="space-y-base font-body-sm text-body-sm">
+                                <li class="flex items-start gap-xs"><input class="mt-1 rounded text-primary focus:ring-primary" type="checkbox"><span>식품알레르기 대상 학생 명단을 급식실과 공유했는가?</span></li>
+                                <li class="flex items-start gap-xs"><input class="mt-1 rounded text-primary focus:ring-primary" type="checkbox"><span>보건일지를 매일 작성하고 있는가?</span></li>
+                            </ul>
+                        </div>
+                    </section>
+                    <section class="bg-white rounded-xl border border-hairline p-xl">
+                        <h3 class="font-title-lg text-title-lg text-secondary mb-lg flex items-center gap-sm"><span class="material-symbols-outlined text-secondary">quiz</span>자주 묻는 질문</h3>
+                        <details class="group bg-surface-container-lowest border border-hairline rounded-lg overflow-hidden mb-xs"><summary class="list-none p-base flex justify-between items-center cursor-pointer hover:bg-surface-soft"><span class="font-title-sm text-title-sm">급식 식중독 의심 시 보고 절차는?</span><span class="material-symbols-outlined group-open:rotate-180 transition-transform">expand_more</span></summary><div class="p-base bg-white border-t border-hairline font-body-sm text-body-sm text-on-surface-variant">즉시 교육청 및 보건소에 보고하고 급식을 중단하며, 원인 식품과 조리 과정을 보존합니다.</div></details>
+                        <details class="group bg-surface-container-lowest border border-hairline rounded-lg overflow-hidden"><summary class="list-none p-base flex justify-between items-center cursor-pointer hover:bg-surface-soft"><span class="font-title-sm text-title-sm">보건일지 작성 기준은?</span><span class="material-symbols-outlined group-open:rotate-180 transition-transform">expand_more</span></summary><div class="p-base bg-white border-t border-hairline font-body-sm text-body-sm text-on-surface-variant">내소 학생의 증상, 처치 내용, 귀가 여부를 매 건 기록하고 월말 통계를 교육청에 보고합니다.</div></details>
+                    </section>
+                </div>
+                <div data-cat-content="admin" class="flex flex-col gap-xl" style="display:none">
+                    <section class="bg-white rounded-xl border border-hairline p-xl">
+                        <div class="flex items-center gap-sm mb-lg">
+                            <div class="w-10 h-10 rounded-full bg-primary-fixed flex items-center justify-center"><span class="material-symbols-outlined text-primary">account_balance</span></div>
+                            <h3 class="font-title-lg text-title-lg text-primary">행정실 업무 주요 절차</h3>
+                        </div>
+                        <ul class="space-y-sm font-body-sm text-body-sm">
+                            <li class="flex items-start gap-xs"><span class="material-symbols-outlined text-primary text-[18px] mt-0.5">check</span>학교회계 예산 편성 및 추가경정 예산(안) 심의</li>
+                            <li class="flex items-start gap-xs"><span class="material-symbols-outlined text-primary text-[18px] mt-0.5">check</span>계약·구매 절차 및 소액수의계약 처리</li>
+                            <li class="flex items-start gap-xs"><span class="material-symbols-outlined text-primary text-[18px] mt-0.5">check</span>시설물 유지보수 및 물품 관리대장 운영</li>
+                        </ul>
+                        <div class="mt-lg p-lg bg-surface-soft rounded-xl border-l-4 border-primary">
+                            <h4 class="font-title-sm text-title-sm mb-sm flex items-center gap-xs"><span class="material-symbols-outlined text-primary">task_alt</span>체크리스트</h4>
+                            <ul class="space-y-base font-body-sm text-body-sm">
+                                <li class="flex items-start gap-xs"><input class="mt-1 rounded text-primary focus:ring-primary" type="checkbox"><span>소액수의계약 기준 금액 이내인지 확인했는가?</span></li>
+                                <li class="flex items-start gap-xs"><input class="mt-1 rounded text-primary focus:ring-primary" type="checkbox"><span>예산 전용 시 학교운영위원회 보고를 완료했는가?</span></li>
+                            </ul>
+                        </div>
+                    </section>
+                    <section class="bg-white rounded-xl border border-hairline p-xl">
+                        <h3 class="font-title-lg text-title-lg text-secondary mb-lg flex items-center gap-sm"><span class="material-symbols-outlined text-secondary">quiz</span>자주 묻는 질문</h3>
+                        <details class="group bg-surface-container-lowest border border-hairline rounded-lg overflow-hidden mb-xs"><summary class="list-none p-base flex justify-between items-center cursor-pointer hover:bg-surface-soft"><span class="font-title-sm text-title-sm">소액수의계약 기준 금액은?</span><span class="material-symbols-outlined group-open:rotate-180 transition-transform">expand_more</span></summary><div class="p-base bg-white border-t border-hairline font-body-sm text-body-sm text-on-surface-variant">물품·용역은 2천만원, 공사는 4천만원 이하일 경우 견적서 비교를 통한 수의계약이 가능합니다.</div></details>
+                        <details class="group bg-surface-container-lowest border border-hairline rounded-lg overflow-hidden"><summary class="list-none p-base flex justify-between items-center cursor-pointer hover:bg-surface-soft"><span class="font-title-sm text-title-sm">예산 전용 절차는?</span><span class="material-symbols-outlined group-open:rotate-180 transition-transform">expand_more</span></summary><div class="p-base bg-white border-t border-hairline font-body-sm text-body-sm text-on-surface-variant">과목 간 전용은 학교회계 규칙에 따라 학교운영위원회에 보고하고 나이스에 반영합니다.</div></details>
+                    </section>
+                </div>
+            </div>
             </div>
         </div>
+        </div>
     </main>
+    <script>
+        function switchGuideCategory(cat, btn) {
+            document.querySelectorAll('#guideContentArea > [data-cat-content]').forEach(el => {
+                el.style.display = el.dataset.catContent === cat ? '' : 'none';
+            });
+            document.querySelectorAll('#categoryNav .cat-btn').forEach(b => {
+                b.classList.remove('bg-primary', 'text-white', 'shadow-lg');
+                b.classList.add('bg-white', 'border', 'border-hairline', 'text-on-surface-variant');
+            });
+            btn.classList.remove('bg-white', 'border', 'border-hairline', 'text-on-surface-variant');
+            btn.classList.add('bg-primary', 'text-white', 'shadow-lg');
+
+            const meta = {
+                kinder: ['유치원 업무', '유치원 업무 가이드', '원아 모집부터 누리과정 운영까지 지원합니다'],
+                elem: ['초등 업무', '초등 업무 가이드', '생활기록부, 방과후학교, 돌봄교실 운영을 지원합니다'],
+                mid: ['중등 업무', '중등 업무 가이드', '고교학점제, 성적 처리, 진로·진학 상담을 지원합니다'],
+                hr: ['인사·관리 업무', '인사·관리 업무 가이드', '교원의 복무, 인사, 성과 평가를 위한 지능형 업무 지원 시스템'],
+                counsel: ['사서·상담·특수 업무', '사서·상담·특수 업무 가이드', '도서관, Wee클래스 상담, 특수교육 업무를 지원합니다'],
+                health: ['보건·영양 업무', '보건·영양 업무 가이드', '건강검진, 급식 위생, 감염병 관리를 지원합니다'],
+                admin: ['행정실 업무', '행정실 업무 가이드', '예산 편성, 계약·구매, 시설물 관리를 지원합니다'],
+            };
+            const m = meta[cat];
+            if (m) {
+                document.getElementById('guideBreadcrumb').textContent = m[0];
+                document.getElementById('guideTitle').textContent = m[1];
+                document.getElementById('guideSubtitle').textContent = m[2];
+            }
+        }
+    </script>
     <!-- Footer -->
     <footer
         class="bg-surface-container-low dark:bg-surface-dark border-t border-hairline dark:border-outline-variant w-full mt-section px-lg max-w-[1600px] mx-auto flex flex-col gap-base py-xl">

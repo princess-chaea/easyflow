@@ -228,44 +228,33 @@
 <li><a class="font-nav-link block px-sm py-sm rounded-lg transition-colors text-[16px] text-on-surface-variant hover:bg-surface hover:text-ink" href="인생도서관_통합 지능형 업무지원 메인.html">인생 도서관 홈</a></li>
 <li><a class="font-nav-link block px-sm py-sm rounded-lg transition-colors text-[16px] text-on-surface-variant hover:bg-surface hover:text-ink" href="AI업무어시스턴트_챗봇.html">AI 상담 (챗봇)</a></li>
 <li><a class="font-nav-link block px-sm py-sm rounded-lg transition-colors text-[16px] text-on-surface-variant hover:bg-surface hover:text-ink" href="인생도서관_업무가이드.html">업무 가이드</a></li>
-<li><a class="font-nav-link block px-sm py-sm rounded-lg transition-colors text-[16px] bg-primary text-white font-bold" href="인생도서관_마이페이지.html">나의 멘토링</a></li>
-<li><a class="font-nav-link block px-sm py-sm rounded-lg transition-colors text-[16px] text-on-surface-variant hover:bg-surface hover:text-ink" href="인생도서관_멘토상담함.html">멘토 상담함</a></li>
+<li><a class="font-nav-link block px-sm py-sm rounded-lg transition-colors text-[16px] text-on-surface-variant hover:bg-surface hover:text-ink" href="인생도서관_마이페이지.html">나의 멘토링</a></li>
+<li><a class="font-nav-link block px-sm py-sm rounded-lg transition-colors text-[16px] bg-primary text-white font-bold" href="인생도서관_멘토상담함.html">멘토 상담함</a></li>
 <li><a class="font-nav-link block px-sm py-sm rounded-lg transition-colors text-[16px] text-on-surface-variant hover:bg-surface hover:text-ink" href="인생도서관_장학사 및 업무담당자 통합 대시보드.html">통합 대시보드</a></li>
 </ul>
 </aside>
 <div class="flex-1 min-w-0 flex flex-col">
-        <!-- Profile Section -->
+        <!-- Header -->
         <section
             class="flex flex-col md:flex-row items-start md:items-center justify-between gap-lg mb-xl bg-surface-soft p-xl rounded-xxl border border-hairline">
             <div class="flex items-center gap-lg">
-                <div class="relative">
-                    <div class="w-20 h-20 rounded-full border-4 border-white shadow-sm overflow-hidden">
-                        <img alt="박지민 교사"
-                            data-alt="A professional and friendly portrait of a young Korean female teacher with a welcoming smile. She is dressed in smart business casual attire, a light-colored cardigan over a simple top. The lighting is bright and airy, typical of a modern school office. The overall atmosphere is warm, intelligent, and highly professional, consistent with a premium educational administrative platform."
-                            src="https://lh3.googleusercontent.com/aida-public/AB6AXuAkNZ3CiViSFlutUR1-Zr7V25mnh4YvxLrnxzFiqs51FL5o_O0NWyraVDt6D5moVs8OTmMs9ewkWzh5GxQtTKY6OLC1JckKkaYYPWd09S7Ytk_F4XuaM9LDIMbKfJQ52iStijzbaECmZS4z7RL0hutc2ojRWoqaah8pRvuUymqib_nfgygS10lSXmmp_hY1oWjeEXbJ0VGtLxOjxF2-C7pWBw1yCVfsGFKPGn8GrQVSQy9EVc2-_W7NVMuBqiY6yE-fQHy5pQ_wUFOB">
-                    </div>
-                    <div class="absolute bottom-0 right-0 bg-primary text-white p-1 rounded-full border-2 border-white">
-                        <span class="material-symbols-outlined text-[14px]" data-icon="edit">edit</span>
-                    </div>
+                <div class="w-16 h-16 rounded-full bg-primary text-white flex items-center justify-center shadow-sm">
+                    <span class="material-symbols-outlined text-[32px]" data-icon="inbox">inbox</span>
                 </div>
                 <div>
                     <div class="flex items-center gap-xs">
-                        <h1 class="font-display-sm text-display-sm font-bold text-on-surface">박지민</h1>
+                        <h1 class="font-display-sm text-display-sm font-bold text-on-surface">멘토 상담함</h1>
                         <span
-                            class="px-sm py-xxs bg-primary-fixed text-on-primary-fixed text-caption-strong rounded-full">교사</span>
+                            class="px-sm py-xxs bg-primary-fixed text-on-primary-fixed text-caption-strong rounded-full">멘토</span>
                     </div>
-                    <p class="font-body-md text-body-md text-muted mt-xxs">○○초등학교 · 교무부</p>
+                    <p class="font-body-md text-body-md text-muted mt-xxs">이민수 수석교사 · 학교 현장 선생님들이 보내온 상담 요청을 확인하고 답변하세요.</p>
                 </div>
             </div>
             <div class="flex gap-sm">
                 <button
                     class="px-lg h-[44px] bg-primary text-white rounded-full font-button flex items-center gap-xs hover:bg-primary-active transition-all">
-                    <span class="material-symbols-outlined text-[20px]" data-icon="edit_note">edit_note</span>
-                    정보 수정
-                </button>
-                <button
-                    class="px-lg h-[44px] bg-surface-strong text-ink rounded-full font-button border border-hairline hover:bg-surface-variant transition-all">
-                    로그아웃
+                    <span class="material-symbols-outlined text-[20px]" data-icon="calendar_month">calendar_month</span>
+                    상담 가능 시간 설정
                 </button>
             </div>
         </section>
@@ -273,12 +262,23 @@
         <div class="grid grid-cols-2 md:grid-cols-4 gap-base mb-xl">
             <div class="bg-white p-lg rounded-xxl border border-hairline flex flex-col gap-sm bento-card shadow-sm">
                 <div class="flex items-center justify-between">
-                    <span class="font-caption-strong text-caption-strong text-muted uppercase tracking-wider">진행 중
-                        상담</span>
+                    <span class="font-caption-strong text-caption-strong text-muted uppercase tracking-wider">신규
+                        요청</span>
+                    <span class="material-symbols-outlined text-error" data-icon="mark_email_unread">mark_email_unread</span>
+                </div>
+                <div class="flex items-baseline gap-xs">
+                    <span class="font-number-display text-display-md text-error">2</span>
+                    <span class="font-body-sm text-body-sm text-muted">건</span>
+                </div>
+            </div>
+            <div class="bg-white p-lg rounded-xxl border border-hairline flex flex-col gap-sm bento-card shadow-sm">
+                <div class="flex items-center justify-between">
+                    <span class="font-caption-strong text-caption-strong text-muted uppercase tracking-wider">답변
+                        대기</span>
                     <span class="material-symbols-outlined text-primary" data-icon="pending">pending</span>
                 </div>
                 <div class="flex items-baseline gap-xs">
-                    <span class="font-number-display text-display-md text-primary">2</span>
+                    <span class="font-number-display text-display-md text-primary">3</span>
                     <span class="font-body-sm text-body-sm text-muted">건</span>
                 </div>
             </div>
@@ -296,34 +296,22 @@
             </div>
             <div class="bg-white p-lg rounded-xxl border border-hairline flex flex-col gap-sm bento-card shadow-sm">
                 <div class="flex items-center justify-between">
-                    <span class="font-caption-strong text-caption-strong text-muted uppercase tracking-wider">완료된
-                        상담</span>
+                    <span class="font-caption-strong text-caption-strong text-muted uppercase tracking-wider">이번 달
+                        완료</span>
                     <span class="material-symbols-outlined text-success" data-icon="check_circle">check_circle</span>
                 </div>
                 <div class="flex items-baseline gap-xs">
-                    <span class="font-number-display text-display-md text-success">5</span>
+                    <span class="font-number-display text-display-md text-success">12</span>
                     <span class="font-body-sm text-body-sm text-muted">건</span>
-                </div>
-            </div>
-            <div class="bg-white p-lg rounded-xxl border border-hairline flex flex-col gap-sm bento-card shadow-sm">
-                <div class="flex items-center justify-between">
-                    <span class="font-caption-strong text-caption-strong text-muted uppercase tracking-wider">저장한
-                        자료</span>
-                    <span class="material-symbols-outlined text-on-primary-fixed-variant"
-                        data-icon="bookmark">bookmark</span>
-                </div>
-                <div class="flex items-baseline gap-xs">
-                    <span class="font-number-display text-display-md text-on-primary-fixed-variant">8</span>
-                    <span class="font-body-sm text-body-sm text-muted">개</span>
                 </div>
             </div>
         </div>
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-xl">
-            <!-- Left Main Section: Consultation List -->
+            <!-- Left Main Section: Consultation Request List -->
             <div class="lg:col-span-2 flex flex-col gap-xl">
                 <section class="bg-white p-xl rounded-xxl border border-hairline shadow-sm">
                     <div class="flex items-center justify-between mb-lg">
-                        <h2 class="font-title-lg text-title-lg text-on-surface">내 상담 신청 목록</h2>
+                        <h2 class="font-title-lg text-title-lg text-on-surface">상담 요청 목록</h2>
                         <button class="text-primary font-button flex items-center gap-xxs hover:underline">
                             전체보기 <span class="material-symbols-outlined text-[18px]"
                                 data-icon="chevron_right">chevron_right</span>
@@ -333,55 +321,104 @@
                         <table class="w-full text-left">
                             <thead class="border-b border-hairline">
                                 <tr>
-                                    <th class="py-md font-caption-strong text-caption-strong text-muted">업무·가이드 경로</th>
-                                    <th class="py-md font-caption-strong text-caption-strong text-muted">신청일</th>
-                                    <th class="py-md font-caption-strong text-caption-strong text-muted">담당</th>
+                                    <th class="py-md font-caption-strong text-caption-strong text-muted">신청 교사</th>
+                                    <th class="py-md font-caption-strong text-caption-strong text-muted">상담 주제</th>
+                                    <th class="py-md font-caption-strong text-caption-strong text-muted">신청일시</th>
                                     <th class="py-md font-caption-strong text-caption-strong text-muted">상태</th>
+                                    <th class="py-md font-caption-strong text-caption-strong text-muted">액션</th>
                                 </tr>
                             </thead>
                             <tbody class="divide-y divide-hairline">
                                 <tr class="hover:bg-surface-soft transition-colors">
                                     <td class="py-lg">
                                         <div class="flex flex-col">
-                                            <span class="font-body-strong text-body-strong">교원 복무 및 연수 신청</span>
-                                            <span class="font-caption text-caption text-muted">행정 지원 &gt; 복무 가이드</span>
+                                            <span class="font-body-strong text-body-strong">김경북</span>
+                                            <span class="font-caption text-caption text-muted">경북초등학교</span>
                                         </div>
                                     </td>
-                                    <td class="py-lg font-number-display text-body-sm">2026-06-12</td>
-                                    <td class="py-lg font-body-sm text-on-surface-variant">인사과 이영희</td>
+                                    <td class="py-lg font-body-sm text-on-surface-variant">교원 복무 및 연수 신청 절차 문의</td>
+                                    <td class="py-lg font-number-display text-body-sm">2026-08-01 14:20</td>
                                     <td class="py-lg">
                                         <span
-                                            class="px-sm py-xxs bg-surface-container-high text-on-surface-variant text-caption-strong rounded-full">상담
+                                            class="px-sm py-xxs bg-error-container text-error text-caption-strong rounded-full">신규</span>
+                                    </td>
+                                    <td class="py-lg">
+                                        <button
+                                            class="px-base h-[36px] bg-primary text-white rounded-full font-button text-body-sm hover:bg-primary-active transition-all">답변하기</button>
+                                    </td>
+                                </tr>
+                                <tr class="hover:bg-surface-soft transition-colors">
+                                    <td class="py-lg">
+                                        <div class="flex flex-col">
+                                            <span class="font-body-strong text-body-strong">이교육</span>
+                                            <span class="font-caption text-caption text-muted">안동중학교</span>
+                                        </div>
+                                    </td>
+                                    <td class="py-lg font-body-sm text-on-surface-variant">NEIS 학적 변동 처리 관련 상담</td>
+                                    <td class="py-lg font-number-display text-body-sm">2026-08-01 09:45</td>
+                                    <td class="py-lg">
+                                        <span
+                                            class="px-sm py-xxs bg-error-container text-error text-caption-strong rounded-full">신규</span>
+                                    </td>
+                                    <td class="py-lg">
+                                        <button
+                                            class="px-base h-[36px] bg-primary text-white rounded-full font-button text-body-sm hover:bg-primary-active transition-all">답변하기</button>
+                                    </td>
+                                </tr>
+                                <tr class="hover:bg-surface-soft transition-colors">
+                                    <td class="py-lg">
+                                        <div class="flex flex-col">
+                                            <span class="font-body-strong text-body-strong">최미래</span>
+                                            <span class="font-caption text-caption text-muted">구미고등학교</span>
+                                        </div>
+                                    </td>
+                                    <td class="py-lg font-body-sm text-on-surface-variant">학교 회계 예산 편성 원칙 문의</td>
+                                    <td class="py-lg font-number-display text-body-sm">2026-07-30 16:10</td>
+                                    <td class="py-lg">
+                                        <span
+                                            class="px-sm py-xxs bg-primary-fixed text-on-primary-fixed-variant text-caption-strong rounded-full">답변
                                             대기</span>
                                     </td>
+                                    <td class="py-lg">
+                                        <button
+                                            class="px-base h-[36px] bg-surface-strong text-ink rounded-full font-button text-body-sm border border-hairline hover:bg-surface-variant transition-all">이어서 답변</button>
+                                    </td>
                                 </tr>
                                 <tr class="hover:bg-surface-soft transition-colors">
                                     <td class="py-lg">
                                         <div class="flex flex-col">
-                                            <span class="font-body-strong text-body-strong">NEIS 학적 변동 처리 안내</span>
-                                            <span class="font-caption text-caption text-muted">정보 서비스 &gt; 나이스 지원</span>
+                                            <span class="font-body-strong text-body-strong">정성실</span>
+                                            <span class="font-caption text-caption text-muted">포항여자중학교</span>
                                         </div>
                                     </td>
-                                    <td class="py-lg font-number-display text-body-sm">2026-06-08</td>
-                                    <td class="py-lg font-body-sm text-on-surface-variant">전산지원팀 김민수</td>
+                                    <td class="py-lg font-body-sm text-on-surface-variant">학교폭력 대응 절차 및 매뉴얼 확인</td>
+                                    <td class="py-lg font-number-display text-body-sm">2026-07-29 11:05</td>
                                     <td class="py-lg">
                                         <span
-                                            class="px-sm py-xxs bg-primary-fixed text-on-primary-fixed-variant text-caption-strong rounded-full">진행
-                                            중</span>
+                                            class="px-sm py-xxs bg-primary-fixed text-on-primary-fixed-variant text-caption-strong rounded-full">답변
+                                            대기</span>
+                                    </td>
+                                    <td class="py-lg">
+                                        <button
+                                            class="px-base h-[36px] bg-surface-strong text-ink rounded-full font-button text-body-sm border border-hairline hover:bg-surface-variant transition-all">이어서 답변</button>
                                     </td>
                                 </tr>
                                 <tr class="hover:bg-surface-soft transition-colors">
                                     <td class="py-lg">
                                         <div class="flex flex-col">
-                                            <span class="font-body-strong text-body-strong">학교 회계 예산 편성 원칙</span>
-                                            <span class="font-caption text-caption text-muted">재무 행정 &gt; 예산 관리</span>
+                                            <span class="font-body-strong text-body-strong">박지영</span>
+                                            <span class="font-caption text-caption text-muted">경상북도교육청 (장학사)</span>
                                         </div>
                                     </td>
-                                    <td class="py-lg font-number-display text-body-sm">2026-05-24</td>
-                                    <td class="py-lg font-body-sm text-on-surface-variant">재무과 최성호</td>
+                                    <td class="py-lg font-body-sm text-on-surface-variant">신규 임용 교사 멘토링 배정 협의</td>
+                                    <td class="py-lg font-number-display text-body-sm">2026-07-24 10:30</td>
                                     <td class="py-lg">
                                         <span
                                             class="px-sm py-xxs bg-success/10 text-success text-caption-strong rounded-full">완료</span>
+                                    </td>
+                                    <td class="py-lg">
+                                        <button
+                                            class="px-base h-[36px] bg-surface-strong text-ink rounded-full font-button text-body-sm border border-hairline hover:bg-surface-variant transition-all">상담 내역 보기</button>
                                     </td>
                                 </tr>
                             </tbody>
@@ -389,7 +426,7 @@
                     </div>
                 </section>
             </div>
-            <!-- Right Sidebar: Upcoming & Resources -->
+            <!-- Right Sidebar: Upcoming & Recent -->
             <div class="flex flex-col gap-xl">
                 <!-- Upcoming Appointment -->
                 <section class="bg-primary text-white p-xl rounded-xxl shadow-lg relative overflow-hidden bento-card">
@@ -405,8 +442,8 @@
                                 <span class="material-symbols-outlined text-primary-fixed"
                                     data-icon="person">person</span>
                                 <div>
-                                    <p class="font-caption text-caption text-primary-fixed">멘토</p>
-                                    <p class="font-body-strong text-body-strong">김도윤 수석교사</p>
+                                    <p class="font-caption text-caption text-primary-fixed">신청 교사</p>
+                                    <p class="font-body-strong text-body-strong">최미래 (구미고등학교)</p>
                                 </div>
                             </div>
                             <div class="flex items-start gap-md">
@@ -414,7 +451,7 @@
                                     data-icon="schedule">schedule</span>
                                 <div>
                                     <p class="font-caption text-caption text-primary-fixed">일시</p>
-                                    <p class="font-body-strong text-body-strong">2026-06-15 15:00</p>
+                                    <p class="font-body-strong text-body-strong">2026-08-05 15:00</p>
                                 </div>
                             </div>
                             <div class="flex items-start gap-md">
@@ -432,56 +469,46 @@
                         </button>
                     </div>
                 </section>
-                <!-- Saved Resources -->
+                <!-- Recently Answered -->
                 <section class="bg-white p-xl rounded-xxl border border-hairline shadow-sm">
                     <div class="flex items-center justify-between mb-lg">
-                        <h2 class="font-title-md text-title-md text-on-surface">저장한 자료·일지</h2>
+                        <h2 class="font-title-md text-title-md text-on-surface">최근 답변 완료</h2>
                         <button class="p-xxs hover:bg-surface-soft rounded-full">
                             <span class="material-symbols-outlined text-muted" data-icon="more_vert">more_vert</span>
                         </button>
                     </div>
                     <div class="flex flex-col gap-sm">
-                        <a class="group flex items-center gap-md p-base bg-surface-soft hover:bg-surface-strong rounded-xl transition-all border border-hairline"
-                            href="#">
+                        <div class="flex items-center gap-md p-base bg-surface-soft rounded-xl border border-hairline">
                             <div
-                                class="w-10 h-10 bg-error-container text-error rounded-lg flex items-center justify-center">
-                                <span class="material-symbols-outlined" data-icon="picture_as_pdf">picture_as_pdf</span>
+                                class="w-10 h-10 bg-success/10 text-success rounded-lg flex items-center justify-center">
+                                <span class="material-symbols-outlined" data-icon="task_alt">task_alt</span>
                             </div>
                             <div class="flex-1 overflow-hidden">
-                                <p class="font-body-sm text-body-sm font-medium truncate text-on-surface">2026학년도 교원 복무
-                                    가이드.pdf</p>
-                                <p class="font-caption text-caption text-muted">2.4MB · 2026.06.11</p>
+                                <p class="font-body-sm text-body-sm font-medium truncate text-on-surface">박지영 장학사 · 멘토링 배정 협의</p>
+                                <p class="font-caption text-caption text-muted">2026.07.24 답변 완료</p>
                             </div>
-                        </a>
-                        <a class="group flex items-center gap-md p-base bg-surface-soft hover:bg-surface-strong rounded-xl transition-all border border-hairline"
-                            href="#">
+                        </div>
+                        <div class="flex items-center gap-md p-base bg-surface-soft rounded-xl border border-hairline">
                             <div
-                                class="w-10 h-10 bg-on-primary-fixed-variant text-white rounded-lg flex items-center justify-center">
-                                <span class="material-symbols-outlined" data-icon="description">description</span>
+                                class="w-10 h-10 bg-success/10 text-success rounded-lg flex items-center justify-center">
+                                <span class="material-symbols-outlined" data-icon="task_alt">task_alt</span>
                             </div>
                             <div class="flex-1 overflow-hidden">
-                                <p class="font-body-sm text-body-sm font-medium truncate text-on-surface">상담
-                                    일지_20260610.docx</p>
-                                <p class="font-caption text-caption text-muted">45KB · 2026.06.10</p>
+                                <p class="font-body-sm text-body-sm font-medium truncate text-on-surface">정성실 교사 · 학교폭력 대응 매뉴얼 안내</p>
+                                <p class="font-caption text-caption text-muted">2026.07.22 답변 완료</p>
                             </div>
-                        </a>
-                        <a class="group flex items-center gap-md p-base bg-surface-soft hover:bg-surface-strong rounded-xl transition-all border border-hairline"
-                            href="#">
+                        </div>
+                        <div class="flex items-center gap-md p-base bg-surface-soft rounded-xl border border-hairline">
                             <div
-                                class="w-10 h-10 bg-secondary-container text-on-secondary-container rounded-lg flex items-center justify-center">
-                                <span class="material-symbols-outlined" data-icon="sticky_note_2">sticky_note_2</span>
+                                class="w-10 h-10 bg-success/10 text-success rounded-lg flex items-center justify-center">
+                                <span class="material-symbols-outlined" data-icon="task_alt">task_alt</span>
                             </div>
                             <div class="flex-1 overflow-hidden">
-                                <p class="font-body-sm text-body-sm font-medium truncate text-on-surface">학교폭력 대응 매뉴얼
-                                    요약.hwp</p>
-                                <p class="font-caption text-caption text-muted">1.1MB · 2026.06.05</p>
+                                <p class="font-body-sm text-body-sm font-medium truncate text-on-surface">이교육 교사 · NEIS 학적 변동 처리 안내</p>
+                                <p class="font-caption text-caption text-muted">2026.07.18 답변 완료</p>
                             </div>
-                        </a>
+                        </div>
                     </div>
-                    <button
-                        class="w-full mt-lg py-sm font-button text-muted border border-dashed border-outline-variant rounded-xl hover:bg-surface-soft transition-all">
-                        + 자료 추가하기
-                    </button>
                 </section>
             </div>
         </div>
