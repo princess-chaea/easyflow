@@ -4,9 +4,124 @@
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>RAG 기반 데이터 갱신 및 관리자 관리 | 이지플로우 (EasyFlow) - 경상북도교육청</title>
-<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<title>업무 발송 - 이지플로우(EasyFlow)</title>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "secondary-fixed": "#ffdea8",
+                      "tertiary": "#501400",
+                      "on-primary-fixed": "#001849",
+                      "on-tertiary-container": "#ff8a62",
+                      "surface-tint": "#335ab4",
+                      "ink": "#111214",
+                      "surface-soft": "#f8f9fa",
+                      "on-primary-container": "#88a7ff",
+                      "background": "#faf8ff",
+                      "danger": "#df2c2c",
+                      "surface-container": "#eeedf5",
+                      "tertiary-fixed-dim": "#ffb59d",
+                      "secondary-container": "#feb700",
+                      "on-tertiary": "#ffffff",
+                      "on-primary": "#ffffff",
+                      "secondary-fixed-dim": "#ffba20",
+                      "inverse-surface": "#2f3036",
+                      "inverse-on-surface": "#f1f0f8",
+                      "surface-variant": "#e2e2ea",
+                      "on-secondary-fixed": "#271900",
+                      "on-tertiary-fixed": "#390c00",
+                      "surface-container-lowest": "#ffffff",
+                      "on-primary-fixed-variant": "#12419b",
+                      "on-surface": "#1a1b21",
+                      "body": "#4e535e",
+                      "primary-fixed-dim": "#b3c5ff",
+                      "on-error": "#ffffff",
+                      "surface-strong": "#f2f4f6",
+                      "on-secondary-fixed-variant": "#5e4200",
+                      "surface-container-low": "#f4f3fb",
+                      "primary-container": "#003893",
+                      "error-container": "#ffdad6",
+                      "on-background": "#1a1b21",
+                      "success": "#00a261",
+                      "on-surface-variant": "#434652",
+                      "primary-active": "#002463",
+                      "outline-variant": "#c4c6d4",
+                      "tertiary-fixed": "#ffdbd0",
+                      "inverse-primary": "#b3c5ff",
+                      "surface": "#faf8ff",
+                      "primary-disabled": "#9eb9e5",
+                      "outline": "#747683",
+                      "surface-container-high": "#e8e7f0",
+                      "on-secondary": "#ffffff",
+                      "on-tertiary-fixed-variant": "#802a07",
+                      "on-error-container": "#93000a",
+                      "error": "#ba1a1a",
+                      "on-secondary-container": "#6b4b00",
+                      "secondary": "#7c5800",
+                      "surface-dim": "#dad9e1",
+                      "surface-dark": "#111214",
+                      "surface-bright": "#faf8ff",
+                      "canvas": "#ffffff",
+                      "muted": "#868b94",
+                      "warning": "#ff9000",
+                      "tertiary-container": "#752201",
+                      "primary-fixed": "#dae1ff",
+                      "hairline": "#e5e8eb",
+                      "surface-container-highest": "#e2e2ea",
+                      "primary": "#003893"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "base": "16px",
+                      "xxs": "4px",
+                      "section": "96px",
+                      "lg": "24px",
+                      "xl": "32px",
+                      "xxl": "48px",
+                      "xs": "8px",
+                      "md": "20px",
+                      "sm": "12px"
+              },
+              "fontFamily": {
+                      "display-lg": ["'HakgyoansimPoster'", "sans-serif"],
+                      "display-md": ["'HakgyoansimPoster'", "sans-serif"],
+                      "display-sm": ["'HakgyoansimPoster'", "sans-serif"],
+                      "title-lg": ["'KerisBaeum'", "sans-serif"],
+                      "title-md": ["'KerisBaeum'", "sans-serif"],
+                      "title-sm": ["'KerisBaeum'", "sans-serif"],
+                      "nav-link": ["'KerisBaeum'", "sans-serif"],
+                      "button": ["'KerisBaeum'", "sans-serif"],
+                      "body-strong": ["'KerisBaeum'", "sans-serif"],
+                      "body-md": ["'KerisBaeum'", "sans-serif"],
+                      "body-sm": ["'KerisBaeum'", "sans-serif"],
+                      "caption": ["'KerisBaeum'", "sans-serif"]
+              },
+              "fontSize": {
+                      "display-lg": ["57px", "64px"],
+                      "display-md": ["45px", "52px"],
+                      "display-sm": ["36px", "44px"],
+                      "title-lg": ["28px", "36px"],
+                      "title-md": ["22px", "28px"],
+                      "title-sm": ["18px", "24px"],
+                      "body-lg": ["16px", "24px"],
+                      "body-md": ["14px", "20px"],
+                      "body-sm": ["12px", "16px"],
+                      "nav-link": ["18px", "24px"],
+                      "caption": ["12px", "16px"]
+              }
+            },
+          },
+        }
+      </script>
 <style>
         @font-face {
             font-family: 'HakgyoansimPoster';
@@ -130,124 +245,34 @@
                 scroll-behavior: auto !important;
             }
         }
-    </style>
-<script id="tailwind-config">
-        tailwind.config = {
-          darkMode: "class",
-          theme: {
-            extend: {
-              "colors": {
-                      "secondary-fixed": "#ffdea8",
-                      "tertiary": "#501400",
-                      "on-primary-fixed": "#001849",
-                      "on-tertiary-container": "#ff8a62",
-                      "surface-tint": "#335ab4",
-                      "ink": "#111214",
-                      "surface-soft": "#f8f9fa",
-                      "on-primary-container": "#88a7ff",
-                      "background": "#faf8ff",
-                      "danger": "#df2c2c",
-                      "surface-container": "#eeedf5",
-                      "tertiary-fixed-dim": "#ffb59d",
-                      "secondary-container": "#feb700",
-                      "on-tertiary": "#ffffff",
-                      "on-primary": "#ffffff",
-                      "secondary-fixed-dim": "#ffba20",
-                      "inverse-surface": "#2f3036",
-                      "inverse-on-surface": "#f1f0f8",
-                      "surface-variant": "#e2e2ea",
-                      "on-secondary-fixed": "#271900",
-                      "on-tertiary-fixed": "#390c00",
-                      "surface-container-lowest": "#ffffff",
-                      "on-primary-fixed-variant": "#12419b",
-                      "on-surface": "#1a1b21",
-                      "body": "#4e535e",
-                      "primary-fixed-dim": "#b3c5ff",
-                      "on-error": "#ffffff",
-                      "surface-strong": "#f2f4f6",
-                      "on-secondary-fixed-variant": "#5e4200",
-                      "surface-container-low": "#f4f3fb",
-                      "primary-container": "#003893",
-                      "error-container": "#ffdad6",
-                      "on-background": "#1a1b21",
-                      "success": "#00a261",
-                      "on-surface-variant": "#434652",
-                      "primary-active": "#002463",
-                      "outline-variant": "#c4c6d4",
-                      "tertiary-fixed": "#ffdbd0",
-                      "inverse-primary": "#b3c5ff",
-                      "surface": "#faf8ff",
-                      "primary-disabled": "#9eb9e5",
-                      "outline": "#747683",
-                      "surface-container-high": "#e8e7f0",
-                      "on-secondary": "#ffffff",
-                      "on-tertiary-fixed-variant": "#802a07",
-                      "on-error-container": "#93000a",
-                      "error": "#ba1a1a",
-                      "on-secondary-container": "#6b4b00",
-                      "secondary": "#7c5800",
-                      "surface-dim": "#dad9e1",
-                      "surface-dark": "#111214",
-                      "surface-bright": "#faf8ff",
-                      "canvas": "#ffffff",
-                      "muted": "#868b94",
-                      "warning": "#ff9000",
-                      "tertiary-container": "#752201",
-                      "primary-fixed": "#dae1ff",
-                      "hairline": "#e5e8eb",
-                      "surface-container-highest": "#e2e2ea",
-                      "primary": "#003893"
-              },
-              "borderRadius": {
-                      "DEFAULT": "0.25rem",
-                      "lg": "0.5rem",
-                      "xl": "0.75rem",
-                      "full": "9999px"
-              },
-              "spacing": {
-                      "base": "16px",
-                      "xxs": "4px",
-                      "section": "96px",
-                      "lg": "24px",
-                      "xl": "32px",
-                      "xxl": "48px",
-                      "xs": "8px",
-                      "md": "20px",
-                      "sm": "12px"
-              },
-              "fontFamily": {
-                      "display-lg": ["'HakgyoansimPoster'", "sans-serif"],
-                      "display-md": ["'HakgyoansimPoster'", "sans-serif"],
-                      "display-sm": ["'HakgyoansimPoster'", "sans-serif"],
-                      "title-lg": ["'KerisBaeum'", "sans-serif"],
-                      "title-md": ["'KerisBaeum'", "sans-serif"],
-                      "title-sm": ["'KerisBaeum'", "sans-serif"],
-                      "nav-link": ["'KerisBaeum'", "sans-serif"],
-                      "button": ["'KerisBaeum'", "sans-serif"],
-                      "body-strong": ["'KerisBaeum'", "sans-serif"],
-                      "body-md": ["'KerisBaeum'", "sans-serif"],
-                      "body-sm": ["'KerisBaeum'", "sans-serif"],
-                      "caption": ["'KerisBaeum'", "sans-serif"]
-              },
-              "fontSize": {
-                      "display-lg": ["57px", "64px"],
-                      "display-md": ["45px", "52px"],
-                      "display-sm": ["36px", "44px"],
-                      "title-lg": ["28px", "36px"],
-                      "title-md": ["22px", "28px"],
-                      "title-sm": ["18px", "24px"],
-                      "body-lg": ["16px", "24px"],
-                      "body-md": ["14px", "20px"],
-                      "body-sm": ["12px", "16px"],
-                      "nav-link": ["18px", "24px"],
-                      "caption": ["12px", "16px"]
-              }
-            },
-          },
+    
+        /* Calendar Styles */
+        .cal-cell { min-height: 120px; padding: 4px; transition: background-color 0.2s; }
+        .cal-cell:hover, .cal-cell:focus-visible { background-color: rgba(0,0,0,0.02); outline: none; }
+        .cal-cell.is-outside { opacity: 0.4; }
+        .cal-cell.is-selected { background-color: rgba(0, 56, 147, 0.05); outline: 2px solid #003893; outline-offset: -2px; }
+        
+        .task-chip {
+            display: block;
+            margin-bottom: 2px;
+            padding: 4px 6px;
+            border: 1px solid var(--chip-color, #ccc);
+            background-color: color-mix(in srgb, var(--chip-color) 10%, transparent);
+            border-left-width: 4px;
+            transition: all 0.2s;
         }
-      </script>
+        .task-chip:hover {
+            filter: brightness(0.95);
+            transform: translateY(-1px);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        .chip-meta { font-size: 11px; opacity: 0.8; }
+        .chip-title { font-weight: 500; font-size: 12px; }
+
+    </style>
 </head>
-<body class="bg-surface-soft text-on-surface">
+<body class="text-ink bg-surface flex flex-col min-h-screen">
+<!-- Header/Navigation -->
 <nav class="fixed top-0 w-full z-50 h-[64px] bg-canvas">
 <div class="max-w-[1600px] w-full mx-auto h-full flex justify-between items-center px-lg">
 <div class="flex items-center gap-[60px]">
@@ -259,7 +284,7 @@
 <a class="font-nav-link text-nav-link text-on-surface-variant hover:text-primary transition-colors h-[64px] flex items-center" href="index.html">홈</a>
 </div>
 <div class="relative h-full flex flex-col justify-start group/col">
-<a class="font-nav-link text-nav-link transition-colors h-[64px] flex items-center gap-xxs whitespace-nowrap group-hover/col:text-primary group-hover/col:font-bold text-on-surface-variant hover:text-primary" href="업무배송_스마트공문달력.html">
+<a class="font-nav-link text-nav-link transition-colors h-[64px] flex items-center gap-xxs whitespace-nowrap group-hover/col:text-primary group-hover/col:font-bold text-primary font-bold border-b-2 border-primary" href="업무배송_스마트공문달력.html">
                 업무 배송 <span class="material-symbols-outlined text-[18px]">expand_more</span>
 </a>
 <div class="absolute top-[64px] left-1/2 -translate-x-1/2 pt-md pb-md min-w-[160px] flex flex-col items-center gap-sm opacity-0 invisible group-hover/mega:opacity-100 group-hover/mega:visible transition-all duration-200 z-50 group-hover/col:bg-surface-container h-[290px] rounded-b-lg">
@@ -310,100 +335,132 @@
 </div>
 </div>
 </nav>
-<main class="pt-[64px]"><div class="w-full max-w-[1600px] mx-auto px-lg py-xl flex flex-col md:flex-row gap-xl" id="global-layout-wrapper">
-<!-- Added background, padding, and rounded corners for the left menu area -->
-
+<main class="pt-[64px] min-h-screen">
+<div class="w-full max-w-[1600px] mx-auto px-lg py-xl flex flex-col md:flex-row gap-xl" id="global-layout-wrapper">
+<!-- LNB Sidebar -->
 <aside class="w-[220px] shrink-0 bg-surface-soft p-lg -ml-lg rounded-2xl hidden md:block" id="main-lnb">
-<h2 class="font-nav-link text-[22px] font-bold text-ink mb-md pb-sm border-b-2 border-ink">학교 관리</h2>
+<h2 class="font-nav-link text-[22px] font-bold text-ink mb-md pb-sm border-b-2 border-ink">업무 배송</h2>
 <ul class="flex flex-col gap-1">
-<li>
-<a class="font-nav-link block px-sm py-sm rounded-lg transition-colors text-[16px] text-on-surface-variant hover:bg-surface hover:text-ink" href="학교관리자_대시보드.html">대시보드</a>
-</li>
-<li>
-<a class="font-nav-link block px-sm py-sm rounded-lg transition-colors text-[16px] text-on-surface-variant hover:bg-surface hover:text-ink" href="학교관리자_학교통합관리.html">학교 통합 관리</a>
-</li>
-<li>
-<a class="font-nav-link block px-sm py-sm rounded-lg transition-colors text-[16px] text-on-surface-variant hover:bg-surface hover:text-ink" href="학교관리자_데이터 리포트.html">데이터 리포트</a>
-</li>
-<li>
-<a class="font-nav-link block px-sm py-sm rounded-lg transition-colors text-[16px] bg-primary text-white font-bold" href="학교관리자_RAG데이터갱신.html">RAG 데이터 갱신</a>
-</li>
+<li><a class="font-nav-link block px-sm py-sm rounded-lg transition-colors text-[16px] text-ink/70 hover:bg-white hover:text-ink" href="업무배송_스마트공문달력.html">스마트 공문 달력</a></li>
+<li><a class="font-nav-link block px-sm py-sm rounded-lg transition-colors text-[16px] text-ink/70 hover:bg-white hover:text-ink" href="업무배송_업무우편함.html">업무 우편함</a></li>
+<li><a class="font-nav-link block px-sm py-sm rounded-lg transition-colors text-[16px] bg-primary text-white font-bold shadow-sm" href="업무배송_업무발송.html">업무 발송</a></li>
+<li><a class="font-nav-link block px-sm py-sm rounded-lg transition-colors text-[16px] text-ink/70 hover:bg-white hover:text-ink" href="업무배송_맞춤형업무가이드.html">맞춤형 업무 가이드</a></li>
 </ul>
 </aside>
-
-<div class="flex-1 min-w-0">
-<!-- 표준 페이지 헤더 영역 -->
-<section class="max-w-[1600px] mx-auto py-xl">
-<div class="bg-canvas p-xl rounded-2xl border border-hairline shadow-sm min-h-[400px]">
-<p>신규 행정 가이드나 우수 사례 문서를 업로드하여 AI 검색 및 챗봇이 참조할 수 있도록 데이터베이스에 반영합니다.</p>
-</div>
-</section>
-</div></div></main>
-<footer class="w-full mt-section px-lg max-w-[1600px] mx-auto flex flex-col gap-base pb-xl border-t border-hairline pt-xl opacity-60 hover:opacity-100 transition-opacity">
-<div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-base">
-<span class="font-title-sm text-title-sm text-on-surface">경상북도교육청</span>
-<div class="flex flex-wrap gap-base">
-<a class="font-caption text-caption text-body hover:underline decoration-primary transition-all" href="#">개인정보처리방침</a>
-<a class="font-caption text-caption text-body hover:underline decoration-primary transition-all" href="#">이용약관</a>
-<a class="font-caption text-caption text-body hover:underline decoration-primary transition-all" href="#">이메일무단수집거부</a>
-<a class="font-caption text-caption text-body hover:underline decoration-primary transition-all" href="#">찾아오시는길</a>
+<!-- Content Area -->
+<div class="flex-1 min-w-0 flex flex-col">
+<div class="mb-lg">
+<h1 class="text-[28px] font-bold text-ink mb-xs">업무 발송</h1>
+<p class="text-[15px] text-ink/70">서식, 기안문 등 필요한 업무 자료를 관련 업무 담당 교직원의 업무 우편함으로 자동 배송합니다.</p>
+<!-- TODO: 실제 권한 연동 시 업무 배송 담당자가 아닌 사용자는 이 페이지 접근을 막고 GNB/사이드바에서도 숨김 처리 필요 -->
+<div class="mt-sm inline-flex items-center gap-xs px-sm py-1 bg-secondary-container text-on-secondary-container rounded-full text-[13px] font-bold w-fit">
+<span class="material-symbols-outlined text-[16px]">badge</span> 업무 배송 담당자 전용
 </div>
 </div>
-<div class="flex flex-col md:flex-row justify-between items-start md:items-center border-t border-hairline/50 pt-base">
-<p class="font-caption text-caption text-on-surface-variant">© 경상북도교육청. All Rights Reserved.</p>
-<p class="font-caption text-caption text-muted">경북 안동시 풍천면 도청대로 511 | 대표전화 054-805-3000</p>
+<div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-lg sm:p-xl flex-1">
+<form class="flex flex-col gap-xl max-w-4xl" onsubmit="event.preventDefault(); showToast();">
+<!-- 담당 업무 카테고리 -->
+<div class="flex flex-col gap-sm">
+<label class="text-[16px] font-bold text-ink flex items-center gap-xs">
+<span class="material-symbols-outlined text-primary text-[20px]">category</span> 
+                                관련 업무 분야 선택
+                            </label>
+<p class="text-[13px] text-ink/60 mb-1">이 업무를 담당(구독)하고 있는 교직원의 우편함과 달력으로 자료가 자동 발송됩니다.</p>
+<div class="grid grid-cols-2 sm:grid-cols-4 gap-sm">
+<label class="border border-gray-200 rounded-xl p-sm flex items-center gap-2 cursor-pointer hover:border-primary transition-colors has-[:checked]:bg-primary/5 has-[:checked]:border-primary">
+<input class="accent-primary w-4 h-4" name="taskCategory" type="checkbox" value="교무"/>
+<span class="text-[15px] font-semibold text-ink">교무/학사</span>
+</label>
+<label class="border border-gray-200 rounded-xl p-sm flex items-center gap-2 cursor-pointer hover:border-primary transition-colors has-[:checked]:bg-primary/5 has-[:checked]:border-primary">
+<input class="accent-primary w-4 h-4" name="taskCategory" type="checkbox" value="행정"/>
+<span class="text-[15px] font-semibold text-ink">행정/예산</span>
+</label>
+<label class="border border-gray-200 rounded-xl p-sm flex items-center gap-2 cursor-pointer hover:border-primary transition-colors has-[:checked]:bg-primary/5 has-[:checked]:border-primary">
+<input class="accent-primary w-4 h-4" name="taskCategory" type="checkbox" value="생활"/>
+<span class="text-[15px] font-semibold text-ink">생활/안전</span>
+</label>
+<label class="border border-gray-200 rounded-xl p-sm flex items-center gap-2 cursor-pointer hover:border-primary transition-colors has-[:checked]:bg-primary/5 has-[:checked]:border-primary">
+<input class="accent-primary w-4 h-4" name="taskCategory" type="checkbox" value="방과후"/>
+<span class="text-[15px] font-semibold text-ink">방과후/돌봄</span>
+</label>
 </div>
-</footer>
+</div>
+<!-- 제목 -->
+<div class="flex flex-col gap-sm">
+<label class="text-[16px] font-bold text-ink">발송 제목</label>
+<input class="w-full border border-gray-300 rounded-xl px-md py-sm text-[15px] focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors" placeholder="예: 2학기 방과후학교 외부강사 계약 서식 안내" type="text"/>
+</div>
+<!-- 내용 -->
+<div class="flex flex-col gap-sm">
+<label class="text-[16px] font-bold text-ink">상세 내용 (메모)</label>
+<textarea class="w-full border border-gray-300 rounded-xl px-md py-sm text-[15px] focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors resize-none" placeholder="수신자가 참고할 내용을 적어주세요." rows="4"></textarea>
+</div>
+<!-- 파일 첨부 -->
+<div class="flex flex-col gap-sm">
+<label class="text-[16px] font-bold text-ink flex items-center gap-xs">
+<span class="material-symbols-outlined text-primary text-[20px]">attach_file</span> 
+                                배송할 자료 첨부
+                            </label>
+<div class="border-2 border-dashed border-gray-300 rounded-2xl p-xl flex flex-col items-center justify-center gap-sm bg-surface-soft/50 hover:bg-surface transition-colors cursor-pointer group">
+<div class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center text-primary group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-[24px]">cloud_upload</span>
+</div>
+<div class="text-center">
+<p class="text-[15px] font-bold text-ink mb-1">클릭하여 파일 선택 또는 여기로 드래그</p>
+<p class="text-[13px] text-ink/50">HWP, PDF, Excel 파일 등을 첨부하여 발송할 수 있습니다.</p>
+</div>
+</div>
+</div>
+<!-- 날짜 선택 -->
+<div class="flex flex-col sm:flex-row gap-lg">
+<div class="flex flex-col gap-sm flex-1">
+<label class="text-[16px] font-bold text-ink flex items-center gap-xs">
+<span class="material-symbols-outlined text-primary text-[20px]">calendar_today</span> 
+                                    업무(마감) 일자
+                                </label>
+<input class="w-full border border-gray-300 rounded-xl px-md py-sm text-[15px] focus:outline-none focus:border-primary transition-colors" type="date"/>
+</div>
+<div class="flex flex-col gap-sm flex-1">
+<label class="text-[16px] font-bold text-ink flex items-center gap-xs">
+<span class="material-symbols-outlined text-primary text-[20px]">schedule_send</span> 
+                                    우편 배송 시기 (공개 일시)
+                                </label>
+<select class="w-full border border-gray-300 rounded-xl px-md py-sm text-[15px] focus:outline-none focus:border-primary transition-colors appearance-none bg-white">
+<option>등록 즉시 발송</option>
+<option>업무일 기준 7일 전 자동 발송</option>
+<option>업무일 기준 3일 전 자동 발송</option>
+<option>직접 지정...</option>
+</select>
+</div>
+</div>
+<hr class="border-gray-200"/>
+<div class="flex justify-end gap-sm">
+<button class="px-xl py-sm rounded-xl font-bold text-[15px] text-ink/70 hover:bg-surface-strong transition-colors border border-transparent" type="button">
+                                취소
+                            </button>
+<button class="px-xl py-sm rounded-xl font-bold text-[15px] bg-primary text-white hover:bg-primary-active transition-colors shadow-sm flex items-center gap-xs" type="submit">
+<span class="material-symbols-outlined text-[18px]">send</span> 배송 등록하기
+                            </button>
+</div>
+</form>
+</div>
+</div>
+</div>
+</main>
+<!-- Toast Notification (Hidden) -->
+<div class="fixed bottom-lg left-1/2 -translate-x-1/2 bg-ink/90 text-white px-xl py-sm rounded-full text-[15px] font-bold shadow-lg transition-all duration-300 translate-y-20 opacity-0 z-[100] flex items-center gap-xs" id="toast">
+<span class="material-symbols-outlined text-green-400">check_circle</span>
+        업무 우편이 성공적으로 등록(배송)되었습니다.
+    </div>
 <script>
-    // Micro-interactions and UI logic
-    document.querySelectorAll('button').forEach(button => {
-        button.addEventListener('click', function(e) {
-            const ripple = document.createElement('span');
-            ripple.classList.add('ripple');
+        function showToast() {
+            const toast = document.getElementById('toast');
+            toast.classList.remove('translate-y-20', 'opacity-0');
             
-            const rect = this.getBoundingClientRect();
-            const size = Math.max(rect.width, rect.height);
-            ripple.style.width = ripple.style.height = `${size}px`;
-            
-            const x = e.clientX - rect.left - size / 2;
-            const y = e.clientY - rect.top - size / 2;
-            ripple.style.left = `${x}px`;
-            ripple.style.top = `${y}px`;
-            
-            this.appendChild(ripple);
-            setTimeout(() => ripple.remove(), 600);
-        });
-    });
-
-    // Intersection Observer for Staggered Reveal
-    const revealOptions = {
-        threshold: 0.1,
-        rootMargin: "0px 0px -50px 0px"
-    };
-
-    const revealObserver = new IntersectionObserver((entries, observer) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                const order = entry.target.getAttribute('data-entrance-order') || 0;
-                setTimeout(() => {
-                    entry.target.classList.add('visible');
-                }, order * 100);
-                observer.unobserve(entry.target);
-            }
-        });
-    }, revealOptions);
-
-    document.querySelectorAll('.entrance-fade').forEach(el => {
-        revealObserver.observe(el);
-    });
-
-    // Initial load animation for hero elements that might be above the fold
-    window.addEventListener('load', () => {
-        document.querySelectorAll('.entrance-fade.visible').forEach(el => {
-            const order = el.getAttribute('data-entrance-order') || 0;
-            el.style.transitionDelay = `${order * 100}ms`;
-        });
-    });
-</script>
+            setTimeout(() => {
+                toast.classList.add('translate-y-20', 'opacity-0');
+            }, 3000);
+        }
+    </script>
 </body>
 </html>

@@ -288,7 +288,7 @@
                 업무 배송 <span class="material-symbols-outlined text-[18px]">expand_more</span>
 </a>
 <div class="absolute top-[64px] left-1/2 -translate-x-1/2 pt-md pb-md min-w-[160px] flex flex-col items-center gap-sm opacity-0 invisible group-hover/mega:opacity-100 group-hover/mega:visible transition-all duration-200 z-50 group-hover/col:bg-surface-container h-[290px] rounded-b-lg">
-<a class="font-nav-link text-[16px] text-on-surface-variant hover:text-primary transition-colors whitespace-nowrap px-sm py-1 w-full text-center" href="업무배송_스마트공문달력.html">스마트 공문 달력</a><a class="font-nav-link text-[16px] text-on-surface-variant hover:text-primary transition-colors whitespace-nowrap px-sm py-1 w-full text-center" href="업무배송_업무우편함.html">업무 우편함</a><a class="font-nav-link text-[16px] text-on-surface-variant hover:text-primary transition-colors whitespace-nowrap px-sm py-1 w-full text-center" href="업무배송_맞춤형업무가이드.html">맞춤형 업무 가이드</a>
+<a class="font-nav-link text-[16px] text-on-surface-variant hover:text-primary transition-colors whitespace-nowrap px-sm py-1 w-full text-center" href="업무배송_스마트공문달력.html">스마트 공문 달력</a><a class="font-nav-link text-[16px] text-on-surface-variant hover:text-primary transition-colors whitespace-nowrap px-sm py-1 w-full text-center" href="업무배송_업무우편함.html">업무 우편함</a><a class="font-nav-link text-[16px] text-on-surface-variant hover:text-primary transition-colors whitespace-nowrap px-sm py-1 w-full text-center" href="업무배송_업무발송.html">업무 발송</a><a class="font-nav-link text-[16px] text-on-surface-variant hover:text-primary transition-colors whitespace-nowrap px-sm py-1 w-full text-center" href="업무배송_맞춤형업무가이드.html">맞춤형 업무 가이드</a>
 </div>
 </div>
 <div class="relative h-full flex flex-col justify-start group/col">
@@ -343,119 +343,134 @@
 <ul class="flex flex-col gap-1">
 <li><a class="font-nav-link block px-sm py-sm rounded-lg transition-colors text-[16px] text-ink/70 hover:bg-white hover:text-ink" href="업무배송_스마트공문달력.html">스마트 공문 달력</a></li>
 <li><a class="font-nav-link block px-sm py-sm rounded-lg transition-colors text-[16px] bg-primary text-white font-bold shadow-sm" href="업무배송_업무우편함.html">업무 우편함</a></li>
+<li><a class="font-nav-link block px-sm py-sm rounded-lg transition-colors text-[16px] text-ink/70 hover:bg-white hover:text-ink" href="업무배송_업무발송.html">업무 발송</a></li>
 <li><a class="font-nav-link block px-sm py-sm rounded-lg transition-colors text-[16px] text-ink/70 hover:bg-white hover:text-ink" href="업무배송_맞춤형업무가이드.html">맞춤형 업무 가이드</a></li>
 </ul>
 </aside>
 <!-- Content Area -->
 <div class="flex-1 min-w-0 flex flex-col">
-<div class="mb-lg">
-<h1 class="text-[28px] font-bold text-ink mb-xs">업무 우편함 발송</h1>
-<p class="text-[15px] text-ink/70">서식, 기안문 등 필요한 업무 자료를 관련 업무 담당자들에게 자동으로 배송합니다.</p>
+<div class="mb-lg flex flex-col sm:flex-row sm:items-end sm:justify-between gap-sm">
+<div>
+<h1 class="text-[28px] font-bold text-ink mb-xs">업무 우편함</h1>
+<p class="text-[15px] text-ink/70">업무 배송 담당자가 보낸 서식·공문·자료를 확인하세요. 마감일은 자동으로 나의 학사일정 달력에 반영됩니다.</p>
 </div>
-<div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-lg sm:p-xl flex-1">
-<form class="flex flex-col gap-xl max-w-4xl" onsubmit="event.preventDefault(); showToast();">
-<!-- 담당 업무 카테고리 -->
-<div class="flex flex-col gap-sm">
-<label class="text-[16px] font-bold text-ink flex items-center gap-xs">
-<span class="material-symbols-outlined text-primary text-[20px]">category</span> 
-                                관련 업무 분야 선택
-                            </label>
-<p class="text-[13px] text-ink/60 mb-1">이 업무를 담당(구독)하고 있는 교직원의 우편함과 달력으로 자료가 자동 발송됩니다.</p>
-<div class="grid grid-cols-2 sm:grid-cols-4 gap-sm">
-<label class="border border-gray-200 rounded-xl p-sm flex items-center gap-2 cursor-pointer hover:border-primary transition-colors has-[:checked]:bg-primary/5 has-[:checked]:border-primary">
-<input class="accent-primary w-4 h-4" name="taskCategory" type="checkbox" value="교무"/>
-<span class="text-[15px] font-semibold text-ink">교무/학사</span>
-</label>
-<label class="border border-gray-200 rounded-xl p-sm flex items-center gap-2 cursor-pointer hover:border-primary transition-colors has-[:checked]:bg-primary/5 has-[:checked]:border-primary">
-<input class="accent-primary w-4 h-4" name="taskCategory" type="checkbox" value="행정"/>
-<span class="text-[15px] font-semibold text-ink">행정/예산</span>
-</label>
-<label class="border border-gray-200 rounded-xl p-sm flex items-center gap-2 cursor-pointer hover:border-primary transition-colors has-[:checked]:bg-primary/5 has-[:checked]:border-primary">
-<input class="accent-primary w-4 h-4" name="taskCategory" type="checkbox" value="생활"/>
-<span class="text-[15px] font-semibold text-ink">생활/안전</span>
-</label>
-<label class="border border-gray-200 rounded-xl p-sm flex items-center gap-2 cursor-pointer hover:border-primary transition-colors has-[:checked]:bg-primary/5 has-[:checked]:border-primary">
-<input class="accent-primary w-4 h-4" name="taskCategory" type="checkbox" value="방과후"/>
-<span class="text-[15px] font-semibold text-ink">방과후/돌봄</span>
-</label>
+<div class="flex items-center gap-xs">
+<button class="mailbox-tab px-md py-xs rounded-full text-[14px] font-bold transition-colors bg-primary text-white" data-filter="all" onclick="filterMail('all', this)">전체 <span class="opacity-80">5</span></button>
+<button class="mailbox-tab px-md py-xs rounded-full text-[14px] font-bold transition-colors text-ink/60 hover:bg-surface-strong" data-filter="unread" onclick="filterMail('unread', this)">안 읽음 <span class="opacity-70">2</span></button>
 </div>
 </div>
-<!-- 제목 -->
-<div class="flex flex-col gap-sm">
-<label class="text-[16px] font-bold text-ink">발송 제목</label>
-<input class="w-full border border-gray-300 rounded-xl px-md py-sm text-[15px] focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors" placeholder="예: 2학기 방과후학교 외부강사 계약 서식 안내" type="text"/>
+<div class="bg-white rounded-2xl shadow-sm border border-gray-200 flex-1 divide-y divide-gray-100 overflow-hidden" id="mailList">
+<div class="mail-item is-unread flex items-start gap-md p-lg hover:bg-surface-soft/60 transition-colors cursor-pointer" data-read="unread">
+<span class="mt-1 w-2 h-2 rounded-full bg-primary shrink-0" title="안 읽음"></span>
+<div class="flex-1 min-w-0">
+<div class="flex flex-wrap items-center gap-xs mb-1">
+<span class="px-xs py-0.5 rounded-md text-[12px] font-bold bg-danger/10 text-danger">행정실</span>
+<span class="text-[13px] text-ink/50">2026.08.01 발송</span>
 </div>
-<!-- 내용 -->
-<div class="flex flex-col gap-sm">
-<label class="text-[16px] font-bold text-ink">상세 내용 (메모)</label>
-<textarea class="w-full border border-gray-300 rounded-xl px-md py-sm text-[15px] focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors resize-none" placeholder="수신자가 참고할 내용을 적어주세요." rows="4"></textarea>
-</div>
-<!-- 파일 첨부 -->
-<div class="flex flex-col gap-sm">
-<label class="text-[16px] font-bold text-ink flex items-center gap-xs">
-<span class="material-symbols-outlined text-primary text-[20px]">attach_file</span> 
-                                배송할 자료 첨부
-                            </label>
-<div class="border-2 border-dashed border-gray-300 rounded-2xl p-xl flex flex-col items-center justify-center gap-sm bg-surface-soft/50 hover:bg-surface transition-colors cursor-pointer group">
-<div class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center text-primary group-hover:scale-110 transition-transform">
-<span class="material-symbols-outlined text-[24px]">cloud_upload</span>
-</div>
-<div class="text-center">
-<p class="text-[15px] font-bold text-ink mb-1">클릭하여 파일 선택 또는 여기로 드래그</p>
-<p class="text-[13px] text-ink/50">HWP, PDF, Excel 파일 등을 첨부하여 발송할 수 있습니다.</p>
+<p class="text-[16px] font-bold text-ink truncate">2026학년도 제1차 추가경정예산(안) 편성 및 학교운영위원회 심의 요청</p>
+<p class="text-[13px] text-ink/60 mt-0.5 truncate">추경 예산(안) 검토 후 붙임 서식에 부서별 요구액을 취합하여 회신 바랍니다.</p>
+<div class="flex flex-wrap items-center gap-sm mt-sm">
+<span class="inline-flex items-center gap-1 px-sm py-1 rounded-lg bg-surface-soft text-[12px] text-ink/70"><span class="material-symbols-outlined text-[14px]">attach_file</span>추경예산_요청기안문.hwp</span>
+<span class="inline-flex items-center gap-1 px-sm py-1 rounded-lg bg-danger/10 text-danger text-[12px] font-bold"><span class="material-symbols-outlined text-[14px]">event</span>마감 D-1</span>
 </div>
 </div>
+<button class="shrink-0 p-xs rounded-full hover:bg-surface-strong text-ink/50 hover:text-primary transition-colors" title="다운로드"><span class="material-symbols-outlined text-[20px]">download</span></button>
 </div>
-<!-- 날짜 선택 -->
-<div class="flex flex-col sm:flex-row gap-lg">
-<div class="flex flex-col gap-sm flex-1">
-<label class="text-[16px] font-bold text-ink flex items-center gap-xs">
-<span class="material-symbols-outlined text-primary text-[20px]">calendar_today</span> 
-                                    업무(마감) 일자
-                                </label>
-<input class="w-full border border-gray-300 rounded-xl px-md py-sm text-[15px] focus:outline-none focus:border-primary transition-colors" type="date"/>
+<div class="mail-item is-unread flex items-start gap-md p-lg hover:bg-surface-soft/60 transition-colors cursor-pointer" data-read="unread">
+<span class="mt-1 w-2 h-2 rounded-full bg-primary shrink-0" title="안 읽음"></span>
+<div class="flex-1 min-w-0">
+<div class="flex flex-wrap items-center gap-xs mb-1">
+<span class="px-xs py-0.5 rounded-md text-[12px] font-bold bg-success/10 text-success">교무실</span>
+<span class="text-[13px] text-ink/50">2026.07.30 발송</span>
 </div>
-<div class="flex flex-col gap-sm flex-1">
-<label class="text-[16px] font-bold text-ink flex items-center gap-xs">
-<span class="material-symbols-outlined text-primary text-[20px]">schedule_send</span> 
-                                    우편 배송 시기 (공개 일시)
-                                </label>
-<select class="w-full border border-gray-300 rounded-xl px-md py-sm text-[15px] focus:outline-none focus:border-primary transition-colors appearance-none bg-white">
-<option>등록 즉시 발송</option>
-<option>업무일 기준 7일 전 자동 발송</option>
-<option>업무일 기준 3일 전 자동 발송</option>
-<option>직접 지정...</option>
-</select>
+<p class="text-[16px] font-bold text-ink truncate">[2학기 준비] 교육과정 워크숍 및 학년협의회 자료 배포</p>
+<p class="text-[13px] text-ink/60 mt-0.5 truncate">학년별 교육과정 재구성안을 첨부 서식에 작성하여 제출해 주세요.</p>
+<div class="flex flex-wrap items-center gap-sm mt-sm">
+<span class="inline-flex items-center gap-1 px-sm py-1 rounded-lg bg-surface-soft text-[12px] text-ink/70"><span class="material-symbols-outlined text-[14px]">attach_file</span>2학기_교육과정_재구성안.hwp</span>
+<span class="inline-flex items-center gap-1 px-sm py-1 rounded-lg bg-danger/10 text-danger text-[12px] font-bold"><span class="material-symbols-outlined text-[14px]">event</span>마감 D-1</span>
 </div>
 </div>
-<hr class="border-gray-200"/>
-<div class="flex justify-end gap-sm">
-<button class="px-xl py-sm rounded-xl font-bold text-[15px] text-ink/70 hover:bg-surface-strong transition-colors border border-transparent" type="button">
-                                취소
-                            </button>
-<button class="px-xl py-sm rounded-xl font-bold text-[15px] bg-primary text-white hover:bg-primary-active transition-colors shadow-sm flex items-center gap-xs" type="submit">
-<span class="material-symbols-outlined text-[18px]">send</span> 배송 등록하기
-                            </button>
+<button class="shrink-0 p-xs rounded-full hover:bg-surface-strong text-ink/50 hover:text-primary transition-colors" title="다운로드"><span class="material-symbols-outlined text-[20px]">download</span></button>
 </div>
-</form>
+<div class="mail-item flex items-start gap-md p-lg hover:bg-surface-soft/60 transition-colors cursor-pointer" data-read="read">
+<span class="mt-1 w-2 h-2 rounded-full bg-transparent shrink-0"></span>
+<div class="flex-1 min-w-0">
+<div class="flex flex-wrap items-center gap-xs mb-1">
+<span class="px-xs py-0.5 rounded-md text-[12px] font-bold bg-secondary-container/60 text-on-secondary-container">행정실</span>
+<span class="text-[13px] text-ink/50">2026.07.28 발송</span>
+</div>
+<p class="text-[16px] font-medium text-ink/80 truncate">2학기 방과후학교 외부강사 계약 및 운영 준비 안내</p>
+<p class="text-[13px] text-ink/60 mt-0.5 truncate">외부강사 채용 시 첨부된 표준 계약서 양식을 사용해 주세요.</p>
+<div class="flex flex-wrap items-center gap-sm mt-sm">
+<span class="inline-flex items-center gap-1 px-sm py-1 rounded-lg bg-surface-soft text-[12px] text-ink/70"><span class="material-symbols-outlined text-[14px]">attach_file</span>방과후강사_표준계약서.hwp</span>
+<span class="inline-flex items-center gap-1 px-sm py-1 rounded-lg bg-warning/10 text-warning text-[12px] font-bold"><span class="material-symbols-outlined text-[14px]">event</span>마감 D-7</span>
+</div>
+</div>
+<button class="shrink-0 p-xs rounded-full hover:bg-surface-strong text-ink/50 hover:text-primary transition-colors" title="다운로드"><span class="material-symbols-outlined text-[20px]">download</span></button>
+</div>
+<div class="mail-item flex items-start gap-md p-lg hover:bg-surface-soft/60 transition-colors cursor-pointer" data-read="read">
+<span class="mt-1 w-2 h-2 rounded-full bg-transparent shrink-0"></span>
+<div class="flex-1 min-w-0">
+<div class="flex flex-wrap items-center gap-xs mb-1">
+<span class="px-xs py-0.5 rounded-md text-[12px] font-bold bg-primary-container/10 text-primary-container">생활안전부</span>
+<span class="text-[13px] text-ink/50">2026.07.25 발송</span>
+</div>
+<p class="text-[16px] font-medium text-ink/80 truncate">개학 맞이 교내 안전점검 및 소방 시설 확인 협조 요청</p>
+<p class="text-[13px] text-ink/60 mt-0.5 truncate">담당 구역 점검표를 작성하여 안전점검일 전까지 제출 바랍니다.</p>
+<div class="flex flex-wrap items-center gap-sm mt-sm">
+<span class="inline-flex items-center gap-1 px-sm py-1 rounded-lg bg-surface-soft text-[12px] text-ink/70"><span class="material-symbols-outlined text-[14px]">attach_file</span>안전점검표_2학기.hwp</span>
+<span class="inline-flex items-center gap-1 px-sm py-1 rounded-lg bg-warning/10 text-warning text-[12px] font-bold"><span class="material-symbols-outlined text-[14px]">event</span>마감 D-9</span>
+</div>
+</div>
+<button class="shrink-0 p-xs rounded-full hover:bg-surface-strong text-ink/50 hover:text-primary transition-colors" title="다운로드"><span class="material-symbols-outlined text-[20px]">download</span></button>
+</div>
+<div class="mail-item flex items-start gap-md p-lg hover:bg-surface-soft/60 transition-colors cursor-pointer" data-read="read">
+<span class="mt-1 w-2 h-2 rounded-full bg-transparent shrink-0"></span>
+<div class="flex-1 min-w-0">
+<div class="flex flex-wrap items-center gap-xs mb-1">
+<span class="px-xs py-0.5 rounded-md text-[12px] font-bold bg-secondary-container/60 text-on-secondary-container">연구실</span>
+<span class="text-[13px] text-ink/50">2026.07.20 발송</span>
+</div>
+<p class="text-[16px] font-medium text-ink/80 truncate">2학기 교육과정 운영 계획 수정 및 학사일정 변경 심의</p>
+<p class="text-[13px] text-ink/60 mt-0.5 truncate">수정된 학사일정(안)을 검토 후 의견을 회신해 주세요.</p>
+<div class="flex flex-wrap items-center gap-sm mt-sm">
+<span class="inline-flex items-center gap-1 px-sm py-1 rounded-lg bg-surface-soft text-[12px] text-ink/70"><span class="material-symbols-outlined text-[14px]">attach_file</span>학사일정_변경(안).hwp</span>
+<span class="inline-flex items-center gap-1 px-sm py-1 rounded-lg bg-surface-strong text-ink/60 text-[12px] font-bold"><span class="material-symbols-outlined text-[14px]">event</span>마감 D-14</span>
+</div>
+</div>
+<button class="shrink-0 p-xs rounded-full hover:bg-surface-strong text-ink/50 hover:text-primary transition-colors" title="다운로드"><span class="material-symbols-outlined text-[20px]">download</span></button>
+</div>
 </div>
 </div>
 </div>
 </main>
-<!-- Toast Notification (Hidden) -->
-<div class="fixed bottom-lg left-1/2 -translate-x-1/2 bg-ink/90 text-white px-xl py-sm rounded-full text-[15px] font-bold shadow-lg transition-all duration-300 translate-y-20 opacity-0 z-[100] flex items-center gap-xs" id="toast">
-<span class="material-symbols-outlined text-green-400">check_circle</span>
-        업무 우편이 성공적으로 등록(배송)되었습니다.
-    </div>
 <script>
-        function showToast() {
-            const toast = document.getElementById('toast');
-            toast.classList.remove('translate-y-20', 'opacity-0');
-            
-            setTimeout(() => {
-                toast.classList.add('translate-y-20', 'opacity-0');
-            }, 3000);
+        function filterMail(filter, btn) {
+            document.querySelectorAll('.mailbox-tab').forEach(b => {
+                b.classList.remove('bg-primary', 'text-white');
+                b.classList.add('text-ink/60');
+            });
+            btn.classList.add('bg-primary', 'text-white');
+            btn.classList.remove('text-ink/60');
+
+            document.querySelectorAll('#mailList .mail-item').forEach(item => {
+                const show = filter === 'all' || item.dataset.read === filter;
+                item.style.display = show ? '' : 'none';
+            });
         }
+
+        document.querySelectorAll('#mailList .mail-item').forEach(item => {
+            item.addEventListener('click', (e) => {
+                if (e.target.closest('button')) return;
+                if (item.dataset.read === 'unread') {
+                    item.dataset.read = 'read';
+                    const dot = item.querySelector('span.rounded-full');
+                    if (dot) dot.classList.replace('bg-primary', 'bg-transparent');
+                    const title = item.querySelector('p.font-bold, p.font-medium');
+                    if (title) { title.classList.remove('font-bold', 'text-ink'); title.classList.add('font-medium', 'text-ink/80'); }
+                }
+            });
+        });
     </script>
 </body>
 </html>
