@@ -1,0 +1,645 @@
+﻿<!DOCTYPE html>
+
+<html lang="ko">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>이지플로우 (EasyFlow) - 학교 통합 관리</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        @font-face {
+            font-family: 'HakgyoansimPoster';
+            src: url('./font/Hakgyoansim_PosterB.ttf') format('truetype');
+            font-weight: 700;
+        }
+        @font-face {
+            font-family: 'KerisBaeum';
+            src: url('./font/KERISBAEUM_L.ttf') format('truetype');
+            font-weight: 300;
+        }
+        @font-face {
+            font-family: 'KerisBaeum';
+            src: url('./font/KERISBAEUM_R.ttf') format('truetype');
+            font-weight: 400;
+        }
+        @font-face {
+            font-family: 'KerisBaeum';
+            src: url('./font/KERISBAEUM_B.ttf') format('truetype');
+            font-weight: 700;
+        }
+        @font-face {
+            font-family: 'KerisBaeum';
+            src: url('./font/KERISBAEUM_EB.ttf') format('truetype');
+            font-weight: 800;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        body {
+            font-family: 'KerisBaeum', sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .ai-gradient {
+            background: linear-gradient(135deg, #003893 0%, #12419b 100%);
+        }
+        .ripple {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            transform: scale(0);
+            animation: ripple-animation 0.6s linear;
+            pointer-events: none;
+        }
+        @keyframes ripple-animation {
+            to { transform: scale(4); opacity: 0; }
+        }
+
+        /* Micro-interactions & Animations */
+        @keyframes pulse-soft {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.7; transform: scale(0.95); }
+        }
+        .animate-pulse-soft { animation: pulse-soft 2s infinite ease-in-out; }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+        .animate-float { animation: float 6s infinite ease-in-out; }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+        .shimmer-effect::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transform: translateX(-100%);
+            animation: shimmer 3s infinite;
+        }
+
+        .hover-lift {
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.4s ease;
+        }
+        .hover-lift:hover {
+            transform: translateY(-8px) scale(1.01);
+            box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+        }
+
+        .nav-link-underline {
+            position: relative;
+        }
+        .nav-link-underline::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: currentColor;
+            transition: width 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .nav-link-underline:hover::after {
+            width: 100%;
+        }
+
+        .entrance-fade {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275), transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .entrance-fade.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+                scroll-behavior: auto !important;
+            }
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "secondary-fixed": "#ffdea8",
+                      "tertiary": "#501400",
+                      "on-primary-fixed": "#001849",
+                      "on-tertiary-container": "#ff8a62",
+                      "surface-tint": "#335ab4",
+                      "ink": "#111214",
+                      "surface-soft": "#f8f9fa",
+                      "on-primary-container": "#88a7ff",
+                      "background": "#faf8ff",
+                      "danger": "#df2c2c",
+                      "surface-container": "#eeedf5",
+                      "tertiary-fixed-dim": "#ffb59d",
+                      "secondary-container": "#feb700",
+                      "on-tertiary": "#ffffff",
+                      "on-primary": "#ffffff",
+                      "secondary-fixed-dim": "#ffba20",
+                      "inverse-surface": "#2f3036",
+                      "inverse-on-surface": "#f1f0f8",
+                      "surface-variant": "#e2e2ea",
+                      "on-secondary-fixed": "#271900",
+                      "on-tertiary-fixed": "#390c00",
+                      "surface-container-lowest": "#ffffff",
+                      "on-primary-fixed-variant": "#12419b",
+                      "on-surface": "#1a1b21",
+                      "body": "#4e535e",
+                      "primary-fixed-dim": "#b3c5ff",
+                      "on-error": "#ffffff",
+                      "surface-strong": "#f2f4f6",
+                      "on-secondary-fixed-variant": "#5e4200",
+                      "surface-container-low": "#f4f3fb",
+                      "primary-container": "#003893",
+                      "error-container": "#ffdad6",
+                      "on-background": "#1a1b21",
+                      "success": "#00a261",
+                      "on-surface-variant": "#434652",
+                      "primary-active": "#002463",
+                      "outline-variant": "#c4c6d4",
+                      "tertiary-fixed": "#ffdbd0",
+                      "inverse-primary": "#b3c5ff",
+                      "surface": "#faf8ff",
+                      "primary-disabled": "#9eb9e5",
+                      "outline": "#747683",
+                      "surface-container-high": "#e8e7f0",
+                      "on-secondary": "#ffffff",
+                      "on-tertiary-fixed-variant": "#802a07",
+                      "on-error-container": "#93000a",
+                      "error": "#ba1a1a",
+                      "on-secondary-container": "#6b4b00",
+                      "secondary": "#7c5800",
+                      "surface-dim": "#dad9e1",
+                      "surface-dark": "#111214",
+                      "surface-bright": "#faf8ff",
+                      "canvas": "#ffffff",
+                      "muted": "#868b94",
+                      "warning": "#ff9000",
+                      "tertiary-container": "#752201",
+                      "primary-fixed": "#dae1ff",
+                      "hairline": "#e5e8eb",
+                      "surface-container-highest": "#e2e2ea",
+                      "primary": "#003893"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "base": "16px",
+                      "xxs": "4px",
+                      "section": "96px",
+                      "lg": "24px",
+                      "xl": "32px",
+                      "xxl": "48px",
+                      "xs": "8px",
+                      "md": "20px",
+                      "sm": "12px"
+              },
+              "fontFamily": {
+                      "display-lg": ["'HakgyoansimPoster'", "sans-serif"],
+                      "display-md": ["'HakgyoansimPoster'", "sans-serif"],
+                      "display-sm": ["'HakgyoansimPoster'", "sans-serif"],
+                      "title-lg": ["'KerisBaeum'", "sans-serif"],
+                      "title-md": ["'KerisBaeum'", "sans-serif"],
+                      "title-sm": ["'KerisBaeum'", "sans-serif"],
+                      "nav-link": ["'KerisBaeum'", "sans-serif"],
+                      "button": ["'KerisBaeum'", "sans-serif"],
+                      "body-strong": ["'KerisBaeum'", "sans-serif"],
+                      "body-md": ["'KerisBaeum'", "sans-serif"],
+                      "body-sm": ["'KerisBaeum'", "sans-serif"],
+                      "caption": ["'KerisBaeum'", "sans-serif"]
+              },
+              "fontSize": {
+                      "display-lg": ["57px", "64px"],
+                      "display-md": ["45px", "52px"],
+                      "display-sm": ["36px", "44px"],
+                      "title-lg": ["28px", "36px"],
+                      "title-md": ["22px", "28px"],
+                      "title-sm": ["18px", "24px"],
+                      "body-lg": ["16px", "24px"],
+                      "body-md": ["14px", "20px"],
+                      "body-sm": ["12px", "16px"],
+                      "nav-link": ["18px", "24px"],
+                      "caption": ["12px", "16px"]
+              }
+            },
+          },
+        }
+      </script>
+</head>
+<body class="bg-surface-soft text-on-surface">
+<nav class="fixed top-0 w-full z-50 h-[64px] flex justify-between items-center px-lg bg-canvas">
+<div class="flex items-center gap-xl">
+<span class="font-display-sm text-display-sm font-semibold text-primary tracking-tight entrance-fade visible" style="transition-delay: 0ms;"><h1 class="font-display-sm text-display-sm font-semibold text-primary-container" style="--tw-border-spacing-y: 0; --tw-translate-x: 0; --tw-translate-y: 0; --tw-rotate: 0; --tw-skew-x: 0; --tw-skew-y: 0; --tw-scale-x: 1; --tw-scale-y: 1; --tw-pan-x: ; --tw-pan-y: ; --tw-pinch-zoom: ; --tw-scroll-snap-strictness: proximity; --tw-gradient-from-position: ; --tw-gradient-via-position: ; --tw-gradient-to-position: ; --tw-ordinal: ; --tw-slashed-zero: ; --tw-numeric-figure: ; --tw-numeric-spacing: ; --tw-numeric-fraction: ; --tw-ring-inset: ; --tw-ring-offset-width: 0px; --tw-ring-offset-color: #fff; --tw-ring-color: rgb(59 130 246 / 0.5); --tw-ring-offset-shadow: 0 0 #0000; --tw-ring-shadow: 0 0 #0000; --tw-shadow: 0 0 #0000; --tw-shadow-colored: 0 0 #0000; --tw-blur: ; --tw-brightness: ; --tw-contrast: ; --tw-grayscale: ; --tw-hue-rotate: ; --tw-invert: ; --tw-saturate: ; --tw-sepia: ; --tw-drop-shadow: ; --tw-backdrop-blur: ; --tw-backdrop-brightness: ; --tw-backdrop-contrast: ; --tw-backdrop-grayscale: ; --tw-backdrop-hue-rotate: ; --tw-backdrop-invert: ; --tw-backdrop-opacity: ; --tw-backdrop-saturate: ; --tw-backdrop-sepia: ; --tw-contain-size: ; --tw-contain-layout: ; --tw-contain-paint: ; --tw-contain-style: ; font-size: 26px; --tw-text-opacity: 1; color: rgb(0, 56, 147); letter-spacing: normal; white-space: nowrap; line-height: 1.4;">이지플로우 (EasyFlow)</h1></span>
+
+<div class="hidden md:flex gap-[80px] group/mega h-[64px] items-center relative">
+<div class="absolute top-[64px] left-1/2 -translate-x-1/2 w-[100vw] bg-white shadow-md border-b border-hairline opacity-0 invisible group-hover/mega:opacity-100 group-hover/mega:visible transition-all duration-200 z-40 h-[180px]"></div>
+<div class="relative h-full flex flex-col justify-start">
+<a class="font-nav-link text-nav-link text-on-surface-variant hover:text-primary transition-colors h-[64px] flex items-center" href="main.html">홈</a>
+</div>
+<div class="relative h-full flex flex-col justify-start group/col">
+<a class="font-nav-link text-nav-link transition-colors h-[64px] flex items-center gap-xxs whitespace-nowrap group-hover/col:text-primary group-hover/col:font-bold text-on-surface-variant hover:text-primary" href="업무배송_스마트공문달력.html">
+                업무 배송 <span class="material-symbols-outlined text-[18px]">expand_more</span>
+</a>
+<div class="absolute top-[64px] left-1/2 -translate-x-1/2 pt-md pb-md min-w-[160px] flex flex-col items-center gap-sm opacity-0 invisible group-hover/mega:opacity-100 group-hover/mega:visible transition-all duration-200 z-50 group-hover/col:bg-surface-container h-[180px] rounded-b-lg">
+<a class="font-nav-link text-[16px] text-on-surface-variant hover:text-primary transition-colors whitespace-nowrap px-sm py-1 w-full text-center" href="업무배송_스마트공문달력.html">스마트 공문 달력</a><a class="font-nav-link text-[16px] text-on-surface-variant hover:text-primary transition-colors whitespace-nowrap px-sm py-1 w-full text-center" href="업무배송_업무우편함.html">업무 우편함</a><a class="font-nav-link text-[16px] text-on-surface-variant hover:text-primary transition-colors whitespace-nowrap px-sm py-1 w-full text-center" href="업무배송_맞춤형업무가이드.html">맞춤형 업무 가이드</a>
+</div>
+</div>
+<div class="relative h-full flex flex-col justify-start group/col">
+<a class="font-nav-link text-nav-link transition-colors h-[64px] flex items-center gap-xxs whitespace-nowrap group-hover/col:text-primary group-hover/col:font-bold text-on-surface-variant hover:text-primary" href="AI업무어시스턴트_챗봇.html">
+                인생 도서관 <span class="material-symbols-outlined text-[18px]">expand_more</span>
+</a>
+<div class="absolute top-[64px] left-1/2 -translate-x-1/2 pt-md pb-md min-w-[160px] flex flex-col items-center gap-sm opacity-0 invisible group-hover/mega:opacity-100 group-hover/mega:visible transition-all duration-200 z-50 group-hover/col:bg-surface-container h-[180px] rounded-b-lg">
+<a class="font-nav-link text-[16px] text-on-surface-variant hover:text-primary transition-colors whitespace-nowrap px-sm py-1 w-full text-center" href="AI업무어시스턴트_챗봇.html">AI 지능형 상담</a><a class="font-nav-link text-[16px] text-on-surface-variant hover:text-primary transition-colors whitespace-nowrap px-sm py-1 w-full text-center" href="공통_프로필수정.html">멘토링 연결 (미구현)</a><a class="font-nav-link text-[16px] text-on-surface-variant hover:text-primary transition-colors whitespace-nowrap px-sm py-1 w-full text-center" href="공통_로그인.html">행정 매뉴얼 검색 (미구현)</a>
+</div>
+</div>
+<div class="relative h-full flex flex-col justify-start group/col">
+<a class="font-nav-link text-nav-link transition-colors h-[64px] flex items-center gap-xxs whitespace-nowrap group-hover/col:text-primary group-hover/col:font-bold text-on-surface-variant hover:text-primary" href="서식자료실_통합검색.html">
+                서식 자료실 <span class="material-symbols-outlined text-[18px]">expand_more</span>
+</a>
+<div class="absolute top-[64px] left-1/2 -translate-x-1/2 pt-md pb-md min-w-[160px] flex flex-col items-center gap-sm opacity-0 invisible group-hover/mega:opacity-100 group-hover/mega:visible transition-all duration-200 z-50 group-hover/col:bg-surface-container h-[180px] rounded-b-lg">
+<a class="font-nav-link text-[16px] text-on-surface-variant hover:text-primary transition-colors whitespace-nowrap px-sm py-1 w-full text-center" href="서식자료실_통합검색.html">통합 검색</a><a class="font-nav-link text-[16px] text-on-surface-variant hover:text-primary transition-colors whitespace-nowrap px-sm py-1 w-full text-center" href="서식 자료실_한글파일서식선택.html">서식 자동 완성</a><a class="font-nav-link text-[16px] text-on-surface-variant hover:text-primary transition-colors whitespace-nowrap px-sm py-1 w-full text-center" href="서식자료실_공문OCR요약.html">공문 분석</a>
+</div>
+</div>
+<div class="relative h-full flex flex-col justify-start group/col">
+<a class="font-nav-link text-nav-link transition-colors h-[64px] flex items-center gap-xxs whitespace-nowrap group-hover/col:text-primary group-hover/col:font-bold text-on-surface-variant hover:text-primary" href="안내센터_공지사항.html">
+                안내센터 <span class="material-symbols-outlined text-[18px]">expand_more</span>
+</a>
+<div class="absolute top-[64px] left-1/2 -translate-x-1/2 pt-md pb-md min-w-[160px] flex flex-col items-center gap-sm opacity-0 invisible group-hover/mega:opacity-100 group-hover/mega:visible transition-all duration-200 z-50 group-hover/col:bg-surface-container h-[180px] rounded-b-lg">
+<a class="font-nav-link text-[16px] text-on-surface-variant hover:text-primary transition-colors whitespace-nowrap px-sm py-1 w-full text-center" href="안내센터_공지사항.html">공지사항</a><a class="font-nav-link text-[16px] text-on-surface-variant hover:text-primary transition-colors whitespace-nowrap px-sm py-1 w-full text-center" href="안내센터_시스템 안내.html">이용 안내</a><a class="font-nav-link text-[16px] text-on-surface-variant hover:text-primary transition-colors whitespace-nowrap px-sm py-1 w-full text-center" href="안내센터_1대1 문의.html">원격 지원 신청</a>
+</div>
+</div>
+</div>
+
+</div>
+<div class="flex items-center gap-base">
+<button class="p-xs text-on-surface-variant hover:bg-surface-strong rounded-full transition-colors"><span class="material-symbols-outlined" data-icon="notifications">notifications</span></button>
+<button class="p-xs text-on-surface-variant hover:text-primary hover:bg-surface-strong rounded-full transition-colors"><span class="material-symbols-outlined" data-icon="settings">settings</span></button>
+<div class="relative group">
+<div class="w-10 h-10 rounded-full bg-surface-container overflow-hidden cursor-pointer active:opacity-80 transition-opacity border border-hairline hover:ring-2 ring-primary/20">
+<img alt="사용자 프로필" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDC4T1JXEVfOTEIvuSGas-vZo6Xrm6Gso-g1t4Ifc8qnWK86nRrH2U8HOTdfdnTsplBb7uebcFVeymcmL2sIdAPhvjovBg9eBquhUSCzN152yf8xwikxJ4E_WZIS6AoZsmFjlNBOS4fEmilnVe9vNRg8OvkOV-BNR6hhdAKBSSULdU9lEfBTz0nTLaBOyVD8VCr72fQSqc3wMrktO117e6OpaN0nuSVbSD2qqq2Ks3RmI91N4fEffpFg9OMmOdWqakRhPaW-FACNKQ3"/>
+</div>
+<div class="absolute top-full right-0 mt-xs w-48 bg-white rounded-xl shadow-xl border border-hairline opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 p-xs">
+<a class="block px-base py-sm font-nav-link text-[15px] hover:bg-surface-soft rounded-lg transition-colors flex items-center gap-2" href="#"><span class="material-symbols-outlined text-[18px]">person</span> 프로필 수정</a>
+<a class="block px-base py-sm font-nav-link text-[15px] hover:bg-surface-soft rounded-lg transition-colors flex items-center gap-2 text-danger" href="#"><span class="material-symbols-outlined text-[18px]">logout</span> 로그아웃</a>
+<div class="border-t border-hairline my-1"></div>
+<div class="px-base py-1 text-[11px] text-muted font-bold">관리자 메뉴</div>
+<a class="block px-base py-sm font-nav-link text-[15px] hover:bg-surface-soft rounded-lg transition-colors flex items-center gap-2" href="학교관리자_대시보드.html"><span class="material-symbols-outlined text-[18px]">school</span> 학교 관리</a>
+<a class="block px-base py-sm font-nav-link text-[15px] hover:bg-surface-soft rounded-lg transition-colors flex items-center gap-2" href="서버관리자_대시보드.html"><span class="material-symbols-outlined text-[18px]">dns</span> 서버 관리</a>
+</div>
+</div>
+</div>
+</nav>
+<!-- Top Navigation Bar -->
+<main class="pt-[64px] min-h-screen"><div class="w-full max-w-[1600px] mx-auto px-lg py-xl flex flex-col md:flex-row gap-xl" id="global-layout-wrapper">
+<!-- Added background, padding, and rounded corners for the left menu area -->
+
+<aside class="w-[220px] shrink-0 bg-surface-soft p-lg rounded-2xl hidden md:block" id="main-lnb">
+<h2 class="font-nav-link text-[22px] font-bold text-ink mb-md pb-sm border-b-2 border-ink">학교 관리</h2>
+<ul class="flex flex-col gap-1">
+<li>
+<a class="font-nav-link block px-sm py-sm rounded-lg transition-colors text-[16px] text-on-surface-variant hover:bg-surface hover:text-ink" href="학교관리자_대시보드.html">대시보드</a>
+</li>
+<li>
+<a class="font-nav-link block px-sm py-sm rounded-lg transition-colors text-[16px] bg-primary text-white font-bold" href="학교관리자_학교통합관리.html">학교 통합 관리</a>
+</li>
+<li>
+<a class="font-nav-link block px-sm py-sm rounded-lg transition-colors text-[16px] text-on-surface-variant hover:bg-surface hover:text-ink" href="학교관리자_데이터 리포트.html">데이터 리포트</a>
+</li>
+<li>
+<a class="font-nav-link block px-sm py-sm rounded-lg transition-colors text-[16px] text-on-surface-variant hover:bg-surface hover:text-ink" href="학교관리자_RAG데이터갱신.html">RAG 데이터 갱신</a>
+</li>
+</ul>
+</aside>
+
+<div class="flex-1 min-w-0">
+<!-- 표준 페이지 헤더 영역 -->
+<header class="bg-canvas border-b border-hairline py-xl px-lg">
+<div class="max-w-7xl mx-auto flex flex-col md:flex-row md:items-end justify-between gap-base">
+<div>
+<h1 class="font-display-md text-display-md text-primary mb-xxs">학교 통합 관리</h1>
+<p class="font-body-md text-body text-on-surface-variant">학교의 모든 부서 업무 및 인력 현황을 실시간으로 모니터링하고 조정합니다.
+                    </p>
+</div>
+<div class="flex gap-sm">
+<button class="px-base py-sm bg-surface-strong text-ink rounded-full font-button flex items-center gap-xs hover:opacity-80 transition-opacity">
+<span class="material-symbols-outlined">download</span>
+<span>보고서 출력</span>
+</button>
+<button class="px-base py-sm bg-primary text-on-primary rounded-full font-button flex items-center gap-xs hover:opacity-90 transition-opacity">
+<span class="material-symbols-outlined">person_add</span>
+<span>신규 인원 등록</span>
+</button>
+</div>
+</div>
+</header>
+<div class="max-w-7xl mx-auto px-lg py-xl">
+<!-- Summary Grid (Bento Style) -->
+<div class="grid grid-cols-1 md:grid-cols-4 gap-lg mb-xl">
+<!-- Status Card -->
+<div class="col-span-1 md:col-span-2 bg-canvas p-xl rounded-xl border border-hairline shadow-sm flex flex-col justify-between">
+<div>
+<span class="font-caption-strong text-caption-strong text-primary uppercase tracking-wider">업무
+                            분장 현황</span>
+<div class="flex items-baseline gap-xs mt-sm">
+<span class="font-display-lg text-display-lg text-primary">84%</span>
+<span class="font-body-sm text-success flex items-center">
+<span class="material-symbols-outlined text-[18px]">trending_up</span>
+                                12% 증가
+                            </span>
+</div>
+</div>
+<div class="mt-xl">
+<div class="w-full bg-surface-container rounded-full h-2">
+<div class="bg-primary h-2 rounded-full w-[84%]"></div>
+</div>
+<p class="font-caption text-caption text-muted mt-xs">총 120개 과업 중 101개 배정 완료</p>
+</div>
+</div>
+<!-- Dept Quick Stats -->
+<div class="bg-surface-container-low p-xl rounded-xl border border-hairline flex flex-col justify-center text-center">
+<span class="material-symbols-outlined text-primary text-[32px] mb-xs">account_balance</span>
+<span class="font-title-lg text-title-lg text-primary">교무실</span>
+<span class="font-caption text-caption text-on-surface-variant">총 42명 / 4개 학년</span>
+</div>
+<div class="bg-surface-container-low p-xl rounded-xl border border-hairline flex flex-col justify-center text-center">
+<span class="material-symbols-outlined text-secondary text-[32px] mb-xs">corporate_fare</span>
+<span class="font-title-lg text-title-lg text-secondary">행정실</span>
+<span class="font-caption text-caption text-on-surface-variant">총 15명 / 3개 팀</span>
+</div>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-lg">
+<!-- Personnel Management Table (Main Content) -->
+<div class="lg:col-span-2 bg-canvas rounded-xl border border-hairline overflow-hidden shadow-sm">
+<div class="p-lg border-b border-hairline flex justify-between items-center bg-surface-soft">
+<h2 class="font-title-md text-title-md text-primary flex items-center gap-xs">
+<span class="material-symbols-outlined">group</span>
+                            부서별 인원 관리
+                        </h2>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-sm top-1/2 -translate-y-1/2 text-on-surface-variant">search</span>
+<input class="pl-xl pr-base py-xs bg-canvas border border-hairline rounded-lg text-body-sm focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all w-48" placeholder="이름 또는 직위 검색" type="text"/>
+</div>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container-lowest border-b border-hairline">
+<th class="px-lg py-sm font-caption-strong text-caption-strong text-on-surface-variant">
+                                        이름</th>
+<th class="px-lg py-sm font-caption-strong text-caption-strong text-on-surface-variant">
+                                        소속/직위</th>
+<th class="px-lg py-sm font-caption-strong text-caption-strong text-on-surface-variant">
+                                        주요 업무</th>
+<th class="px-lg py-sm font-caption-strong text-caption-strong text-on-surface-variant">
+                                        상태</th>
+<th class="px-lg py-sm font-caption-strong text-caption-strong text-on-surface-variant text-center">
+                                        관리</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-hairline">
+<tr class="hover:bg-surface-container-lowest transition-colors">
+<td class="px-lg py-base">
+<div class="flex items-center gap-sm">
+<div class="w-8 h-8 rounded-full bg-primary-fixed flex items-center justify-center text-on-primary-fixed font-title-sm">
+                                                김</div>
+<span class="font-body-strong text-body-strong">김철수</span>
+</div>
+</td>
+<td class="px-lg py-base">
+<div class="flex flex-col">
+<span class="font-body-md text-body-md">교무실</span>
+<span class="font-caption text-caption text-muted">교감</span>
+</div>
+</td>
+<td class="px-lg py-base">
+<span class="font-body-sm text-body-sm">학사 일정 총괄</span>
+</td>
+<td class="px-lg py-base">
+<span class="px-sm py-xxs bg-success/10 text-success rounded-full font-caption-strong text-[11px]">재직
+                                            중</span>
+</td>
+<td class="px-lg py-base text-center">
+<button class="p-xxs hover:bg-surface-container rounded text-muted">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</td>
+</tr>
+<tr class="hover:bg-surface-container-lowest transition-colors">
+<td class="px-lg py-base">
+<div class="flex items-center gap-sm">
+<div class="w-8 h-8 rounded-full bg-secondary-fixed flex items-center justify-center text-on-secondary-fixed font-title-sm">
+                                                이</div>
+<span class="font-body-strong text-body-strong">이영희</span>
+</div>
+</td>
+<td class="px-lg py-base">
+<div class="flex flex-col">
+<span class="font-body-md text-body-md">행정실</span>
+<span class="font-caption text-caption text-muted">행정실장</span>
+</div>
+</td>
+<td class="px-lg py-base">
+<span class="font-body-sm text-body-sm">예산 편성 및 집행</span>
+</td>
+<td class="px-lg py-base">
+<span class="px-sm py-xxs bg-success/10 text-success rounded-full font-caption-strong text-[11px]">재직
+                                            중</span>
+</td>
+<td class="px-lg py-base text-center">
+<button class="p-xxs hover:bg-surface-container rounded text-muted">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</td>
+</tr>
+<tr class="hover:bg-surface-container-lowest transition-colors">
+<td class="px-lg py-base">
+<div class="flex items-center gap-sm">
+<div class="w-8 h-8 rounded-full bg-surface-container-highest flex items-center justify-center text-on-surface-variant font-title-sm">
+                                                박</div>
+<span class="font-body-strong text-body-strong">박민준</span>
+</div>
+</td>
+<td class="px-lg py-base">
+<div class="flex flex-col">
+<span class="font-body-md text-body-md">1학년부</span>
+<span class="font-caption text-caption text-muted">교사</span>
+</div>
+</td>
+<td class="px-lg py-base">
+<span class="font-body-sm text-body-sm">창의적 체험활동</span>
+</td>
+<td class="px-lg py-base">
+<span class="px-sm py-xxs bg-warning/10 text-warning rounded-full font-caption-strong text-[11px]">출장
+                                            중</span>
+</td>
+<td class="px-lg py-base text-center">
+<button class="p-xxs hover:bg-surface-container rounded text-muted">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</td>
+</tr>
+<tr class="hover:bg-surface-container-lowest transition-colors">
+<td class="px-lg py-base">
+<div class="flex items-center gap-sm">
+<div class="w-8 h-8 rounded-full bg-surface-container-highest flex items-center justify-center text-on-surface-variant font-title-sm">
+                                                정</div>
+<span class="font-body-strong text-body-strong">정다혜</span>
+</div>
+</td>
+<td class="px-lg py-base">
+<div class="flex flex-col">
+<span class="font-body-md text-body-md">방과후팀</span>
+<span class="font-caption text-caption text-muted">실무원</span>
+</div>
+</td>
+<td class="px-lg py-base">
+<span class="font-body-sm text-body-sm">강사 채용 및 관리</span>
+</td>
+<td class="px-lg py-base">
+<span class="px-sm py-xxs bg-success/10 text-success rounded-full font-caption-strong text-[11px]">재직
+                                            중</span>
+</td>
+<td class="px-lg py-base text-center">
+<button class="p-xxs hover:bg-surface-container rounded text-muted">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<!-- Right Sidebar / Quick Actions & Task Dist -->
+<div class="space-y-lg">
+<!-- Task Distribution Status -->
+<div class="bg-canvas p-xl rounded-xl border border-hairline shadow-sm">
+<h3 class="font-title-sm text-title-sm text-primary mb-lg flex items-center gap-xs">
+<span class="material-symbols-outlined">analytics</span>
+                            부서별 업무 배분율
+                        </h3>
+<div class="space-y-base">
+<div class="space-y-xxs">
+<div class="flex justify-between font-caption text-caption">
+<span>교무기획부</span>
+<span class="font-bold">92%</span>
+</div>
+<div class="w-full bg-surface-container rounded-full h-1.5 overflow-hidden">
+<div class="bg-primary h-full w-[92%]"></div>
+</div>
+</div>
+<div class="space-y-xxs">
+<div class="flex justify-between font-caption text-caption">
+<span>인성교육부</span>
+<span class="font-bold">78%</span>
+</div>
+<div class="w-full bg-surface-container rounded-full h-1.5 overflow-hidden">
+<div class="bg-primary h-full w-[78%]"></div>
+</div>
+</div>
+<div class="space-y-xxs">
+<div class="flex justify-between font-caption text-caption">
+<span>정보과학부</span>
+<span class="font-bold">45%</span>
+</div>
+<div class="w-full bg-surface-container rounded-full h-1.5 overflow-hidden">
+<div class="bg-secondary h-full w-[45%]"></div>
+</div>
+<p class="text-[10px] text-danger mt-1">※ 업무 재배치 필요</p>
+</div>
+</div>
+</div>
+<!-- AI Personnel Recommendation -->
+<div class="ai-glass p-xl rounded-xl border border-outline-variant shadow-lg text-on-primary">
+<div class="flex items-center gap-xs mb-md">
+<span class="material-symbols-outlined text-secondary-fixed">auto_awesome</span>
+<span class="font-title-sm text-title-sm text-white">AI 업무 최적화 제안</span>
+</div>
+<p class="font-body-sm text-surface-variant mb-lg leading-relaxed">
+                            현재 <strong>정보과학부</strong>의 업무량이 타 부서 대비 현저히 낮습니다. 학사 관리 시스템 고도화 작업을 이영희 행정실장에서 정보과학부로 이관하는
+                            것을 추천합니다.
+                        </p>
+<button class="w-full py-sm bg-white text-primary rounded-full font-button hover:bg-surface-bright transition-colors">
+                            제안 적용하기
+                        </button>
+</div>
+<!-- Quick Actions -->
+<div class="bg-surface-strong p-xl rounded-xl flex flex-col gap-sm">
+<h3 class="font-caption-strong text-caption-strong text-muted mb-xs">빠른 설정</h3>
+<button class="w-full flex items-center justify-between p-base bg-canvas rounded-lg border border-hairline hover:border-primary transition-all">
+<div class="flex items-center gap-base">
+<span class="material-symbols-outlined text-primary">assignment_ind</span>
+<span class="font-body-md">업무 분장표 생성</span>
+</div>
+<span class="material-symbols-outlined text-muted">chevron_right</span>
+</button>
+<button class="w-full flex items-center justify-between p-base bg-canvas rounded-lg border border-hairline hover:border-primary transition-all">
+<div class="flex items-center gap-base">
+<span class="material-symbols-outlined text-primary">swap_horiz</span>
+<span class="font-body-md">인사 이동 처리</span>
+</div>
+<span class="material-symbols-outlined text-muted">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</div></div></main>
+<footer class="w-full mt-section px-lg max-w-7xl mx-auto flex flex-col gap-base py-xl border-t border-hairline">
+<div class="flex flex-col md:flex-row justify-between items-center gap-md">
+<span class="font-title-sm text-title-sm text-on-surface dark:text-surface-bright">경상북도교육청</span>
+<div class="flex gap-lg">
+<a class="font-caption text-caption text-body hover:underline decoration-primary" href="#">개인정보처리방침</a>
+<a class="font-caption text-caption text-body hover:underline decoration-primary" href="#">이용약관</a>
+<a class="font-caption text-caption text-body hover:underline decoration-primary" href="#">이메일무단수집거부</a>
+<a class="font-caption text-caption text-body hover:underline decoration-primary" href="#">찾아오시는길</a>
+</div>
+</div>
+<p class="font-caption text-caption text-on-surface-variant text-center md:text-left">© 경상북도교육청. All Rights
+            Reserved.</p>
+</footer>
+<script>
+        // Simple micro-interaction for rows
+        document.querySelectorAll('tbody tr').forEach(row => {
+            row.addEventListener('click', () => {
+                row.classList.add('opacity-80');
+                setTimeout(() => row.classList.remove('opacity-80'), 150);
+            });
+        });
+
+        // Search highlight mock
+        const searchInput = document.querySelector('input[type="text"]');
+        searchInput.addEventListener('input', (e) => {
+            const query = e.target.value.toLowerCase();
+            document.querySelectorAll('tbody tr').forEach(row => {
+                const name = row.querySelector('.font-body-strong').textContent.toLowerCase();
+                if (name.includes(query)) {
+                    row.style.display = 'table-row';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        });
+    </script>
+</body>
+</html>

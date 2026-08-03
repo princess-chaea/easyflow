@@ -1,0 +1,670 @@
+﻿<!DOCTYPE html>
+
+<html lang="ko">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>이지플로우 서버 관리자 대시보드</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        @font-face {
+            font-family: 'HakgyoansimPoster';
+            src: url('./font/Hakgyoansim_PosterB.ttf') format('truetype');
+            font-weight: 700;
+        }
+        @font-face {
+            font-family: 'KerisBaeum';
+            src: url('./font/KERISBAEUM_L.ttf') format('truetype');
+            font-weight: 300;
+        }
+        @font-face {
+            font-family: 'KerisBaeum';
+            src: url('./font/KERISBAEUM_R.ttf') format('truetype');
+            font-weight: 400;
+        }
+        @font-face {
+            font-family: 'KerisBaeum';
+            src: url('./font/KERISBAEUM_B.ttf') format('truetype');
+            font-weight: 700;
+        }
+        @font-face {
+            font-family: 'KerisBaeum';
+            src: url('./font/KERISBAEUM_EB.ttf') format('truetype');
+            font-weight: 800;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        body {
+            font-family: 'KerisBaeum', sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .ai-gradient {
+            background: linear-gradient(135deg, #003893 0%, #12419b 100%);
+        }
+        .ripple {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            transform: scale(0);
+            animation: ripple-animation 0.6s linear;
+            pointer-events: none;
+        }
+        @keyframes ripple-animation {
+            to { transform: scale(4); opacity: 0; }
+        }
+
+        /* Micro-interactions & Animations */
+        @keyframes pulse-soft {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.7; transform: scale(0.95); }
+        }
+        .animate-pulse-soft { animation: pulse-soft 2s infinite ease-in-out; }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+        .animate-float { animation: float 6s infinite ease-in-out; }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+        .shimmer-effect::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transform: translateX(-100%);
+            animation: shimmer 3s infinite;
+        }
+
+        .hover-lift {
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.4s ease;
+        }
+        .hover-lift:hover {
+            transform: translateY(-8px) scale(1.01);
+            box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+        }
+
+        .nav-link-underline {
+            position: relative;
+        }
+        .nav-link-underline::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: currentColor;
+            transition: width 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .nav-link-underline:hover::after {
+            width: 100%;
+        }
+
+        .entrance-fade {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275), transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .entrance-fade.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+                scroll-behavior: auto !important;
+            }
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "secondary-fixed": "#ffdea8",
+                      "tertiary": "#501400",
+                      "on-primary-fixed": "#001849",
+                      "on-tertiary-container": "#ff8a62",
+                      "surface-tint": "#335ab4",
+                      "ink": "#111214",
+                      "surface-soft": "#f8f9fa",
+                      "on-primary-container": "#88a7ff",
+                      "background": "#faf8ff",
+                      "danger": "#df2c2c",
+                      "surface-container": "#eeedf5",
+                      "tertiary-fixed-dim": "#ffb59d",
+                      "secondary-container": "#feb700",
+                      "on-tertiary": "#ffffff",
+                      "on-primary": "#ffffff",
+                      "secondary-fixed-dim": "#ffba20",
+                      "inverse-surface": "#2f3036",
+                      "inverse-on-surface": "#f1f0f8",
+                      "surface-variant": "#e2e2ea",
+                      "on-secondary-fixed": "#271900",
+                      "on-tertiary-fixed": "#390c00",
+                      "surface-container-lowest": "#ffffff",
+                      "on-primary-fixed-variant": "#12419b",
+                      "on-surface": "#1a1b21",
+                      "body": "#4e535e",
+                      "primary-fixed-dim": "#b3c5ff",
+                      "on-error": "#ffffff",
+                      "surface-strong": "#f2f4f6",
+                      "on-secondary-fixed-variant": "#5e4200",
+                      "surface-container-low": "#f4f3fb",
+                      "primary-container": "#003893",
+                      "error-container": "#ffdad6",
+                      "on-background": "#1a1b21",
+                      "success": "#00a261",
+                      "on-surface-variant": "#434652",
+                      "primary-active": "#002463",
+                      "outline-variant": "#c4c6d4",
+                      "tertiary-fixed": "#ffdbd0",
+                      "inverse-primary": "#b3c5ff",
+                      "surface": "#faf8ff",
+                      "primary-disabled": "#9eb9e5",
+                      "outline": "#747683",
+                      "surface-container-high": "#e8e7f0",
+                      "on-secondary": "#ffffff",
+                      "on-tertiary-fixed-variant": "#802a07",
+                      "on-error-container": "#93000a",
+                      "error": "#ba1a1a",
+                      "on-secondary-container": "#6b4b00",
+                      "secondary": "#7c5800",
+                      "surface-dim": "#dad9e1",
+                      "surface-dark": "#111214",
+                      "surface-bright": "#faf8ff",
+                      "canvas": "#ffffff",
+                      "muted": "#868b94",
+                      "warning": "#ff9000",
+                      "tertiary-container": "#752201",
+                      "primary-fixed": "#dae1ff",
+                      "hairline": "#e5e8eb",
+                      "surface-container-highest": "#e2e2ea",
+                      "primary": "#003893"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "base": "16px",
+                      "xxs": "4px",
+                      "section": "96px",
+                      "lg": "24px",
+                      "xl": "32px",
+                      "xxl": "48px",
+                      "xs": "8px",
+                      "md": "20px",
+                      "sm": "12px"
+              },
+              "fontFamily": {
+                      "display-lg": ["'HakgyoansimPoster'", "sans-serif"],
+                      "display-md": ["'HakgyoansimPoster'", "sans-serif"],
+                      "display-sm": ["'HakgyoansimPoster'", "sans-serif"],
+                      "title-lg": ["'KerisBaeum'", "sans-serif"],
+                      "title-md": ["'KerisBaeum'", "sans-serif"],
+                      "title-sm": ["'KerisBaeum'", "sans-serif"],
+                      "nav-link": ["'KerisBaeum'", "sans-serif"],
+                      "button": ["'KerisBaeum'", "sans-serif"],
+                      "body-strong": ["'KerisBaeum'", "sans-serif"],
+                      "body-md": ["'KerisBaeum'", "sans-serif"],
+                      "body-sm": ["'KerisBaeum'", "sans-serif"],
+                      "caption": ["'KerisBaeum'", "sans-serif"]
+              },
+              "fontSize": {
+                      "display-lg": ["57px", "64px"],
+                      "display-md": ["45px", "52px"],
+                      "display-sm": ["36px", "44px"],
+                      "title-lg": ["28px", "36px"],
+                      "title-md": ["22px", "28px"],
+                      "title-sm": ["18px", "24px"],
+                      "body-lg": ["16px", "24px"],
+                      "body-md": ["14px", "20px"],
+                      "body-sm": ["12px", "16px"],
+                      "nav-link": ["18px", "24px"],
+                      "caption": ["12px", "16px"]
+              }
+            },
+          },
+        }
+      </script>
+</head>
+<body class="bg-surface-soft text-on-surface">
+<nav class="fixed top-0 w-full z-50 h-[64px] flex justify-between items-center px-lg bg-canvas">
+<div class="flex items-center gap-xl">
+<span class="font-display-sm text-display-sm font-semibold text-primary tracking-tight entrance-fade visible" style="transition-delay: 0ms;"><h1 class="font-display-sm text-display-sm font-semibold text-primary-container" style="--tw-border-spacing-y: 0; --tw-translate-x: 0; --tw-translate-y: 0; --tw-rotate: 0; --tw-skew-x: 0; --tw-skew-y: 0; --tw-scale-x: 1; --tw-scale-y: 1; --tw-pan-x: ; --tw-pan-y: ; --tw-pinch-zoom: ; --tw-scroll-snap-strictness: proximity; --tw-gradient-from-position: ; --tw-gradient-via-position: ; --tw-gradient-to-position: ; --tw-ordinal: ; --tw-slashed-zero: ; --tw-numeric-figure: ; --tw-numeric-spacing: ; --tw-numeric-fraction: ; --tw-ring-inset: ; --tw-ring-offset-width: 0px; --tw-ring-offset-color: #fff; --tw-ring-color: rgb(59 130 246 / 0.5); --tw-ring-offset-shadow: 0 0 #0000; --tw-ring-shadow: 0 0 #0000; --tw-shadow: 0 0 #0000; --tw-shadow-colored: 0 0 #0000; --tw-blur: ; --tw-brightness: ; --tw-contrast: ; --tw-grayscale: ; --tw-hue-rotate: ; --tw-invert: ; --tw-saturate: ; --tw-sepia: ; --tw-drop-shadow: ; --tw-backdrop-blur: ; --tw-backdrop-brightness: ; --tw-backdrop-contrast: ; --tw-backdrop-grayscale: ; --tw-backdrop-hue-rotate: ; --tw-backdrop-invert: ; --tw-backdrop-opacity: ; --tw-backdrop-saturate: ; --tw-backdrop-sepia: ; --tw-contain-size: ; --tw-contain-layout: ; --tw-contain-paint: ; --tw-contain-style: ; font-size: 26px; --tw-text-opacity: 1; color: rgb(0, 56, 147); letter-spacing: normal; white-space: nowrap; line-height: 1.4;">이지플로우 (EasyFlow)</h1></span>
+
+<div class="hidden md:flex gap-[80px] group/mega h-[64px] items-center relative">
+<div class="absolute top-[64px] left-1/2 -translate-x-1/2 w-[100vw] bg-white shadow-md border-b border-hairline opacity-0 invisible group-hover/mega:opacity-100 group-hover/mega:visible transition-all duration-200 z-40 h-[180px]"></div>
+<div class="relative h-full flex flex-col justify-start">
+<a class="font-nav-link text-nav-link text-on-surface-variant hover:text-primary transition-colors h-[64px] flex items-center" href="main.html">홈</a>
+</div>
+<div class="relative h-full flex flex-col justify-start group/col">
+<a class="font-nav-link text-nav-link transition-colors h-[64px] flex items-center gap-xxs whitespace-nowrap group-hover/col:text-primary group-hover/col:font-bold text-on-surface-variant hover:text-primary" href="업무배송_스마트공문달력.html">
+                업무 배송 <span class="material-symbols-outlined text-[18px]">expand_more</span>
+</a>
+<div class="absolute top-[64px] left-1/2 -translate-x-1/2 pt-md pb-md min-w-[160px] flex flex-col items-center gap-sm opacity-0 invisible group-hover/mega:opacity-100 group-hover/mega:visible transition-all duration-200 z-50 group-hover/col:bg-surface-container h-[180px] rounded-b-lg">
+<a class="font-nav-link text-[16px] text-on-surface-variant hover:text-primary transition-colors whitespace-nowrap px-sm py-1 w-full text-center" href="업무배송_스마트공문달력.html">스마트 공문 달력</a><a class="font-nav-link text-[16px] text-on-surface-variant hover:text-primary transition-colors whitespace-nowrap px-sm py-1 w-full text-center" href="업무배송_업무우편함.html">업무 우편함</a><a class="font-nav-link text-[16px] text-on-surface-variant hover:text-primary transition-colors whitespace-nowrap px-sm py-1 w-full text-center" href="업무배송_맞춤형업무가이드.html">맞춤형 업무 가이드</a>
+</div>
+</div>
+<div class="relative h-full flex flex-col justify-start group/col">
+<a class="font-nav-link text-nav-link transition-colors h-[64px] flex items-center gap-xxs whitespace-nowrap group-hover/col:text-primary group-hover/col:font-bold text-on-surface-variant hover:text-primary" href="AI업무어시스턴트_챗봇.html">
+                인생 도서관 <span class="material-symbols-outlined text-[18px]">expand_more</span>
+</a>
+<div class="absolute top-[64px] left-1/2 -translate-x-1/2 pt-md pb-md min-w-[160px] flex flex-col items-center gap-sm opacity-0 invisible group-hover/mega:opacity-100 group-hover/mega:visible transition-all duration-200 z-50 group-hover/col:bg-surface-container h-[180px] rounded-b-lg">
+<a class="font-nav-link text-[16px] text-on-surface-variant hover:text-primary transition-colors whitespace-nowrap px-sm py-1 w-full text-center" href="AI업무어시스턴트_챗봇.html">AI 지능형 상담</a><a class="font-nav-link text-[16px] text-on-surface-variant hover:text-primary transition-colors whitespace-nowrap px-sm py-1 w-full text-center" href="공통_프로필수정.html">멘토링 연결 (미구현)</a><a class="font-nav-link text-[16px] text-on-surface-variant hover:text-primary transition-colors whitespace-nowrap px-sm py-1 w-full text-center" href="공통_로그인.html">행정 매뉴얼 검색 (미구현)</a>
+</div>
+</div>
+<div class="relative h-full flex flex-col justify-start group/col">
+<a class="font-nav-link text-nav-link transition-colors h-[64px] flex items-center gap-xxs whitespace-nowrap group-hover/col:text-primary group-hover/col:font-bold text-on-surface-variant hover:text-primary" href="서식자료실_통합검색.html">
+                서식 자료실 <span class="material-symbols-outlined text-[18px]">expand_more</span>
+</a>
+<div class="absolute top-[64px] left-1/2 -translate-x-1/2 pt-md pb-md min-w-[160px] flex flex-col items-center gap-sm opacity-0 invisible group-hover/mega:opacity-100 group-hover/mega:visible transition-all duration-200 z-50 group-hover/col:bg-surface-container h-[180px] rounded-b-lg">
+<a class="font-nav-link text-[16px] text-on-surface-variant hover:text-primary transition-colors whitespace-nowrap px-sm py-1 w-full text-center" href="서식자료실_통합검색.html">통합 검색</a><a class="font-nav-link text-[16px] text-on-surface-variant hover:text-primary transition-colors whitespace-nowrap px-sm py-1 w-full text-center" href="서식 자료실_한글파일서식선택.html">서식 자동 완성</a><a class="font-nav-link text-[16px] text-on-surface-variant hover:text-primary transition-colors whitespace-nowrap px-sm py-1 w-full text-center" href="서식자료실_공문OCR요약.html">공문 분석</a>
+</div>
+</div>
+<div class="relative h-full flex flex-col justify-start group/col">
+<a class="font-nav-link text-nav-link transition-colors h-[64px] flex items-center gap-xxs whitespace-nowrap group-hover/col:text-primary group-hover/col:font-bold text-on-surface-variant hover:text-primary" href="안내센터_공지사항.html">
+                안내센터 <span class="material-symbols-outlined text-[18px]">expand_more</span>
+</a>
+<div class="absolute top-[64px] left-1/2 -translate-x-1/2 pt-md pb-md min-w-[160px] flex flex-col items-center gap-sm opacity-0 invisible group-hover/mega:opacity-100 group-hover/mega:visible transition-all duration-200 z-50 group-hover/col:bg-surface-container h-[180px] rounded-b-lg">
+<a class="font-nav-link text-[16px] text-on-surface-variant hover:text-primary transition-colors whitespace-nowrap px-sm py-1 w-full text-center" href="안내센터_공지사항.html">공지사항</a><a class="font-nav-link text-[16px] text-on-surface-variant hover:text-primary transition-colors whitespace-nowrap px-sm py-1 w-full text-center" href="안내센터_시스템 안내.html">이용 안내</a><a class="font-nav-link text-[16px] text-on-surface-variant hover:text-primary transition-colors whitespace-nowrap px-sm py-1 w-full text-center" href="안내센터_1대1 문의.html">원격 지원 신청</a>
+</div>
+</div>
+</div>
+
+</div>
+<div class="flex items-center gap-base">
+<button class="p-xs text-on-surface-variant hover:bg-surface-strong rounded-full transition-colors"><span class="material-symbols-outlined" data-icon="notifications">notifications</span></button>
+<button class="p-xs text-on-surface-variant hover:text-primary hover:bg-surface-strong rounded-full transition-colors"><span class="material-symbols-outlined" data-icon="settings">settings</span></button>
+<div class="relative group">
+<div class="w-10 h-10 rounded-full bg-surface-container overflow-hidden cursor-pointer active:opacity-80 transition-opacity border border-hairline hover:ring-2 ring-primary/20">
+<img alt="사용자 프로필" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDC4T1JXEVfOTEIvuSGas-vZo6Xrm6Gso-g1t4Ifc8qnWK86nRrH2U8HOTdfdnTsplBb7uebcFVeymcmL2sIdAPhvjovBg9eBquhUSCzN152yf8xwikxJ4E_WZIS6AoZsmFjlNBOS4fEmilnVe9vNRg8OvkOV-BNR6hhdAKBSSULdU9lEfBTz0nTLaBOyVD8VCr72fQSqc3wMrktO117e6OpaN0nuSVbSD2qqq2Ks3RmI91N4fEffpFg9OMmOdWqakRhPaW-FACNKQ3"/>
+</div>
+<div class="absolute top-full right-0 mt-xs w-48 bg-white rounded-xl shadow-xl border border-hairline opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 p-xs">
+<a class="block px-base py-sm font-nav-link text-[15px] hover:bg-surface-soft rounded-lg transition-colors flex items-center gap-2" href="#"><span class="material-symbols-outlined text-[18px]">person</span> 프로필 수정</a>
+<a class="block px-base py-sm font-nav-link text-[15px] hover:bg-surface-soft rounded-lg transition-colors flex items-center gap-2 text-danger" href="#"><span class="material-symbols-outlined text-[18px]">logout</span> 로그아웃</a>
+<div class="border-t border-hairline my-1"></div>
+<div class="px-base py-1 text-[11px] text-muted font-bold">관리자 메뉴</div>
+<a class="block px-base py-sm font-nav-link text-[15px] hover:bg-surface-soft rounded-lg transition-colors flex items-center gap-2" href="학교관리자_대시보드.html"><span class="material-symbols-outlined text-[18px]">school</span> 학교 관리</a>
+<a class="block px-base py-sm font-nav-link text-[15px] hover:bg-surface-soft rounded-lg transition-colors flex items-center gap-2" href="서버관리자_대시보드.html"><span class="material-symbols-outlined text-[18px]">dns</span> 서버 관리</a>
+</div>
+</div>
+</div>
+</nav>
+<!-- TopNavBar -->
+<div class="flex pt-[64px] flex-1">
+<!-- Sidebar -->
+<aside class="w-64 border-r border-hairline bg-surface-container-lowest hidden md:flex flex-col p-md gap-xs shrink-0 sticky top-[64px] h-[calc(100vh-64px)]">
+<div class="mb-base">
+<p class="text-caption-strong text-muted px-sm uppercase tracking-wider">시스템 콘솔</p>
+</div>
+<a class="sidebar-active flex items-center gap-sm px-sm py-base rounded-lg font-nav-link" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span>시스템 개요</span>
+</a>
+<a class="flex items-center gap-sm px-sm py-base rounded-lg font-nav-link text-on-surface-variant hover:bg-surface-container transition-colors" href="#">
+<span class="material-symbols-outlined">save_as</span>
+<span>회원 권한 관리</span>
+</a>
+<a class="flex items-center gap-sm px-sm py-base rounded-lg font-nav-link text-on-surface-variant hover:bg-surface-container transition-colors" href="#">
+<span class="material-symbols-outlined">database</span>
+<span>RAG 데이터 관리</span>
+</a>
+<a class="flex items-center gap-sm px-sm py-base rounded-lg font-nav-link text-on-surface-variant hover:bg-surface-container transition-colors" href="#">
+<span class="material-symbols-outlined">monitoring</span>
+<span>리소스 모니터링</span>
+</a>
+<a class="flex items-center gap-sm px-sm py-base rounded-lg font-nav-link text-on-surface-variant hover:bg-surface-container transition-colors" href="#">
+<span class="material-symbols-outlined">security</span>
+<span>보안 설정</span>
+</a>
+<div class="mt-auto border-t border-hairline pt-md">
+<div class="p-sm bg-surface-container-high rounded-lg">
+<div class="flex justify-between items-center mb-xs">
+<span class="text-caption-strong">서버 가동 시간</span>
+<span class="text-caption font-number-display text-primary">99.98%</span>
+</div>
+<div class="w-full bg-outline-variant h-1 rounded-full overflow-hidden">
+<div class="bg-primary w-[99%] h-full"></div>
+</div>
+</div>
+</div>
+</aside>
+<!-- Main Content -->
+<main class="flex-1 p-lg overflow-y-auto"><div class="w-full max-w-[1600px] mx-auto px-lg py-xl flex flex-col md:flex-row gap-xl" id="global-layout-wrapper">
+<!-- Added background, padding, and rounded corners for the left menu area -->
+
+<aside class="w-[220px] shrink-0 bg-surface-soft p-lg rounded-2xl hidden md:block" id="main-lnb">
+<h2 class="font-nav-link text-[22px] font-bold text-ink mb-md pb-sm border-b-2 border-ink">서버 관리</h2>
+<ul class="flex flex-col gap-1">
+<li>
+<a class="font-nav-link block px-sm py-sm rounded-lg transition-colors text-[16px] bg-primary text-white font-bold" href="서버관리자_대시보드.html">대시보드</a>
+</li>
+<li>
+<a class="font-nav-link block px-sm py-sm rounded-lg transition-colors text-[16px] text-on-surface-variant hover:bg-surface hover:text-ink" href="서버관리자_리소스 모니터링.html">리소스 모니터링</a>
+</li>
+<li>
+<a class="font-nav-link block px-sm py-sm rounded-lg transition-colors text-[16px] text-on-surface-variant hover:bg-surface hover:text-ink" href="서버관리자_보안설정.html">보안 설정</a>
+</li>
+<li>
+<a class="font-nav-link block px-sm py-sm rounded-lg transition-colors text-[16px] text-on-surface-variant hover:bg-surface hover:text-ink" href="서버관리자_회원관리.html">회원 관리</a>
+</li>
+<li>
+<a class="font-nav-link block px-sm py-sm rounded-lg transition-colors text-[16px] text-on-surface-variant hover:bg-surface hover:text-ink" href="서버관리자_RAG데이터관리.html">RAG 데이터 관리</a>
+</li>
+</ul>
+</aside>
+
+<div class="flex-1 min-w-0">
+<!-- 표준 페이지 헤더 영역 -->
+<!-- Header Section -->
+<div class="flex flex-col md:flex-row md:items-end justify-between mb-xl gap-md">
+<div>
+<h2 class="font-display-md text-display-md text-primary mb-xs">시스템 대시보드</h2>
+<p class="text-body-md text-muted">실시간 인프라 상태 및 통합 행정 제어 센터입니다.</p>
+</div>
+<div class="flex gap-base">
+<button class="px-base py-sm bg-surface-strong text-ink font-button rounded-full border border-hairline hover:bg-surface-container-high transition-colors flex items-center gap-xs">
+<span class="material-symbols-outlined text-[20px]">refresh</span>
+                        데이터 새로고침
+                    </button>
+<button class="px-base py-sm bg-primary text-on-primary font-button rounded-full hover:bg-primary-active transition-all shadow-sm flex items-center gap-xs">
+<span class="material-symbols-outlined text-[20px]">emergency</span>
+                        긴급 정지
+                    </button>
+</div>
+</div>
+<!-- Summary Cards: Bento Grid Style -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-lg mb-section">
+<!-- Active Users -->
+<div class="bg-canvas border border-hairline p-lg rounded-2xl shadow-sm hover:shadow-md transition-shadow">
+<div class="flex items-center justify-between mb-md">
+<div class="p-sm bg-primary-fixed rounded-lg">
+<span class="material-symbols-outlined text-primary">group</span>
+</div>
+<span class="text-success text-caption-strong flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">trending_up</span> 12%
+                        </span>
+</div>
+<p class="text-caption text-muted mb-xs">활성 사용자</p>
+<h3 class="font-number-display text-display-sm text-on-surface">12,480</h3>
+</div>
+<!-- Server Status -->
+<div class="bg-canvas border border-hairline p-lg rounded-2xl shadow-sm hover:shadow-md transition-shadow">
+<div class="flex items-center justify-between mb-md">
+<div class="p-sm bg-success/10 rounded-lg">
+<span class="material-symbols-outlined text-success">dns</span>
+</div>
+<div class="flex items-center gap-1">
+<span class="w-2 h-2 rounded-full bg-success animate-pulse"></span>
+<span class="text-caption-strong text-success">정상</span>
+</div>
+</div>
+<p class="text-caption text-muted mb-xs">서버 상태</p>
+<h3 class="font-title-lg text-title-lg text-on-surface">안정적 (리전 KR-1)</h3>
+</div>
+<!-- AI API Status -->
+<div class="bg-canvas border border-hairline p-lg rounded-2xl shadow-sm hover:shadow-md transition-shadow">
+<div class="flex items-center justify-between mb-md">
+<div class="p-sm bg-secondary-fixed rounded-lg">
+<span class="material-symbols-outlined text-on-secondary-fixed-variant">psychology</span>
+</div>
+<span class="text-caption-strong text-on-secondary-container">최적</span>
+</div>
+<p class="text-caption text-muted mb-xs">AI 콕핏 엔진</p>
+<h3 class="font-number-display text-display-sm text-on-surface">24ms <span class="text-caption font-sans text-muted">지연율</span></h3>
+</div>
+<!-- System Load -->
+<div class="bg-canvas border border-hairline p-lg rounded-2xl shadow-sm hover:shadow-md transition-shadow">
+<div class="flex items-center justify-between mb-md">
+<div class="p-sm bg-error-container rounded-lg">
+<span class="material-symbols-outlined text-on-error-container">memory</span>
+</div>
+<span class="text-caption-strong text-muted">CPU/RAM</span>
+</div>
+<p class="text-caption text-muted mb-xs">시스템 부하</p>
+<h3 class="font-number-display text-display-sm text-on-surface">14.2%</h3>
+</div>
+</div>
+<!-- Main Data Section: 2 Column Layout -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-lg">
+<!-- Traffic Chart Card -->
+<div class="lg:col-span-2 bg-canvas border border-hairline rounded-2xl p-lg shadow-sm">
+<div class="flex items-center justify-between mb-xl">
+<div>
+<h4 class="font-title-md text-title-md text-primary">실시간 트래픽 (24시간)</h4>
+<p class="text-caption text-muted">패킷 흐름 및 요청 수 시각화 데이터입니다.</p>
+</div>
+<div class="flex gap-xs">
+<button class="px-sm py-1 bg-surface-strong text-caption-strong rounded-full">일간</button>
+<button class="px-sm py-1 text-caption-strong text-muted hover:text-primary">주간</button>
+</div>
+</div>
+<!-- Simulated Chart -->
+<div class="h-64 w-full flex items-end gap-2 px-2 border-b border-hairline relative">
+<!-- Chart Grid Lines -->
+<div class="absolute inset-0 flex flex-col justify-between pointer-events-none opacity-10">
+<div class="w-full border-t border-ink"></div>
+<div class="w-full border-t border-ink"></div>
+<div class="w-full border-t border-ink"></div>
+<div class="w-full border-t border-ink"></div>
+</div>
+<!-- Bars -->
+<div class="flex-1 bg-primary/20 hover:bg-primary/40 rounded-t-sm chart-bar" style="height: 40%"></div>
+<div class="flex-1 bg-primary/20 hover:bg-primary/40 rounded-t-sm chart-bar" style="height: 35%"></div>
+<div class="flex-1 bg-primary/20 hover:bg-primary/40 rounded-t-sm chart-bar" style="height: 45%"></div>
+<div class="flex-1 bg-primary/20 hover:bg-primary/40 rounded-t-sm chart-bar" style="height: 60%"></div>
+<div class="flex-1 bg-primary/40 hover:bg-primary/60 rounded-t-sm chart-bar" style="height: 80%"></div>
+<div class="flex-1 bg-primary/60 hover:bg-primary/80 rounded-t-sm chart-bar" style="height: 70%"></div>
+<div class="flex-1 bg-primary/80 hover:bg-primary/100 rounded-t-sm chart-bar" style="height: 95%"></div>
+<div class="flex-1 bg-primary/40 hover:bg-primary/60 rounded-t-sm chart-bar" style="height: 50%"></div>
+<div class="flex-1 bg-primary/20 hover:bg-primary/40 rounded-t-sm chart-bar" style="height: 30%"></div>
+<div class="flex-1 bg-primary/20 hover:bg-primary/40 rounded-t-sm chart-bar" style="height: 25%"></div>
+<div class="flex-1 bg-primary/30 hover:bg-primary/50 rounded-t-sm chart-bar" style="height: 45%"></div>
+<div class="flex-1 bg-primary/50 hover:bg-primary/70 rounded-t-sm chart-bar" style="height: 65%"></div>
+</div>
+<div class="flex justify-between mt-base px-2">
+<span class="text-caption text-muted">00:00</span>
+<span class="text-caption text-muted">06:00</span>
+<span class="text-caption text-muted">12:00</span>
+<span class="text-caption text-muted">18:00</span>
+<span class="text-caption text-muted">23:59</span>
+</div>
+</div>
+<!-- Quick Actions & Alerts -->
+<div class="flex flex-col gap-lg">
+<!-- Quick Actions -->
+<div class="bg-canvas border border-hairline rounded-2xl p-lg shadow-sm">
+<h4 class="font-title-sm text-title-sm text-primary mb-lg">빠른 행정 도구</h4>
+<div class="flex flex-col gap-sm">
+<button class="w-full flex items-center justify-between p-base bg-surface-soft hover:bg-primary-fixed rounded-lg border border-hairline transition-all group">
+<div class="flex items-center gap-base">
+<span class="material-symbols-outlined text-primary">admin_panel_settings</span>
+<span class="font-button text-on-surface">관리자 권한 부여</span>
+</div>
+<span class="material-symbols-outlined text-muted group-hover:text-primary">chevron_right</span>
+</button>
+<button class="w-full flex items-center justify-between p-base bg-surface-soft hover:bg-primary-fixed rounded-lg border border-hairline transition-all group">
+<div class="flex items-center gap-base">
+<span class="material-symbols-outlined text-primary">security_update_good</span>
+<span class="font-button text-on-surface">IP 접속 제어</span>
+</div>
+<span class="material-symbols-outlined text-muted group-hover:text-primary">chevron_right</span>
+</button>
+<button class="w-full flex items-center justify-between p-base bg-surface-soft hover:bg-primary-fixed rounded-lg border border-hairline transition-all group">
+<div class="flex items-center gap-base">
+<span class="material-symbols-outlined text-primary">terminal</span>
+<span class="font-button text-on-surface">시스템 로그 조회</span>
+</div>
+<span class="material-symbols-outlined text-muted group-hover:text-primary">chevron_right</span>
+</button>
+</div>
+</div>
+<!-- Recent Alerts -->
+<div class="bg-surface-dark rounded-2xl p-lg shadow-xl flex-1 text-white">
+<div class="flex items-center gap-sm mb-lg">
+<span class="material-symbols-outlined text-warning" style="font-variation-settings: 'FILL' 1;">warning</span>
+<h4 class="font-title-sm text-title-sm">보안 이상 징후</h4>
+</div>
+<ul class="space-y-base">
+<li class="flex gap-base items-start">
+<div class="w-2 h-2 rounded-full bg-danger mt-1.5 shrink-0"></div>
+<div>
+<p class="text-body-sm font-bold">무차별 대입 공격(Brute-force) 감지</p>
+<p class="text-caption text-outline-variant">IP: 192.168.1.12 • 2분 전</p>
+</div>
+</li>
+<li class="flex gap-base items-start">
+<div class="w-2 h-2 rounded-full bg-warning mt-1.5 shrink-0"></div>
+<div>
+<p class="text-body-sm font-bold">API 사용량 급증 (AI 콕핏)</p>
+<p class="text-caption text-outline-variant">요청량 +400% • 15분 전</p>
+</div>
+</li>
+<li class="flex gap-base items-start opacity-60">
+<div class="w-2 h-2 rounded-full bg-success mt-1.5 shrink-0"></div>
+<div>
+<p class="text-body-sm font-bold">자동 백업 완료</p>
+<p class="text-caption text-outline-variant">볼륨 ID: BK-928 • 1시간 전</p>
+</div>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<!-- Detailed Resource Monitor Table -->
+<div class="mt-section bg-canvas border border-hairline rounded-2xl overflow-hidden shadow-sm">
+<div class="px-lg py-base border-b border-hairline flex items-center justify-between">
+<h4 class="font-title-md text-title-md text-primary">노드 리소스</h4>
+<button class="text-primary font-button text-body-sm hover:underline">전체 클러스터 보기</button>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-strong text-caption-strong text-muted">
+<th class="px-lg py-base font-semibold">노드 명칭</th>
+<th class="px-lg py-base font-semibold">가동 시간</th>
+<th class="px-lg py-base font-semibold">CPU 점유율</th>
+<th class="px-lg py-base font-semibold">메모리</th>
+<th class="px-lg py-base font-semibold">네트워크 입/출력</th>
+<th class="px-lg py-base font-semibold text-right">작업</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-hairline">
+<tr class="hover:bg-surface-soft transition-colors">
+<td class="px-lg py-base font-body-sm font-bold text-on-surface">KR-SEOUL-MASTER-01</td>
+<td class="px-lg py-base font-number-display text-body-sm">42d 12h</td>
+<td class="px-lg py-base">
+<div class="flex items-center gap-base">
+<div class="flex-1 bg-outline-variant h-1.5 rounded-full overflow-hidden max-w-[80px]">
+<div class="bg-success w-[24%] h-full"></div>
+</div>
+<span class="text-caption font-number-display">24%</span>
+</div>
+</td>
+<td class="px-lg py-base font-number-display text-body-sm">8.4 / 32 GB</td>
+<td class="px-lg py-base font-number-display text-body-sm">1.2 Gbps / 400 Mbps</td>
+<td class="px-lg py-base text-right">
+<button class="p-xs text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</td>
+</tr>
+<tr class="hover:bg-surface-soft transition-colors">
+<td class="px-lg py-base font-body-sm font-bold text-on-surface">KR-SEOUL-AI-WORKER-01
+                                </td>
+<td class="px-lg py-base font-number-display text-body-sm">12d 04h</td>
+<td class="px-lg py-base">
+<div class="flex items-center gap-base">
+<div class="flex-1 bg-outline-variant h-1.5 rounded-full overflow-hidden max-w-[80px]">
+<div class="bg-warning w-[68%] h-full"></div>
+</div>
+<span class="text-caption font-number-display">68%</span>
+</div>
+</td>
+<td class="px-lg py-base font-number-display text-body-sm">48.2 / 64 GB</td>
+<td class="px-lg py-base font-number-display text-body-sm">8.4 Gbps / 2.1 Gbps</td>
+<td class="px-lg py-base text-right">
+<button class="p-xs text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</td>
+</tr>
+<tr class="hover:bg-surface-soft transition-colors">
+<td class="px-lg py-base font-body-sm font-bold text-on-surface">KR-BUSAN-DB-01</td>
+<td class="px-lg py-base font-number-display text-body-sm">128d 18h</td>
+<td class="px-lg py-base">
+<div class="flex items-center gap-base">
+<div class="flex-1 bg-outline-variant h-1.5 rounded-full overflow-hidden max-w-[80px]">
+<div class="bg-success w-[12%] h-full"></div>
+</div>
+<span class="text-caption font-number-display">12%</span>
+</div>
+</td>
+<td class="px-lg py-base font-number-display text-body-sm">14.1 / 128 GB</td>
+<td class="px-lg py-base font-number-display text-body-sm">240 Mbps / 90 Mbps</td>
+<td class="px-lg py-base text-right">
+<button class="p-xs text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div></div></main>
+</div>
+<!-- Footer -->
+<footer class="w-full mt-section px-lg max-w-full border-t border-hairline bg-surface-container-low py-xl">
+<div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-base">
+<div class="flex flex-col gap-xs items-center md:items-start">
+<span class="font-title-sm text-title-sm text-on-surface">경상북도교육청 통합플랫폼</span>
+<p class="font-caption text-caption text-on-surface-variant">© 경상북도교육청. All Rights Reserved.</p>
+</div>
+<div class="flex gap-lg">
+<a class="text-body text-caption hover:underline decoration-primary" href="#">개인정보처리방침</a>
+<a class="text-body text-caption hover:underline decoration-primary" href="#">이용약관</a>
+<a class="text-body text-caption hover:underline decoration-primary" href="#">이메일무단수집거부</a>
+<a class="text-body text-caption hover:underline decoration-primary" href="#">찾아오시는길</a>
+</div>
+</div>
+</footer>
+<!-- FAB for Global Support -->
+<button class="fixed bottom-lg right-lg w-14 h-14 bg-primary text-on-primary rounded-full shadow-lg flex items-center justify-center hover:scale-110 transition-transform z-50">
+<span class="material-symbols-outlined">support_agent</span>
+</button>
+<script>
+        // Micro-interaction for refreshing charts
+        document.addEventListener('DOMContentLoaded', () => {
+            const bars = document.querySelectorAll('.chart-bar');
+            bars.forEach(bar => {
+                const targetHeight = bar.style.height;
+                bar.style.height = '0%';
+                setTimeout(() => {
+                    bar.style.height = targetHeight;
+                }, 300);
+            });
+        });
+    </script>
+</body>
+</html>

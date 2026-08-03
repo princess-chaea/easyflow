@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>로그인 - 이지플로우(EasyFlow)</title>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @font-face {
+            font-family: 'HakgyoansimPoster';
+            src: url('./font/Hakgyoansim_PosterB.ttf') format('truetype');
+            font-weight: 700;
+        }
+        @font-face {
+            font-family: 'KerisBaeum';
+            src: url('./font/KERISBAEUM_L.ttf') format('truetype');
+            font-weight: 300;
+        }
+        @font-face {
+            font-family: 'KerisBaeum';
+            src: url('./font/KERISBAEUM_R.ttf') format('truetype');
+            font-weight: 400;
+        }
+        @font-face {
+            font-family: 'KerisBaeum';
+            src: url('./font/KERISBAEUM_B.ttf') format('truetype');
+            font-weight: 700;
+        }
+        @font-face {
+            font-family: 'KerisBaeum';
+            src: url('./font/KERISBAEUM_EB.ttf') format('truetype');
+            font-weight: 800;
+        }
+        body {
+            font-family: 'KerisBaeum', sans-serif;
+            background-color: #f8f9fa;
+            -webkit-font-smoothing: antialiased;
+        }
+        .error-msg {
+            display: none;
+            color: #ef4444; /* text-red-500 */
+            font-size: 13px;
+            margin-top: 4px;
+        }
+        .error-input {
+            border-color: #ef4444 !important;
+        }
+    </style>
+    <script id="tailwind-config">
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        "display-lg": ["'HakgyoansimPoster'", "sans-serif"],
+                        "display-md": ["'HakgyoansimPoster'", "sans-serif"],
+                        "display-sm": ["'HakgyoansimPoster'", "sans-serif"],
+                        "title-lg": ["'KerisBaeum'", "sans-serif"],
+                        "title-md": ["'KerisBaeum'", "sans-serif"],
+                        "title-sm": ["'KerisBaeum'", "sans-serif"],
+                        "nav-link": ["'KerisBaeum'", "sans-serif"],
+                        "button": ["'KerisBaeum'", "sans-serif"],
+                        "body-strong": ["'KerisBaeum'", "sans-serif"],
+                        "body-md": ["'KerisBaeum'", "sans-serif"],
+                        "body-sm": ["'KerisBaeum'", "sans-serif"],
+                        "caption": ["'KerisBaeum'", "sans-serif"]
+                    },
+                    colors: {
+                        primary: { DEFAULT: '#0033a0', active: '#002277' },
+                        surface: { DEFAULT: '#f8f9fa', soft: '#f1f3f5', strong: '#e9ecef' },
+                        ink: { DEFAULT: '#212529', lighter: '#495057' }
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="text-ink flex flex-col min-h-screen items-center justify-center bg-[url('https://www.gbe.kr/images/main/bg_visual.jpg')] bg-cover bg-center">
+    
+    <div class="absolute inset-0 bg-white/60 backdrop-blur-md"></div>
+
+    <div class="relative z-10 w-full max-w-[420px] bg-white rounded-3xl shadow-2xl overflow-hidden flex flex-col border border-white/50">
+        <!-- Header -->
+        <div class="p-8 text-center border-b border-gray-100 bg-surface-soft/30">
+            <h1 class="font-display-lg text-[32px] text-primary mb-2 tracking-tight">이지플로우</h1>
+            <p class="text-[16px] text-ink/60 font-light">경상북도교육청 AI 기반 업무경감 플랫폼</p>
+        </div>
+
+        <!-- Form -->
+        <div class="p-8 flex flex-col gap-6">
+            
+            <button class="w-full h-12 bg-white border border-gray-300 rounded-xl flex items-center justify-center gap-3 hover:bg-gray-50 transition-colors shadow-sm">
+                <img src="assets/images/gbe_symbol.jpg" alt="GBE Logo" class="w-6 h-6 rounded-full object-cover">
+                <span class="font-bold text-[16px] text-ink">교육기관 인증서로 로그인</span>
+            </button>
+            
+            <div class="flex items-center gap-3">
+                <hr class="flex-1 border-gray-200">
+                <span class="text-[13px] text-ink/40 font-bold">또는 GBE 이메일로 로그인</span>
+                <hr class="flex-1 border-gray-200">
+            </div>
+
+            <form id="loginForm" class="flex flex-col gap-4" novalidate>
+                <div class="flex flex-col gap-1.5">
+                    <label class="text-[14px] font-bold text-ink">GBE 이메일</label>
+                    <input type="email" id="emailInput" placeholder="example@gbe.kr" class="w-full border border-gray-300 rounded-xl px-4 py-3 text-[15px] focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors">
+                    <div id="emailError" class="error-msg">아이디를 확인해주세요.</div>
+                </div>
+                <div class="flex flex-col gap-1.5">
+                    <div class="flex justify-between items-center">
+                        <label class="text-[14px] font-bold text-ink">비밀번호</label>
+                        <a href="#" class="text-[13px] text-primary hover:underline">비밀번호 찾기</a>
+                    </div>
+                    <input type="password" id="pwInput" placeholder="비밀번호를 입력하세요" class="w-full border border-gray-300 rounded-xl px-4 py-3 text-[15px] focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors">
+                    <div id="pwError" class="error-msg">비밀번호를 확인해주세요.</div>
+                </div>
+                
+                <button type="submit" class="w-full h-12 bg-primary text-white rounded-xl font-bold text-[16px] mt-2 hover:bg-primary-active transition-colors shadow-md">
+                    로그인
+                </button>
+            </form>
+
+            <div class="text-center mt-2">
+                <span class="text-[14px] text-ink/60">아직 계정이 없으신가요?</span>
+                <a href="공통_회원가입.html" class="text-[14px] text-primary font-bold ml-2 hover:underline">회원가입</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const emailInput = document.getElementById('emailInput');
+            const pwInput = document.getElementById('pwInput');
+            const emailError = document.getElementById('emailError');
+            const pwError = document.getElementById('pwError');
+            
+            // Reset errors
+            emailError.style.display = 'none';
+            pwError.style.display = 'none';
+            emailInput.classList.remove('error-input');
+            pwInput.classList.remove('error-input');
+            
+            const email = emailInput.value.trim();
+            const pw = pwInput.value.trim();
+            
+            // Dummy logic
+            let hasError = false;
+            
+            if (email !== 'test@gbe.kr') {
+                emailError.style.display = 'block';
+                emailInput.classList.add('error-input');
+                emailInput.focus();
+                hasError = true;
+            } else if (pw !== 'test1234!') {
+                pwError.style.display = 'block';
+                pwInput.classList.add('error-input');
+                pwInput.focus();
+                hasError = true;
+            }
+            
+            if (!hasError) {
+                // Login Success
+                window.location.href = 'main.html';
+            }
+        });
+    </script>
+</body>
+</html>

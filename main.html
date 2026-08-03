@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+
+<html lang="ko" style=""><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>이지플로우 (EasyFlow) - 경상북도교육청</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        @font-face {
+            font-family: 'HakgyoansimPoster';
+            src: url('./font/Hakgyoansim_PosterB.ttf') format('truetype');
+            font-weight: 700;
+        }
+        @font-face {
+            font-family: 'KerisBaeum';
+            src: url('./font/KERISBAEUM_L.ttf') format('truetype');
+            font-weight: 300;
+        }
+        @font-face {
+            font-family: 'KerisBaeum';
+            src: url('./font/KERISBAEUM_R.ttf') format('truetype');
+            font-weight: 400;
+        }
+        @font-face {
+            font-family: 'KerisBaeum';
+            src: url('./font/KERISBAEUM_B.ttf') format('truetype');
+            font-weight: 700;
+        }
+        @font-face {
+            font-family: 'KerisBaeum';
+            src: url('./font/KERISBAEUM_EB.ttf') format('truetype');
+            font-weight: 800;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        body {
+            font-family: 'KerisBaeum', sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .ai-gradient {
+            background: linear-gradient(135deg, #003893 0%, #12419b 100%);
+        }
+        .ripple {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            transform: scale(0);
+            animation: ripple-animation 0.6s linear;
+            pointer-events: none;
+        }
+        @keyframes ripple-animation {
+            to { transform: scale(4); opacity: 0; }
+        }
+
+        /* Micro-interactions & Animations */
+        @keyframes pulse-soft {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.7; transform: scale(0.95); }
+        }
+        .animate-pulse-soft { animation: pulse-soft 2s infinite ease-in-out; }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+        .animate-float { animation: float 6s infinite ease-in-out; }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+        .shimmer-effect::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transform: translateX(-100%);
+            animation: shimmer 3s infinite;
+        }
+
+        .hover-lift {
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.4s ease;
+        }
+        .hover-lift:hover {
+            transform: translateY(-8px) scale(1.01);
+            box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+        }
+
+        .nav-link-underline {
+            position: relative;
+        }
+        .nav-link-underline::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: currentColor;
+            transition: width 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .nav-link-underline:hover::after {
+            width: 100%;
+        }
+
+        .entrance-fade {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275), transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .entrance-fade.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+                scroll-behavior: auto !important;
+            }
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "secondary-fixed": "#ffdea8",
+                      "tertiary": "#501400",
+                      "on-primary-fixed": "#001849",
+                      "on-tertiary-container": "#ff8a62",
+                      "surface-tint": "#335ab4",
+                      "ink": "#111214",
+                      "surface-soft": "#f8f9fa",
+                      "on-primary-container": "#88a7ff",
+                      "background": "#faf8ff",
+                      "danger": "#df2c2c",
+                      "surface-container": "#eeedf5",
+                      "tertiary-fixed-dim": "#ffb59d",
+                      "secondary-container": "#feb700",
+                      "on-tertiary": "#ffffff",
+                      "on-primary": "#ffffff",
+                      "secondary-fixed-dim": "#ffba20",
+                      "inverse-surface": "#2f3036",
+                      "inverse-on-surface": "#f1f0f8",
+                      "surface-variant": "#e2e2ea",
+                      "on-secondary-fixed": "#271900",
+                      "on-tertiary-fixed": "#390c00",
+                      "surface-container-lowest": "#ffffff",
+                      "on-primary-fixed-variant": "#12419b",
+                      "on-surface": "#1a1b21",
+                      "body": "#4e535e",
+                      "primary-fixed-dim": "#b3c5ff",
+                      "on-error": "#ffffff",
+                      "surface-strong": "#f2f4f6",
+                      "on-secondary-fixed-variant": "#5e4200",
+                      "surface-container-low": "#f4f3fb",
+                      "primary-container": "#003893",
+                      "error-container": "#ffdad6",
+                      "on-background": "#1a1b21",
+                      "success": "#00a261",
+                      "on-surface-variant": "#434652",
+                      "primary-active": "#002463",
+                      "outline-variant": "#c4c6d4",
+                      "tertiary-fixed": "#ffdbd0",
+                      "inverse-primary": "#b3c5ff",
+                      "surface": "#faf8ff",
+                      "primary-disabled": "#9eb9e5",
+                      "outline": "#747683",
+                      "surface-container-high": "#e8e7f0",
+                      "on-secondary": "#ffffff",
+                      "on-tertiary-fixed-variant": "#802a07",
+                      "on-error-container": "#93000a",
+                      "error": "#ba1a1a",
+                      "on-secondary-container": "#6b4b00",
+                      "secondary": "#7c5800",
+                      "surface-dim": "#dad9e1",
+                      "surface-dark": "#111214",
+                      "surface-bright": "#faf8ff",
+                      "canvas": "#ffffff",
+                      "muted": "#868b94",
+                      "warning": "#ff9000",
+                      "tertiary-container": "#752201",
+                      "primary-fixed": "#dae1ff",
+                      "hairline": "#e5e8eb",
+                      "surface-container-highest": "#e2e2ea",
+                      "primary": "#003893"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "base": "16px",
+                      "xxs": "4px",
+                      "section": "96px",
+                      "lg": "24px",
+                      "xl": "32px",
+                      "xxl": "48px",
+                      "xs": "8px",
+                      "md": "20px",
+                      "sm": "12px"
+              },
+              "fontFamily": {
+                      "display-lg": ["'HakgyoansimPoster'", "sans-serif"],
+                      "display-md": ["'HakgyoansimPoster'", "sans-serif"],
+                      "display-sm": ["'HakgyoansimPoster'", "sans-serif"],
+                      "title-lg": ["'KerisBaeum'", "sans-serif"],
+                      "title-md": ["'KerisBaeum'", "sans-serif"],
+                      "title-sm": ["'KerisBaeum'", "sans-serif"],
+                      "nav-link": ["'KerisBaeum'", "sans-serif"],
+                      "button": ["'KerisBaeum'", "sans-serif"],
+                      "body-strong": ["'KerisBaeum'", "sans-serif"],
+                      "body-md": ["'KerisBaeum'", "sans-serif"],
+                      "body-sm": ["'KerisBaeum'", "sans-serif"],
+                      "caption": ["'KerisBaeum'", "sans-serif"]
+              },
+              "fontSize": {
+                      "display-lg": ["57px", "64px"],
+                      "display-md": ["45px", "52px"],
+                      "display-sm": ["36px", "44px"],
+                      "title-lg": ["28px", "36px"],
+                      "title-md": ["22px", "28px"],
+                      "title-sm": ["18px", "24px"],
+                      "body-lg": ["16px", "24px"],
+                      "body-md": ["14px", "20px"],
+                      "body-sm": ["12px", "16px"],
+                      "nav-link": ["18px", "24px"],
+                      "caption": ["12px", "16px"]
+              }
+            },
+          },
+        }
+      </script>
+</head>
+<body class="bg-surface-soft text-on-surface">
+<!-- Top Navigation Bar -->
+<nav class="fixed top-0 w-full z-50 h-[64px] flex justify-between items-center px-lg bg-canvas">
+<div class="flex items-center gap-xl">
+<span class="font-display-sm text-display-sm font-semibold text-primary tracking-tight entrance-fade visible" style="transition-delay: 0ms;"><h1 class="font-display-sm text-display-sm font-semibold text-primary-container" style="--tw-border-spacing-y: 0; --tw-translate-x: 0; --tw-translate-y: 0; --tw-rotate: 0; --tw-skew-x: 0; --tw-skew-y: 0; --tw-scale-x: 1; --tw-scale-y: 1; --tw-pan-x: ; --tw-pan-y: ; --tw-pinch-zoom: ; --tw-scroll-snap-strictness: proximity; --tw-gradient-from-position: ; --tw-gradient-via-position: ; --tw-gradient-to-position: ; --tw-ordinal: ; --tw-slashed-zero: ; --tw-numeric-figure: ; --tw-numeric-spacing: ; --tw-numeric-fraction: ; --tw-ring-inset: ; --tw-ring-offset-width: 0px; --tw-ring-offset-color: #fff; --tw-ring-color: rgb(59 130 246 / 0.5); --tw-ring-offset-shadow: 0 0 #0000; --tw-ring-shadow: 0 0 #0000; --tw-shadow: 0 0 #0000; --tw-shadow-colored: 0 0 #0000; --tw-blur: ; --tw-brightness: ; --tw-contrast: ; --tw-grayscale: ; --tw-hue-rotate: ; --tw-invert: ; --tw-saturate: ; --tw-sepia: ; --tw-drop-shadow: ; --tw-backdrop-blur: ; --tw-backdrop-brightness: ; --tw-backdrop-contrast: ; --tw-backdrop-grayscale: ; --tw-backdrop-hue-rotate: ; --tw-backdrop-invert: ; --tw-backdrop-opacity: ; --tw-backdrop-saturate: ; --tw-backdrop-sepia: ; --tw-contain-size: ; --tw-contain-layout: ; --tw-contain-paint: ; --tw-contain-style: ; font-size: 26px; --tw-text-opacity: 1; color: rgb(0, 56, 147); letter-spacing: normal; white-space: nowrap; line-height: 1.4;">이지플로우 (EasyFlow)</h1></span>
+
+<div class="hidden md:flex gap-[80px] group/mega h-[64px] items-center relative">
+<div class="absolute top-[64px] left-1/2 -translate-x-1/2 w-[100vw] bg-white shadow-md border-b border-hairline opacity-0 invisible group-hover/mega:opacity-100 group-hover/mega:visible transition-all duration-200 z-40 h-[180px]"></div>
+<div class="relative h-full flex flex-col justify-start">
+<a class="font-nav-link text-nav-link text-on-surface-variant hover:text-primary transition-colors h-[64px] flex items-center" href="main.html">홈</a>
+</div>
+<div class="relative h-full flex flex-col justify-start group/col">
+<a class="font-nav-link text-nav-link transition-colors h-[64px] flex items-center gap-xxs whitespace-nowrap group-hover/col:text-primary group-hover/col:font-bold text-on-surface-variant hover:text-primary" href="업무배송_스마트공문달력.html">
+                업무 배송 <span class="material-symbols-outlined text-[18px]">expand_more</span>
+</a>
+<div class="absolute top-[64px] left-1/2 -translate-x-1/2 pt-md pb-md min-w-[160px] flex flex-col items-center gap-sm opacity-0 invisible group-hover/mega:opacity-100 group-hover/mega:visible transition-all duration-200 z-50 group-hover/col:bg-surface-container h-[180px] rounded-b-lg">
+<a class="font-nav-link text-[16px] text-on-surface-variant hover:text-primary transition-colors whitespace-nowrap px-sm py-1 w-full text-center" href="업무배송_스마트공문달력.html">스마트 공문 달력</a><a class="font-nav-link text-[16px] text-on-surface-variant hover:text-primary transition-colors whitespace-nowrap px-sm py-1 w-full text-center" href="업무배송_업무우편함.html">업무 우편함</a><a class="font-nav-link text-[16px] text-on-surface-variant hover:text-primary transition-colors whitespace-nowrap px-sm py-1 w-full text-center" href="업무배송_맞춤형업무가이드.html">맞춤형 업무 가이드</a>
+</div>
+</div>
+<div class="relative h-full flex flex-col justify-start group/col">
+<a class="font-nav-link text-nav-link transition-colors h-[64px] flex items-center gap-xxs whitespace-nowrap group-hover/col:text-primary group-hover/col:font-bold text-on-surface-variant hover:text-primary" href="AI업무어시스턴트_챗봇.html">
+                인생 도서관 <span class="material-symbols-outlined text-[18px]">expand_more</span>
+</a>
+<div class="absolute top-[64px] left-1/2 -translate-x-1/2 pt-md pb-md min-w-[160px] flex flex-col items-center gap-sm opacity-0 invisible group-hover/mega:opacity-100 group-hover/mega:visible transition-all duration-200 z-50 group-hover/col:bg-surface-container h-[180px] rounded-b-lg">
+<a class="font-nav-link text-[16px] text-on-surface-variant hover:text-primary transition-colors whitespace-nowrap px-sm py-1 w-full text-center" href="AI업무어시스턴트_챗봇.html">AI 지능형 상담</a><a class="font-nav-link text-[16px] text-on-surface-variant hover:text-primary transition-colors whitespace-nowrap px-sm py-1 w-full text-center" href="공통_프로필수정.html">멘토링 연결 (미구현)</a><a class="font-nav-link text-[16px] text-on-surface-variant hover:text-primary transition-colors whitespace-nowrap px-sm py-1 w-full text-center" href="공통_로그인.html">행정 매뉴얼 검색 (미구현)</a>
+</div>
+</div>
+<div class="relative h-full flex flex-col justify-start group/col">
+<a class="font-nav-link text-nav-link transition-colors h-[64px] flex items-center gap-xxs whitespace-nowrap group-hover/col:text-primary group-hover/col:font-bold text-on-surface-variant hover:text-primary" href="서식자료실_통합검색.html">
+                서식 자료실 <span class="material-symbols-outlined text-[18px]">expand_more</span>
+</a>
+<div class="absolute top-[64px] left-1/2 -translate-x-1/2 pt-md pb-md min-w-[160px] flex flex-col items-center gap-sm opacity-0 invisible group-hover/mega:opacity-100 group-hover/mega:visible transition-all duration-200 z-50 group-hover/col:bg-surface-container h-[180px] rounded-b-lg">
+<a class="font-nav-link text-[16px] text-on-surface-variant hover:text-primary transition-colors whitespace-nowrap px-sm py-1 w-full text-center" href="서식자료실_통합검색.html">통합 검색</a><a class="font-nav-link text-[16px] text-on-surface-variant hover:text-primary transition-colors whitespace-nowrap px-sm py-1 w-full text-center" href="서식 자료실_한글파일서식선택.html">서식 자동 완성</a><a class="font-nav-link text-[16px] text-on-surface-variant hover:text-primary transition-colors whitespace-nowrap px-sm py-1 w-full text-center" href="서식자료실_공문OCR요약.html">공문 분석</a>
+</div>
+</div>
+<div class="relative h-full flex flex-col justify-start group/col">
+<a class="font-nav-link text-nav-link transition-colors h-[64px] flex items-center gap-xxs whitespace-nowrap group-hover/col:text-primary group-hover/col:font-bold text-on-surface-variant hover:text-primary" href="안내센터_공지사항.html">
+                안내센터 <span class="material-symbols-outlined text-[18px]">expand_more</span>
+</a>
+<div class="absolute top-[64px] left-1/2 -translate-x-1/2 pt-md pb-md min-w-[160px] flex flex-col items-center gap-sm opacity-0 invisible group-hover/mega:opacity-100 group-hover/mega:visible transition-all duration-200 z-50 group-hover/col:bg-surface-container h-[180px] rounded-b-lg">
+<a class="font-nav-link text-[16px] text-on-surface-variant hover:text-primary transition-colors whitespace-nowrap px-sm py-1 w-full text-center" href="안내센터_공지사항.html">공지사항</a><a class="font-nav-link text-[16px] text-on-surface-variant hover:text-primary transition-colors whitespace-nowrap px-sm py-1 w-full text-center" href="안내센터_시스템 안내.html">이용 안내</a><a class="font-nav-link text-[16px] text-on-surface-variant hover:text-primary transition-colors whitespace-nowrap px-sm py-1 w-full text-center" href="안내센터_1대1 문의.html">원격 지원 신청</a>
+</div>
+</div>
+</div>
+
+</div>
+<div class="flex items-center gap-base">
+<button class="p-xs text-on-surface-variant hover:bg-surface-strong rounded-full transition-colors"><span class="material-symbols-outlined" data-icon="notifications">notifications</span></button>
+<button class="p-xs text-on-surface-variant hover:text-primary hover:bg-surface-strong rounded-full transition-colors"><span class="material-symbols-outlined" data-icon="settings">settings</span></button>
+<div class="relative group">
+<div class="w-10 h-10 rounded-full bg-surface-container overflow-hidden cursor-pointer active:opacity-80 transition-opacity border border-hairline hover:ring-2 ring-primary/20">
+<img alt="사용자 프로필" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDC4T1JXEVfOTEIvuSGas-vZo6Xrm6Gso-g1t4Ifc8qnWK86nRrH2U8HOTdfdnTsplBb7uebcFVeymcmL2sIdAPhvjovBg9eBquhUSCzN152yf8xwikxJ4E_WZIS6AoZsmFjlNBOS4fEmilnVe9vNRg8OvkOV-BNR6hhdAKBSSULdU9lEfBTz0nTLaBOyVD8VCr72fQSqc3wMrktO117e6OpaN0nuSVbSD2qqq2Ks3RmI91N4fEffpFg9OMmOdWqakRhPaW-FACNKQ3"/>
+</div>
+<div class="absolute top-full right-0 mt-xs w-48 bg-white rounded-xl shadow-xl border border-hairline opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 p-xs">
+<a class="block px-base py-sm font-nav-link text-[15px] hover:bg-surface-soft rounded-lg transition-colors flex items-center gap-2" href="#"><span class="material-symbols-outlined text-[18px]">person</span> 프로필 수정</a>
+<a class="block px-base py-sm font-nav-link text-[15px] hover:bg-surface-soft rounded-lg transition-colors flex items-center gap-2 text-danger" href="#"><span class="material-symbols-outlined text-[18px]">logout</span> 로그아웃</a>
+<div class="border-t border-hairline my-1"></div>
+<div class="px-base py-1 text-[11px] text-muted font-bold">관리자 메뉴</div>
+<a class="block px-base py-sm font-nav-link text-[15px] hover:bg-surface-soft rounded-lg transition-colors flex items-center gap-2" href="학교관리자_대시보드.html"><span class="material-symbols-outlined text-[18px]">school</span> 학교 관리</a>
+<a class="block px-base py-sm font-nav-link text-[15px] hover:bg-surface-soft rounded-lg transition-colors flex items-center gap-2" href="서버관리자_대시보드.html"><span class="material-symbols-outlined text-[18px]">dns</span> 서버 관리</a>
+</div>
+</div>
+</div>
+</nav>
+<main class="pt-[64px]">
+<!-- Hero Section -->
+<section class="relative bg-surface-dark py-section overflow-hidden">
+<div class="max-w-7xl mx-auto px-lg grid md:grid-cols-2 items-center gap-xl relative z-10">
+<div class="space-y-md entrance-fade visible" style="transition-delay: 0ms;">
+<div class="flex items-center gap-sm">
+<span class="inline-block py-xxs px-sm bg-primary-container text-on-primary-container rounded-full text-caption-strong font-bold">GBE AI Cockpit v2.0</span>
+<span class="flex items-center gap-xs text-success text-caption animate-pulse-soft">
+<span class="w-2 h-2 rounded-full bg-success"></span>
+        시스템 실시간 가동 중
+    </span>
+</div>
+<h1 class="text-white font-display-xl text-display-xl tracking-tight leading-tight">이지플로우:<br/>업무 배송과 인생 도서관의 통합 플랫폼</h1>
+<p class="text-surface-variant font-body-md text-body-md max-w-lg">인공지능 기술로 교직원의 행정 업무를 혁신하고, 인생 도서관을 통해 성장의 기회를 제공하는 경북 교육의 스마트 파트너입니다.</p>
+<div class="flex gap-base pt-base">
+<button class="bg-primary text-white px-xl py-sm rounded-full font-button hover:bg-primary-active transition-all flex items-center gap-xs relative overflow-hidden shimmer-effect">
+                        AI 콕핏 시작하기 <span class="material-symbols-outlined" data-icon="rocket_launch">rocket_launch</span>
+</button>
+<button class="bg-surface-dark-elevated text-white border border-outline px-xl py-sm rounded-full font-button hover:bg-white/10 transition-all">메뉴얼 보기</button>
+</div>
+</div>
+<div class="relative hidden md:block entrance-fade visible" style="transition-delay: 0ms;">
+<div class="glass-card p-xl rounded-xl space-y-md border-primary/20 relative z-20 animate-float" style="animation-duration: 8s;">
+<div class="flex justify-between items-center">
+<span class="text-white font-title-sm">실시간 업무 처리 현황</span>
+<span class="text-secondary-container font-number-display">87% 완료</span>
+</div>
+<div class="h-2 bg-white/10 rounded-full overflow-hidden">
+<div class="h-full bg-secondary-container transition-all duration-1000 ease-out" style="width: 87%"></div>
+</div>
+<div class="grid grid-cols-2 gap-base">
+<div class="bg-white/5 p-base rounded-xl border border-white/10 hover:bg-white/10 transition-colors cursor-default">
+<span class="text-white/60 text-caption block">오늘의 기안</span>
+<span class="text-white font-title-md">12건</span>
+</div>
+<div class="bg-white/5 p-base rounded-xl border border-white/10 hover:bg-white/10 transition-colors cursor-default">
+<span class="text-white/60 text-caption block">AI 분석 완료</span>
+<span class="text-white font-title-md">34건</span>
+</div>
+</div>
+</div>
+<!-- Decorative AI Graphic elements -->
+<div class="absolute -top-12 -right-12 w-64 h-64 bg-primary/20 blur-[100px] rounded-full animate-pulse-soft"></div>
+<div class="absolute -bottom-8 -left-8 w-48 h-48 bg-secondary-container/10 blur-[80px] rounded-full animate-pulse-soft" style="animation-delay: 1s;"></div>
+</div>
+</div>
+<!-- Background Image -->
+<div class="absolute top-0 right-0 w-1/2 h-full opacity-30 pointer-events-none">
+<img class="w-full h-full object-cover" data-alt="A sophisticated abstract 3D visualization of data streams and neural networks in deep blue and gold." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDRskiqPKpwHwvnkb4-JGlN71N4k_rvKrkgNU41XtIL3JMdv4BJAXoRYR6Esm8lAXfJADZwEh7B0AiNIssPMkS3UUkC00k7H-fXrEIiaC2GjFm-CstIjdJxh4JW85i-2KCSVMxHcnhHVkdfZfPqBEOnKlLPyse1MAPkyA-BV0Lhl8VLvoQdN3firzG8cVdDxpGTOFTlqWuZnE7hUVXENHjofKg5dh8GwJ7DZUKBh4q8dBnL_UeyKBGryLQamoG7cmDbzc-_jBEeTSWP"/>
+</div>
+</section>
+<!-- Main Dashboard -->
+<section class="max-w-7xl mx-auto px-lg py-xl">
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-lg">
+<!-- 업무배송 달력 -->
+<div class="lg:col-span-8 bg-canvas p-xl rounded-xl border border-hairline shadow-sm hover-lift entrance-fade visible" data-entrance-order="1" style="transition-delay: 100ms;">
+<div class="flex justify-between items-center mb-xl">
+<div class="flex items-center gap-base">
+<span class="material-symbols-outlined text-primary" data-icon="local_shipping">local_shipping</span>
+<h2 class="font-title-lg text-title-lg">이번 주 업무 배송 일정</h2>
+</div>
+<div class="flex gap-xs">
+<button class="p-xs rounded-full hover:bg-surface-strong transition-colors"><span class="material-symbols-outlined" data-icon="chevron_left">chevron_left</span></button>
+<span class="font-body-strong px-base self-center">2024년 5월 3주</span>
+<button class="p-xs rounded-full hover:bg-surface-strong transition-colors"><span class="material-symbols-outlined" data-icon="chevron_right">chevron_right</span></button>
+</div>
+</div>
+<div class="grid grid-cols-5 gap-base">
+<!-- Monday -->
+<div class="space-y-base group">
+<div class="text-center pb-base border-b border-hairline group-hover:border-primary transition-colors">
+<span class="text-caption text-on-surface-variant block">월</span>
+<span class="font-title-md">20</span>
+</div>
+<div class="bg-primary/5 p-sm rounded-xl border-l-4 border-primary hover:bg-primary/10 transition-colors cursor-pointer">
+<span class="text-caption-strong text-primary block">행정실</span>
+<p class="text-body-sm line-clamp-2">급여 작업 마감</p>
+</div>
+</div>
+<!-- Tuesday -->
+<div class="space-y-base group">
+<div class="text-center pb-base border-b border-hairline group-hover:border-primary transition-colors">
+<span class="text-caption text-on-surface-variant block">화</span>
+<span class="font-title-md">21</span>
+</div>
+<div class="bg-success/5 p-sm rounded-xl border-l-4 border-success hover:bg-success/10 transition-colors cursor-pointer">
+<span class="text-caption-strong text-success block">교무실</span>
+<p class="text-body-sm line-clamp-2">학부모 총회 지원</p>
+</div>
+<div class="bg-warning/5 p-sm rounded-xl border-l-4 border-warning hover:bg-warning/10 transition-colors cursor-pointer">
+<span class="text-caption-strong text-warning block">연구실</span>
+<p class="text-body-sm line-clamp-2">연수 보고서 제출</p>
+</div>
+</div>
+<!-- Wednesday -->
+<div class="space-y-base group">
+<div class="text-center pb-base border-b border-hairline text-primary">
+<span class="text-caption block">수</span>
+<span class="font-title-md">22</span>
+</div>
+<div class="bg-surface-container p-sm rounded-xl border border-hairline opacity-60">
+<span class="text-caption-strong block">일정 없음</span>
+</div>
+</div>
+<!-- Thursday -->
+<div class="space-y-base group">
+<div class="text-center pb-base border-b border-hairline group-hover:border-primary transition-colors">
+<span class="text-caption text-on-surface-variant block">목</span>
+<span class="font-title-md">23</span>
+</div>
+<div class="bg-primary/5 p-sm rounded-xl border-l-4 border-primary hover:bg-primary/10 transition-colors cursor-pointer">
+<span class="text-caption-strong text-primary block">행정실</span>
+<p class="text-body-sm line-clamp-2">지출결의서 정리</p>
+</div>
+</div>
+<!-- Friday -->
+<div class="space-y-base group">
+<div class="text-center pb-base border-b border-hairline group-hover:border-primary transition-colors">
+<span class="text-caption text-on-surface-variant block">금</span>
+<span class="font-title-md">24</span>
+</div>
+<div class="bg-danger/5 p-sm rounded-xl border-l-4 border-danger hover:bg-danger/10 transition-colors cursor-pointer">
+<span class="text-caption-strong text-danger block">마감</span>
+<p class="text-body-sm line-clamp-2">주간 업무 보고</p>
+</div>
+</div>
+</div>
+</div>
+<!-- 인생 도서관 (AI 챗봇 & 상담) -->
+<div class="lg:col-span-4 bg-primary text-white p-xl rounded-xl flex flex-col justify-between hover-lift entrance-fade visible" data-entrance-order="2" style="transition-delay: 200ms;">
+<div>
+<div class="flex items-center gap-base mb-lg">
+<span class="material-symbols-outlined text-secondary-container animate-bounce" data-icon="auto_stories" style="animation-duration: 3s;">auto_stories</span>
+<h2 class="font-title-lg">인생 도서관</h2>
+</div>
+<p class="font-body-md text-primary-fixed leading-relaxed">AI 어시스턴트와 전문 멘토가 함께하는 경북 교육의 통합 지식 허브입니다. 고민 상담부터 전문 지식까지 물어보세요.</p>
+</div>
+<div class="space-y-base mt-xl">
+<button class="w-full bg-white/10 hover:bg-white/20 py-base px-lg rounded-xl text-left flex justify-between items-center transition-all group shadow-sm">
+<span class="">멘토링 상담 예약</span>
+<span class="material-symbols-outlined group-hover:translate-x-1 transition-transform" data-icon="arrow_forward">arrow_forward</span>
+</button>
+<div class="flex items-center gap-base bg-white rounded-full p-xs pl-base shadow-lg overflow-hidden ring-0 focus-within:ring-2 ring-secondary-container transition-all">
+<input class="flex-grow bg-transparent border-none text-on-surface focus:ring-0 text-body-sm" placeholder="AI 사서에게 질문하기" type="text"/>
+<button class="bg-primary p-xs rounded-full text-white hover:bg-primary-active transition-colors"><span class="material-symbols-outlined" data-icon="send">send</span></button>
+</div>
+</div>
+</div>
+<!-- 한글 파일 뚝딱 -->
+<div class="lg:col-span-5 bg-canvas p-xl rounded-xl border border-hairline shadow-sm relative overflow-hidden hover-lift entrance-fade visible" data-entrance-order="3" style="transition-delay: 300ms;">
+<div class="flex items-center gap-base mb-lg">
+<span class="material-symbols-outlined text-primary" data-icon="auto_fix_high">auto_fix_high</span>
+<h2 class="font-title-lg">한글 파일 '뚝딱'</h2>
+</div>
+<p class="text-body-sm text-on-surface-variant mb-xl">공문 서식을 우리 학교 정보에 맞춰 자동으로 변환해 드립니다.</p>
+<div class="border-2 border-dashed border-outline-variant rounded-xl p-xl text-center bg-surface-soft hover:bg-surface-strong hover:border-primary transition-all cursor-pointer mb-base group">
+<span class="material-symbols-outlined text-primary text-display-sm group-hover:scale-110 transition-transform" data-icon="upload_file">upload_file</span>
+<p class="font-body-strong mt-sm">HWP/HWPX 파일을 드래그하여 업로드</p>
+<p class="text-caption text-muted mt-xxs">우리 학교 버전으로 자동 변환됩니다.</p>
+</div>
+<div class="space-y-base">
+<div class="flex justify-between items-center p-sm bg-surface-container rounded-xl hover:bg-surface-container-high transition-colors">
+<div class="flex items-center gap-base">
+<span class="material-symbols-outlined text-success" data-icon="check_circle">check_circle</span>
+<span class="text-body-sm">교원 연수 결과 보고서.hwp</span>
+</div>
+<button class="text-primary text-caption-strong hover:underline">다운로드</button>
+</div>
+</div>
+</div>
+<!-- 서식 자료실 -->
+<div class="lg:col-span-7 bg-canvas p-xl rounded-xl border border-hairline shadow-sm hover-lift entrance-fade visible" data-entrance-order="4" style="transition-delay: 400ms;">
+<div class="flex justify-between items-center mb-xl">
+<div class="flex items-center gap-base">
+<span class="material-symbols-outlined text-primary" data-icon="folder_shared">folder_shared</span>
+<h2 class="font-title-lg">서식 자료실</h2>
+</div>
+<div class="flex gap-xs">
+<span class="bg-surface-strong px-sm py-xxs rounded-full text-caption-strong text-on-surface-variant cursor-pointer hover:bg-primary hover:text-white transition-all">#기안서</span>
+<span class="bg-surface-strong px-sm py-xxs rounded-full text-caption-strong text-on-surface-variant cursor-pointer hover:bg-primary hover:text-white transition-all">#계획서</span>
+<span class="bg-surface-strong px-sm py-xxs rounded-full text-caption-strong text-on-surface-variant cursor-pointer hover:bg-primary hover:text-white transition-all">#보고서</span>
+</div>
+</div>
+<div class="overflow-hidden border border-hairline rounded-xl">
+<table class="w-full text-left">
+<thead class="bg-surface-soft border-b border-hairline text-caption-strong text-on-surface-variant">
+<tr>
+<th class="px-base py-sm">자료명</th>
+<th class="px-base py-sm">분류</th>
+<th class="px-base py-sm text-right">등록일</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-hairline">
+<tr class="hover:bg-surface-soft transition-colors group cursor-pointer entrance-fade visible" data-entrance-order="5" style="transition-delay: 500ms;">
+<td class="px-base py-md text-body-sm font-medium group-hover:text-primary transition-colors">2024년도 하계 교원 연수 운영 계획(안)</td>
+<td class="px-base py-md"><span class="px-xs py-xxs bg-primary/10 text-primary text-[11px] rounded font-bold">공통서식</span></td>
+<td class="px-base py-md text-right text-caption text-muted font-number-display">2024.05.15</td>
+</tr>
+<tr class="hover:bg-surface-soft transition-colors group cursor-pointer entrance-fade visible" data-entrance-order="6" style="transition-delay: 600ms;">
+<td class="px-base py-md text-body-sm font-medium group-hover:text-primary transition-colors">초등학교 1인 1스마트기기 관리 지침</td>
+<td class="px-base py-md"><span class="px-xs py-xxs bg-success/10 text-success text-[11px] rounded font-bold">정보화</span></td>
+<td class="px-base py-md text-right text-caption text-muted font-number-display">2024.05.14</td>
+</tr>
+<tr class="hover:bg-surface-soft transition-colors group cursor-pointer entrance-fade visible" data-entrance-order="7" style="transition-delay: 700ms;">
+<td class="px-base py-md text-body-sm font-medium group-hover:text-primary transition-colors">학교 급식 만족도 조사 설문지 서식</td>
+<td class="px-base py-md"><span class="px-xs py-xxs bg-warning/10 text-warning text-[11px] rounded font-bold">급식/보건</span></td>
+<td class="px-base py-md text-right text-caption text-muted font-number-display">2024.05.12</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</section>
+<!-- Targeted Service Banner -->
+<section class="max-w-7xl mx-auto px-lg pb-section entrance-fade visible" data-entrance-order="8" style="transition-delay: 800ms;">
+<div class="ai-gradient p-xxl rounded-xl text-white flex flex-col md:flex-row items-center justify-between gap-xl relative overflow-hidden group shadow-xl hover:shadow-2xl transition-all duration-500">
+<div class="relative z-10 max-w-2xl">
+<span class="inline-block py-xxs px-sm bg-secondary-container text-on-secondary-container rounded-full text-caption-strong font-bold mb-base shadow-sm">Featured Service</span>
+<h2 class="font-display-md text-display-md mb-md">교직원용 업무 콕핏 프리미엄</h2>
+<p class="font-body-md text-primary-fixed/80">맞춤형 행정 비서 서비스로 우리 학교만의 특화된 업무 흐름을 설계하세요. 데이터 기반의 의사결정과 자동화된 서류 처리가 가능해집니다.</p>
+<button class="mt-xl bg-white text-primary px-xxl py-sm rounded-full font-button hover:bg-secondary-fixed hover:scale-105 active:scale-95 transition-all shadow-lg">자세히 알아보기</button>
+</div>
+<div class="relative z-10">
+<div class="w-48 h-48 rounded-full border-2 border-white/20 flex items-center justify-center animate-pulse-soft">
+<span class="material-symbols-outlined text-[80px] text-secondary-container" data-icon="radar">radar</span>
+</div>
+</div>
+<!-- Abstract background shapes -->
+<div class="absolute top-0 left-0 w-full h-full opacity-10">
+<div class="absolute -top-1/2 -left-1/4 w-[600px] h-[600px] bg-white rounded-full blur-[150px] group-hover:scale-110 transition-transform duration-1000"></div>
+<div class="absolute -bottom-1/2 -right-1/4 w-[600px] h-[600px] bg-secondary-container rounded-full blur-[150px] group-hover:scale-110 transition-transform duration-1000"></div>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="w-full mt-section px-lg max-w-7xl mx-auto flex flex-col gap-base pb-xl border-t border-hairline pt-xl opacity-60 hover:opacity-100 transition-opacity">
+<div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-base">
+<span class="font-title-sm text-title-sm text-on-surface">경상북도교육청</span>
+<div class="flex flex-wrap gap-base">
+<a class="font-caption text-caption text-body hover:underline decoration-primary transition-all" href="#">개인정보처리방침</a>
+<a class="font-caption text-caption text-body hover:underline decoration-primary transition-all" href="#">이용약관</a>
+<a class="font-caption text-caption text-body hover:underline decoration-primary transition-all" href="#">이메일무단수집거부</a>
+<a class="font-caption text-caption text-body hover:underline decoration-primary transition-all" href="#">찾아오시는길</a>
+</div>
+</div>
+<div class="flex flex-col md:flex-row justify-between items-start md:items-center border-t border-hairline/50 pt-base">
+<p class="font-caption text-caption text-on-surface-variant">© 경상북도교육청. All Rights Reserved.</p>
+<p class="font-caption text-caption text-muted">경북 안동시 풍천면 도청대로 511 | 대표전화 054-805-3000</p>
+</div>
+</footer>
+<script>
+    // Micro-interactions and UI logic
+    document.querySelectorAll('button').forEach(button => {
+        button.addEventListener('click', function(e) {
+            const ripple = document.createElement('span');
+            ripple.classList.add('ripple');
+            
+            const rect = this.getBoundingClientRect();
+            const size = Math.max(rect.width, rect.height);
+            ripple.style.width = ripple.style.height = `${size}px`;
+            
+            const x = e.clientX - rect.left - size / 2;
+            const y = e.clientY - rect.top - size / 2;
+            ripple.style.left = `${x}px`;
+            ripple.style.top = `${y}px`;
+            
+            this.appendChild(ripple);
+            setTimeout(() => ripple.remove(), 600);
+        });
+    });
+
+    // Intersection Observer for Staggered Reveal
+    const revealOptions = {
+        threshold: 0.1,
+        rootMargin: "0px 0px -50px 0px"
+    };
+
+    const revealObserver = new IntersectionObserver((entries, observer) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const order = entry.target.getAttribute('data-entrance-order') || 0;
+                setTimeout(() => {
+                    entry.target.classList.add('visible');
+                }, order * 100);
+                observer.unobserve(entry.target);
+            }
+        });
+    }, revealOptions);
+
+    document.querySelectorAll('.entrance-fade').forEach(el => {
+        revealObserver.observe(el);
+    });
+
+    // Initial load animation for hero elements that might be above the fold
+    window.addEventListener('load', () => {
+        document.querySelectorAll('.entrance-fade.visible').forEach(el => {
+            const order = el.getAttribute('data-entrance-order') || 0;
+            el.style.transitionDelay = `${order * 100}ms`;
+        });
+    });
+</script>
+</body></html>

@@ -1,0 +1,804 @@
+<!DOCTYPE html>
+
+<html lang="ko">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>이지플로우 (EasyFlow) - 경상북도교육청</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        @font-face {
+            font-family: 'HakgyoansimPoster';
+            src: url('./font/Hakgyoansim_PosterB.ttf') format('truetype');
+            font-weight: 700;
+        }
+        @font-face {
+            font-family: 'KerisBaeum';
+            src: url('./font/KERISBAEUM_L.ttf') format('truetype');
+            font-weight: 300;
+        }
+        @font-face {
+            font-family: 'KerisBaeum';
+            src: url('./font/KERISBAEUM_R.ttf') format('truetype');
+            font-weight: 400;
+        }
+        @font-face {
+            font-family: 'KerisBaeum';
+            src: url('./font/KERISBAEUM_B.ttf') format('truetype');
+            font-weight: 700;
+        }
+        @font-face {
+            font-family: 'KerisBaeum';
+            src: url('./font/KERISBAEUM_EB.ttf') format('truetype');
+            font-weight: 800;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        body {
+            font-family: 'KerisBaeum', sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .ai-gradient {
+            background: linear-gradient(135deg, #003893 0%, #12419b 100%);
+        }
+        .ripple {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            transform: scale(0);
+            animation: ripple-animation 0.6s linear;
+            pointer-events: none;
+        }
+        @keyframes ripple-animation {
+            to { transform: scale(4); opacity: 0; }
+        }
+
+        /* Micro-interactions & Animations */
+        @keyframes pulse-soft {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.7; transform: scale(0.95); }
+        }
+        .animate-pulse-soft { animation: pulse-soft 2s infinite ease-in-out; }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+        .animate-float { animation: float 6s infinite ease-in-out; }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+        .shimmer-effect::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transform: translateX(-100%);
+            animation: shimmer 3s infinite;
+        }
+
+        .hover-lift {
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.4s ease;
+        }
+        .hover-lift:hover {
+            transform: translateY(-8px) scale(1.01);
+            box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+        }
+
+        .nav-link-underline {
+            position: relative;
+        }
+        .nav-link-underline::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: currentColor;
+            transition: width 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .nav-link-underline:hover::after {
+            width: 100%;
+        }
+
+        .entrance-fade {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275), transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .entrance-fade.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+                scroll-behavior: auto !important;
+            }
+        }
+    
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+            #printArea, #printArea * {
+                visibility: visible;
+            }
+            #printArea {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+                box-shadow: none !important;
+                border: none !important;
+            }
+            .no-print {
+                display: none !important;
+            }
+        }
+</style>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "secondary-fixed": "#ffdea8",
+                      "tertiary": "#501400",
+                      "on-primary-fixed": "#001849",
+                      "on-tertiary-container": "#ff8a62",
+                      "surface-tint": "#335ab4",
+                      "ink": "#111214",
+                      "surface-soft": "#f8f9fa",
+                      "on-primary-container": "#88a7ff",
+                      "background": "#faf8ff",
+                      "danger": "#df2c2c",
+                      "surface-container": "#eeedf5",
+                      "tertiary-fixed-dim": "#ffb59d",
+                      "secondary-container": "#feb700",
+                      "on-tertiary": "#ffffff",
+                      "on-primary": "#ffffff",
+                      "secondary-fixed-dim": "#ffba20",
+                      "inverse-surface": "#2f3036",
+                      "inverse-on-surface": "#f1f0f8",
+                      "surface-variant": "#e2e2ea",
+                      "on-secondary-fixed": "#271900",
+                      "on-tertiary-fixed": "#390c00",
+                      "surface-container-lowest": "#ffffff",
+                      "on-primary-fixed-variant": "#12419b",
+                      "on-surface": "#1a1b21",
+                      "body": "#4e535e",
+                      "primary-fixed-dim": "#b3c5ff",
+                      "on-error": "#ffffff",
+                      "surface-strong": "#f2f4f6",
+                      "on-secondary-fixed-variant": "#5e4200",
+                      "surface-container-low": "#f4f3fb",
+                      "primary-container": "#003893",
+                      "error-container": "#ffdad6",
+                      "on-background": "#1a1b21",
+                      "success": "#00a261",
+                      "on-surface-variant": "#434652",
+                      "primary-active": "#002463",
+                      "outline-variant": "#c4c6d4",
+                      "tertiary-fixed": "#ffdbd0",
+                      "inverse-primary": "#b3c5ff",
+                      "surface": "#faf8ff",
+                      "primary-disabled": "#9eb9e5",
+                      "outline": "#747683",
+                      "surface-container-high": "#e8e7f0",
+                      "on-secondary": "#ffffff",
+                      "on-tertiary-fixed-variant": "#802a07",
+                      "on-error-container": "#93000a",
+                      "error": "#ba1a1a",
+                      "on-secondary-container": "#6b4b00",
+                      "secondary": "#7c5800",
+                      "surface-dim": "#dad9e1",
+                      "surface-dark": "#111214",
+                      "surface-bright": "#faf8ff",
+                      "canvas": "#ffffff",
+                      "muted": "#868b94",
+                      "warning": "#ff9000",
+                      "tertiary-container": "#752201",
+                      "primary-fixed": "#dae1ff",
+                      "hairline": "#e5e8eb",
+                      "surface-container-highest": "#e2e2ea",
+                      "primary": "#003893"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "base": "16px",
+                      "xxs": "4px",
+                      "section": "96px",
+                      "lg": "24px",
+                      "xl": "32px",
+                      "xxl": "48px",
+                      "xs": "8px",
+                      "md": "20px",
+                      "sm": "12px"
+              },
+              "fontFamily": {
+                      "display-lg": ["'HakgyoansimPoster'", "sans-serif"],
+                      "display-md": ["'HakgyoansimPoster'", "sans-serif"],
+                      "display-sm": ["'HakgyoansimPoster'", "sans-serif"],
+                      "title-lg": ["'KerisBaeum'", "sans-serif"],
+                      "title-md": ["'KerisBaeum'", "sans-serif"],
+                      "title-sm": ["'KerisBaeum'", "sans-serif"],
+                      "nav-link": ["'KerisBaeum'", "sans-serif"],
+                      "button": ["'KerisBaeum'", "sans-serif"],
+                      "body-strong": ["'KerisBaeum'", "sans-serif"],
+                      "body-md": ["'KerisBaeum'", "sans-serif"],
+                      "body-sm": ["'KerisBaeum'", "sans-serif"],
+                      "caption": ["'KerisBaeum'", "sans-serif"]
+              },
+              "fontSize": {
+                      "display-lg": ["57px", "64px"],
+                      "display-md": ["45px", "52px"],
+                      "display-sm": ["36px", "44px"],
+                      "title-lg": ["28px", "36px"],
+                      "title-md": ["22px", "28px"],
+                      "title-sm": ["18px", "24px"],
+                      "body-lg": ["16px", "24px"],
+                      "body-md": ["14px", "20px"],
+                      "body-sm": ["12px", "16px"],
+                      "nav-link": ["18px", "24px"],
+                      "caption": ["12px", "16px"]
+              }
+            },
+          },
+        }
+      </script>
+</head>
+<body class="bg-surface-soft text-on-surface">
+<nav class="fixed top-0 w-full z-50 h-[64px] flex justify-between items-center px-lg bg-canvas">
+<div class="flex items-center gap-xl">
+<span class="font-display-sm text-display-sm font-semibold text-primary tracking-tight entrance-fade visible" style="transition-delay: 0ms;"><h1 class="font-display-sm text-display-sm font-semibold text-primary-container" style="--tw-border-spacing-y: 0; --tw-translate-x: 0; --tw-translate-y: 0; --tw-rotate: 0; --tw-skew-x: 0; --tw-skew-y: 0; --tw-scale-x: 1; --tw-scale-y: 1; --tw-pan-x: ; --tw-pan-y: ; --tw-pinch-zoom: ; --tw-scroll-snap-strictness: proximity; --tw-gradient-from-position: ; --tw-gradient-via-position: ; --tw-gradient-to-position: ; --tw-ordinal: ; --tw-slashed-zero: ; --tw-numeric-figure: ; --tw-numeric-spacing: ; --tw-numeric-fraction: ; --tw-ring-inset: ; --tw-ring-offset-width: 0px; --tw-ring-offset-color: #fff; --tw-ring-color: rgb(59 130 246 / 0.5); --tw-ring-offset-shadow: 0 0 #0000; --tw-ring-shadow: 0 0 #0000; --tw-shadow: 0 0 #0000; --tw-shadow-colored: 0 0 #0000; --tw-blur: ; --tw-brightness: ; --tw-contrast: ; --tw-grayscale: ; --tw-hue-rotate: ; --tw-invert: ; --tw-saturate: ; --tw-sepia: ; --tw-drop-shadow: ; --tw-backdrop-blur: ; --tw-backdrop-brightness: ; --tw-backdrop-contrast: ; --tw-backdrop-grayscale: ; --tw-backdrop-hue-rotate: ; --tw-backdrop-invert: ; --tw-backdrop-opacity: ; --tw-backdrop-saturate: ; --tw-backdrop-sepia: ; --tw-contain-size: ; --tw-contain-layout: ; --tw-contain-paint: ; --tw-contain-style: ; font-size: 26px; --tw-text-opacity: 1; color: rgb(0, 56, 147); letter-spacing: normal; white-space: nowrap; line-height: 1.4;">이지플로우 (EasyFlow)</h1></span>
+
+<div class="hidden md:flex gap-[80px] group/mega h-[64px] items-center relative">
+<div class="absolute top-[64px] left-1/2 -translate-x-1/2 w-[100vw] bg-white shadow-md border-b border-hairline opacity-0 invisible group-hover/mega:opacity-100 group-hover/mega:visible transition-all duration-200 z-40 h-[180px]"></div>
+<div class="relative h-full flex flex-col justify-start">
+<a class="font-nav-link text-nav-link text-on-surface-variant hover:text-primary transition-colors h-[64px] flex items-center" href="main.html">홈</a>
+</div>
+<div class="relative h-full flex flex-col justify-start group/col">
+<a class="font-nav-link text-nav-link transition-colors h-[64px] flex items-center gap-xxs whitespace-nowrap group-hover/col:text-primary group-hover/col:font-bold text-on-surface-variant hover:text-primary" href="업무배송_스마트공문달력.html">
+                업무 배송 <span class="material-symbols-outlined text-[18px]">expand_more</span>
+</a>
+<div class="absolute top-[64px] left-1/2 -translate-x-1/2 pt-md pb-md min-w-[160px] flex flex-col items-center gap-sm opacity-0 invisible group-hover/mega:opacity-100 group-hover/mega:visible transition-all duration-200 z-50 group-hover/col:bg-surface-container h-[180px] rounded-b-lg">
+<a class="font-nav-link text-[16px] text-on-surface-variant hover:text-primary transition-colors whitespace-nowrap px-sm py-1 w-full text-center" href="업무배송_스마트공문달력.html">스마트 공문 달력</a><a class="font-nav-link text-[16px] text-on-surface-variant hover:text-primary transition-colors whitespace-nowrap px-sm py-1 w-full text-center" href="업무배송_업무우편함.html">업무 우편함</a><a class="font-nav-link text-[16px] text-on-surface-variant hover:text-primary transition-colors whitespace-nowrap px-sm py-1 w-full text-center" href="업무배송_맞춤형업무가이드.html">맞춤형 업무 가이드</a>
+</div>
+</div>
+<div class="relative h-full flex flex-col justify-start group/col">
+<a class="font-nav-link text-nav-link transition-colors h-[64px] flex items-center gap-xxs whitespace-nowrap group-hover/col:text-primary group-hover/col:font-bold text-primary font-bold border-b-2 border-primary" href="AI업무어시스턴트_챗봇.html">
+                인생 도서관 <span class="material-symbols-outlined text-[18px]">expand_more</span>
+</a>
+<div class="absolute top-[64px] left-1/2 -translate-x-1/2 pt-md pb-md min-w-[160px] flex flex-col items-center gap-sm opacity-0 invisible group-hover/mega:opacity-100 group-hover/mega:visible transition-all duration-200 z-50 group-hover/col:bg-surface-container h-[180px] rounded-b-lg">
+<a class="font-nav-link text-[16px] text-on-surface-variant hover:text-primary transition-colors whitespace-nowrap px-sm py-1 w-full text-center" href="AI업무어시스턴트_챗봇.html">AI 지능형 상담</a><a class="font-nav-link text-[16px] text-on-surface-variant hover:text-primary transition-colors whitespace-nowrap px-sm py-1 w-full text-center" href="공통_프로필수정.html">멘토링 연결 (미구현)</a><a class="font-nav-link text-[16px] text-on-surface-variant hover:text-primary transition-colors whitespace-nowrap px-sm py-1 w-full text-center" href="공통_로그인.html">행정 매뉴얼 검색 (미구현)</a>
+</div>
+</div>
+<div class="relative h-full flex flex-col justify-start group/col">
+<a class="font-nav-link text-nav-link transition-colors h-[64px] flex items-center gap-xxs whitespace-nowrap group-hover/col:text-primary group-hover/col:font-bold text-on-surface-variant hover:text-primary" href="서식자료실_통합검색.html">
+                서식 자료실 <span class="material-symbols-outlined text-[18px]">expand_more</span>
+</a>
+<div class="absolute top-[64px] left-1/2 -translate-x-1/2 pt-md pb-md min-w-[160px] flex flex-col items-center gap-sm opacity-0 invisible group-hover/mega:opacity-100 group-hover/mega:visible transition-all duration-200 z-50 group-hover/col:bg-surface-container h-[180px] rounded-b-lg">
+<a class="font-nav-link text-[16px] text-on-surface-variant hover:text-primary transition-colors whitespace-nowrap px-sm py-1 w-full text-center" href="서식자료실_통합검색.html">통합 검색</a><a class="font-nav-link text-[16px] text-on-surface-variant hover:text-primary transition-colors whitespace-nowrap px-sm py-1 w-full text-center" href="서식 자료실_한글파일서식선택.html">서식 자동 완성</a><a class="font-nav-link text-[16px] text-on-surface-variant hover:text-primary transition-colors whitespace-nowrap px-sm py-1 w-full text-center" href="서식자료실_공문OCR요약.html">공문 분석</a>
+</div>
+</div>
+<div class="relative h-full flex flex-col justify-start group/col">
+<a class="font-nav-link text-nav-link transition-colors h-[64px] flex items-center gap-xxs whitespace-nowrap group-hover/col:text-primary group-hover/col:font-bold text-on-surface-variant hover:text-primary" href="안내센터_공지사항.html">
+                안내센터 <span class="material-symbols-outlined text-[18px]">expand_more</span>
+</a>
+<div class="absolute top-[64px] left-1/2 -translate-x-1/2 pt-md pb-md min-w-[160px] flex flex-col items-center gap-sm opacity-0 invisible group-hover/mega:opacity-100 group-hover/mega:visible transition-all duration-200 z-50 group-hover/col:bg-surface-container h-[180px] rounded-b-lg">
+<a class="font-nav-link text-[16px] text-on-surface-variant hover:text-primary transition-colors whitespace-nowrap px-sm py-1 w-full text-center" href="안내센터_공지사항.html">공지사항</a><a class="font-nav-link text-[16px] text-on-surface-variant hover:text-primary transition-colors whitespace-nowrap px-sm py-1 w-full text-center" href="안내센터_시스템 안내.html">이용 안내</a><a class="font-nav-link text-[16px] text-on-surface-variant hover:text-primary transition-colors whitespace-nowrap px-sm py-1 w-full text-center" href="안내센터_1대1 문의.html">원격 지원 신청</a>
+</div>
+</div>
+</div>
+
+</div>
+<div class="flex items-center gap-base">
+<button class="p-xs text-on-surface-variant hover:bg-surface-strong rounded-full transition-colors"><span class="material-symbols-outlined" data-icon="notifications">notifications</span></button>
+<button class="p-xs text-on-surface-variant hover:text-primary hover:bg-surface-strong rounded-full transition-colors"><span class="material-symbols-outlined" data-icon="settings">settings</span></button>
+<div class="relative group">
+<div class="w-10 h-10 rounded-full bg-surface-container overflow-hidden cursor-pointer active:opacity-80 transition-opacity border border-hairline hover:ring-2 ring-primary/20">
+<img alt="사용자 프로필" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDC4T1JXEVfOTEIvuSGas-vZo6Xrm6Gso-g1t4Ifc8qnWK86nRrH2U8HOTdfdnTsplBb7uebcFVeymcmL2sIdAPhvjovBg9eBquhUSCzN152yf8xwikxJ4E_WZIS6AoZsmFjlNBOS4fEmilnVe9vNRg8OvkOV-BNR6hhdAKBSSULdU9lEfBTz0nTLaBOyVD8VCr72fQSqc3wMrktO117e6OpaN0nuSVbSD2qqq2Ks3RmI91N4fEffpFg9OMmOdWqakRhPaW-FACNKQ3"/>
+</div>
+<div class="absolute top-full right-0 mt-xs w-48 bg-white rounded-xl shadow-xl border border-hairline opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 p-xs">
+<a class="block px-base py-sm font-nav-link text-[15px] hover:bg-surface-soft rounded-lg transition-colors flex items-center gap-2" href="#"><span class="material-symbols-outlined text-[18px]">person</span> 프로필 수정</a>
+<a class="block px-base py-sm font-nav-link text-[15px] hover:bg-surface-soft rounded-lg transition-colors flex items-center gap-2 text-danger" href="#"><span class="material-symbols-outlined text-[18px]">logout</span> 로그아웃</a>
+<div class="border-t border-hairline my-1"></div>
+<div class="px-base py-1 text-[11px] text-muted font-bold">관리자 메뉴</div>
+<a class="block px-base py-sm font-nav-link text-[15px] hover:bg-surface-soft rounded-lg transition-colors flex items-center gap-2" href="학교관리자_대시보드.html"><span class="material-symbols-outlined text-[18px]">school</span> 학교 관리</a>
+<a class="block px-base py-sm font-nav-link text-[15px] hover:bg-surface-soft rounded-lg transition-colors flex items-center gap-2" href="서버관리자_대시보드.html"><span class="material-symbols-outlined text-[18px]">dns</span> 서버 관리</a>
+</div>
+</div>
+</div>
+</nav>
+<!-- Top Navigation Bar -->
+<main class="pt-[64px] min-h-screen flex flex-col"><div class="w-full max-w-[1600px] mx-auto px-lg py-xl flex flex-col md:flex-row gap-xl" id="global-layout-wrapper">
+<!-- Added background, padding, and rounded corners for the left menu area -->
+
+<aside class="w-[220px] shrink-0 bg-surface-soft p-lg rounded-2xl hidden md:block" id="main-lnb">
+<h2 class="font-nav-link text-[22px] font-bold text-ink mb-md pb-sm border-b-2 border-ink">인생 도서관</h2>
+<ul class="flex flex-col gap-1">
+<li>
+<a class="font-nav-link block px-sm py-sm rounded-lg transition-colors text-[16px] bg-primary text-white font-bold" href="AI업무어시스턴트_챗봇.html">AI 지능형 상담</a>
+</li>
+<li>
+<a class="font-nav-link block px-sm py-sm rounded-lg transition-colors text-[16px] text-on-surface-variant hover:bg-surface hover:text-ink" href="#">멘토링 연결 (미구현)</a>
+</li>
+<li>
+<a class="font-nav-link block px-sm py-sm rounded-lg transition-colors text-[16px] text-on-surface-variant hover:bg-surface hover:text-ink" href="#">행정 매뉴얼 검색 (미구현)</a>
+</li>
+</ul>
+</aside>
+
+<div class="flex-1 min-w-0">
+<!-- 표준 페이지 헤더 영역 -->
+<div class="flex-1 flex overflow-hidden relative max-w-7xl mx-auto w-full h-[calc(100vh-64px)]">
+<!-- Sidebar for Chat History & Mentor Links -->
+<aside class="w-80 border-r border-hairline bg-surface-soft hidden md:flex flex-col">
+<div class="p-4 border-b border-hairline">
+<button class="w-full flex items-center justify-center gap-2 bg-primary text-white py-2 rounded-lg font-semibold hover:bg-primary-active transition-colors" onclick="resetChat()">
+<span class="material-symbols-outlined">add_circle</span> 새 대화 시작
+      </button>
+</div>
+<div class="flex-1 overflow-y-auto p-4 space-y-4">
+<div>
+<h3 class="text-xs font-bold text-muted mb-2 uppercase tracking-wider">최근 대화 내역</h3>
+<ul class="space-y-1" id="chatHistoryList">
+<li><button class="w-full text-left px-3 py-2 rounded-md text-sm hover:bg-surface-strong truncate">교원 복무 규정 질의</button></li>
+<li><button class="w-full text-left px-3 py-2 rounded-md text-sm hover:bg-surface-strong truncate">학교 폭력 사안 처리 절차</button></li>
+</ul>
+</div>
+<div>
+<h3 class="text-xs font-bold text-muted mb-2 uppercase tracking-wider">멘토 연계 (인생도서관)</h3>
+<button class="w-full text-left px-3 py-2 rounded-md text-sm bg-secondary-container text-on-secondary-container hover:opacity-90 flex items-center gap-2" onclick="sendArs('멘토연결')">
+<span class="material-symbols-outlined text-[18px]">support_agent</span> 담당 멘토에게 질문하기
+        </button>
+<button class="w-full text-left px-3 py-2 rounded-md text-sm hover:bg-surface-strong flex items-center gap-2 mt-1" onclick="openLogModal()">
+<span class="material-symbols-outlined text-[18px]">print</span> 월별 상담일지 출력
+        </button>
+</div>
+</div>
+</aside>
+<!-- Main Chat Area -->
+<main class="flex-1 flex flex-col bg-canvas">
+<header class="p-4 border-b border-hairline flex items-center justify-between bg-surface-soft">
+<h2 class="text-lg font-bold text-primary flex items-center gap-2">
+<span class="material-symbols-outlined">smart_toy</span> AI 업무 어시스턴트
+      </h2>
+<button class="md:hidden p-2 text-muted hover:text-primary"><span class="material-symbols-outlined">menu</span></button>
+</header>
+<div class="flex-1 overflow-y-auto p-4 md:p-8 space-y-6" id="chatWindow">
+<!-- Greeting & ARS Guide -->
+<div class="flex gap-4" id="welcomeMessage">
+<div class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-primary">smart_toy</span>
+</div>
+<div class="flex-1">
+<div class="bg-surface-soft p-4 rounded-2xl rounded-tl-none text-ink shadow-sm max-w-3xl">
+<p class="mb-3">안녕하세요! 경북교육청 AI 업무 어시스턴트입니다. 무엇을 도와드릴까요?</p>
+<p class="text-sm text-muted mb-4">자주 묻는 질문을 선택하거나, 하단에 직접 입력해주세요.</p>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-2">
+<button class="ars-btn text-left p-3 rounded-lg border border-hairline hover:border-primary hover:bg-primary/5 transition-colors flex items-center gap-2" onclick="sendArs('교무/학사')">
+<span class="material-symbols-outlined text-primary">school</span> <div><div class="font-bold text-sm">교무/학사</div><div class="text-xs text-muted">학사일정, 성적처리 등</div></div>
+</button>
+<button class="ars-btn text-left p-3 rounded-lg border border-hairline hover:border-primary hover:bg-primary/5 transition-colors flex items-center gap-2" onclick="sendArs('행정/예산')">
+<span class="material-symbols-outlined text-success">account_balance</span> <div><div class="font-bold text-sm">행정/예산</div><div class="text-xs text-muted">회계, 물품, 시설 등</div></div>
+</button>
+<button class="ars-btn text-left p-3 rounded-lg border border-hairline hover:border-primary hover:bg-primary/5 transition-colors flex items-center gap-2" onclick="sendArs('생활/안전')">
+<span class="material-symbols-outlined text-warning">health_and_safety</span> <div><div class="font-bold text-sm">생활/안전</div><div class="text-xs text-muted">학폭, 보건, 급식 등</div></div>
+</button>
+<button class="ars-btn text-left p-3 rounded-lg border border-hairline hover:border-primary hover:bg-primary/5 transition-colors flex items-center gap-2" onclick="sendArs('멘토연결')">
+<span class="material-symbols-outlined text-secondary">support_agent</span> <div><div class="font-bold text-sm">인생도서관 상담</div><div class="text-xs text-muted">담당 멘토와 직접 연결</div></div>
+</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="p-4 border-t border-hairline bg-surface-soft">
+<div class="max-w-4xl mx-auto relative">
+<textarea class="w-full resize-none rounded-2xl border border-hairline pl-4 pr-12 py-3 bg-canvas focus:outline-none focus:ring-2 focus:ring-primary/50 text-ink" id="chatInput" onkeydown="if(event.key==='Enter' &amp;&amp; !event.shiftKey) { event.preventDefault(); sendMessage(); }" placeholder="AI 어시스턴트에게 질문하기..." rows="1"></textarea>
+<button class="absolute right-2 bottom-2 w-8 h-8 flex items-center justify-center rounded-full bg-primary text-white hover:bg-primary-active transition-colors" onclick="sendMessage()">
+<span class="material-symbols-outlined text-[18px]">send</span>
+</button>
+</div>
+<p class="text-center text-[11px] text-muted mt-2">AI는 실수를 할 수 있습니다. 중요한 정보는 교육청 공식 지침을 확인하세요.</p>
+</div>
+<!-- Monthly Log Modal -->
+<div class="hidden fixed inset-0 z-50 bg-ink/50 flex items-center justify-center p-4 backdrop-blur-sm transition-opacity" id="logModal">
+<div class="bg-canvas rounded-2xl shadow-xl w-full max-w-4xl max-h-[90vh] overflow-hidden flex flex-col border border-hairline anim-pop">
+<div class="px-6 py-4 border-b border-hairline flex justify-between items-center bg-surface-container-low">
+<h3 class="font-title-md text-primary flex items-center gap-2"><span class="material-symbols-outlined">print</span> 인생도서관 월별 상담 일지</h3>
+<button class="text-muted hover:text-ink transition-colors w-8 h-8 rounded-full flex items-center justify-center hover:bg-surface-strong" onclick="closeLogModal()"><span class="material-symbols-outlined">close</span></button>
+</div>
+<div class="p-6 flex-1 overflow-y-auto bg-canvas">
+<div class="flex justify-between items-end mb-4 no-print">
+<div>
+<h4 class="font-bold text-ink">2026년 5월 상담 내역</h4>
+<p class="text-sm text-muted">교육청 홈페이지 탑재 및 장학사 제출용 보고서 양식입니다.</p>
+</div>
+<div class="flex gap-2">
+<select class="border border-hairline rounded-md text-sm p-1.5 bg-surface-soft">
+<option>2026년 5월</option>
+<option>2026년 4월</option>
+<option>2026년 3월</option>
+</select>
+</div>
+</div>
+<!-- Printable Table Area -->
+<div class="bg-white border border-hairline p-8 shadow-sm" id="printArea">
+<h2 class="text-center font-title-lg text-ink mb-6">2026학년도 5월 인생도서관 상담 일지</h2>
+<div class="flex justify-end text-sm mb-2 text-ink">
+<span class="mr-4"><strong>작성자:</strong> 김교사 멘토</span>
+<span><strong>제출일:</strong> 2026.05.31</span>
+</div>
+<table class="w-full border-collapse border border-hairline text-sm text-left">
+<thead class="bg-surface-strong text-ink">
+<tr>
+<th class="border border-hairline p-2 text-center w-24">일자</th>
+<th class="border border-hairline p-2 text-center w-28">분야</th>
+<th class="border border-hairline p-2">상담(질문) 요약 내용</th>
+<th class="border border-hairline p-2 text-center w-20">상태</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="border border-hairline p-2 text-center">05.02</td>
+<td class="border border-hairline p-2 text-center"><span class="bg-primary/10 text-primary px-2 py-0.5 rounded text-xs font-bold">교무/학사</span></td>
+<td class="border border-hairline p-2">교원 복무 규정 중 특별휴가(경조사) 관련 지침 질의 및 필요 서류 문의</td>
+<td class="border border-hairline p-2 text-center"><span class="text-success font-bold">완료</span></td>
+</tr>
+<tr>
+<td class="border border-hairline p-2 text-center">05.10</td>
+<td class="border border-hairline p-2 text-center"><span class="bg-warning/10 text-warning px-2 py-0.5 rounded text-xs font-bold">생활/안전</span></td>
+<td class="border border-hairline p-2">학교 폭력 사안 접수 시 초기 대응 절차 및 전담기구 구성 요건 문의</td>
+<td class="border border-hairline p-2 text-center"><span class="text-success font-bold">완료</span></td>
+</tr>
+<tr>
+<td class="border border-hairline p-2 text-center">05.21</td>
+<td class="border border-hairline p-2 text-center"><span class="bg-success/10 text-success px-2 py-0.5 rounded text-xs font-bold">행정/예산</span></td>
+<td class="border border-hairline p-2">현장체험학습 예산 집행 품의 작성 시 유의사항 및 여비 정산 규정</td>
+<td class="border border-hairline p-2 text-center"><span class="text-muted font-bold">대기</span></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="px-6 py-4 border-t border-hairline bg-surface-container-low flex justify-end gap-2 no-print">
+<button class="px-4 py-2 text-sm font-semibold text-muted hover:bg-hairline rounded-lg transition-colors" onclick="closeLogModal()">닫기</button>
+<button class="px-4 py-2 text-sm font-semibold bg-primary text-white hover:bg-primary-active rounded-lg transition-colors flex items-center gap-1 shadow-sm" onclick="window.print()"><span class="material-symbols-outlined text-[16px]">print</span> PDF 출력 및 인쇄</button>
+</div>
+</div>
+</div>
+</main>
+</div>
+<!-- Mentor Modal -->
+<div class="hidden fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4" id="mentorModal">
+<div class="bg-white rounded-2xl shadow-xl w-full max-w-lg overflow-hidden">
+<div class="px-6 py-4 border-b border-hairline flex justify-between items-center bg-surface-soft">
+<h3 class="font-bold text-lg text-primary flex items-center gap-2"><span class="material-symbols-outlined">support_agent</span> 인생도서관 멘토 연계</h3>
+<button class="text-muted hover:text-ink" onclick="closeMentorModal()"><span class="material-symbols-outlined">close</span></button>
+</div>
+<div class="p-6 space-y-4">
+<p class="text-sm text-body">현재 진행 중인 대화 내용을 바탕으로 가장 적합한 멘토 선생님께 질문을 전달합니다.</p>
+<div>
+<label class="block text-xs font-bold text-muted mb-1">질문 요약 (자동 생성)</label>
+<input class="w-full border border-hairline rounded-md p-2 bg-surface-soft font-bold text-primary" id="mentorCategoryAuto" readonly="" type="text" value="최근 문의한 내용을 요약하여 자동 입력됩니다."/>
+</div>
+<div>
+<label class="block text-xs font-bold text-muted mb-1">추가 문의 사항</label>
+<textarea class="w-full border border-hairline rounded-md p-2 min-h-[100px]" placeholder="멘토 선생님께 남길 추가 메시지를 적어주세요."></textarea>
+</div>
+</div>
+<div class="px-6 py-4 border-t border-hairline bg-surface-soft flex justify-end gap-2">
+<button class="px-4 py-2 text-sm font-semibold text-body hover:bg-hairline rounded-lg transition-colors" onclick="closeMentorModal()">취소</button>
+<button class="px-4 py-2 text-sm font-semibold bg-primary text-white hover:bg-primary-active rounded-lg transition-colors flex items-center gap-1" onclick="submitMentorRequest()"><span class="material-symbols-outlined text-[16px]">send</span> 상담 신청하기</button>
+</div>
+</div>
+</div>
+<script>
+  let currentCategoryPath = [];
+
+  function resetChat() {
+    currentCategoryPath = [];
+    document.getElementById('chatWindow').innerHTML = document.getElementById('welcomeMessage').outerHTML;
+  }
+
+  function addMessage(text, isUser = false) {
+    const chatWindow = document.getElementById('chatWindow');
+    const div = document.createElement('div');
+    div.className = "flex gap-4 " + (isUser ? "flex-row-reverse" : "entrance-fade visible");
+    
+    let avatar = isUser ? '<div class="w-10 h-10 rounded-full bg-surface-strong overflow-hidden shrink-0"><img src="https://lh3.googleusercontent.com/aida-public/AB6AXuDC4T1JXEVfOTEIvuSGas-vZo6Xrm6Gso-g1t4Ifc8qnWK86nRrH2U8HOTdfdnTsplBb7uebcFVeymcmL2sIdAPhvjovBg9eBquhUSCzN152yf8xwikxJ4E_WZIS6AoZsmFjlNBOS4fEmilnVe9vNRg8OvkOV-BNR6hhdAKBSSULdU9lEfBTz0nTLaBOyVD8VCr72fQSqc3wMrktO117e6OpaN0nuSVbSD2qqq2Ks3RmI91N4fEffpFg9OMmOdWqakRhPaW-FACNKQ3" alt="User"></div>' : '<div class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center shrink-0 shadow-sm"><span class="material-symbols-outlined text-primary">smart_toy</span></div>';
+    
+    let bubbleClass = isUser ? "bg-primary text-white p-4 rounded-2xl rounded-tr-none shadow-sm max-w-3xl text-body-sm" : "bg-canvas text-ink p-4 rounded-2xl rounded-tl-none shadow-sm border border-hairline max-w-3xl text-body-sm";
+    
+    div.innerHTML = avatar + '<div class="flex-1 flex ' + (isUser ? "justify-end" : "") + '"><div class="' + bubbleClass + '">' + text + '</div></div>';
+    
+    chatWindow.appendChild(div);
+    chatWindow.scrollTop = chatWindow.scrollHeight;
+  }
+
+  function showTypingIndicator() {
+      const chatWindow = document.getElementById('chatWindow');
+      const div = document.createElement('div');
+      div.id = 'typingIndicator';
+      div.className = "flex gap-4 entrance-fade visible";
+      
+      let avatar = '<div class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center shrink-0 shadow-sm"><span class="material-symbols-outlined text-primary">smart_toy</span></div>';
+      
+      div.innerHTML = avatar + `
+      <div class="flex-1 flex">
+          <div class="bg-canvas p-4 rounded-2xl rounded-tl-none shadow-sm border border-hairline flex items-center gap-1">
+              <div class="w-2 h-2 bg-muted rounded-full animate-pulse-soft"></div>
+              <div class="w-2 h-2 bg-muted rounded-full animate-pulse-soft" style="animation-delay: 0.2s"></div>
+              <div class="w-2 h-2 bg-muted rounded-full animate-pulse-soft" style="animation-delay: 0.4s"></div>
+          </div>
+      </div>`;
+      
+      chatWindow.appendChild(div);
+      chatWindow.scrollTop = chatWindow.scrollHeight;
+  }
+
+  function hideTypingIndicator() {
+      const indicator = document.getElementById('typingIndicator');
+      if(indicator) indicator.remove();
+  }
+
+  // Multi-depth ARS Logic
+  const arsTree = {
+      '교무/학사': {
+          desc: '학사일정, 성적처리, 학적 등',
+          icon: 'school',
+          color: 'text-primary',
+          children: ['학사일정 관리', '나이스 학적 처리', '성적 관리 지침', '기타 교무 문의']
+      },
+      '행정/예산': {
+          desc: '회계, 물품, 시설 등',
+          icon: 'account_balance',
+          color: 'text-success',
+          children: ['품의 및 지출 절차', '물품 관리대장', '여비 정산 방법', '기타 행정 문의']
+      },
+      '생활/안전': {
+          desc: '학폭, 보건, 급식 등',
+          icon: 'health_and_safety',
+          color: 'text-warning',
+          children: ['학교폭력 사안 처리', '감염병 예방 관리', '현장체험학습 안전', '기타 생활 안전 문의']
+      }
+  };
+
+  function sendArs(category) {
+    if (category === '멘토연결') {
+        openMentorModal();
+        return;
+    }
+
+    addMessage(category + '에 대해 질문할게요.', true);
+    currentCategoryPath.push(category);
+    
+    showTypingIndicator();
+
+    setTimeout(() => {
+      hideTypingIndicator();
+      
+      if (currentCategoryPath.length === 1) {
+          // 2-depth options
+          const node = arsTree[category];
+          let optionsHtml = `<p class="mb-3 font-bold text-primary">👉 [${category}] 분야를 선택하셨습니다.</p><p class="text-sm text-muted mb-4">원하시는 세부 항목을 선택하시거나, 하단 입력창에 직접 질문해 주세요.</p><div class="flex flex-wrap gap-2">`;
+          
+          node.children.forEach(child => {
+              optionsHtml += `<button onclick="sendArs('${child}')" class="px-4 py-2 bg-surface-soft border border-hairline hover:border-primary hover:bg-primary/5 hover:text-primary rounded-full text-sm font-medium transition-colors">${child}</button>`;
+          });
+          optionsHtml += `</div>`;
+          addMessage(optionsHtml);
+      } else {
+          // Final depth - prompt for typing
+          let optionsHtml = `<p class="mb-3 font-bold text-primary">👉 [${currentCategoryPath.join(' > ')}] 항목입니다.</p><p class="text-sm text-ink mb-4">관련된 교육청 매뉴얼과 지침을 준비했습니다. 구체적으로 어떤 내용이 궁금하신가요?</p><p class="text-xs text-muted flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">keyboard</span> 하단 채팅창에 질문을 입력해 주세요.</p>`;
+          addMessage(optionsHtml);
+          document.getElementById('chatInput').focus();
+      }
+    }, 600);
+  }
+
+  function sendMessage() {
+    const input = document.getElementById('chatInput');
+    const text = input.value.trim();
+    if(!text) return;
+    
+    addMessage(text, true);
+    input.value = '';
+    
+    showTypingIndicator();
+    
+    setTimeout(() => {
+      hideTypingIndicator();
+      let prefix = currentCategoryPath.length > 0 ? `[${currentCategoryPath.join(' > ')}] 관련 질문이시군요.<br><br>` : '';
+      addMessage(prefix + '관련된 최신 경북교육청 지침 및 매뉴얼 데이터를 바탕으로 검색한 결과입니다.<br><br>... (학습된 RAG 데이터 기반의 AI 맞춤형 답변이 출력될 자리입니다.) <br><br> 만족스러운 답변을 얻지 못하셨다면, 현업에 계신 멘토 선생님께 직접 여쭤보는 것은 어떨까요?<br><br><button class="mt-2 px-4 py-2 bg-primary text-white rounded-lg font-bold text-sm hover:bg-primary-active transition-colors flex items-center gap-1 shadow-sm hover-lift" onclick="sendArs('멘토연결')"><span class="material-symbols-outlined text-[16px]">support_agent</span> 인생도서관 멘토 연결하기</button>');
+    }, 1200);
+  }
+
+  function openMentorModal() {
+    document.getElementById('mentorModal').classList.remove('hidden');
+    // Set auto category text
+    const summaryInput = document.getElementById('mentorCategoryAuto');
+    if(summaryInput) {
+        if(currentCategoryPath.length > 0) {
+            summaryInput.value = `[` + currentCategoryPath.join(' > ') + `] 관련 상세 상담 요청`;
+        } else {
+            summaryInput.value = `[일반 문의] 멘토 상담 요청`;
+        }
+    }
+  }
+
+  function closeMentorModal() {
+    document.getElementById('mentorModal').classList.add('hidden');
+  }
+
+  function submitMentorRequest() {
+    closeMentorModal();
+    addMessage('상담 신청이 완료되었습니다! 인생도서관 멘토 선생님께 내용이 성공적으로 전달되었습니다.<br>답변이 등록되면 알림을 통해 알려드리겠습니다.', false);
+  }
+
+  function openLogModal() {
+      document.getElementById('logModal').classList.remove('hidden');
+  }
+  
+  function closeLogModal() {
+      document.getElementById('logModal').classList.add('hidden');
+  }
+</script>
+<!-- Monthly Log Modal -->
+<div class="hidden fixed inset-0 z-50 bg-ink/50 flex items-center justify-center p-4 backdrop-blur-sm transition-opacity" id="logModal">
+<div class="bg-canvas rounded-2xl shadow-xl w-full max-w-4xl max-h-[90vh] overflow-hidden flex flex-col border border-hairline anim-pop">
+<div class="px-6 py-4 border-b border-hairline flex justify-between items-center bg-surface-container-low">
+<h3 class="font-title-md text-primary flex items-center gap-2"><span class="material-symbols-outlined">print</span> 인생도서관 월별 상담 일지</h3>
+<button class="text-muted hover:text-ink transition-colors w-8 h-8 rounded-full flex items-center justify-center hover:bg-surface-strong" onclick="closeLogModal()"><span class="material-symbols-outlined">close</span></button>
+</div>
+<div class="p-6 flex-1 overflow-y-auto bg-canvas">
+<div class="flex justify-between items-end mb-4 no-print">
+<div>
+<h4 class="font-bold text-ink">2026년 5월 상담 내역</h4>
+<p class="text-sm text-muted">교육청 홈페이지 탑재 및 장학사 제출용 보고서 양식입니다.</p>
+</div>
+<div class="flex gap-2">
+<select class="border border-hairline rounded-md text-sm p-1.5 bg-surface-soft">
+<option>2026년 5월</option>
+<option>2026년 4월</option>
+<option>2026년 3월</option>
+</select>
+</div>
+</div>
+<!-- Printable Table Area -->
+<div class="bg-white border border-hairline p-8 shadow-sm" id="printArea">
+<h2 class="text-center font-title-lg text-ink mb-6">2026학년도 5월 인생도서관 상담 일지</h2>
+<div class="flex justify-end text-sm mb-2 text-ink">
+<span class="mr-4"><strong>작성자:</strong> 김교사 멘토</span>
+<span><strong>제출일:</strong> 2026.05.31</span>
+</div>
+<table class="w-full border-collapse border border-hairline text-sm text-left">
+<thead class="bg-surface-strong text-ink">
+<tr>
+<th class="border border-hairline p-2 text-center w-24">일자</th>
+<th class="border border-hairline p-2 text-center w-28">분야</th>
+<th class="border border-hairline p-2">상담(질문) 요약 내용</th>
+<th class="border border-hairline p-2 text-center w-20">상태</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="border border-hairline p-2 text-center">05.02</td>
+<td class="border border-hairline p-2 text-center"><span class="bg-primary/10 text-primary px-2 py-0.5 rounded text-xs font-bold">교무/학사</span></td>
+<td class="border border-hairline p-2">교원 복무 규정 중 특별휴가(경조사) 관련 지침 질의 및 필요 서류 문의</td>
+<td class="border border-hairline p-2 text-center"><span class="text-success font-bold">완료</span></td>
+</tr>
+<tr>
+<td class="border border-hairline p-2 text-center">05.10</td>
+<td class="border border-hairline p-2 text-center"><span class="bg-warning/10 text-warning px-2 py-0.5 rounded text-xs font-bold">생활/안전</span></td>
+<td class="border border-hairline p-2">학교 폭력 사안 접수 시 초기 대응 절차 및 전담기구 구성 요건 문의</td>
+<td class="border border-hairline p-2 text-center"><span class="text-success font-bold">완료</span></td>
+</tr>
+<tr>
+<td class="border border-hairline p-2 text-center">05.21</td>
+<td class="border border-hairline p-2 text-center"><span class="bg-success/10 text-success px-2 py-0.5 rounded text-xs font-bold">행정/예산</span></td>
+<td class="border border-hairline p-2">현장체험학습 예산 집행 품의 작성 시 유의사항 및 여비 정산 규정</td>
+<td class="border border-hairline p-2 text-center"><span class="text-muted font-bold">대기</span></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="px-6 py-4 border-t border-hairline bg-surface-container-low flex justify-end gap-2 no-print">
+<button class="px-4 py-2 text-sm font-semibold text-muted hover:bg-hairline rounded-lg transition-colors" onclick="closeLogModal()">닫기</button>
+<button class="px-4 py-2 text-sm font-semibold bg-primary text-white hover:bg-primary-active rounded-lg transition-colors flex items-center gap-1 shadow-sm" onclick="window.print()"><span class="material-symbols-outlined text-[16px]">print</span> PDF 출력 및 인쇄</button>
+</div>
+</div>
+</div>
+</div></div></main>
+<!-- Footer -->
+<footer class="w-full mt-section px-lg max-w-7xl mx-auto flex flex-col gap-base pb-xl border-t border-hairline pt-xl opacity-60 hover:opacity-100 transition-opacity">
+<div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-base">
+<span class="font-title-sm text-title-sm text-on-surface">경상북도교육청</span>
+<div class="flex flex-wrap gap-base">
+<a class="font-caption text-caption text-body hover:underline decoration-primary transition-all" href="#">개인정보처리방침</a>
+<a class="font-caption text-caption text-body hover:underline decoration-primary transition-all" href="#">이용약관</a>
+<a class="font-caption text-caption text-body hover:underline decoration-primary transition-all" href="#">이메일무단수집거부</a>
+<a class="font-caption text-caption text-body hover:underline decoration-primary transition-all" href="#">찾아오시는길</a>
+</div>
+</div>
+<div class="flex flex-col md:flex-row justify-between items-start md:items-center border-t border-hairline/50 pt-base">
+<p class="font-caption text-caption text-on-surface-variant">© 경상북도교육청. All Rights Reserved.</p>
+<p class="font-caption text-caption text-muted">경북 안동시 풍천면 도청대로 511 | 대표전화 054-805-3000</p>
+</div>
+</footer>
+<script>
+    // Micro-interactions and UI logic
+    document.querySelectorAll('button').forEach(button => {
+        button.addEventListener('click', function(e) {
+            const ripple = document.createElement('span');
+            ripple.classList.add('ripple');
+            
+            const rect = this.getBoundingClientRect();
+            const size = Math.max(rect.width, rect.height);
+            ripple.style.width = ripple.style.height = `${size}px`;
+            
+            const x = e.clientX - rect.left - size / 2;
+            const y = e.clientY - rect.top - size / 2;
+            ripple.style.left = `${x}px`;
+            ripple.style.top = `${y}px`;
+            
+            this.appendChild(ripple);
+            setTimeout(() => ripple.remove(), 600);
+        });
+    });
+
+    // Intersection Observer for Staggered Reveal
+    const revealOptions = {
+        threshold: 0.1,
+        rootMargin: "0px 0px -50px 0px"
+    };
+
+    const revealObserver = new IntersectionObserver((entries, observer) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const order = entry.target.getAttribute('data-entrance-order') || 0;
+                setTimeout(() => {
+                    entry.target.classList.add('visible');
+                }, order * 100);
+                observer.unobserve(entry.target);
+            }
+        });
+    }, revealOptions);
+
+    document.querySelectorAll('.entrance-fade').forEach(el => {
+        revealObserver.observe(el);
+    });
+
+    // Initial load animation for hero elements that might be above the fold
+    window.addEventListener('load', () => {
+        document.querySelectorAll('.entrance-fade.visible').forEach(el => {
+            const order = el.getAttribute('data-entrance-order') || 0;
+            el.style.transitionDelay = `${order * 100}ms`;
+        });
+    });
+</script>
+</body>
+</html>

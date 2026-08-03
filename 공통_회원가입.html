@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>회원가입 - 이지플로우(EasyFlow)</title>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @font-face {
+            font-family: 'HakgyoansimPoster';
+            src: url('./font/Hakgyoansim_PosterB.ttf') format('truetype');
+            font-weight: 700;
+        }
+        @font-face {
+            font-family: 'KerisBaeum';
+            src: url('./font/KERISBAEUM_L.ttf') format('truetype');
+            font-weight: 300;
+        }
+        @font-face {
+            font-family: 'KerisBaeum';
+            src: url('./font/KERISBAEUM_R.ttf') format('truetype');
+            font-weight: 400;
+        }
+        @font-face {
+            font-family: 'KerisBaeum';
+            src: url('./font/KERISBAEUM_B.ttf') format('truetype');
+            font-weight: 700;
+        }
+        @font-face {
+            font-family: 'KerisBaeum';
+            src: url('./font/KERISBAEUM_EB.ttf') format('truetype');
+            font-weight: 800;
+        }
+        body {
+            font-family: 'KerisBaeum', sans-serif;
+            background-color: #f8f9fa;
+            -webkit-font-smoothing: antialiased;
+        }
+        .error-msg {
+            display: none;
+            color: #ef4444; /* text-red-500 */
+            font-size: 13px;
+            margin-top: 4px;
+        }
+        .error-input {
+            border-color: #ef4444 !important;
+        }
+    </style>
+    <script id="tailwind-config">
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        "display-lg": ["'HakgyoansimPoster'", "sans-serif"],
+                        "display-md": ["'HakgyoansimPoster'", "sans-serif"],
+                        "display-sm": ["'HakgyoansimPoster'", "sans-serif"],
+                        "title-lg": ["'KerisBaeum'", "sans-serif"],
+                        "title-md": ["'KerisBaeum'", "sans-serif"],
+                        "title-sm": ["'KerisBaeum'", "sans-serif"],
+                        "nav-link": ["'KerisBaeum'", "sans-serif"],
+                        "button": ["'KerisBaeum'", "sans-serif"],
+                        "body-strong": ["'KerisBaeum'", "sans-serif"],
+                        "body-md": ["'KerisBaeum'", "sans-serif"],
+                        "body-sm": ["'KerisBaeum'", "sans-serif"],
+                        "caption": ["'KerisBaeum'", "sans-serif"]
+                    },
+                    colors: {
+                        primary: { DEFAULT: '#0033a0', active: '#002277' },
+                        surface: { DEFAULT: '#f8f9fa', soft: '#f1f3f5', strong: '#e9ecef' },
+                        ink: { DEFAULT: '#212529', lighter: '#495057' }
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="text-ink flex flex-col min-h-screen items-center py-10 bg-surface relative">
+    
+    <div class="w-full max-w-[600px] bg-white rounded-3xl shadow-sm border border-gray-200 overflow-hidden flex flex-col mb-10">
+        <!-- Header -->
+        <div class="p-8 text-center border-b border-gray-100 bg-surface-soft/30">
+            <h1 class="font-display-lg text-[28px] text-primary mb-1">이지플로우 회원가입</h1>
+            <p class="text-[15px] text-ink/60">경북교육청 소속 교직원 인증 후 가입을 진행합니다.</p>
+        </div>
+
+        <form id="signupForm" class="p-8 flex flex-col gap-8" novalidate>
+            
+            <!-- Section 1: Email Auth -->
+            <section class="flex flex-col gap-4">
+                <h2 class="text-[18px] font-bold text-ink border-b border-gray-200 pb-2">1. 메일 인증</h2>
+                
+                <div class="flex flex-col gap-2">
+                    <label class="text-[14px] font-bold text-ink">GBE 이메일 주소</label>
+                    <div class="flex gap-2">
+                        <div class="flex-1 flex items-center border border-gray-300 rounded-xl overflow-hidden focus-within:border-primary focus-within:ring-1 focus-within:ring-primary transition-colors bg-white">
+                            <input type="text" id="emailInput" placeholder="아이디" class="w-full px-4 py-3 text-[15px] focus:outline-none bg-transparent">
+                            <span class="text-ink/60 px-3 bg-surface-soft h-full flex items-center border-l border-gray-300">@gbe.kr</span>
+                        </div>
+                        <button type="button" id="sendAuthMailBtn" class="px-4 bg-surface-strong text-ink font-bold rounded-xl hover:bg-gray-200 transition-colors shrink-0 text-[14px]">
+                            인증메일 발송
+                        </button>
+                    </div>
+                    <div id="emailError" class="error-msg">이메일 아이디를 입력해주세요.</div>
+                </div>
+
+                <div class="flex flex-col gap-2 mt-2">
+                    <div class="flex gap-2">
+                        <input type="text" id="pinInput" placeholder="인증번호 6자리" class="flex-1 border border-gray-300 rounded-xl px-4 py-3 text-[15px] focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors">
+                        <button type="button" id="verifyPinBtn" class="px-6 bg-primary text-white font-bold rounded-xl hover:bg-primary-active transition-colors shrink-0 text-[14px]">
+                            확인
+                        </button>
+                    </div>
+                    <div id="pinError" class="error-msg">인증번호 6자리를 확인해주세요.</div>
+                    <p class="text-[13px] text-green-600 font-bold hidden" id="auth-success-msg">인증이 완료되었습니다.</p>
+                </div>
+            </section>
+
+            <!-- Section 2: Basic Info -->
+            <section class="flex flex-col gap-4">
+                <h2 class="text-[18px] font-bold text-ink border-b border-gray-200 pb-2">2. 기본 정보 및 역할 선택</h2>
+                
+                <div class="flex flex-col gap-4">
+                    <div class="flex flex-col gap-2">
+                        <label class="text-[14px] font-bold text-ink">이름</label>
+                        <input type="text" id="nameInput" placeholder="실명을 입력하세요" class="w-full border border-gray-300 rounded-xl px-4 py-3 text-[15px] focus:outline-none focus:border-primary transition-colors">
+                        <div id="nameError" class="error-msg">이름을 입력해주세요.</div>
+                    </div>
+                    
+                    <div class="flex flex-col gap-2">
+                        <label class="text-[14px] font-bold text-ink">비밀번호</label>
+                        <input type="password" id="pwInput" placeholder="영문, 숫자, 특수문자 조합 8자리 이상" class="w-full border border-gray-300 rounded-xl px-4 py-3 text-[15px] focus:outline-none focus:border-primary transition-colors">
+                        <div id="pwError" class="error-msg">8자리 이상, 영문/숫자/특수문자를 포함해야 합니다.</div>
+                        
+                        <input type="password" id="pwConfirmInput" placeholder="비밀번호 확인" class="w-full border border-gray-300 rounded-xl px-4 py-3 text-[15px] focus:outline-none focus:border-primary transition-colors mt-1">
+                        <div id="pwConfirmError" class="error-msg">비밀번호가 일치하지 않습니다.</div>
+                    </div>
+
+                    <div class="flex flex-col gap-2 mt-2">
+                        <label class="text-[14px] font-bold text-ink">신청할 시스템 역할(권한) 선택 <span class="font-normal text-ink/60 text-[12px] ml-1">중복 선택 가능</span></label>
+                        <p class="text-[13px] text-ink/60 mb-1">
+                            가입 시 우선 <strong>'일반 회원'</strong>으로 처리되며, 선택하신 관리자/멘토 권한은 서버 관리자의 승인 후 최종 부여됩니다.
+                        </p>
+                        <div class="flex flex-col gap-2">
+                            <!-- Fixed General Role -->
+                            <label class="flex items-center gap-2 p-3 border border-gray-200 rounded-xl bg-surface-soft cursor-not-allowed">
+                                <input type="checkbox" checked disabled class="w-4 h-4 accent-gray-500 cursor-not-allowed">
+                                <span class="text-[15px] font-bold text-gray-500">일반 교직원 (기본)</span>
+                            </label>
+                            
+                            <label class="flex items-center gap-2 p-3 border border-gray-200 rounded-xl cursor-pointer hover:bg-surface-soft transition-colors has-[:checked]:border-primary has-[:checked]:bg-primary/5">
+                                <input type="checkbox" name="role" value="학교관리자" class="w-4 h-4 accent-primary">
+                                <span class="text-[15px] font-bold text-ink">학교 관리자 <span class="text-[13px] font-normal text-ink/60 ml-1">(소속 학교 교직원 관리)</span></span>
+                            </label>
+                            
+                            <label class="flex items-center gap-2 p-3 border border-gray-200 rounded-xl cursor-pointer hover:bg-surface-soft transition-colors has-[:checked]:border-primary has-[:checked]:bg-primary/5">
+                                <input type="checkbox" name="role" value="업무배송" class="w-4 h-4 accent-primary">
+                                <span class="text-[15px] font-bold text-ink">업무 배송 담당자 <span class="text-[13px] font-normal text-ink/60 ml-1">(업무 우편 발송 권한)</span></span>
+                            </label>
+                            
+                            <label class="flex items-center gap-2 p-3 border border-gray-200 rounded-xl cursor-pointer hover:bg-surface-soft transition-colors has-[:checked]:border-primary has-[:checked]:bg-primary/5">
+                                <input type="checkbox" name="role" value="멘토" class="w-4 h-4 accent-primary">
+                                <span class="text-[15px] font-bold text-ink">인생 도서관 멘토 <span class="text-[13px] font-normal text-ink/60 ml-1">(멘토링 상담 담당)</span></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section 3: Consent -->
+            <section class="flex flex-col gap-4">
+                <h2 class="text-[18px] font-bold text-ink border-b border-gray-200 pb-2">3. 약관 및 수신 동의</h2>
+                
+                <div class="flex flex-col gap-3 bg-surface-soft p-4 rounded-xl border border-gray-200">
+                    <label class="flex items-start gap-3 cursor-pointer group">
+                        <input type="checkbox" class="w-5 h-5 accent-primary mt-0.5" id="check-all">
+                        <div class="flex flex-col">
+                            <span class="text-[16px] font-bold text-ink group-hover:text-primary transition-colors">전체 동의하기</span>
+                            <span class="text-[13px] text-ink/60 mt-1">필수 및 선택 약관에 모두 동의합니다.</span>
+                        </div>
+                    </label>
+                    <hr class="border-gray-300 my-1">
+                    
+                    <!-- Required 1 -->
+                    <label class="flex items-start gap-3 cursor-pointer group">
+                        <input type="checkbox" id="reqAgree1" class="w-4 h-4 accent-primary mt-1 consent-chk req-chk" required>
+                        <div class="flex flex-col">
+                            <span class="text-[14px] font-bold text-ink"><span class="text-primary">[필수]</span> 개인정보 수집 및 이용 동의</span>
+                            <span class="text-[12px] text-ink/60 mt-1">이지플로우는 구글 캘린더 연동 및 맞춤형 서식 자동 완성을 위해 학교 정보(소속 등)와 캘린더 접근 권한(인증 시)을 수집 및 활용합니다.</span>
+                        </div>
+                    </label>
+                    
+                    <!-- Required 2 -->
+                    <label class="flex items-start gap-3 cursor-pointer group mt-2">
+                        <input type="checkbox" id="reqAgree2" class="w-4 h-4 accent-primary mt-1 consent-chk req-chk" required>
+                        <div class="flex flex-col">
+                            <span class="text-[14px] font-bold text-ink"><span class="text-primary">[필수]</span> 대화 기록 및 일지 이메일 발송 동의</span>
+                            <span class="text-[12px] text-ink/60 mt-1">인생도서관 챗봇 대화 기록 및 멘토링 상담 일지를 보관 및 안내 목적으로 귀하의 GBE 메일로 발송하는 것에 동의합니다.</span>
+                        </div>
+                    </label>
+
+                    <div id="agreeError" class="error-msg">필수 약관에 모두 동의해주세요.</div>
+
+                    <!-- Optional 1 -->
+                    <label class="flex items-start gap-3 cursor-pointer group mt-2">
+                        <input type="checkbox" class="w-4 h-4 accent-primary mt-1 consent-chk">
+                        <div class="flex flex-col">
+                            <span class="text-[14px] font-bold text-ink"><span class="text-gray-500">[선택]</span> 업무 배송 알림 및 주간 브리핑 수신 동의</span>
+                            <span class="text-[12px] text-ink/60 mt-1">새로운 공문 서식이 업데이트되거나, 이메일을 통해 주간 필수 업무 브리핑을 수신하는 것에 동의합니다.</span>
+                        </div>
+                    </label>
+                </div>
+            </section>
+
+            <button type="submit" id="submitBtn" class="w-full h-14 bg-primary text-white rounded-xl font-bold text-[18px] mt-4 hover:bg-primary-active transition-colors shadow-md">
+                가입 완료하기
+            </button>
+            
+            <div class="text-center mt-[-10px]">
+                <a href="공통_로그인.html" class="text-[14px] text-ink/60 hover:underline">이미 계정이 있으신가요? 로그인</a>
+            </div>
+
+        </form>
+    </div>
+
+    <!-- Email Auth Modal -->
+    <div id="emailAuthModal" class="fixed inset-0 z-[200] hidden items-center justify-center">
+        <!-- Backdrop -->
+        <div class="absolute inset-0 bg-black/40 backdrop-blur-sm" onclick="closeAuthModal()"></div>
+        <!-- Modal Content -->
+        <div class="relative bg-white rounded-2xl w-[90%] max-w-[400px] shadow-2xl overflow-hidden flex flex-col p-6 animate-fade-in-up">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-[20px] font-bold text-ink">인증메일 발송 완료</h3>
+                <button type="button" onclick="closeAuthModal()" class="text-gray-400 hover:text-ink transition-colors">
+                    <span class="material-symbols-outlined text-[24px]">close</span>
+                </button>
+            </div>
+            
+            <div class="flex flex-col items-center py-4 gap-4">
+                <div class="w-16 h-16 bg-blue-50 rounded-full flex items-center justify-center text-primary mb-2">
+                    <span class="material-symbols-outlined text-[32px]">mark_email_read</span>
+                </div>
+                <p class="text-[15px] text-ink text-center leading-relaxed">
+                    입력하신 GBE 이메일로<br>
+                    <strong>6자리 인증번호(PIN)</strong>가 발송되었습니다.
+                </p>
+                <p class="text-[13px] text-ink/60 text-center">
+                    이메일을 확인하신 후, 회원가입 화면에<br>인증번호를 입력해주세요.
+                </p>
+            </div>
+            
+            <div class="mt-4 flex justify-end gap-2">
+                <button type="button" onclick="closeAuthModal()" class="w-full px-4 py-3 bg-primary text-white font-bold rounded-xl hover:bg-primary-active transition-colors text-[14px]">
+                    확인
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Signup Success Modal -->
+    <div id="signupSuccessModal" class="fixed inset-0 z-[200] hidden items-center justify-center">
+        <!-- Backdrop -->
+        <div class="absolute inset-0 bg-black/40 backdrop-blur-sm"></div>
+        <!-- Modal Content -->
+        <div class="relative bg-white rounded-2xl w-[90%] max-w-[400px] shadow-2xl overflow-hidden flex flex-col p-6 animate-fade-in-up">
+            <div class="flex justify-center items-center mb-4">
+                <div class="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center text-primary mt-2">
+                    <span class="material-symbols-outlined text-[36px]">check_circle</span>
+                </div>
+            </div>
+            
+            <div class="flex flex-col items-center pb-4 gap-3">
+                <h3 class="text-[22px] font-bold text-ink text-center leading-tight">
+                    <span id="signupSuccessName" class="text-primary"></span>님<br>회원가입이 완료되었습니다!
+                </h3>
+                <p class="text-[15px] text-ink/60 text-center">
+                    확인을 누르시면 로그인 화면으로 이동합니다.
+                </p>
+            </div>
+            
+            <div class="mt-4 flex justify-end gap-2">
+                <button type="button" onclick="window.location.href='공통_로그인.html'" class="w-full px-4 py-3 bg-primary text-white font-bold rounded-xl hover:bg-primary-active transition-colors text-[16px]">
+                    확인 (로그인하기)
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in-up {
+            animation: fadeInUp 0.3s ease-out forwards;
+        }
+    </style>
+
+    <script>
+        // Check All Logic
+        document.getElementById('check-all').addEventListener('change', function(e) {
+            const checkboxes = document.querySelectorAll('.consent-chk');
+            checkboxes.forEach(chk => chk.checked = e.target.checked);
+        });
+
+        // Email Auth Modal Logic
+        const sendAuthMailBtn = document.getElementById('sendAuthMailBtn');
+        const emailInput = document.getElementById('emailInput');
+        const emailAuthModal = document.getElementById('emailAuthModal');
+
+        function closeAuthModal() {
+            emailAuthModal.classList.add('hidden');
+            emailAuthModal.classList.remove('flex');
+            document.getElementById('pinInput').focus();
+        }
+
+        sendAuthMailBtn.addEventListener('click', () => {
+            if(!emailInput.value.trim()) {
+                document.getElementById('emailError').style.display = 'block';
+                emailInput.parentElement.classList.add('error-input');
+                emailInput.focus();
+                return;
+            }
+            document.getElementById('emailError').style.display = 'none';
+            emailInput.parentElement.classList.remove('error-input');
+            
+            emailAuthModal.classList.remove('hidden');
+            emailAuthModal.classList.add('flex');
+        });
+
+        // Verify PIN Logic Mock
+        let isPinVerified = false;
+        document.getElementById('verifyPinBtn').addEventListener('click', () => {
+            const pin = document.getElementById('pinInput').value.trim();
+            if(pin.length === 6) {
+                document.getElementById('pinError').style.display = 'none';
+                document.getElementById('pinInput').classList.remove('error-input');
+                document.getElementById('auth-success-msg').classList.remove('hidden');
+                document.getElementById('auth-success-msg').classList.add('block');
+                isPinVerified = true;
+            } else {
+                document.getElementById('pinError').style.display = 'block';
+                document.getElementById('pinInput').classList.add('error-input');
+                document.getElementById('auth-success-msg').classList.add('hidden');
+                document.getElementById('auth-success-msg').classList.remove('block');
+                isPinVerified = false;
+            }
+        });
+
+        // Form Validation Logic
+        document.getElementById('signupForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            let isValid = true;
+            let firstErrorElement = null;
+
+            // Reset all errors
+            document.querySelectorAll('.error-msg').forEach(el => el.style.display = 'none');
+            document.querySelectorAll('.error-input').forEach(el => el.classList.remove('error-input'));
+
+            // 1. Email & PIN
+            if(!emailInput.value.trim()) {
+                document.getElementById('emailError').style.display = 'block';
+                emailInput.parentElement.classList.add('error-input');
+                isValid = false;
+                if(!firstErrorElement) firstErrorElement = emailInput;
+            }
+            if(!isPinVerified) {
+                document.getElementById('pinError').style.display = 'block';
+                document.getElementById('pinInput').classList.add('error-input');
+                isValid = false;
+                if(!firstErrorElement) firstErrorElement = document.getElementById('pinInput');
+            }
+
+            // 2. Name
+            const nameInput = document.getElementById('nameInput');
+            if(!nameInput.value.trim()) {
+                document.getElementById('nameError').style.display = 'block';
+                nameInput.classList.add('error-input');
+                isValid = false;
+                if(!firstErrorElement) firstErrorElement = nameInput;
+            }
+
+            // 3. Password
+            const pwInput = document.getElementById('pwInput');
+            const pwConfirmInput = document.getElementById('pwConfirmInput');
+            // Basic regex: at least 8 chars, one letter, one number, one special char
+            const pwRegex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/;
+            
+            if(!pwRegex.test(pwInput.value)) {
+                document.getElementById('pwError').style.display = 'block';
+                pwInput.classList.add('error-input');
+                isValid = false;
+                if(!firstErrorElement) firstErrorElement = pwInput;
+            } else if(pwInput.value !== pwConfirmInput.value) {
+                document.getElementById('pwConfirmError').style.display = 'block';
+                pwConfirmInput.classList.add('error-input');
+                isValid = false;
+                if(!firstErrorElement) firstErrorElement = pwConfirmInput;
+            }
+
+            // 4. Consent
+            const req1 = document.getElementById('reqAgree1');
+            const req2 = document.getElementById('reqAgree2');
+            if(!req1.checked || !req2.checked) {
+                document.getElementById('agreeError').style.display = 'block';
+                isValid = false;
+                if(!firstErrorElement) firstErrorElement = req1;
+            }
+
+            if(!isValid) {
+                // Focus on the first invalid field
+                if(firstErrorElement) {
+                    firstErrorElement.focus();
+                }
+            } else {
+                // Success Modal
+                document.getElementById('signupSuccessName').innerText = nameInput.value.trim();
+                const successModal = document.getElementById('signupSuccessModal');
+                successModal.classList.remove('hidden');
+                successModal.classList.add('flex');
+            }
+        });
+    </script>
+</body>
+</html>
