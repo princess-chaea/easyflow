@@ -632,7 +632,7 @@
     setTimeout(() => {
       hideTypingIndicator();
       let prefix = currentCategoryPath.length > 0 ? `[${currentCategoryPath.join(' > ')}] 관련 질문이시군요.<br><br>` : '';
-      addMessage(prefix + '관련된 최신 경북교육청 지침 및 매뉴얼 데이터를 바탕으로 검색한 결과입니다.<br><br>... (학습된 RAG 데이터 기반의 AI 맞춤형 답변이 출력될 자리입니다.) <br><br> 만족스러운 답변을 얻지 못하셨다면, 현업에 계신 멘토 선생님께 직접 여쭤보는 것은 어떨까요?<br><br><button class="mt-2 px-4 py-2 bg-primary text-white rounded-lg font-bold text-sm hover:bg-primary-active transition-colors flex items-center gap-1 shadow-sm hover-lift" onclick="sendArs('멘토연결')"><span class="material-symbols-outlined text-[16px]">support_agent</span> 인생도서관 멘토 연결하기</button>');
+      addMessage(prefix + '관련된 최신 경북교육청 지침 및 매뉴얼 데이터를 바탕으로 검색한 결과입니다.<br><br>... (학습된 RAG 데이터 기반의 AI 맞춤형 답변이 출력될 자리입니다.) <br><br> 만족스러운 답변을 얻지 못하셨다면, 현업에 계신 멘토 선생님께 직접 여쭤보는 것은 어떨까요?<br><br><button class="mt-2 px-4 py-2 bg-primary text-white rounded-lg font-bold text-sm hover:bg-primary-active transition-colors flex items-center gap-1 shadow-sm hover-lift" onclick="sendArs(\'멘토연결\')"><span class="material-symbols-outlined text-[16px]">support_agent</span> 인생도서관 멘토 연결하기</button>');
     }, 1200);
   }
 
