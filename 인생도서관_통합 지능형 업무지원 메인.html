@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+
+<html class="light" lang="ko">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>인생 도서관 - 경북교육청 통합 플랫폼</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "secondary-fixed": "#ffdea8",
+                        "inverse-on-surface": "#f1f0f8",
+                        "success": "#00a261",
+                        "secondary-container": "#feb700",
+                        "on-tertiary-fixed-variant": "#802a07",
+                        "on-tertiary": "#ffffff",
+                        "inverse-primary": "#b3c5ff",
+                        "on-tertiary-fixed": "#390c00",
+                        "on-tertiary-container": "#ff8a62",
+                        "surface-container-lowest": "#ffffff",
+                        "primary-active": "#002463",
+                        "on-surface-variant": "#434652",
+                        "error-container": "#ffdad6",
+                        "on-background": "#1a1b21",
+                        "inverse-surface": "#2f3036",
+                        "surface-container-high": "#e8e7f0",
+                        "on-secondary-container": "#6b4b00",
+                        "muted": "#868b94",
+                        "on-error-container": "#93000a",
+                        "outline": "#747683",
+                        "surface-tint": "#335ab4",
+                        "danger": "#df2c2c",
+                        "surface-bright": "#faf8ff",
+                        "on-primary-fixed-variant": "#12419b",
+                        "warning": "#ff9000",
+                        "surface-dark": "#111214",
+                        "error": "#ba1a1a",
+                        "surface-container": "#eeedf5",
+                        "ink": "#111214",
+                        "body": "#4e535e",
+                        "on-primary-container": "#88a7ff",
+                        "primary-fixed": "#dae1ff",
+                        "primary-container": "#003893",
+                        "primary": "#002465",
+                        "hairline": "#e5e8eb",
+                        "secondary-fixed-dim": "#ffba20",
+                        "surface-container-highest": "#e2e2ea",
+                        "surface-container-low": "#f4f3fb",
+                        "surface-variant": "#e2e2ea",
+                        "surface-dim": "#dad9e1",
+                        "surface-soft": "#f8f9fa",
+                        "on-secondary": "#ffffff",
+                        "on-secondary-fixed-variant": "#5e4200",
+                        "on-error": "#ffffff",
+                        "on-primary-fixed": "#001849",
+                        "tertiary-container": "#752201",
+                        "outline-variant": "#c4c6d4",
+                        "on-primary": "#ffffff",
+                        "tertiary-fixed-dim": "#ffb59d",
+                        "primary-disabled": "#9eb9e5",
+                        "on-secondary-fixed": "#271900",
+                        "tertiary": "#501400",
+                        "secondary": "#7c5800",
+                        "primary-fixed-dim": "#b3c5ff",
+                        "canvas": "#ffffff",
+                        "tertiary-fixed": "#ffdbd0",
+                        "surface-strong": "#f2f4f6",
+                        "background": "#faf8ff",
+                        "on-surface": "#1a1b21",
+                        "surface": "#faf8ff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "xxl": "24px",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "base": "16px",
+                        "sm": "12px",
+                        "md": "20px",
+                        "xl": "32px",
+                        "lg": "24px",
+                        "section": "96px",
+                        "xxs": "4px",
+                        "xxl": "48px",
+                        "xs": "8px"
+                    },
+                    "fontFamily": {
+                        "caption": ["Pretendard, sans-serif"],
+                        "title-sm": ["Pretendard, sans-serif"],
+                        "nav-link": ["Pretendard, sans-serif"],
+                        "caption-strong": ["Pretendard, sans-serif"],
+                        "body-sm": ["Pretendard, sans-serif"],
+                        "body-md": ["Pretendard, sans-serif"],
+                        "display-md": ["Pretendard, sans-serif"],
+                        "display-sm": ["Pretendard, sans-serif"],
+                        "body-strong": ["Pretendard, sans-serif"],
+                        "display-mega": ["Pretendard, sans-serif"],
+                        "display-xl": ["Pretendard, sans-serif"],
+                        "number-display": ["'JetBrains Mono', Pretendard, monospace"],
+                        "display-lg": ["Pretendard, sans-serif"],
+                        "button": ["Pretendard, sans-serif"],
+                        "title-md": ["Pretendard, sans-serif"],
+                        "title-lg": ["Pretendard, sans-serif"]
+                    }
+                },
+            },
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Pretendard', sans-serif;
+            background-color: #faf8ff;
+            color: #1a1b21;
+        }
+
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .shadow-premium {
+            box-shadow: 0 10px 30px -5px rgba(0, 36, 101, 0.08), 0 4px 12px -4px rgba(0, 36, 101, 0.04);
+        }
+
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #e5e8eb;
+            border-radius: 10px;
+        }
+
+        .active-nav-link {
+            position: relative;
+        }
+
+        .active-nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background-color: #002465;
+        }
+    </style>
+</head>
+
+<body class="min-h-screen flex flex-col">
+    <!-- TopNavBar -->
+    <header
+        class="fixed top-0 w-full z-50 h-[64px] flex justify-between items-center px-lg bg-canvas border-b border-hairline">
+        <div class="flex items-center gap-xl">
+            <h1 class="font-display-sm text-display-sm font-extrabold text-primary tracking-tight">인생 도서관</h1>
+            <nav class="hidden md:flex gap-lg">
+                <a class="font-nav-link text-nav-link text-on-surface-variant hover:text-primary transition-colors"
+                    href="#">홈</a>
+                <a class="font-nav-link text-nav-link text-on-surface-variant hover:text-primary transition-colors"
+                    href="#">업무 배송</a>
+                <a class="font-nav-link text-nav-link text-primary border-b-2 border-primary pb-1 font-bold" href="#">인생
+                    도서관</a>
+                <a class="font-nav-link text-nav-link text-on-surface-variant hover:text-primary transition-colors"
+                    href="#">서식 자료실</a>
+                <a class="font-nav-link text-nav-link text-on-surface-variant hover:text-primary transition-colors"
+                    href="#">안내센터</a>
+            </nav>
+        </div>
+        <div class="flex items-center gap-md">
+            <button class="text-on-surface-variant hover:text-primary transition-opacity active:opacity-80">
+                <span class="material-symbols-outlined">notifications</span>
+            </button>
+            <button class="text-on-surface-variant hover:text-primary transition-opacity active:opacity-80">
+                <span class="material-symbols-outlined">settings</span>
+            </button>
+            <div class="flex items-center gap-xs ml-base pl-base border-l border-hairline">
+                <div class="w-8 h-8 rounded-full overflow-hidden bg-surface-container">
+                    <img alt="사용자 프로필"
+                        data-alt="A professional headshot of a friendly female teacher in her late 30s with a warm smile, wearing a professional blazer. The background is a blurred office interior with soft natural lighting, consistent with a modern corporate educational environment. The overall aesthetic is professional, clean, and trustworthy, using soft and warm color tones."
+                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuAAvm1BgqdW0HId7tMzrwMrxGLHgDbf6PZFZeRr-G6An8YLpdqG1Je7gU6F2XwRE_eqG0BIxrQnN4Id-JtH2-E56di-YaxF2VDwobOhLNY3KtM_OzkGOH3PsofqRWCKSOcsAWhG81U22UVYiRtNCE5j_ErnEDbjhEUG62G6XPtbnbze92oJNPc8BE87k-oAWehqvY-ya7_5lvaw8FVQGiyctz7_u9Du1-TYN9_5OXFTmNARtMyjAMFC5QsAphQCRWNSxBKPd9oc-Mmo" />
+                </div>
+                <span class="font-body-sm text-body-sm font-semibold">김경북 교사</span>
+            </div>
+        </div>
+    </header>
+    <main class="mt-[64px] flex-grow">
+        <!-- Hero Section -->
+        <section class="relative bg-primary py-xxl overflow-hidden">
+            <div class="absolute inset-0 opacity-10">
+
+            </div>
+            <div class="max-w-7xl mx-auto px-lg relative z-10 text-center">
+                <h2 class="font-display-lg text-display-lg text-white mb-base">업무 부담을 덜어주는 지식 파트너, 인생 도서관</h2>
+                <p class="font-body-md text-body-md text-primary-fixed-dim max-w-2xl mx-auto mb-xxl opacity-90">
+                    AI 챗봇이 단계별 가이드 대화로 업무 처리를 안내하고,<br />담당 멘토 교사·장학사 상담으로 즉시 연결합니다.
+                </p>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-lg max-w-4xl mx-auto">
+                    <div
+                        class="bg-primary-container bg-opacity-30 rounded-xxl p-lg backdrop-blur-sm border border-primary-container">
+                        <div class="text-secondary-container mb-xs"><span
+                                class="material-symbols-outlined text-[32px]">hub</span></div>
+                        <div class="font-title-md text-title-md text-white">7개 핵심 업무 영역</div>
+                    </div>
+                    <div
+                        class="bg-primary-container bg-opacity-30 rounded-xxl p-lg backdrop-blur-sm border border-primary-container">
+                        <div class="text-secondary-container mb-xs"><span
+                                class="material-symbols-outlined text-[32px]">support_agent</span></div>
+                        <div class="font-title-md text-title-md text-white">실시간 상담 연계</div>
+                    </div>
+                    <div
+                        class="bg-primary-container bg-opacity-30 rounded-xxl p-lg backdrop-blur-sm border border-primary-container">
+                        <div class="text-secondary-container mb-xs"><span
+                                class="material-symbols-outlined text-[32px]">history_edu</span></div>
+                        <div class="font-title-md text-title-md text-white">자동 일지 기록</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- Main Body: 3-Column -->
+        <section class="max-w-7xl mx-auto px-lg py-xl">
+            <div class="grid grid-cols-12 gap-lg h-[700px]">
+                <!-- Left Panel: 가이드 대화 -->
+                <aside class="col-span-12 lg:col-span-3 flex flex-col gap-base">
+                    <div class="font-title-sm text-title-sm text-on-surface-variant flex items-center gap-xs">
+                        <span class="material-symbols-outlined text-[20px]">category</span>
+                        가이드 영역 선택
+                    </div>
+                    <div class="flex flex-col gap-xs overflow-y-auto pr-xs custom-scrollbar">
+                        <button
+                            class="flex items-center gap-md p-md bg-white border border-hairline rounded-xl hover:bg-surface-container-low transition-all text-left shadow-sm group">
+                            <span
+                                class="material-symbols-outlined text-primary group-hover:scale-110 transition-transform">child_care</span>
+                            <span class="font-body-strong">유치원 업무</span>
+                        </button>
+                        <button
+                            class="flex items-center gap-md p-md bg-white border border-hairline rounded-xl hover:bg-surface-container-low transition-all text-left shadow-sm group">
+                            <span
+                                class="material-symbols-outlined text-primary group-hover:scale-110 transition-transform">school</span>
+                            <span class="font-body-strong">초등 업무</span>
+                        </button>
+                        <button
+                            class="flex items-center gap-md p-md bg-white border border-hairline rounded-xl hover:bg-surface-container-low transition-all text-left shadow-sm group">
+                            <span
+                                class="material-symbols-outlined text-primary group-hover:scale-110 transition-transform">history_edu</span>
+                            <span class="font-body-strong">중등 업무</span>
+                        </button>
+                        <button
+                            class="flex items-center gap-md p-md bg-primary text-white border border-primary rounded-xl transition-all text-left shadow-md">
+                            <span class="material-symbols-outlined">badge</span>
+                            <span class="font-body-strong">인사·관리 업무</span>
+                        </button>
+                        <button
+                            class="flex items-center gap-md p-md bg-white border border-hairline rounded-xl hover:bg-surface-container-low transition-all text-left shadow-sm group">
+                            <span
+                                class="material-symbols-outlined text-primary group-hover:scale-110 transition-transform">book</span>
+                            <span class="font-body-strong">사서·상담·특수 업무</span>
+                        </button>
+                        <button
+                            class="flex items-center gap-md p-md bg-white border border-hairline rounded-xl hover:bg-surface-container-low transition-all text-left shadow-sm group">
+                            <span
+                                class="material-symbols-outlined text-primary group-hover:scale-110 transition-transform">health_and_safety</span>
+                            <span class="font-body-strong">보건·영양 업무</span>
+                        </button>
+                        <button
+                            class="flex items-center gap-md p-md bg-white border border-hairline rounded-xl hover:bg-surface-container-low transition-all text-left shadow-sm group">
+                            <span
+                                class="material-symbols-outlined text-primary group-hover:scale-110 transition-transform">corporate_fare</span>
+                            <span class="font-body-strong">행정실 업무</span>
+                        </button>
+                    </div>
+                </aside>
+                <!-- Center Panel: AI 챗봇 -->
+                <div
+                    class="col-span-12 lg:col-span-6 flex flex-col bg-white rounded-xxl shadow-premium border border-hairline overflow-hidden">
+                    <!-- Chat Header -->
+                    <div class="px-lg py-base border-b border-hairline bg-surface-container-lowest">
+                        <div class="flex items-center gap-xs text-caption text-muted mb-xxs">
+                            <span>인생 도서관</span>
+                            <span class="material-symbols-outlined text-[14px]">chevron_right</span>
+                            <span>인사·관리 업무</span>
+                            <span class="material-symbols-outlined text-[14px]">chevron_right</span>
+                            <span class="text-primary font-bold">복무·휴가 처리</span>
+                        </div>
+                        <div class="font-title-md text-title-md flex items-center gap-xs">
+                            <span class="w-2 h-2 rounded-full bg-success animate-pulse"></span>
+                            AI 업무 가이드 실시간 지원
+                        </div>
+                    </div>
+                    <!-- Chat Body -->
+                    <div class="flex-grow overflow-y-auto p-lg flex flex-col gap-lg custom-scrollbar bg-slate-50/30">
+                        <!-- User Bubble -->
+                        <div class="flex justify-end">
+                            <div
+                                class="bg-primary text-white p-md rounded-xl rounded-tr-none max-w-[80%] shadow-sm font-body-md">
+                                육아시간 사용 시 일일 복무 처리 절차가 궁금합니다. 나이스 상신 방법을 알려주세요.
+                            </div>
+                        </div>
+                        <!-- AI Bubble -->
+                        <div class="flex justify-start gap-md">
+                            <div
+                                class="w-10 h-10 rounded-full bg-primary-container flex items-center justify-center text-white shrink-0">
+                                <span class="material-symbols-outlined">smart_toy</span>
+                            </div>
+                            <div class="flex flex-col gap-xs max-w-[85%]">
+                                <div class="bg-white border border-hairline p-md rounded-xl rounded-tl-none shadow-sm">
+                                    <p class="font-body-md mb-md">
+                                        육아시간 사용 시 나이스(NEIS) 처리 절차는 다음과 같습니다.
+                                    </p>
+                                    <div class="space-y-sm mb-md">
+                                        <div class="flex gap-xs items-start">
+                                            <span
+                                                class="w-5 h-5 rounded-full bg-surface-container-high flex items-center justify-center text-caption-strong text-primary shrink-0">1</span>
+                                            <span class="text-body-sm">[복무] - [개인복무신청] - [신청] 메뉴로 접속합니다.</span>
+                                        </div>
+                                        <div class="flex gap-xs items-start">
+                                            <span
+                                                class="w-5 h-5 rounded-full bg-surface-container-high flex items-center justify-center text-caption-strong text-primary shrink-0">2</span>
+                                            <span class="text-body-sm">근무상황: '특별휴가', 사유: '육아시간'을 선택합니다.</span>
+                                        </div>
+                                        <div class="flex gap-xs items-start">
+                                            <span
+                                                class="w-5 h-5 rounded-full bg-surface-container-high flex items-center justify-center text-caption-strong text-primary shrink-0">3</span>
+                                            <span class="text-body-sm">시작 및 종료 시간을 2시간 범위 내에서 설정하고 증빙서류(최초 신청 시)를
+                                                첨부합니다.</span>
+                                        </div>
+                                    </div>
+                                    <div class="flex flex-wrap gap-xs items-center">
+                                        <span
+                                            class="inline-flex items-center gap-xxs px-xs py-[2px] bg-surface-container rounded-full text-caption text-muted border border-outline-variant">
+                                            <span class="material-symbols-outlined text-[14px]">menu_book</span>
+                                            2026 업무 편람
+                                        </span>
+                                        <span
+                                            class="inline-flex items-center gap-xxs px-xs py-[2px] bg-surface-container rounded-full text-caption text-muted border border-outline-variant">
+                                            <span class="material-symbols-outlined text-[14px]">link</span>
+                                            공무원 복무규정 제20조
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="flex flex-wrap gap-sm mt-xs">
+                                    <button
+                                        class="px-md py-xs bg-white border border-hairline rounded-full text-body-sm font-semibold hover:border-primary hover:text-primary transition-colors flex items-center gap-xs">
+                                        더 자세히 <span class="material-symbols-outlined text-[16px]">add</span>
+                                    </button>
+                                    <button
+                                        class="px-md py-xs bg-surface-strong border border-hairline rounded-full text-body-sm font-semibold hover:bg-primary-container hover:text-white transition-all flex items-center gap-xs">
+                                        담당자 상담 연계 <span
+                                            class="material-symbols-outlined text-[16px]">person_search</span>
+                                    </button>
+                                    <button
+                                        class="px-md py-xs bg-white border border-hairline rounded-full text-body-sm font-semibold hover:bg-surface-container-high transition-colors flex items-center gap-xs">
+                                        처음으로 <span class="material-symbols-outlined text-[16px]">refresh</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Chat Input -->
+                    <div class="p-lg border-t border-hairline bg-white">
+                        <div class="relative flex items-center">
+                            <input
+                                class="w-full bg-surface-container-low border-hairline rounded-xl px-lg py-md focus:ring-2 focus:ring-primary focus:border-primary transition-all pr-[120px]"
+                                placeholder="처리하려는 업무를 입력하세요" type="text" />
+                            <div class="absolute right-xs flex items-center gap-xs">
+                                <button
+                                    class="w-10 h-10 flex items-center justify-center text-muted hover:text-primary transition-colors">
+                                    <span class="material-symbols-outlined">mic</span>
+                                </button>
+                                <button
+                                    class="bg-primary text-white w-10 h-10 rounded-lg flex items-center justify-center hover:bg-primary-active transition-colors">
+                                    <span class="material-symbols-outlined">send</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Right Panel: 연계 담당자 -->
+                <aside class="col-span-12 lg:col-span-3 flex flex-col gap-xl">
+                    <!-- Mentor Cards -->
+                    <div class="flex flex-col gap-base">
+                        <div class="font-title-sm text-title-sm text-on-surface-variant flex items-center gap-xs">
+                            <span class="material-symbols-outlined text-[20px]">group</span>
+                            실시간 연계 멘토
+                        </div>
+                        <div class="space-y-base">
+                            <div
+                                class="bg-white p-md border border-hairline rounded-xxl shadow-sm flex items-center gap-md">
+                                <div
+                                    class="w-14 h-14 rounded-full overflow-hidden bg-surface-container-high border-2 border-primary-fixed">
+                                    <img alt="멘토 프로필"
+                                        data-alt="A portrait of a male educational professional in his 40s, looking intelligent and accessible. He has a soft smile and wears a casual yet professional oxford shirt. The background is a clean, minimal school office environment with soft focus. High-quality corporate aesthetic, trustworthy and professional."
+                                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuCVmxIOl2XscURjHFJPt17shkkAoPlP99aN49oRUp_0Iq87EFUce3VsP-_7mevQvDnY9-r54m6ygQeYTnVA_v_o_gcFWoRIeDOgHhJxLidDUVksRxzzoyTUhYxokgrUzQq4wrLlPu1iFkJO0_C3aw2jsyw6d-ZWbTjp3qSKzlf9eQTlDah8bsFNlR65w7L03x7nok586dK5aJx116AJTS4072zyfYn-J5Wc8ZBbHwDdZQk0zGwcWt6-wZ6kjxYMJSDi09maOc89QoBC" />
+                                </div>
+                                <div class="flex-grow">
+                                    <div class="flex justify-between items-start">
+                                        <span class="font-title-sm text-title-sm">이민수 멘토</span>
+                                        <span
+                                            class="bg-success/10 text-success text-[11px] font-bold px-xxs rounded flex items-center gap-xxs">
+                                            <span class="w-1 h-1 rounded-full bg-success"></span> 상담가능
+                                        </span>
+                                    </div>
+                                    <div class="text-caption text-muted">인사·관리 / 복무 전문</div>
+                                    <button
+                                        class="mt-xs text-primary text-caption-strong flex items-center gap-xxs hover:underline">
+                                        상담 요청 <span class="material-symbols-outlined text-[14px]">arrow_forward</span>
+                                    </button>
+                                </div>
+                            </div>
+                            <div
+                                class="bg-white p-md border border-hairline rounded-xxl shadow-sm flex items-center gap-md opacity-80">
+                                <div
+                                    class="w-14 h-14 rounded-full overflow-hidden bg-surface-container-high border-2 border-hairline">
+                                    <img alt="멘토 프로필"
+                                        data-alt="A portrait of a female school administrator in her late 40s, looking experienced and kind. She wears professional glasses and a simple navy dress. The background is a brightly lit, modern administrative office. The mood is calm, reliable, and helpful."
+                                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuBxovBLsxYaUzWQE4NqGEFKdVbG-L_f0u3C6WV4BsSQRa6P1T8QmR18pjqpQzyWZp5IXLCRLlHz_Xu4PqursyhFXO9b9i-u9eY253-fYZkw3taooloybflTKTPAZ68r5xFsDB7MXvx5wmJlbw-dkXxp3kyh5tyB1n448ra8tfO36tANE0ofm7ECMU_hST5FdFo2xKNU3OGoa3p12MNV8R9KQre8ex_lZW8qYfU74YrZH-7_KIOkR5AodseVq1w_gGAjmXmbOhg_r1mU" />
+                                </div>
+                                <div class="flex-grow">
+                                    <div class="flex justify-between items-start">
+                                        <span class="font-title-sm text-title-sm">박지영 장학사</span>
+                                        <span class="bg-muted/10 text-muted text-[11px] font-bold px-xxs rounded">
+                                            상담종료
+                                        </span>
+                                    </div>
+                                    <div class="text-caption text-muted">학사 운영 / 교육과정</div>
+                                    <button class="mt-xs text-muted text-caption-strong flex items-center gap-xxs"
+                                        disabled="">
+                                        메시지 남기기 <span class="material-symbols-outlined text-[14px]">mail</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Recommended Resources -->
+                    <div class="bg-surface-container-low rounded-xxl p-lg border border-hairline">
+                        <div class="font-title-sm text-title-sm mb-md flex items-center gap-xs text-primary">
+                            <span class="material-symbols-outlined text-[20px]">star</span>
+                            추천 자료
+                        </div>
+                        <ul class="space-y-md">
+                            <li class="group cursor-pointer">
+                                <div
+                                    class="text-body-sm font-semibold group-hover:text-primary transition-colors line-clamp-1">
+                                    2026학년도 교원 복무 관리 지침</div>
+                                <div class="text-caption text-muted flex justify-between mt-xxs">
+                                    <span>PDF (2.4MB)</span>
+                                    <span>2026.05.15</span>
+                                </div>
+                            </li>
+                            <li class="group cursor-pointer">
+                                <div
+                                    class="text-body-sm font-semibold group-hover:text-primary transition-colors line-clamp-1">
+                                    나이스(NEIS) 복무 상신 통합 매뉴얼</div>
+                                <div class="text-caption text-muted flex justify-between mt-xxs">
+                                    <span>Video (15:30)</span>
+                                    <span>2026.04.10</span>
+                                </div>
+                            </li>
+                            <li class="group cursor-pointer">
+                                <div
+                                    class="text-body-sm font-semibold group-hover:text-primary transition-colors line-clamp-1">
+                                    자주 묻는 복무 FAQ 100선</div>
+                                <div class="text-caption text-muted flex justify-between mt-xxs">
+                                    <span>HTML</span>
+                                    <span>2026.06.01</span>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </aside>
+            </div>
+        </section>
+        <!-- Bottom Section: 상담 일지 -->
+        <section class="bg-white border-t border-hairline py-xxl">
+            <div class="max-w-7xl mx-auto px-lg">
+                <div class="flex flex-col md:flex-row justify-between items-end md:items-center gap-lg mb-xl">
+                    <div>
+                        <h3 class="font-display-sm text-display-sm mb-xxs">지능형 상담 일지</h3>
+                        <p class="font-body-md text-muted">AI 가이드 및 멘토 상담 내역이 자동으로 기록됩니다.</p>
+                    </div>
+                    <div class="flex flex-wrap items-center gap-md">
+                        <div class="bg-surface-container p-[4px] rounded-full flex gap-xxs">
+                            <button
+                                class="px-md py-xs rounded-full bg-white text-primary text-body-sm font-bold shadow-sm">멘토
+                                교사</button>
+                            <button
+                                class="px-md py-xs rounded-full text-on-surface-variant text-body-sm font-medium hover:bg-white/50 transition-colors">장학사</button>
+                            <button
+                                class="px-md py-xs rounded-full text-on-surface-variant text-body-sm font-medium hover:bg-white/50 transition-colors">관리자</button>
+                        </div>
+                        <div class="flex gap-xs">
+                            <button
+                                class="flex items-center gap-xs px-md py-xs border border-hairline rounded-lg text-body-sm font-semibold hover:bg-surface-container-low transition-colors">
+                                <span class="material-symbols-outlined text-[20px]">download</span> CSV 내보내기
+                            </button>
+                            <button
+                                class="flex items-center gap-xs px-md py-xs border border-hairline rounded-lg text-body-sm font-semibold hover:bg-surface-container-low transition-colors">
+                                <span class="material-symbols-outlined text-[20px]">print</span> 일지 출력
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-white border border-hairline rounded-xl overflow-hidden shadow-sm">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="bg-surface-container-low text-on-surface-variant font-title-sm text-title-sm">
+                                <th class="px-lg py-md border-b border-hairline font-bold">일시</th>
+                                <th class="px-lg py-md border-b border-hairline font-bold">신청 교사</th>
+                                <th class="px-lg py-md border-b border-hairline font-bold">업무·가이드 경로</th>
+                                <th class="px-lg py-md border-b border-hairline font-bold">유형</th>
+                                <th class="px-lg py-md border-b border-hairline font-bold">담당</th>
+                                <th class="px-lg py-md border-b border-hairline font-bold">상태</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-hairline">
+                            <tr class="hover:bg-slate-50 transition-colors font-body-sm">
+                                <td class="px-lg py-md font-number-display text-body-sm">2026-06-12 14:22</td>
+                                <td class="px-lg py-md font-bold">김경북 (경북초)</td>
+                                <td class="px-lg py-md">인사·관리 › 복무·휴가 처리</td>
+                                <td class="px-lg py-md"><span
+                                        class="px-xs py-[2px] bg-primary/5 text-primary rounded border border-primary/20">AI
+                                        가이드</span></td>
+                                <td class="px-lg py-md text-muted">AI 챗봇</td>
+                                <td class="px-lg py-md"><span
+                                        class="text-success flex items-center gap-xxs font-bold"><span
+                                            class="material-symbols-outlined text-[18px]">check_circle</span> 완료</span>
+                                </td>
+                            </tr>
+                            <tr class="hover:bg-slate-50 transition-colors font-body-sm">
+                                <td class="px-lg py-md font-number-display text-body-sm">2026-06-12 11:05</td>
+                                <td class="px-lg py-md font-bold">이교육 (안동중)</td>
+                                <td class="px-lg py-md">행정실 › 시설물 안전 관리</td>
+                                <td class="px-lg py-md"><span
+                                        class="px-xs py-[2px] bg-warning/5 text-warning rounded border border-warning/20">담당자
+                                        상담</span></td>
+                                <td class="px-lg py-md">박지영 장학사</td>
+                                <td class="px-lg py-md"><span
+                                        class="text-warning flex items-center gap-xxs font-bold"><span
+                                            class="material-symbols-outlined text-[18px]">pending</span> 상담 대기</span>
+                                </td>
+                            </tr>
+                            <tr class="hover:bg-slate-50 transition-colors font-body-sm">
+                                <td class="px-lg py-md font-number-display text-body-sm">2026-06-11 16:45</td>
+                                <td class="px-lg py-md font-bold">최미래 (구미고)</td>
+                                <td class="px-lg py-md">중등 업무 › 고교학점제 수강 신청</td>
+                                <td class="px-lg py-md"><span
+                                        class="px-xs py-[2px] bg-primary/5 text-primary rounded border border-primary/20">AI
+                                        가이드</span></td>
+                                <td class="px-lg py-md">AI 챗봇</td>
+                                <td class="px-lg py-md"><span
+                                        class="text-success flex items-center gap-xxs font-bold"><span
+                                            class="material-symbols-outlined text-[18px]">check_circle</span> 완료</span>
+                                </td>
+                            </tr>
+                            <tr class="hover:bg-slate-50 transition-colors font-body-sm">
+                                <td class="px-lg py-md font-number-display text-body-sm">2026-06-11 09:30</td>
+                                <td class="px-lg py-md font-bold">정성실 (포항여중)</td>
+                                <td class="px-lg py-md">인사·관리 › 연수 신청 안내</td>
+                                <td class="px-lg py-md"><span
+                                        class="px-xs py-[2px] bg-warning/5 text-warning rounded border border-warning/20">담당자
+                                        상담</span></td>
+                                <td class="px-lg py-md">이민수 멘토</td>
+                                <td class="px-lg py-md"><span
+                                        class="text-success flex items-center gap-xxs font-bold"><span
+                                            class="material-symbols-outlined text-[18px]">check_circle</span> 완료</span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+    </main>
+    <!-- Footer -->
+    <footer class="w-full mt-section px-lg max-w-7xl mx-auto flex flex-col gap-base border-t border-hairline py-xl">
+        <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-lg">
+            <div class="font-title-sm text-title-sm text-on-surface font-bold tracking-tight">경상북도교육청 인생 도서관</div>
+            <nav class="flex flex-wrap gap-md">
+                <a class="font-caption text-caption text-body hover:underline decoration-primary" href="#">개인정보처리방침</a>
+                <a class="font-caption text-caption text-body hover:underline decoration-primary" href="#">이용약관</a>
+                <a class="font-caption text-caption text-body hover:underline decoration-primary" href="#">이메일무단수집거부</a>
+                <a class="font-caption text-caption text-body hover:underline decoration-primary" href="#">찾아오시는길</a>
+            </nav>
+        </div>
+        <div class="font-caption text-caption text-on-surface-variant opacity-70">
+            © 경상북도교육청. All Rights Reserved. (36759) 경상북도 안동시 풍천면 도청대로 511
+        </div>
+    </footer>
+    <script>
+        // Simple micro-interaction for input highlight
+        const input = document.querySelector('input');
+        input.addEventListener('focus', () => {
+            input.parentElement.classList.add('ring-2', 'ring-primary/20');
+        });
+        input.addEventListener('blur', () => {
+            input.parentElement.classList.remove('ring-2', 'ring-primary/20');
+        });
+
+        // Chat scroll to bottom (simulated)
+        const chatBody = document.querySelector('.flex-grow.overflow-y-auto');
+        chatBody.scrollTop = chatBody.scrollHeight;
+    </script>
+</body>
+
+</html>

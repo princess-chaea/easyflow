@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html class="light" lang="ko">
+
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>이지플로우 (EasyFlow) - 장학사 통합 현황 대시보드</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Pretendard,+-apple-system,+BlinkMacSystemFont,+system-ui,+'Apple+SD+Gothic+Neo',+sans-serif:wght@100..900&amp;family=Pretendard,+sans-serif:wght@100..900&amp;display=swap"
+        rel="stylesheet">
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-soft": "#f8f9fa",
+                        "surface-dark": "#111214",
+                        "on-background": "#1a1b21",
+                        "primary-fixed": "#dae1ff",
+                        "on-surface": "#1a1b21",
+                        "surface": "#faf8ff",
+                        "outline": "#747683",
+                        "inverse-primary": "#b3c5ff",
+                        "tertiary-fixed-dim": "#ffb59d",
+                        "warning": "#ff9000",
+                        "surface-container-low": "#f4f3fb",
+                        "tertiary-container": "#752201",
+                        "on-error": "#ffffff",
+                        "surface-bright": "#faf8ff",
+                        "on-error-container": "#93000a",
+                        "background": "#faf8ff",
+                        "secondary-fixed-dim": "#ffba20",
+                        "inverse-surface": "#2f3036",
+                        "secondary-fixed": "#ffdea8",
+                        "secondary": "#7c5800",
+                        "tertiary-fixed": "#ffdbd0",
+                        "primary": "#002465",
+                        "on-tertiary-container": "#ff8a62",
+                        "surface-strong": "#f2f4f6",
+                        "ink": "#111214",
+                        "surface-variant": "#e2e2ea",
+                        "surface-container-highest": "#e2e2ea",
+                        "on-surface-variant": "#434652",
+                        "on-primary-fixed-variant": "#12419b",
+                        "on-secondary-fixed": "#271900",
+                        "primary-disabled": "#9eb9e5",
+                        "surface-tint": "#335ab4",
+                        "surface-container-high": "#e8e7f0",
+                        "surface-dim": "#dad9e1",
+                        "error-container": "#ffdad6",
+                        "primary-fixed-dim": "#b3c5ff",
+                        "muted": "#868b94",
+                        "on-primary-container": "#88a7ff",
+                        "inverse-on-surface": "#f1f0f8",
+                        "on-primary": "#ffffff",
+                        "on-tertiary-fixed-variant": "#802a07",
+                        "hairline": "#e5e8eb",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-container": "#eeedf5",
+                        "primary-container": "#003893",
+                        "on-tertiary-fixed": "#390c00",
+                        "secondary-container": "#feb700",
+                        "on-primary-fixed": "#001849",
+                        "tertiary": "#501400",
+                        "on-secondary-fixed-variant": "#5e4200",
+                        "primary-active": "#002463",
+                        "body": "#4e535e",
+                        "on-secondary-container": "#6b4b00",
+                        "error": "#ba1a1a",
+                        "danger": "#df2c2c",
+                        "on-secondary": "#ffffff",
+                        "outline-variant": "#c4c6d4",
+                        "canvas": "#ffffff",
+                        "success": "#00a261",
+                        "on-tertiary": "#ffffff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "section": "96px",
+                        "xxl": "48px",
+                        "md": "20px",
+                        "lg": "24px",
+                        "base": "16px",
+                        "xs": "8px",
+                        "sm": "12px",
+                        "xxs": "4px",
+                        "xl": "32px"
+                    },
+                    "fontFamily": {
+                        "caption-strong": ["Pretendard, sans-serif"],
+                        "nav-link": ["Pretendard, sans-serif"],
+                        "display-mega": ["Pretendard, -apple-system, BlinkMacSystemFont, system-ui, 'Apple SD Gothic Neo', sans-serif"],
+                        "caption": ["Pretendard, sans-serif"],
+                        "body-sm": ["Pretendard, sans-serif"],
+                        "number-display": ["'JetBrains Mono', Pretendard, monospace"],
+                        "title-lg": ["Pretendard, sans-serif"],
+                        "display-md": ["Pretendard, sans-serif"],
+                        "display-xl": ["Pretendard, sans-serif"],
+                        "button": ["Pretendard, sans-serif"],
+                        "body-strong": ["Pretendard, sans-serif"],
+                        "body-md": ["Pretendard, sans-serif"],
+                        "display-lg": ["Pretendard, sans-serif"],
+                        "title-sm": ["Pretendard, sans-serif"],
+                        "display-sm": ["Pretendard, sans-serif"],
+                        "title-md": ["Pretendard, sans-serif"]
+                    }
+                },
+            },
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Pretendard', sans-serif;
+            background-color: #faf8ff;
+        }
+
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(229, 232, 235, 0.5);
+        }
+
+        .chart-bar {
+            transition: height 1s ease-out;
+        }
+    </style>
+</head>
+
+<body class="text-on-surface">
+    <!-- Top Navigation Bar -->
+    <header
+        class="bg-canvas fixed top-0 w-full z-50 h-[64px] flex justify-between items-center px-lg max-w-full border-b border-hairline">
+        <div class="flex items-center gap-xl">
+            <span class="font-display-sm text-display-sm font-bold text-primary">인생 도서관</span>
+            <nav class="hidden md:flex gap-lg"><a
+                    class="font-nav-link text-nav-link text-primary border-b-2 border-primary pb-1" href="#">홈</a><a
+                    class="font-nav-link text-nav-link text-on-surface-variant hover:text-primary transition-colors"
+                    href="#">업무 배송</a><a
+                    class="font-nav-link text-nav-link text-on-surface-variant hover:text-primary transition-colors"
+                    href="#">인생 도서관</a><a
+                    class="font-nav-link text-nav-link text-on-surface-variant hover:text-primary transition-colors"
+                    href="#">서식 자료실</a><a
+                    class="font-nav-link text-nav-link text-on-surface-variant hover:text-primary transition-colors"
+                    href="#">안내센터</a></nav>
+        </div>
+        <div class="flex items-center gap-base">
+            <div class="text-right mr-sm hidden sm:block">
+                <p class="font-body-strong text-body-strong text-primary">박지영 장학사</p>
+                <p class="font-caption text-caption text-muted">경상북도교육청 중등교육과</p>
+            </div>
+            <div class="flex gap-xs">
+                <button
+                    class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-surface-strong transition-colors">
+                    <span class="material-symbols-outlined text-on-surface-variant">notifications</span>
+                </button>
+                <button
+                    class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-surface-strong transition-colors">
+                    <span class="material-symbols-outlined text-on-surface-variant">settings</span>
+                </button>
+            </div>
+            <img alt="사용자 프로필" class="w-10 h-10 rounded-full border border-hairline shadow-sm"
+                data-alt="A professional headshot of a Korean female educator in her late 30s, wearing a sophisticated dark navy blazer. She has a warm and confident expression, set against a clean, modern office background with soft bokeh. The lighting is bright and professional, emphasizing a trustworthy and intelligent personality consistent with a high-level educational administrator."
+                src="https://lh3.googleusercontent.com/aida-public/AB6AXuCvSmKihUB-D-p149wAtJAbYhc94x8dAynjUXPbkJQOdKibv-Lt1X0NSFY7gUSsVrlpWXgJz-OMhJAtMvbIZOXghzX1XvURXI7o7bMw74G1Q49ZrSFjne7TNJaEX-qXl0DW3AKN3U8USpZAd6Ha56vOjnPpUiY-aV3jLjmr8KulWPBqdL5IFuqlP2jDWRPxArtSubO1Pa0q84LRgGu2IKcWyvIqU1FaCA3BPcX0tTwU1JDcwHygFTPjJ-fRrT026WK0_vu8v0crTRj9">
+        </div>
+    </header>
+    <main class="pt-[96px] pb-section px-lg max-w-7xl mx-auto space-y-lg">
+        <!-- Hero Section -->
+        <section class="flex flex-col md:flex-row md:items-end justify-between gap-base mb-xl">
+            <div>
+                <h1 class="font-display-md text-display-md text-primary tracking-tight">인생 도서관 통합 현황</h1>
+                <p class="font-body-md text-body-md text-on-surface-variant mt-xxs">2026년 실시간 상담 및 멘토링 운영 현황 데이터입니다.</p>
+            </div>
+            <div class="flex gap-xs">
+                <div class="bg-surface-strong px-base py-xs rounded-lg flex items-center gap-xs">
+                    <span class="material-symbols-outlined text-primary text-[20px]">calendar_today</span>
+                    <span class="font-caption-strong text-caption-strong text-primary">2026. 06. 14 기준</span>
+                </div>
+            </div>
+        </section>
+        <!-- KPI Summary Cards -->
+        <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-lg">
+            <div class="glass-card p-lg rounded-xl shadow-sm border-l-4 border-primary">
+                <div class="flex justify-between items-start mb-xs">
+                    <span
+                        class="material-symbols-outlined text-primary bg-primary-fixed p-xs rounded-lg">analytics</span>
+                    <span class="text-success font-caption-strong text-caption-strong flex items-center gap-1">+12%
+                        <span class="material-symbols-outlined text-[14px]">trending_up</span></span>
+                </div>
+                <h3 class="font-caption text-caption text-muted">총 상담 건수</h3>
+                <p class="font-number-display text-[32px] text-primary mt-xxs">128</p>
+            </div>
+            <div class="glass-card p-lg rounded-xl shadow-sm border-l-4 border-secondary-container">
+                <div class="flex justify-between items-start mb-xs">
+                    <span
+                        class="material-symbols-outlined text-secondary-container bg-secondary-fixed p-xs rounded-lg">assignment_add</span>
+                    <span class="text-secondary font-caption-strong text-caption-strong">NEW</span>
+                </div>
+                <h3 class="font-caption text-caption text-muted">이번 달 신청</h3>
+                <p class="font-number-display text-[32px] text-on-surface mt-xxs">24</p>
+            </div>
+            <div class="glass-card p-lg rounded-xl shadow-sm border-l-4 border-success">
+                <div class="flex justify-between items-start mb-xs">
+                    <span
+                        class="material-symbols-outlined text-success bg-green-100 p-xs rounded-lg">check_circle</span>
+                    <span class="text-success font-caption-strong text-caption-strong">Target 95%</span>
+                </div>
+                <h3 class="font-caption text-caption text-muted">처리 완료율</h3>
+                <p class="font-number-display text-[32px] text-on-surface mt-xxs">92%</p>
+            </div>
+            <div class="glass-card p-lg rounded-xl shadow-sm border-l-4 border-outline">
+                <div class="flex justify-between items-start mb-xs">
+                    <span
+                        class="material-symbols-outlined text-on-surface-variant bg-surface-strong p-xs rounded-lg">groups</span>
+                    <span class="text-muted font-caption-strong text-caption-strong">활동 중</span>
+                </div>
+                <h3 class="font-caption text-caption text-muted">활동 멘토 수</h3>
+                <p class="font-number-display text-[32px] text-on-surface mt-xxs">16</p>
+            </div>
+        </section>
+        <!-- Visualization Section (Bento Style) -->
+        <section class="grid grid-cols-1 lg:grid-cols-12 gap-lg">
+            <!-- 영역별 신청 현황 (Bar Chart Placeholder) -->
+            <div class="lg:col-span-7 glass-card p-xl rounded-xl shadow-sm flex flex-col">
+                <div class="flex justify-between items-center mb-xl">
+                    <div>
+                        <h2 class="font-title-md text-title-md text-primary">7개 업무 영역별 신청 현황</h2>
+                        <p class="font-caption text-caption text-muted">인사·관리 영역에서 가장 높은 수요 발생</p>
+                    </div>
+                    <button class="text-primary hover:underline font-caption-strong">전체보기</button>
+                </div>
+                <div class="flex-grow flex items-end justify-between gap-base h-[240px] px-md">
+                    <div class="flex flex-col items-center gap-sm flex-1">
+                        <div class="bg-primary-fixed w-full rounded-t-lg chart-bar hover:bg-primary transition-all duration-300 relative group"
+                            style="height: 60%;">
+                            <span
+                                class="absolute -top-8 left-1/2 -translate-x-1/2 font-number-display text-caption opacity-0 group-hover:opacity-100 transition-opacity">42</span>
+                        </div>
+                        <span
+                            class="font-caption text-caption text-on-surface-variant text-center leading-tight">교무학사</span>
+                    </div>
+                    <div class="flex flex-col items-center gap-sm flex-1">
+                        <div class="bg-primary-fixed w-full rounded-t-lg chart-bar hover:bg-primary transition-all duration-300 relative group"
+                            style="height: 45%;">
+                            <span
+                                class="absolute -top-8 left-1/2 -translate-x-1/2 font-number-display text-caption opacity-0 group-hover:opacity-100 transition-opacity">31</span>
+                        </div>
+                        <span
+                            class="font-caption text-caption text-on-surface-variant text-center leading-tight">연구복지</span>
+                    </div>
+                    <div class="flex flex-col items-center gap-sm flex-1">
+                        <div class="bg-primary w-full rounded-t-lg chart-bar relative group" style="height: 95%;">
+                            <span
+                                class="absolute -top-8 left-1/2 -translate-x-1/2 font-number-display text-caption text-primary font-bold">68</span>
+                        </div>
+                        <span
+                            class="font-caption-strong text-caption-strong text-primary text-center leading-tight">인사·관리</span>
+                    </div>
+                    <div class="flex flex-col items-center gap-sm flex-1">
+                        <div class="bg-primary-fixed w-full rounded-t-lg chart-bar hover:bg-primary transition-all duration-300 relative group"
+                            style="height: 30%;">
+                            <span
+                                class="absolute -top-8 left-1/2 -translate-x-1/2 font-number-display text-caption opacity-0 group-hover:opacity-100 transition-opacity">18</span>
+                        </div>
+                        <span
+                            class="font-caption text-caption text-on-surface-variant text-center leading-tight">행정·회계</span>
+                    </div>
+                    <div class="flex flex-col items-center gap-sm flex-1">
+                        <div class="bg-primary-fixed w-full rounded-t-lg chart-bar hover:bg-primary transition-all duration-300 relative group"
+                            style="height: 50%;">
+                            <span
+                                class="absolute -top-8 left-1/2 -translate-x-1/2 font-number-display text-caption opacity-0 group-hover:opacity-100 transition-opacity">35</span>
+                        </div>
+                        <span
+                            class="font-caption text-caption text-on-surface-variant text-center leading-tight">시설·안전</span>
+                    </div>
+                    <div class="flex flex-col items-center gap-sm flex-1">
+                        <div class="bg-primary-fixed w-full rounded-t-lg chart-bar hover:bg-primary transition-all duration-300 relative group"
+                            style="height: 25%;">
+                            <span
+                                class="absolute -top-8 left-1/2 -translate-x-1/2 font-number-display text-caption opacity-0 group-hover:opacity-100 transition-opacity">12</span>
+                        </div>
+                        <span
+                            class="font-caption text-caption text-on-surface-variant text-center leading-tight">정보·전산</span>
+                    </div>
+                    <div class="flex flex-col items-center gap-sm flex-1">
+                        <div class="bg-primary-fixed w-full rounded-t-lg chart-bar hover:bg-primary transition-all duration-300 relative group"
+                            style="height: 40%;">
+                            <span
+                                class="absolute -top-8 left-1/2 -translate-x-1/2 font-number-display text-caption opacity-0 group-hover:opacity-100 transition-opacity">22</span>
+                        </div>
+                        <span
+                            class="font-caption text-caption text-on-surface-variant text-center leading-tight">기타지원</span>
+                    </div>
+                </div>
+            </div>
+            <!-- 월별 상담 추이 (Line Chart Placeholder Style) -->
+            <div
+                class="lg:col-span-5 glass-card p-xl rounded-xl shadow-sm bg-primary text-white overflow-hidden relative">
+                <div class="relative z-10">
+                    <h2 class="font-title-md text-title-md text-primary-fixed">월별 상담 추이</h2>
+                    <p class="font-caption text-caption text-on-primary-container">상반기 지속적인 성장 곡선</p>
+                    <div class="mt-xl h-[180px] flex items-end">
+                        <!-- Custom SVG Line Chart -->
+                        <svg class="w-full h-full stroke-primary-fixed fill-none overflow-visible"
+                            viewBox="0 0 400 150">
+                            <path d="M0,140 Q60,130 80,110 T160,90 T240,60 T320,30 T400,10" stroke-linecap="round"
+                                stroke-width="4"></path>
+                            <circle cx="80" cy="110" fill="white" r="4"></circle>
+                            <circle cx="160" cy="90" fill="white" r="4"></circle>
+                            <circle cx="240" cy="60" fill="white" r="4"></circle>
+                            <circle cx="320" cy="30" fill="white" r="4"></circle>
+                            <circle cx="400" cy="10" fill="#feb700" r="6"></circle>
+                        </svg>
+                    </div>
+                    <div
+                        class="flex justify-between mt-sm font-number-display text-caption text-primary-fixed-dim opacity-80">
+                        <span class="">1월</span><span class="">2월</span><span class="">3월</span><span
+                            class="">4월</span><span class="">5월</span><span class="">6월</span>
+                    </div>
+                    <div
+                        class="mt-lg p-base bg-primary-container/30 rounded-lg backdrop-blur-sm border border-white/10">
+                        <div class="flex justify-between items-center">
+                            <span class="font-body-sm text-body-sm">6월 예상 성장률</span>
+                            <span class="text-secondary-container font-bold">+28%</span>
+                        </div>
+                    </div>
+                </div>
+                <!-- Abstract Shader Background -->
+
+            </div>
+        </section>
+        <!-- Detailed Status Section -->
+        <section class="grid grid-cols-1 lg:grid-cols-3 gap-lg">
+            <!-- 영역별 현황 요약 테이블 -->
+            <div class="lg:col-span-1 glass-card p-xl rounded-xl shadow-sm">
+                <h2 class="font-title-md text-title-md text-primary mb-lg">영역별 요약</h2>
+                <div class="space-y-sm">
+                    <div class="flex justify-between items-center py-sm border-b border-hairline">
+                        <span class="font-body-sm text-body-sm text-on-surface">인사·관리</span>
+                        <span class="font-number-display text-body-sm font-bold text-primary">68건</span>
+                    </div>
+                    <div class="flex justify-between items-center py-sm border-b border-hairline">
+                        <span class="font-body-sm text-body-sm text-on-surface">교무학사</span>
+                        <span class="font-number-display text-body-sm font-bold text-primary">42건</span>
+                    </div>
+                    <div class="flex justify-between items-center py-sm border-b border-hairline">
+                        <span class="font-body-sm text-body-sm text-on-surface">연구복지</span>
+                        <span class="font-number-display text-body-sm font-bold text-primary">31건</span>
+                    </div>
+                    <div class="flex justify-between items-center py-sm border-b border-hairline">
+                        <span class="font-body-sm text-body-sm text-on-surface">시설·안전</span>
+                        <span class="font-number-display text-body-sm font-bold text-primary">35건</span>
+                    </div>
+                    <div class="flex justify-between items-center py-sm">
+                        <span class="font-body-sm text-body-sm text-on-surface">정보·전산</span>
+                        <span class="font-number-display text-body-sm font-bold text-primary">12건</span>
+                    </div>
+                </div>
+                <div class="mt-lg p-lg bg-surface-strong rounded-xl text-center">
+                    <p class="font-caption text-caption text-muted">가장 시급한 지원 필요</p>
+                    <p class="font-body-strong text-body-strong text-error mt-xxs">인사 발령 관련 고충</p>
+                </div>
+            </div>
+            <!-- 최근 상담 신청 실시간 목록 -->
+            <div class="lg:col-span-2 glass-card p-xl rounded-xl shadow-sm overflow-hidden">
+                <div class="flex justify-between items-center mb-lg">
+                    <h2 class="font-title-md text-title-md text-primary">최근 상담 신청 현황</h2>
+                    <div class="flex items-center gap-xs text-success">
+                        <span class="relative flex h-2 w-2">
+                            <span
+                                class="animate-ping absolute inline-flex h-full w-full rounded-full bg-success opacity-75"></span>
+                            <span class="relative inline-flex rounded-full h-2 w-2 bg-success"></span>
+                        </span>
+                        <span class="font-caption-strong text-caption-strong">실시간 업데이트 중</span>
+                    </div>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left">
+                        <thead>
+                            <tr class="border-b border-hairline text-muted">
+                                <th class="pb-base font-caption-strong text-caption-strong px-xs">신청 교사</th>
+                                <th class="pb-base font-caption-strong text-caption-strong px-xs">소속 학교</th>
+                                <th class="pb-base font-caption-strong text-caption-strong px-xs">업무 영역</th>
+                                <th class="pb-base font-caption-strong text-caption-strong px-xs">신청 일시</th>
+                                <th class="pb-base font-caption-strong text-caption-strong px-xs">상태</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-hairline">
+                            <tr class="hover:bg-surface-soft transition-colors group">
+                                <td class="py-md px-xs font-body-sm text-body-sm text-on-surface">김태우</td>
+                                <td class="py-md px-xs font-body-sm text-body-sm text-on-surface-variant">경북고등학교</td>
+                                <td class="py-md px-xs font-body-sm text-body-sm text-on-surface-variant">인사·관리</td>
+                                <td class="py-md px-xs font-number-display text-caption text-muted">2026.06.14 14:22
+                                </td>
+                                <td class="py-md px-xs">
+                                    <span
+                                        class="bg-primary-fixed text-primary px-sm py-1 rounded-full font-caption-strong text-caption-strong">대기
+                                        중</span>
+                                </td>
+                            </tr>
+                            <tr class="hover:bg-surface-soft transition-colors">
+                                <td class="py-md px-xs font-body-sm text-body-sm text-on-surface">이은지</td>
+                                <td class="py-md px-xs font-body-sm text-body-sm text-on-surface-variant">포항제철중학교</td>
+                                <td class="py-md px-xs font-body-sm text-body-sm text-on-surface-variant">교무학사</td>
+                                <td class="py-md px-xs font-number-display text-caption text-muted">2026.06.14 11:45
+                                </td>
+                                <td class="py-md px-xs">
+                                    <span
+                                        class="bg-secondary-fixed text-on-secondary-fixed-variant px-sm py-1 rounded-full font-caption-strong text-caption-strong">진행
+                                        중</span>
+                                </td>
+                            </tr>
+                            <tr class="hover:bg-surface-soft transition-colors">
+                                <td class="py-md px-xs font-body-sm text-body-sm text-on-surface">박민준</td>
+                                <td class="py-md px-xs font-body-sm text-body-sm text-on-surface-variant">구미여자고등학교</td>
+                                <td class="py-md px-xs font-body-sm text-body-sm text-on-surface-variant">연구복지</td>
+                                <td class="py-md px-xs font-number-display text-caption text-muted">2026.06.13 16:30
+                                </td>
+                                <td class="py-md px-xs">
+                                    <span
+                                        class="bg-success/10 text-success px-sm py-1 rounded-full font-caption-strong text-caption-strong">처리
+                                        완료</span>
+                                </td>
+                            </tr>
+                            <tr class="hover:bg-surface-soft transition-colors">
+                                <td class="py-md px-xs font-body-sm text-body-sm text-on-surface">최윤서</td>
+                                <td class="py-md px-xs font-body-sm text-body-sm text-on-surface-variant">안동중앙중학교</td>
+                                <td class="py-md px-xs font-body-sm text-body-sm text-on-surface-variant">인사·관리</td>
+                                <td class="py-md px-xs font-number-display text-caption text-muted">2026.06.13 09:10
+                                </td>
+                                <td class="py-md px-xs">
+                                    <span
+                                        class="bg-success/10 text-success px-sm py-1 rounded-full font-caption-strong text-caption-strong">처리
+                                        완료</span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="mt-lg flex justify-center">
+                    <button
+                        class="bg-primary text-white px-xl py-sm rounded-full font-button text-button hover:opacity-90 transition-opacity flex items-center gap-xs">
+                        신청 목록 전체 보기 <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+                    </button>
+                </div>
+            </div>
+        </section>
+    </main>
+    <!-- Footer -->
+    <footer class="w-full mt-section px-lg max-w-7xl mx-auto flex flex-col gap-base py-xl border-t border-hairline">
+        <div class="flex flex-col md:flex-row justify-between items-center gap-md">
+            <span class="font-title-sm text-title-sm text-on-surface font-bold">이지플로우 (EasyFlow)</span>
+            <div class="flex gap-lg">
+                <a class="font-caption text-caption text-body hover:underline decoration-primary" href="#">개인정보처리방침</a>
+                <a class="font-caption text-caption text-body hover:underline decoration-primary" href="#">이용약관</a>
+                <a class="font-caption text-caption text-body hover:underline decoration-primary" href="#">이메일무단수집거부</a>
+                <a class="font-caption text-caption text-body hover:underline decoration-primary" href="#">찾아오시는길</a>
+            </div>
+        </div>
+        <p class="font-caption text-caption text-on-surface-variant text-center md:text-left opacity-60">© 경상북도교육청. All
+            Rights Reserved. 본 데이터는 2026년 기준 시뮬레이션 데이터입니다.</p>
+    </footer>
+    <script>
+        // Simple Interaction logic
+        document.addEventListener('DOMContentLoaded', () => {
+            const bars = document.querySelectorAll('.chart-bar');
+            bars.forEach((bar, index) => {
+                const originalHeight = bar.style.height;
+                bar.style.height = '0%';
+                setTimeout(() => {
+                    bar.style.height = originalHeight;
+                }, 100 * index);
+            });
+        });
+    </script>
+
+
+</body>
+
+</html>

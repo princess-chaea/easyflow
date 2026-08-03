@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html class="light" lang="ko">
+
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>인사·관리 업무 상세 가이드 | 이지플로우 (EasyFlow)</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet">
+    <link as="style" crossorigin=""
+        href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css"
+        rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Pretendard,+sans-serif:wght@100..900&amp;display=swap"
+        rel="stylesheet">
+    <style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+
+        body {
+            font-family: 'Pretendard', sans-serif;
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(229, 232, 235, 0.5);
+        }
+    </style>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-soft": "#f8f9fa",
+                        "surface-dark": "#111214",
+                        "on-background": "#1a1b21",
+                        "primary-fixed": "#dae1ff",
+                        "on-surface": "#1a1b21",
+                        "surface": "#faf8ff",
+                        "outline": "#747683",
+                        "inverse-primary": "#b3c5ff",
+                        "tertiary-fixed-dim": "#ffb59d",
+                        "warning": "#ff9000",
+                        "surface-container-low": "#f4f3fb",
+                        "tertiary-container": "#752201",
+                        "on-error": "#ffffff",
+                        "surface-bright": "#faf8ff",
+                        "on-error-container": "#93000a",
+                        "background": "#faf8ff",
+                        "secondary-fixed-dim": "#ffba20",
+                        "inverse-surface": "#2f3036",
+                        "secondary-fixed": "#ffdea8",
+                        "secondary": "#7c5800",
+                        "tertiary-fixed": "#ffdbd0",
+                        "primary": "#002465",
+                        "on-tertiary-container": "#ff8a62",
+                        "surface-strong": "#f2f4f6",
+                        "ink": "#111214",
+                        "surface-variant": "#e2e2ea",
+                        "surface-container-highest": "#e2e2ea",
+                        "on-surface-variant": "#434652",
+                        "on-primary-fixed-variant": "#12419b",
+                        "on-secondary-fixed": "#271900",
+                        "primary-disabled": "#9eb9e5",
+                        "surface-tint": "#335ab4",
+                        "surface-container-high": "#e8e7f0",
+                        "surface-dim": "#dad9e1",
+                        "error-container": "#ffdad6",
+                        "primary-fixed-dim": "#b3c5ff",
+                        "muted": "#868b94",
+                        "on-primary-container": "#88a7ff",
+                        "inverse-on-surface": "#f1f0f8",
+                        "on-primary": "#ffffff",
+                        "on-tertiary-fixed-variant": "#802a07",
+                        "hairline": "#e5e8eb",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-container": "#eeedf5",
+                        "primary-container": "#003893",
+                        "on-tertiary-fixed": "#390c00",
+                        "secondary-container": "#feb700",
+                        "on-primary-fixed": "#001849",
+                        "tertiary": "#501400",
+                        "on-secondary-fixed-variant": "#5e4200",
+                        "primary-active": "#002463",
+                        "body": "#4e535e",
+                        "on-secondary-container": "#6b4b00",
+                        "error": "#ba1a1a",
+                        "danger": "#df2c2c",
+                        "on-secondary": "#ffffff",
+                        "outline-variant": "#c4c6d4",
+                        "canvas": "#ffffff",
+                        "success": "#00a261",
+                        "on-tertiary": "#ffffff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "section": "96px",
+                        "xxl": "48px",
+                        "md": "20px",
+                        "lg": "24px",
+                        "base": "16px",
+                        "xs": "8px",
+                        "sm": "12px",
+                        "xxs": "4px",
+                        "xl": "32px"
+                    },
+                    "fontFamily": {
+                        "caption-strong": ["Pretendard, sans-serif"],
+                        "nav-link": ["Pretendard, sans-serif"],
+                        "display-mega": ["Pretendard, sans-serif"],
+                        "caption": ["Pretendard, sans-serif"],
+                        "body-sm": ["Pretendard, sans-serif"],
+                        "number-display": ["'JetBrains Mono', Pretendard, monospace"],
+                        "title-lg": ["Pretendard, sans-serif"],
+                        "display-md": ["Pretendard, sans-serif"],
+                        "display-xl": ["Pretendard, sans-serif"],
+                        "button": ["Pretendard, sans-serif"],
+                        "body-strong": ["Pretendard, sans-serif"],
+                        "body-md": ["Pretendard, sans-serif"],
+                        "display-lg": ["Pretendard, sans-serif"],
+                        "title-sm": ["Pretendard, sans-serif"],
+                        "display-sm": ["Pretendard, sans-serif"],
+                        "title-md": ["Pretendard, sans-serif"]
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+
+<body class="bg-surface-soft text-on-background antialiased">
+    <!-- TopNavBar -->
+    <header
+        class="bg-canvas dark:bg-surface-dark border-b border-hairline dark:border-outline-variant fixed top-0 w-full z-50 h-[64px] flex justify-between items-center px-lg max-w-full">
+        <div class="flex items-center gap-xl">
+            <h1 class="font-display-sm text-display-sm font-bold text-primary dark:text-primary-fixed">인생 도서관</h1>
+            <nav class="hidden md:flex items-center gap-lg"><a
+                    class="font-nav-link text-nav-link text-on-surface-variant dark:text-surface-variant hover:text-primary dark:hover:text-secondary-fixed transition-colors"
+                    href="#">홈</a><a
+                    class="font-nav-link text-nav-link text-on-surface-variant dark:text-surface-variant hover:text-primary dark:hover:text-secondary-fixed transition-colors"
+                    href="#">업무 배송</a><a
+                    class="font-nav-link text-nav-link text-primary dark:text-secondary-container border-b-2 border-primary dark:border-secondary-container pb-1 hover:text-primary dark:hover:text-secondary-fixed transition-colors"
+                    href="#">인생 도서관</a><a
+                    class="font-nav-link text-nav-link text-on-surface-variant dark:text-surface-variant hover:text-primary dark:hover:text-secondary-fixed transition-colors"
+                    href="#">서식 자료실</a><a
+                    class="font-nav-link text-nav-link text-on-surface-variant dark:text-surface-variant hover:text-primary dark:hover:text-secondary-fixed transition-colors"
+                    href="#">안내센터</a></nav>
+        </div>
+        <div class="flex items-center gap-base">
+            <button class="p-xs text-on-surface-variant hover:bg-surface-container transition-colors rounded-full">
+                <span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+            </button>
+            <button class="p-xs text-on-surface-variant hover:bg-surface-container transition-colors rounded-full">
+                <span class="material-symbols-outlined" data-icon="settings">settings</span>
+            </button>
+            <div
+                class="w-8 h-8 rounded-full bg-primary-fixed flex items-center justify-center overflow-hidden border border-hairline">
+                <img alt="사용자 프로필"
+                    data-alt="A professional headshot of a middle-aged male educator with a warm smile, wearing a modern navy blazer. The lighting is bright and clean, typical of a high-end corporate portrait. The background is a softly blurred office environment with neutral tones, perfectly aligned with the professional and trustworthy brand identity of the GBE platform."
+                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuDF-yxvGqHVIbo6XfuCszpIJ-IAI5dFBDvY3eowjU0IVYlZ723yTcFUxQvbIni4OXmpcTXUXOIE6r1_0hOwjp_egMh4pu4Fbrh9pqwBOHxWTeeRQ2P1zoak3YngorSbHiEOUBllI8sS4ruMk4hfzPuR-e20ECZtIRTNXdurOYvBhA8iZJbrfAG637TW_Z2bqtNZNWIkJiThxDpbs0Nv2lz4EQJPvOzGf-LGj2wSgUWx_5TsniBbVch1RA3i9n5BlCoD1QMRnKhMOQPL">
+            </div>
+        </div>
+    </header>
+    <main class="pt-[64px] min-h-screen">
+        <!-- Hero Section & Breadcrumb -->
+        <section class="bg-primary text-white py-xl px-lg">
+            <div class="max-w-7xl mx-auto">
+                <nav class="flex items-center gap-xs text-primary-fixed mb-sm font-caption text-caption">
+                    <span class="">인생 도서관</span>
+                    <span class="material-symbols-outlined text-[14px]" data-icon="chevron_right">chevron_right</span>
+                    <span class="text-white font-caption-strong">인사·관리 업무</span>
+                </nav>
+                <div class="flex flex-col md:flex-row md:items-end justify-between gap-base">
+                    <div>
+                        <h2 class="font-display-lg text-display-lg mb-xs">인사·관리 업무 가이드</h2>
+                        <p class="font-body-md text-body-md opacity-90">교원의 복무, 인사, 성과 평가를 위한 지능형 업무 지원 시스템</p>
+                    </div>
+                    <div
+                        class="flex items-center gap-xs font-number-display text-number-display bg-white/10 px-base py-xs rounded-lg backdrop-blur-md">
+                        <span class="material-symbols-outlined" data-icon="calendar_today">calendar_today</span>
+                        <span class="">2026. 06. 15</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- Content Area -->
+        <div class="max-w-7xl mx-auto px-lg py-xl">
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-xl">
+                <!-- Sidebar -->
+                <aside class="md:col-span-3">
+                    <nav class="flex flex-col gap-xs sticky top-[88px]">
+                        <button
+                            class="flex items-center justify-between w-full p-base rounded-xl transition-all text-left bg-primary text-white shadow-lg">
+                            <span class="font-title-sm text-title-sm">복무·휴가 처리</span>
+                            <span class="material-symbols-outlined" data-icon="arrow_right_alt">arrow_right_alt</span>
+                        </button>
+                        <button
+                            class="flex items-center justify-between w-full p-base rounded-xl transition-all text-left bg-white border border-hairline text-on-surface-variant hover:border-primary-disabled">
+                            <span class="font-title-sm text-title-sm">인사기록·전보</span>
+                        </button>
+                        <button
+                            class="flex items-center justify-between w-full p-base rounded-xl transition-all text-left bg-white border border-hairline text-on-surface-variant hover:border-primary-disabled">
+                            <span class="font-title-sm text-title-sm">성과·근무 평가</span>
+                        </button>
+                        <div class="mt-xl p-lg rounded-xl bg-surface-container-high border border-hairline">
+                            <p
+                                class="font-caption-strong text-caption-strong text-primary mb-sm flex items-center gap-xxs">
+                                <span class="material-symbols-outlined text-[18px]" data-icon="info">info</span>
+                                안내 사항
+                            </p>
+                            <p class="font-caption text-caption text-on-surface-variant">2026년 상반기 성과 평가는 6월 30일까지
+                                완료해주시기 바랍니다.</p>
+                        </div>
+                    </nav>
+                </aside>
+                <!-- Main Content -->
+                <div class="md:col-span-9 flex flex-col gap-xl">
+                    <!-- 1. Process Section -->
+                    <section class="bg-white rounded-xl border border-hairline p-xl">
+                        <div class="flex items-center gap-sm mb-lg">
+                            <div class="w-10 h-10 rounded-full bg-primary-fixed flex items-center justify-center">
+                                <span class="material-symbols-outlined text-primary"
+                                    data-icon="account_tree">account_tree</span>
+                            </div>
+                            <h3 class="font-title-lg text-title-lg text-primary">교원 복무·휴가 처리 프로세스</h3>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-4 gap-base relative">
+                            <!-- Process Steps -->
+                            <div
+                                class="relative z-10 flex flex-col items-center text-center p-base bg-surface-container-low rounded-xl border border-hairline group hover:border-primary-disabled transition-all">
+                                <span
+                                    class="font-number-display text-number-display text-primary-disabled mb-xs group-hover:text-primary">01</span>
+                                <p class="font-body-strong text-body-strong mb-xxs">신청서 작성</p>
+                                <p class="font-caption text-caption text-muted">나이스 복무 메뉴에서 유형 선택</p>
+                            </div>
+                            <div
+                                class="relative z-10 flex flex-col items-center text-center p-base bg-surface-container-low rounded-xl border border-hairline group hover:border-primary-disabled transition-all">
+                                <span
+                                    class="font-number-display text-number-display text-primary-disabled mb-xs group-hover:text-primary">02</span>
+                                <p class="font-body-strong text-body-strong mb-xxs">증빙 서류 첨부</p>
+                                <p class="font-caption text-caption text-muted">병가 등 필요 시 파일 업로드</p>
+                            </div>
+                            <div
+                                class="relative z-10 flex flex-col items-center text-center p-base bg-surface-container-low rounded-xl border border-hairline group hover:border-primary-disabled transition-all">
+                                <span
+                                    class="font-number-display text-number-display text-primary-disabled mb-xs group-hover:text-primary">03</span>
+                                <p class="font-body-strong text-body-strong mb-xxs">결재 경로 지정</p>
+                                <p class="font-caption text-caption text-muted">직급별 전결 규정 확인</p>
+                            </div>
+                            <div
+                                class="relative z-10 flex flex-col items-center text-center p-base bg-surface-container-low rounded-xl border border-hairline group hover:border-primary-disabled transition-all">
+                                <span
+                                    class="font-number-display text-number-display text-primary-disabled mb-xs group-hover:text-primary">04</span>
+                                <p class="font-body-strong text-body-strong mb-xxs">최종 승인 확인</p>
+                                <p class="font-caption text-caption text-muted">알림 메시지 및 처리 상태 확인</p>
+                            </div>
+                        </div>
+                        <div class="mt-lg p-lg bg-surface-soft rounded-xl border-l-4 border-primary">
+                            <h4 class="font-title-sm text-title-sm mb-sm flex items-center gap-xs">
+                                <span class="material-symbols-outlined text-primary"
+                                    data-icon="task_alt">task_alt</span>
+                                체크리스트
+                            </h4>
+                            <ul class="space-y-base font-body-sm text-body-sm">
+                                <li class="flex items-start gap-xs">
+                                    <input class="mt-1 rounded text-primary focus:ring-primary" type="checkbox">
+                                    <span class="">병가 신청 시 7일 이상은 반드시 의사 진단서가 첨부되었는가?</span>
+                                </li>
+                                <li class="flex items-start gap-xs">
+                                    <input class="mt-1 rounded text-primary focus:ring-primary" type="checkbox">
+                                    <span class="">육아시간 사용 시 나이스 복무 기안에 해당 자녀 성명이 명시되었는가?</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </section>
+                    <!-- Bento Grid for FAQ & Mentor -->
+                    <div class="grid grid-cols-1 md:grid-cols-5 gap-xl">
+                        <!-- 2. FAQ Section -->
+                        <section
+                            class="md:col-span-3 bg-white rounded-xl border border-hairline p-xl h-full flex flex-col">
+                            <div class="flex items-center gap-sm mb-lg">
+                                <div class="w-10 h-10 rounded-full bg-secondary-fixed flex items-center justify-center">
+                                    <span class="material-symbols-outlined text-secondary" data-icon="quiz">quiz</span>
+                                </div>
+                                <h3 class="font-title-lg text-title-lg text-secondary">자주 묻는 질문 (FAQ)</h3>
+                            </div>
+                            <div class="space-y-xs flex-1">
+                                <details
+                                    class="group bg-surface-container-lowest border border-hairline rounded-lg overflow-hidden transition-all duration-300">
+                                    <summary
+                                        class="list-none p-base flex justify-between items-center cursor-pointer hover:bg-surface-soft">
+                                        <span class="font-title-sm text-title-sm text-on-surface">육아시간 사용 시 나이스 처리
+                                            방법은?</span>
+                                        <span
+                                            class="material-symbols-outlined group-open:rotate-180 transition-transform"
+                                            data-icon="expand_more">expand_more</span>
+                                    </summary>
+                                    <div
+                                        class="p-base bg-white border-t border-hairline font-body-sm text-body-sm text-on-surface-variant">
+                                        나이스 복무관리 &gt; 개인복무신청 &gt; '특별휴가' 선택 후 '육아시간'을 지정합니다. 하루 2시간 범위 내에서 사용 가능하며, 기안문에
+                                        대상 자녀의 정보를 입력해야 합니다.
+                                    </div>
+                                </details>
+                                <details
+                                    class="group bg-surface-container-lowest border border-hairline rounded-lg overflow-hidden transition-all duration-300">
+                                    <summary
+                                        class="list-none p-base flex justify-between items-center cursor-pointer hover:bg-surface-soft">
+                                        <span class="font-title-sm text-title-sm text-on-surface">연가 보상비 지급
+                                            대상인가요?</span>
+                                        <span
+                                            class="material-symbols-outlined group-open:rotate-180 transition-transform"
+                                            data-icon="expand_more">expand_more</span>
+                                    </summary>
+                                    <div
+                                        class="p-base bg-white border-t border-hairline font-body-sm text-body-sm text-on-surface-variant">
+                                        교원의 경우 원칙적으로 방학 중 연가 사용이 가능하므로 연가 보상비 지급 대상에서 제외됩니다. 단, 행정직 및 방학 중 근무자의 경우 규정에
+                                        따라 다를 수 있습니다.
+                                    </div>
+                                </details>
+                                <details
+                                    class="group bg-surface-container-lowest border border-hairline rounded-lg overflow-hidden transition-all duration-300">
+                                    <summary
+                                        class="list-none p-base flex justify-between items-center cursor-pointer hover:bg-surface-soft">
+                                        <span class="font-title-sm text-title-sm text-on-surface">병가 신청 시 진단서 제출
+                                            기준은?</span>
+                                        <span
+                                            class="material-symbols-outlined group-open:rotate-180 transition-transform"
+                                            data-icon="expand_more">expand_more</span>
+                                    </summary>
+                                    <div
+                                        class="p-base bg-white border-t border-hairline font-body-sm text-body-sm text-on-surface-variant">
+                                        연간 누계 6일까지는 진단서 없이 신청 가능합니다. 7일 이상 연속되는 병가 혹은 연간 누계 6일을 초과하는 경우에는 반드시 의료기관의 진단서를
+                                        첨부해야 합니다.
+                                    </div>
+                                </details>
+                            </div>
+                        </section>
+                        <!-- 4. Mentor Section -->
+                        <section
+                            class="md:col-span-2 bg-primary text-white rounded-xl p-xl flex flex-col justify-between items-center text-center">
+                            <div>
+                                <h3 class="font-title-lg text-title-lg mb-lg">전문가 멘토링</h3>
+                                <div class="mb-lg">
+                                    <div
+                                        class="w-24 h-24 rounded-full border-4 border-primary-fixed mx-auto overflow-hidden bg-white mb-base">
+                                        <img alt="김도윤 멘토"
+                                            data-alt="A portrait of a confident male professional educator in his late 30s, named Kim Do-yun. He is wearing a grey tailored suit with a white shirt and is standing against a light wooden library background. The lighting is soft and flattering, emphasizing a mood of mentorship, reliability, and approachability. The image reflects the educational leadership aesthetic of the South Korean GBE region."
+                                            src="https://lh3.googleusercontent.com/aida-public/AB6AXuA5XQvWtsxq9C7m_HMv3jjFYN2cYkCff49alXbJteGtv8TcJIPdPDfISjkGIT4IPG6_TvcjIKtQY1yvbcOtTE9EGnXmuKnnkIaWPtvnewD4hArM1ljmENkRSAioMQVXZ4RABkMH-NFo8zaDbh72m0tww4zqdkgQgRJLDM7giQv5UKBzyoNaSETsHC-azElUS41sLL9S6iDcCsHm-xyZ-JIBIsMMa3rON6VUYO1bZKRCPCNaIJhgH6i7-xi_zLyyaLwPMIcnSUgOdeIc">
+                                    </div>
+                                    <p class="font-title-md text-title-md">김도윤 멘토</p>
+                                    <p class="font-caption text-caption opacity-80">○○중학교 행정실장</p>
+                                </div>
+                                <p class="font-body-sm text-body-sm mb-xl opacity-90">"복잡한 인사 기록이나 전보 관련 궁금증, 현직 전문가가 직접
+                                    도와드립니다."</p>
+                            </div>
+                            <button
+                                class="w-full bg-white text-primary font-button text-button py-base rounded-full hover:bg-primary-fixed transition-colors active:opacity-90">
+                                상담 신청하기
+                            </button>
+                        </section>
+                    </div>
+                    <!-- 3. Forms Section -->
+                    <section class="bg-white rounded-xl border border-hairline p-xl">
+                        <div class="flex items-center justify-between mb-lg">
+                            <div class="flex items-center gap-sm">
+                                <div class="w-10 h-10 rounded-full bg-surface-strong flex items-center justify-center">
+                                    <span class="material-symbols-outlined text-ink"
+                                        data-icon="description">description</span>
+                                </div>
+                                <h3 class="font-title-lg text-title-lg text-ink">관련 서식 및 지침</h3>
+                            </div>
+                            <a class="text-primary font-caption-strong flex items-center gap-xxs hover:underline"
+                                href="#">
+                                전체보기 <span class="material-symbols-outlined text-[18px]"
+                                    data-icon="open_in_new">open_in_new</span>
+                            </a>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-base">
+                            <div
+                                class="flex items-center justify-between p-lg rounded-xl border border-hairline bg-surface-soft hover:bg-white hover:shadow-md transition-all group">
+                                <div class="flex items-center gap-base">
+                                    <div class="p-base bg-white rounded-lg shadow-sm">
+                                        <span class="material-symbols-outlined text-danger"
+                                            data-icon="picture_as_pdf">picture_as_pdf</span>
+                                    </div>
+                                    <div>
+                                        <p class="font-body-strong text-body-strong">교원 휴가 신청서(양식)</p>
+                                        <p class="font-caption text-caption text-muted">hwp, 25KB</p>
+                                    </div>
+                                </div>
+                                <button class="p-base text-muted group-hover:text-primary transition-colors">
+                                    <span class="material-symbols-outlined" data-icon="download">download</span>
+                                </button>
+                            </div>
+                            <div
+                                class="flex items-center justify-between p-lg rounded-xl border border-hairline bg-surface-soft hover:bg-white hover:shadow-md transition-all group">
+                                <div class="flex items-center gap-base">
+                                    <div class="p-base bg-white rounded-lg shadow-sm">
+                                        <span class="material-symbols-outlined text-primary"
+                                            data-icon="article">article</span>
+                                    </div>
+                                    <div>
+                                        <p class="font-body-strong text-body-strong">복무 관리 지침(2026)</p>
+                                        <p class="font-caption text-caption text-muted">pdf, 1.2MB</p>
+                                    </div>
+                                </div>
+                                <button class="p-base text-muted group-hover:text-primary transition-colors">
+                                    <span class="material-symbols-outlined" data-icon="download">download</span>
+                                </button>
+                            </div>
+                        </div>
+                    </section>
+                    <!-- Bottom CTA Banner -->
+                    <section class="relative overflow-hidden bg-surface-dark text-white rounded-xxl p-xl md:p-xxl">
+
+                        <div class="relative z-10 flex flex-col md:flex-row items-center justify-between gap-xl">
+                            <div class="text-center md:text-left">
+                                <h3 class="font-display-sm text-display-sm mb-base">더 궁금한 점이 있으신가요?</h3>
+                                <p class="font-body-md text-body-md opacity-80 max-w-lg">AI 챗봇이 인사 규정부터 나이스 입력 방법까지
+                                    실시간으로 답변해 드립니다.</p>
+                            </div>
+                            <button
+                                class="flex items-center gap-sm bg-secondary-container text-on-secondary-container font-button text-button px-xl py-base rounded-full hover:shadow-[0_0_20px_rgba(254,183,0,0.4)] transition-all">
+                                <span class="material-symbols-outlined" data-icon="smart_toy"
+                                    style="font-variation-settings: 'FILL' 1;">smart_toy</span>
+                                AI 챗봇에게 바로 물어보기
+                            </button>
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </div>
+    </main>
+    <!-- Footer -->
+    <footer
+        class="bg-surface-container-low dark:bg-surface-dark border-t border-hairline dark:border-outline-variant w-full mt-section px-lg max-w-7xl mx-auto flex flex-col gap-base py-xl">
+        <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-base">
+            <h2 class="font-title-sm text-title-sm text-on-surface dark:text-surface-bright">경상북도교육청</h2>
+            <div class="flex flex-wrap gap-base">
+                <a class="font-caption text-caption text-body dark:text-muted hover:underline decoration-primary"
+                    href="#">개인정보처리방침</a>
+                <a class="font-caption text-caption text-body dark:text-muted hover:underline decoration-primary"
+                    href="#">이용약관</a>
+                <a class="font-caption text-caption text-body dark:text-muted hover:underline decoration-primary"
+                    href="#">이메일무단수집거부</a>
+                <a class="font-caption text-caption text-body dark:text-muted hover:underline decoration-primary"
+                    href="#">찾아오시는길</a>
+            </div>
+        </div>
+        <p class="font-caption text-caption text-on-surface-variant dark:text-surface-variant">© 경상북도교육청. All Rights
+            Reserved.</p>
+    </footer>
+    <script>
+        // Micro-interactions and simple state management
+        document.querySelectorAll('details').forEach((el) => {
+            el.addEventListener('toggle', (e) => {
+                if (el.open) {
+                    document.querySelectorAll('details').forEach((otherEl) => {
+                        if (otherEl !== el) otherEl.open = false;
+                    });
+                }
+            });
+        });
+    </script>
+
+
+</body>
+
+</html>
