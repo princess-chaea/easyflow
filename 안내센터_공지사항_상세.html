@@ -4,7 +4,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>이지플로우 (EasyFlow) - 공지사항</title>
+<title>이지플로우 (EasyFlow) - 공지사항 상세보기</title>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
 <style>
@@ -338,58 +338,80 @@
 <span class="material-symbols-outlined text-[16px]" data-icon="chevron_right">chevron_right</span>
 <span class="text-primary font-semibold">공지사항</span>
 </div>
-<h1 class="font-headline-lg text-headline-lg text-primary mb-lg">공지사항</h1>
-<!-- Notice List -->
-<div class="bg-surface-container-lowest rounded-2xl border border-outline-variant content-shadow overflow-hidden divide-y divide-outline-variant">
-<a class="flex flex-col sm:flex-row sm:items-center justify-between gap-sm p-lg hover:bg-surface-container-high transition-colors" href="안내센터_공지사항_상세.html">
-<div class="flex items-center gap-md min-w-0">
-<span class="shrink-0 inline-flex items-center px-sm py-1 bg-primary-container text-on-primary rounded-full text-label-sm font-label-sm uppercase tracking-wider">Update</span>
-<span class="font-title-sm text-on-surface truncate">2024년 상반기 행정 시스템 고도화 업데이트 안내</span>
+<!-- Detail Card -->
+<article class="bg-surface-container-lowest rounded-2xl border border-outline-variant content-shadow overflow-hidden">
+<!-- Header -->
+<header class="p-lg md:p-xl border-b border-outline-variant bg-surface-container-low/30">
+<div class="inline-flex items-center px-sm py-1 bg-primary-container text-on-primary rounded-full text-label-sm font-label-sm mb-md uppercase tracking-wider">
+                        Update
+                    </div>
+<h1 class="font-headline-lg text-headline-lg text-primary mb-md">2024년 상반기 행정 시스템 고도화 업데이트 안내</h1>
+<div class="flex flex-wrap items-center gap-md text-on-surface-variant font-body-sm">
+<div class="flex items-center gap-xs">
+<span class="material-symbols-outlined text-[18px]" data-icon="calendar_today">calendar_today</span>
+<span>작성일: 2024. 05. 24</span>
 </div>
-<div class="shrink-0 flex items-center gap-md text-on-surface-variant font-body-sm">
-<span>2024.05.24</span>
-<span class="flex items-center gap-xxs"><span class="material-symbols-outlined text-[16px]" data-icon="visibility">visibility</span>1,284</span>
+<div class="flex items-center gap-xs">
+<span class="material-symbols-outlined text-[18px]" data-icon="visibility">visibility</span>
+<span>조회수: 1,284</span>
 </div>
+<div class="flex items-center gap-xs">
+<span class="material-symbols-outlined text-[18px]" data-icon="person">person</span>
+<span>관리자</span>
+</div>
+</div>
+</header>
+<!-- Body Content -->
+<div class="p-lg md:p-xl font-body-md leading-relaxed text-on-surface-variant">
+<p class="mb-md">안녕하세요, 이지플로우(EasyFlow) 운영팀입니다.</p>
+<p class="mb-md">선생님들의 보다 원활한 행정 업무 처리를 위해 아래와 같이 행정 시스템 업데이트가 진행될 예정입니다. 이번 업데이트는 사용자 인터페이스(UI) 개선
+                        및 데이터 처리 속도 향상에 초점을 맞추었습니다.</p>
+<div class="my-lg p-lg bg-surface-container-low rounded-2xl border-l-4 border-primary-container">
+<h3 class="font-title-sm text-primary mb-sm">주요 업데이트 내용</h3>
+<ul class="list-disc ml-md space-y-base">
+<li><strong>전자문서 결재 라인 자동화:</strong> 빈번하게 사용되는 결재 경로를 AI가 분석하여 추천합니다.</li>
+<li><strong>예산 실시간 모니터링 대시보드:</strong> 사업별 예산 집행 현황을 한눈에 파악할 수 있는 시각화 도구가 추가됩니다.</li>
+<li><strong>모바일 행정 지원 강화:</strong> 현장 학습 및 외부 활동 중에도 문서 확인이 용이하도록 모바일 뷰어가 개선되었습니다.</li>
+</ul>
+</div>
+<div class="rounded-2xl overflow-hidden mb-lg">
+<img class="w-full aspect-video object-cover" data-alt="A clean and modern UI dashboard interface showing administrative system metrics. The design uses a professional palette of deep blue and crisp white, with smooth data visualizations, organized grids, and subtle shadows. It illustrates high-end corporate software with a focus on usability and clarity." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAanGyhzatcW3089ZUMHD86OZZvPA426_CMX-B4u2h2atibha9cVE0N90TgRf1_OniBA3bfllg61hNfKA2W5IIrghMlEs-Fh9_CQjyDGelBlzmZAht59CttHL0eI6roab-hoUzmCdx8V2dlVRv2PzwH1DtltTon3fA6DZ2EWHjkWWUIAPPbBujRvdlBrxU3eLJWi1EqNje5pRLIqtzRagPkO38d7Js-iJHa7w1rB6-cBK5nEZsWNsrWpg"/>
+</div>
+<p class="mb-md">업데이트 작업 기간 동안 일시적인 서비스 지연이 발생할 수 있으니 양해 부탁드립니다.</p>
+<p class="mb-sm"><strong>작업 일시:</strong> 2024년 5월 26일 (일) 00:00 ~ 04:00 (약 4시간)</p>
+<p>문의 사항이 있으신 경우 안내센터 1:1 문의를 이용해 주시기 바랍니다. 항상 더 나은 서비스를 제공하기 위해 노력하겠습니다. 감사합니다.</p>
+<div class="mt-xl flex flex-wrap gap-sm">
+<div class="flex items-center gap-xs px-sm py-xs bg-secondary-container text-on-secondary-container rounded-lg text-body-sm">
+<span class="material-symbols-outlined text-[18px]" data-icon="attach_file">attach_file</span>
+<span>행정시스템_매뉴얼_v2.pdf</span>
+</div>
+</div>
+</div>
+<!-- Post Navigation -->
+<footer class="border-t border-outline-variant">
+<div class="grid grid-cols-1 md:grid-cols-2 divide-y md:divide-y-0 md:divide-x divide-outline-variant">
+<a class="flex flex-col p-lg hover:bg-surface-container-high transition-colors group" href="안내센터_공지사항.html">
+<span class="text-label-sm font-label-sm text-on-surface-variant mb-xs flex items-center gap-xs">
+<span class="material-symbols-outlined text-[16px]" data-icon="arrow_upward">arrow_upward</span> 이전 글
+                            </span>
+<span class="font-title-sm text-on-surface group-hover:text-primary-container truncate">교육용
+                                AI 보조 도구 사용 가이드라인 배포</span>
 </a>
-<a class="flex flex-col sm:flex-row sm:items-center justify-between gap-sm p-lg hover:bg-surface-container-high transition-colors" href="#">
-<div class="flex items-center gap-md min-w-0">
-<span class="shrink-0 inline-flex items-center px-sm py-1 bg-surface-container text-on-surface-variant rounded-full text-label-sm font-label-sm uppercase tracking-wider">일반</span>
-<span class="font-title-sm text-on-surface truncate">교육용 AI 보조 도구 사용 가이드라인 배포</span>
-</div>
-<div class="shrink-0 flex items-center gap-md text-on-surface-variant font-body-sm">
-<span>2024.05.10</span>
-<span class="flex items-center gap-xxs"><span class="material-symbols-outlined text-[16px]" data-icon="visibility">visibility</span>892</span>
-</div>
+<a class="flex flex-col p-lg text-right hover:bg-surface-container-high transition-colors group" href="안내센터_공지사항.html">
+<span class="text-label-sm font-label-sm text-on-surface-variant mb-xs flex items-center justify-end gap-xs">
+                                다음 글 <span class="material-symbols-outlined text-[16px]" data-icon="arrow_downward">arrow_downward</span>
+</span>
+<span class="font-title-sm text-on-surface group-hover:text-primary-container truncate">6월
+                                정기 보안 점검 및 서버 점검 안내</span>
 </a>
-<a class="flex flex-col sm:flex-row sm:items-center justify-between gap-sm p-lg hover:bg-surface-container-high transition-colors" href="#">
-<div class="flex items-center gap-md min-w-0">
-<span class="shrink-0 inline-flex items-center px-sm py-1 bg-surface-container text-on-surface-variant rounded-full text-label-sm font-label-sm uppercase tracking-wider">일반</span>
-<span class="font-title-sm text-on-surface truncate">6월 정기 보안 점검 및 서버 점검 안내</span>
 </div>
-<div class="shrink-0 flex items-center gap-md text-on-surface-variant font-body-sm">
-<span>2024.06.01</span>
-<span class="flex items-center gap-xxs"><span class="material-symbols-outlined text-[16px]" data-icon="visibility">visibility</span>456</span>
-</div>
-</a>
-<a class="flex flex-col sm:flex-row sm:items-center justify-between gap-sm p-lg hover:bg-surface-container-high transition-colors" href="#">
-<div class="flex items-center gap-md min-w-0">
-<span class="shrink-0 inline-flex items-center px-sm py-1 bg-surface-container text-on-surface-variant rounded-full text-label-sm font-label-sm uppercase tracking-wider">일반</span>
-<span class="font-title-sm text-on-surface truncate">개인정보 처리방침 개정 안내</span>
-</div>
-<div class="shrink-0 flex items-center gap-md text-on-surface-variant font-body-sm">
-<span>2024.04.15</span>
-<span class="flex items-center gap-xxs"><span class="material-symbols-outlined text-[16px]" data-icon="visibility">visibility</span>623</span>
-</div>
-</a>
-<a class="flex flex-col sm:flex-row sm:items-center justify-between gap-sm p-lg hover:bg-surface-container-high transition-colors" href="#">
-<div class="flex items-center gap-md min-w-0">
-<span class="shrink-0 inline-flex items-center px-sm py-1 bg-surface-container text-on-surface-variant rounded-full text-label-sm font-label-sm uppercase tracking-wider">일반</span>
-<span class="font-title-sm text-on-surface truncate">여름방학 중 시스템 이용 안내</span>
-</div>
-<div class="shrink-0 flex items-center gap-md text-on-surface-variant font-body-sm">
-<span>2024.07.01</span>
-<span class="flex items-center gap-xxs"><span class="material-symbols-outlined text-[16px]" data-icon="visibility">visibility</span>301</span>
-</div>
+</footer>
+</article>
+<!-- Bottom Actions -->
+<div class="mt-lg flex justify-center">
+<a class="flex items-center gap-xs px-xl py-md bg-primary-container text-on-primary rounded-full font-title-sm hover:opacity-90 transition-opacity content-shadow" href="안내센터_공지사항.html">
+<span class="material-symbols-outlined" data-icon="list">list</span>
+<span>목록으로 돌아가기</span>
 </a>
 </div>
 </div>
