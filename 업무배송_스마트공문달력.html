@@ -877,10 +877,9 @@
 </footer>
 </div></div></main>
 <!-- ══════════════════════════════════════════════════════════════════
-     ① 날짜 상세 슬라이드 패널 (날짜 클릭 시)
-     ══════════════════════════════════════════════════════════════════ -->
-<div class="hidden fixed inset-0 bg-ink/40 z-40 anim-fade no-print" id="panelScrim"></div>
-<aside aria-labelledby="dayPanelTitle" aria-modal="true" class="hidden fixed top-0 right-0 h-full w-full sm:w-[420px] bg-canvas z-50 shadow-modal flex-col no-print" id="dayPanel" role="dialog">
+     ① 날짜 상세 슬라이드 패널 (날짜 클릭 시) — 달력을 가리지 않는 비모달 인스펙터.
+     다른 날짜를 클릭하면 스크림 없이 바로 그 날짜 내용으로 갱신된다. -->
+<aside aria-labelledby="dayPanelTitle" class="hidden fixed top-0 right-0 h-full w-full sm:w-[420px] bg-canvas z-50 border-l border-hairline shadow-modal sm:shadow-[-8px_0_24px_-8px_rgba(17,18,20,0.12)] flex-col no-print" id="dayPanel" role="region">
 <header class="px-md py-base border-b border-hairline flex items-start justify-between gap-sm shrink-0">
 <div>
 <p class="text-caption text-muted" id="dayPanelWeekday">—</p>
@@ -3211,13 +3210,11 @@
       const panel = document.getElementById('dayPanel');
       panel.classList.remove('hidden');
       panel.classList.add('flex', 'anim-slide');
-      document.getElementById('panelScrim').classList.remove('hidden');
     }
 
     function closeDayPanel() {
       const p = document.getElementById('dayPanel');
       p.classList.add('hidden'); p.classList.remove('flex', 'anim-slide');
-      document.getElementById('panelScrim').classList.add('hidden');
     }
 
     /* ═══════════════════════════════════════════════════════════════════════
@@ -3512,7 +3509,6 @@
       searchSchool(document.getElementById('schoolInput').value.trim()));
 
     document.getElementById('btnClosePanel').addEventListener('click', closeDayPanel);
-    document.getElementById('panelScrim').addEventListener('click', closeDayPanel);
     document.getElementById('btnCloseModal').addEventListener('click', closeModal);
     document.getElementById('modalScrim').addEventListener('click', closeModal);
     document.querySelectorAll('.modal-tab').forEach(b => b.addEventListener('click', () => switchTab(b.dataset.tab)));
