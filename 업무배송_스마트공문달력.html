@@ -339,7 +339,7 @@
      상단 네비게이션 (팀 전체 통일 — stitch 원본 code.html 구조 동일)
      ══════════════════════════════════════════════════════════════════ -->
 <!-- 전체 메뉴 패널 (lg 미만) -->
-<main class="pt-[64px] min-h-screen" id="main"><div class="w-full max-w-[1600px] mx-auto px-lg py-xl flex flex-col md:flex-row gap-xl" id="global-layout-wrapper">
+<main class="pt-[64px] min-h-screen" id="main"><div class="w-full max-w-[1920px] mx-auto px-lg py-xl flex flex-col md:flex-row gap-xl" id="global-layout-wrapper">
 <!-- Reduced width to w-[180px] to minimize left spacing -->
 <!-- Added background, padding, and rounded corners for the left menu area -->
 
@@ -501,9 +501,60 @@
 </div>
 </div>
 <div class="w-full px-lg py-lg">
-<div class="grid grid-cols-1 lg:grid-cols-[248px_1fr] gap-lg items-start" id="mainGrid">
+<div class="flex flex-col gap-lg items-start w-full" id="mainGrid">
+<!-- 하단 안내 밴드 -->
+<section class="w-full px-lg pb-lg no-print">
+<div>
+<!-- KPI 4종 — 팀원 페이지와 동일한 흰 카드 + 하이라인 + soft shadow -->
+<div class="grid grid-cols-2 lg:grid-cols-4 gap-base">
+<div class="rise rounded-2xl bg-canvas border border-hairline shadow-soft p-md" style="animation-delay:.12s">
+<div class="flex items-start justify-between gap-xs">
+<p class="text-caption text-body">이번 달 배송 업무</p>
+<span class="w-8 h-8 shrink-0 rounded-full bg-primary/5 grid place-items-center">
+<span class="material-symbols-outlined text-[18px] text-primary">local_shipping</span></span>
+</div>
+<p class="font-mono text-display-md text-ink mt-xs tnum"><span id="kpiWeek">0</span><span class="text-title-md text-muted">건</span></p>
+<p class="text-caption text-muted mt-xxs" id="kpiWeekSub">—</p>
+</div>
+<div class="rise rounded-2xl bg-canvas border border-hairline shadow-soft p-md" style="animation-delay:.16s">
+<div class="flex items-start justify-between gap-xs">
+<p class="text-caption text-body whitespace-nowrap">기한 임박 <span class="text-danger font-semibold">7일</span></p>
+<span class="w-8 h-8 shrink-0 rounded-full bg-danger/5 grid place-items-center">
+<span class="material-symbols-outlined text-[18px] text-danger">priority_high</span></span>
+</div>
+<p class="font-mono text-display-md text-ink mt-xs tnum"><span id="kpiUrgent">0</span><span class="text-title-md text-muted">건</span></p>
+<p class="text-caption text-muted mt-xxs" id="kpiUrgentSub">—</p>
+</div>
+<div class="rise rounded-2xl bg-canvas border border-hairline shadow-soft p-md" style="animation-delay:.20s">
+<div class="flex items-start justify-between gap-xs">
+<p class="text-caption text-body">이번 달 학사일정</p>
+<span class="w-8 h-8 shrink-0 rounded-full bg-primary/5 grid place-items-center">
+<span class="material-symbols-outlined text-[18px] text-primary">calendar_month</span></span>
+</div>
+<p class="font-mono text-display-md text-ink mt-xs tnum"><span id="kpiNeis">0</span><span class="text-title-md text-muted">건</span></p>
+<p class="text-caption text-muted mt-xxs" id="kpiNeisSub">NEIS 연동 대기 중</p>
+</div>
+<!-- 진행률 링 -->
+<div class="rise col-span-2 lg:col-span-1 rounded-2xl bg-canvas border border-hairline shadow-soft p-md flex items-center gap-base" style="animation-delay:.24s">
+<div class="relative w-[62px] h-[62px] shrink-0">
+<svg class="w-full h-full -rotate-90" viewbox="0 0 44 44">
+<circle class="ring-track" cx="22" cy="22" fill="none" r="19" stroke-width="4"></circle>
+<circle class="ring-value" cx="22" cy="22" fill="none" id="ringValue" r="19" stroke-dasharray="119.4" stroke-dashoffset="119.4" stroke-width="4"></circle>
+</svg>
+<span class="absolute inset-0 grid place-items-center font-mono text-caption-strong text-primary tnum" id="ringPct">0%</span>
+</div>
+<div class="min-w-0">
+<p class="text-caption text-body">이번 달 처리율</p>
+<p class="text-title-sm text-ink mt-xxs" id="ringLabel">—</p>
+<p class="text-caption text-muted mt-xxs">완료 체크는 기기에 저장됩니다</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+
 <!-- ── 사이드바 ── (좁은 화면에서는 달력을 먼저 보여주고 뒤로 밀린다) -->
-<aside class="order-2 grid grid-cols-1 md:grid-cols-2 gap-base lg:order-1 lg:block lg:space-y-base lg:sticky lg:top-[88px] no-print" id="sideCol">
+<aside class="order-1 flex flex-wrap gap-base w-full no-print items-start [&>section]:flex-1 [&>details]:flex-none [&>details]:min-w-[150px]" id="sideCol">
 <!-- 오늘의 필수 업무 -->
 <section class="bg-canvas rounded-2xl border border-hairline shadow-soft p-md">
 <div class="flex items-center gap-xs mb-xs">
@@ -538,7 +589,7 @@
 <div class="flex items-center gap-xs">
 <span class="w-7 h-7 rounded-full bg-primary/5 grid place-items-center shrink-0">
 <span class="material-symbols-outlined text-[17px] text-primary">groups</span></span>
-<h2 class="text-title-sm text-primary">주관 부서</h2>
+<h2 class="text-title-sm text-primary whitespace-nowrap">주관 부서</h2>
 </div>
 <div class="flex items-center gap-xs shrink-0">
 <button class="text-caption text-primary hover:underline" id="btnDeptAll" onclick="event.stopPropagation()">전체</button>
@@ -558,7 +609,7 @@
 <div class="flex items-center gap-xs">
 <span class="w-7 h-7 rounded-full bg-primary/5 grid place-items-center shrink-0">
 <span class="material-symbols-outlined text-[17px] text-primary">tune</span></span>
-<h2 class="text-title-sm text-primary">보기 설정</h2>
+<h2 class="text-title-sm text-primary whitespace-nowrap">보기 설정</h2>
 </div>
 <div class="flex items-center gap-2">
 <button class="text-caption text-muted hover:text-primary hover:underline shrink-0" id="btnResetOpts" onclick="event.stopPropagation()">초기화</button>
@@ -647,7 +698,7 @@
 <div class="flex items-center gap-xs">
 <span class="w-7 h-7 rounded-full bg-primary/5 grid place-items-center shrink-0">
 <span class="material-symbols-outlined text-[17px] text-primary">help</span></span>
-<h2 class="text-title-sm text-primary">범례</h2>
+<h2 class="text-title-sm text-primary whitespace-nowrap">범례</h2>
 </div>
 <div class="flex items-center gap-2">
 <span class="material-symbols-outlined transition-transform group-open:rotate-180 text-muted">expand_more</span>
@@ -783,56 +834,7 @@
 </section>
 </div>
 </div>
-<!-- 하단 안내 밴드 -->
-<section class="w-full px-lg pb-lg no-print">
-<div>
-<!-- KPI 4종 — 팀원 페이지와 동일한 흰 카드 + 하이라인 + soft shadow -->
-<div class="grid grid-cols-2 lg:grid-cols-4 gap-base">
-<div class="rise rounded-2xl bg-canvas border border-hairline shadow-soft p-md" style="animation-delay:.12s">
-<div class="flex items-start justify-between gap-xs">
-<p class="text-caption text-body">이번 달 배송 업무</p>
-<span class="w-8 h-8 shrink-0 rounded-full bg-primary/5 grid place-items-center">
-<span class="material-symbols-outlined text-[18px] text-primary">local_shipping</span></span>
-</div>
-<p class="font-mono text-display-md text-ink mt-xs tnum"><span id="kpiWeek">0</span><span class="text-title-md text-muted">건</span></p>
-<p class="text-caption text-muted mt-xxs" id="kpiWeekSub">—</p>
-</div>
-<div class="rise rounded-2xl bg-canvas border border-hairline shadow-soft p-md" style="animation-delay:.16s">
-<div class="flex items-start justify-between gap-xs">
-<p class="text-caption text-body whitespace-nowrap">기한 임박 <span class="text-danger font-semibold">7일</span></p>
-<span class="w-8 h-8 shrink-0 rounded-full bg-danger/5 grid place-items-center">
-<span class="material-symbols-outlined text-[18px] text-danger">priority_high</span></span>
-</div>
-<p class="font-mono text-display-md text-ink mt-xs tnum"><span id="kpiUrgent">0</span><span class="text-title-md text-muted">건</span></p>
-<p class="text-caption text-muted mt-xxs" id="kpiUrgentSub">—</p>
-</div>
-<div class="rise rounded-2xl bg-canvas border border-hairline shadow-soft p-md" style="animation-delay:.20s">
-<div class="flex items-start justify-between gap-xs">
-<p class="text-caption text-body">이번 달 학사일정</p>
-<span class="w-8 h-8 shrink-0 rounded-full bg-primary/5 grid place-items-center">
-<span class="material-symbols-outlined text-[18px] text-primary">calendar_month</span></span>
-</div>
-<p class="font-mono text-display-md text-ink mt-xs tnum"><span id="kpiNeis">0</span><span class="text-title-md text-muted">건</span></p>
-<p class="text-caption text-muted mt-xxs" id="kpiNeisSub">NEIS 연동 대기 중</p>
-</div>
-<!-- 진행률 링 -->
-<div class="rise col-span-2 lg:col-span-1 rounded-2xl bg-canvas border border-hairline shadow-soft p-md flex items-center gap-base" style="animation-delay:.24s">
-<div class="relative w-[62px] h-[62px] shrink-0">
-<svg class="w-full h-full -rotate-90" viewbox="0 0 44 44">
-<circle class="ring-track" cx="22" cy="22" fill="none" r="19" stroke-width="4"></circle>
-<circle class="ring-value" cx="22" cy="22" fill="none" id="ringValue" r="19" stroke-dasharray="119.4" stroke-dashoffset="119.4" stroke-width="4"></circle>
-</svg>
-<span class="absolute inset-0 grid place-items-center font-mono text-caption-strong text-primary tnum" id="ringPct">0%</span>
-</div>
-<div class="min-w-0">
-<p class="text-caption text-body">이번 달 처리율</p>
-<p class="text-title-sm text-ink mt-xxs" id="ringLabel">—</p>
-<p class="text-caption text-muted mt-xxs">완료 체크는 기기에 저장됩니다</p>
-</div>
-</div>
-</div>
-</div>
-</section>
+
 <!-- CTA — 인생도서관 페이지와 동일한 GBE 딥블루 밴드 -->
 <section class="bg-primary text-on-primary mt-xl no-print">
 <div class="w-full px-lg py-xxl grid md:grid-cols-3 gap-lg items-center">
@@ -1050,7 +1052,7 @@
        좁은 화면은 정보 손실이 없는 '목록' 뷰로 시작하고,
        사용자가 직접 뷰를 고르기 전까지는 화면 폭 변화에 따라 자동으로 따라갑니다. */
     const isNarrow = () => window.matchMedia('(max-width: 767px)').matches;
-    let view = isNarrow() ? 'list' : 'month';
+    let view = 'month';
     let userChoseView = false;
     let neisCache = {};          // 'YYYY-MM' → [{date, name, content, kind}]
     let activeDepts = new Set(DEPT_LIST);
