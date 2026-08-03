@@ -4290,8 +4290,6 @@
        셀 클릭 핸들러의 selectDate() 로 자연스럽게 흘러가 날짜 패널이 열린다 */
 
     /* ───────── 시작 ───────── */
-    document.getElementById('pillTaskCount').textContent = TASKS.length;
-    document.getElementById('pillFormCount').textContent = TASKS.reduce((a, t) => a + t.f.length, 0);
     // 저장된 학교 복원 (한 번 고르면 계속 유지 — 학교 변경은 설정 ▸ 기준 학교)
     document.getElementById('schoolInput').value = SCHOOL.name;
     document.getElementById('schoolMeta').textContent = SCHOOL.office + ' · ' + (SCHOOL.area || '-') + ' · 코드 ' + SCHOOL.code;
