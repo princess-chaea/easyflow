@@ -206,27 +206,6 @@
 </div>
 </nav>
     <main class="pt-[64px] min-h-screen">
-        <!-- Hero Section & Breadcrumb -->
-        <section class="bg-primary text-white py-xl px-lg">
-            <div class="max-w-[1600px] mx-auto">
-                <nav class="flex items-center gap-xs text-primary-fixed mb-sm font-caption text-caption">
-                    <span class="">인생 도서관</span>
-                    <span class="material-symbols-outlined text-[14px]" data-icon="chevron_right">chevron_right</span>
-                    <span class="text-white font-caption-strong" id="guideBreadcrumb">인사·관리 업무</span>
-                </nav>
-                <div class="flex flex-col md:flex-row md:items-end justify-between gap-base">
-                    <div>
-                        <h2 class="font-display-lg text-display-lg mb-xs" id="guideTitle">인사·관리 업무 가이드</h2>
-                        <p class="font-body-md text-body-md opacity-90" id="guideSubtitle">교원의 복무, 인사, 성과 평가를 위한 지능형 업무 지원 시스템</p>
-                    </div>
-                    <div
-                        class="flex items-center gap-xs font-number-display text-number-display bg-white/10 px-base py-xs rounded-lg backdrop-blur-md">
-                        <span class="material-symbols-outlined" data-icon="calendar_today">calendar_today</span>
-                        <span class="">2026. 06. 15</span>
-                    </div>
-                </div>
-            </div>
-        </section>
         <!-- Standard Section Layout -->
         <div class="max-w-[1600px] mx-auto px-lg py-xl flex flex-col md:flex-row gap-xl" id="global-layout-wrapper">
         <aside class="w-[220px] shrink-0 bg-surface-soft p-lg -ml-lg rounded-2xl hidden md:block" id="main-lnb">
@@ -241,6 +220,22 @@
         </ul>
         </aside>
         <div class="flex-1 min-w-0">
+            <section class="flex flex-col md:flex-row items-start md:items-center justify-between gap-lg mb-xl bg-surface-soft p-xl rounded-xxl border border-hairline">
+                <div>
+                    <nav class="flex items-center gap-xs text-muted mb-sm font-caption text-caption">
+                        <span class="">인생 도서관</span>
+                        <span class="material-symbols-outlined text-[14px]" data-icon="chevron_right">chevron_right</span>
+                        <span class="text-on-surface font-caption-strong" id="guideBreadcrumb">인사·관리 업무</span>
+                    </nav>
+                    <h1 class="font-display-sm text-display-sm font-bold text-on-surface mb-xs" id="guideTitle">인사·관리 업무 가이드</h1>
+                    <p class="font-body-md text-body-md text-muted" id="guideSubtitle">교원의 복무, 인사, 성과 평가를 위한 지능형 업무 지원 시스템</p>
+                </div>
+                <div
+                    class="flex items-center gap-xs font-number-display text-number-display bg-white px-base py-xs rounded-lg border border-hairline text-on-surface-variant">
+                    <span class="material-symbols-outlined" data-icon="calendar_today">calendar_today</span>
+                    <span class="">2026. 06. 15</span>
+                </div>
+            </section>
             <div class="grid grid-cols-1 md:grid-cols-12 gap-xl">
                 <!-- Category Sidebar -->
                 <aside class="md:col-span-3">
