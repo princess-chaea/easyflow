@@ -284,11 +284,6 @@
         <div class="flex-1 min-w-0">
             <div class="mb-lg flex flex-col sm:flex-row sm:items-end sm:justify-between gap-sm">
                 <div>
-                    <nav class="flex items-center gap-xs text-ink/50 mb-xs text-[13px]">
-                        <span class="">인생 도서관</span>
-                        <span class="material-symbols-outlined text-[14px]" data-icon="chevron_right">chevron_right</span>
-                        <span class="text-ink/70 font-bold" id="guideBreadcrumb">인사·관리 업무</span>
-                    </nav>
                     <h1 class="text-[28px] font-bold text-ink mb-xs" id="guideTitle">인사·관리 업무 가이드</h1>
                     <p class="text-[15px] text-ink/70" id="guideSubtitle">교원의 복무, 인사, 성과 평가를 위한 지능형 업무 지원 시스템</p>
                 </div>
@@ -736,7 +731,6 @@
             };
             const m = meta[cat];
             if (m) {
-                document.getElementById('guideBreadcrumb').textContent = m[0];
                 document.getElementById('guideTitle').textContent = m[1];
                 document.getElementById('guideSubtitle').textContent = m[2];
             }
@@ -753,9 +747,9 @@
                 <a class="font-caption text-caption text-body dark:text-muted hover:underline decoration-primary"
                     href="공통_이용약관.html">이용약관</a>
                 <a class="font-caption text-caption text-body dark:text-muted hover:underline decoration-primary"
-                    href="#">이메일무단수집거부</a>
+                    href="공통_이메일무단수집거부.html">이메일무단수집거부</a>
                 <a class="font-caption text-caption text-body dark:text-muted hover:underline decoration-primary"
-                    href="#">찾아오시는길</a>
+                    href="공통_찾아오시는길.html">찾아오시는길</a>
             </div>
         </div>
         <p class="font-caption text-caption text-on-surface-variant dark:text-surface-variant">© 경상북도교육청. All Rights
