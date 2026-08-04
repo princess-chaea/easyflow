@@ -76,6 +76,8 @@
                     localStorage.removeItem('currentRole');
                 });
             }
+        });
+
         // Profile Dropdown Click Toggle
         const profileTrigger = document.querySelector('.profile-dropdown-trigger');
         const profileMenu = document.querySelector('.profile-dropdown-menu');
