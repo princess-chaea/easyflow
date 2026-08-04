@@ -76,6 +76,7 @@
             }
         }
     </script>
+    <script src="assets/js/auth.js"></script>
 </head>
 <body class="text-ink flex flex-col min-h-screen items-center justify-center bg-[url('https://www.gbe.kr/images/main/bg_visual.jpg')] bg-cover bg-center">
     
@@ -147,23 +148,36 @@
             const email = emailInput.value.trim();
             const pw = pwInput.value.trim();
             
-            // Dummy logic
+            // Test Accounts Data
+            const accounts = {
+                'test@gbe.kr': '서버관리자',
+                'test1@gbe.kr': '학교관리자',
+                'test2@gbe.kr': '업무배송 담당자',
+                'test3@gbe.kr': '인생 도서관 멘토',
+                'test4@gbe.kr': '장학사',
+                'test5@gbe.kr': '일반 교원'
+            };
+
             let hasError = false;
             
-            if (email !== 'test@gbe.kr') {
+            if (!accounts[email]) {
+                emailError.innerText = '등록되지 않은 계정입니다.';
                 emailError.style.display = 'block';
                 emailInput.classList.add('error-input');
                 emailInput.focus();
                 hasError = true;
             } else if (pw !== 'test1234!') {
+                pwError.innerText = '비밀번호를 확인해주세요.';
                 pwError.style.display = 'block';
                 pwInput.classList.add('error-input');
-                pwInput.focus();
+                if (!hasError) pwInput.focus();
                 hasError = true;
             }
             
             if (!hasError) {
                 // Login Success
+                localStorage.setItem('currentUser', email);
+                localStorage.setItem('currentRole', accounts[email]);
                 window.location.href = 'index.html';
             }
         });
