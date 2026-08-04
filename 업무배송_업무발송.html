@@ -383,7 +383,7 @@
 </div>
 </div>
 <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-lg sm:p-xl flex-1">
-<form class="flex flex-col gap-xl max-w-4xl" onsubmit="event.preventDefault(); showToast();">
+<form class="flex flex-col gap-xl w-full" onsubmit="event.preventDefault(); showToast();">
 <!-- 담당 업무 카테고리 -->
 <div class="flex flex-col gap-sm">
 <label class="text-[16px] font-bold text-ink flex items-center gap-xs">
@@ -437,6 +437,18 @@
 <input type="file" id="sendFileInput" class="hidden" multiple onchange="sendUpdateFileList(this.files)"/>
 </div>
 <div class="flex flex-wrap gap-xs" id="sendFileChips"></div>
+</div>
+<!-- 링크 첨부 -->
+<div class="flex flex-col gap-sm">
+<label class="text-[16px] font-bold text-ink flex items-center gap-xs">
+<span class="material-symbols-outlined text-primary text-[20px]">link</span>
+                                참고 링크 첨부 <span class="font-normal text-[13px] text-ink/50">(선택 · 유튜브 영상, 참고 사이트 등)</span>
+                            </label>
+<div class="flex flex-col sm:flex-row gap-xs">
+<input class="flex-1 w-full border border-gray-300 rounded-xl px-md py-sm text-[15px] focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors" id="sendLinkInput" onkeydown="if(event.key==='Enter'){event.preventDefault(); sendAddLink();}" placeholder="https:// 로 시작하는 링크를 입력하세요" type="url"/>
+<button class="px-lg py-sm rounded-xl font-bold text-[15px] bg-surface-strong text-ink hover:bg-hairline transition-colors shrink-0" onclick="sendAddLink()" type="button">추가</button>
+</div>
+<div class="flex flex-wrap gap-xs" id="sendLinkChips"></div>
 </div>
 <!-- 날짜 선택 -->
 <div class="flex flex-col sm:flex-row gap-lg">
@@ -528,6 +540,42 @@
             document.getElementById('sendDropzoneText').textContent = '클릭하여 파일 선택 또는 여기로 드래그';
             document.getElementById('sendCustomDate').classList.add('hidden');
             document.getElementById('sendCustomDate').value = '';
+            document.getElementById('sendLinkChips').innerHTML = '';
+            document.getElementById('sendLinkInput').value = '';
+        }
+
+        function sendAddLink() {
+            const input = document.getElementById('sendLinkInput');
+            const url = input.value.trim();
+            if (!url) return;
+            try { new URL(url); } catch {
+                alert('올바른 링크 형식을 입력해주세요. (예: https://...)');
+                return;
+            }
+
+            const chip = document.createElement('span');
+            chip.className = 'inline-flex items-center gap-xxs px-sm py-1 rounded-full bg-primary/5 text-[13px] text-primary max-w-full';
+
+            const icon = document.createElement('span');
+            icon.className = 'material-symbols-outlined text-[14px]';
+            icon.textContent = 'link';
+
+            const a = document.createElement('a');
+            a.href = url;
+            a.target = '_blank';
+            a.rel = 'noopener noreferrer';
+            a.className = 'truncate max-w-[280px] hover:underline';
+            a.textContent = url;
+
+            const removeBtn = document.createElement('button');
+            removeBtn.type = 'button';
+            removeBtn.className = 'material-symbols-outlined text-[14px] text-primary/60 hover:text-danger';
+            removeBtn.textContent = 'close';
+            removeBtn.addEventListener('click', () => chip.remove());
+
+            chip.append(icon, a, removeBtn);
+            document.getElementById('sendLinkChips').appendChild(chip);
+            input.value = '';
         }
 
         function sendTimingChanged(value) {
