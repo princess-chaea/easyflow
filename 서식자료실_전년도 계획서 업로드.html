@@ -361,15 +361,37 @@
 
 </div>
 <div class="flex items-center gap-base">
-<button class="p-xs text-on-surface-variant hover:bg-surface-strong rounded-full transition-colors"><span class="material-symbols-outlined" data-icon="notifications">notifications</span></button>
-<button class="p-xs text-on-surface-variant hover:text-primary hover:bg-surface-strong rounded-full transition-colors"><span class="material-symbols-outlined" data-icon="settings">settings</span></button>
+<div class="relative group">
+<button aria-label="알림" class="p-xs text-on-surface-variant hover:bg-surface-strong rounded-full transition-colors relative"><span class="material-symbols-outlined" data-icon="notifications">notifications</span><span class="absolute top-0.5 right-0.5 w-2 h-2 bg-danger rounded-full" id="notifDot"></span></button>
+<div class="absolute top-full right-0 mt-xs w-80 bg-white rounded-xl shadow-xl border border-hairline opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 overflow-hidden">
+<div class="px-base py-sm border-b border-hairline flex items-center justify-between">
+<span class="font-nav-link text-[15px] font-bold text-ink">알림</span>
+<button class="text-[12px] text-primary hover:underline" onclick="event.preventDefault(); const d=document.getElementById('notifDot'); if(d) d.remove(); event.target.textContent='확인 완료';">모두 읽음</button>
+</div>
+<div class="max-h-[320px] overflow-y-auto divide-y divide-hairline">
+<a class="flex gap-sm px-base py-sm hover:bg-surface-soft transition-colors" href="업무배송_업무우편함.html">
+<span class="material-symbols-outlined text-primary text-[20px] mt-xxs">mail</span>
+<span class="flex-1 min-w-0"><span class="block text-[13px] text-ink">새 업무 우편이 도착했습니다.</span><span class="block text-[12px] text-muted mt-xxs">방금 전</span></span>
+</a>
+<a class="flex gap-sm px-base py-sm hover:bg-surface-soft transition-colors" href="안내센터_시스템 안내.html">
+<span class="material-symbols-outlined text-primary text-[20px] mt-xxs">chat_bubble</span>
+<span class="flex-1 min-w-0"><span class="block text-[13px] text-ink">1:1 문의에 답변이 등록되었습니다.</span><span class="block text-[12px] text-muted mt-xxs">1시간 전</span></span>
+</a>
+<a class="flex gap-sm px-base py-sm hover:bg-surface-soft transition-colors" href="업무배송_스마트공문달력.html">
+<span class="material-symbols-outlined text-muted text-[20px] mt-xxs">event</span>
+<span class="flex-1 min-w-0"><span class="block text-[13px] text-ink">기한이 임박한 업무가 3건 있습니다.</span><span class="block text-[12px] text-muted mt-xxs">어제</span></span>
+</a>
+</div>
+</div>
+</div>
+<a aria-label="설정" class="p-xs text-on-surface-variant hover:text-primary hover:bg-surface-strong rounded-full transition-colors" href="공통_프로필수정.html"><span class="material-symbols-outlined" data-icon="settings">settings</span></a>
 <div class="relative group">
 <div class="w-10 h-10 rounded-full bg-surface-container overflow-hidden cursor-pointer active:opacity-80 transition-opacity border border-hairline hover:ring-2 ring-primary/20">
 <img alt="사용자 프로필" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDC4T1JXEVfOTEIvuSGas-vZo6Xrm6Gso-g1t4Ifc8qnWK86nRrH2U8HOTdfdnTsplBb7uebcFVeymcmL2sIdAPhvjovBg9eBquhUSCzN152yf8xwikxJ4E_WZIS6AoZsmFjlNBOS4fEmilnVe9vNRg8OvkOV-BNR6hhdAKBSSULdU9lEfBTz0nTLaBOyVD8VCr72fQSqc3wMrktO117e6OpaN0nuSVbSD2qqq2Ks3RmI91N4fEffpFg9OMmOdWqakRhPaW-FACNKQ3"/>
 </div>
 <div class="absolute top-full right-0 mt-xs w-48 bg-white rounded-xl shadow-xl border border-hairline opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 p-xs">
-<a class="block px-base py-sm font-nav-link text-[15px] hover:bg-surface-soft rounded-lg transition-colors flex items-center gap-2" href="#"><span class="material-symbols-outlined text-[18px]">person</span> 프로필 수정</a>
-<a class="block px-base py-sm font-nav-link text-[15px] hover:bg-surface-soft rounded-lg transition-colors flex items-center gap-2 text-danger" href="#"><span class="material-symbols-outlined text-[18px]">logout</span> 로그아웃</a>
+<a class="block px-base py-sm font-nav-link text-[15px] hover:bg-surface-soft rounded-lg transition-colors flex items-center gap-2" href="공통_프로필수정.html"><span class="material-symbols-outlined text-[18px]">person</span> 프로필 수정</a>
+<a class="block px-base py-sm font-nav-link text-[15px] hover:bg-surface-soft rounded-lg transition-colors flex items-center gap-2 text-danger" href="공통_로그인.html" onclick="return confirm('로그아웃 하시겠습니까?')"><span class="material-symbols-outlined text-[18px]">logout</span> 로그아웃</a>
 <div class="border-t border-hairline my-1"></div>
 <div class="px-base py-1 text-[11px] text-muted font-bold">관리자 메뉴</div>
 <a class="block px-base py-sm font-nav-link text-[15px] hover:bg-surface-soft rounded-lg transition-colors flex items-center gap-2" href="학교관리자_대시보드.html"><span class="material-symbols-outlined text-[18px]">school</span> 학교 관리</a>
