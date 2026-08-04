@@ -165,41 +165,7 @@
                     </div>
                 </section>
 
-                <hr class="border-gray-100">
 
-                <!-- 현재 역할(권한) 상태 -->
-                <section class="flex flex-col gap-4">
-                    <div class="flex items-center justify-between">
-                        <h2 class="text-[18px] font-bold text-ink">시스템 부여 역할 (권한)</h2>
-                    </div>
-                    
-                    <div class="bg-surface-soft rounded-xl p-4 border border-gray-200">
-                        <div class="flex flex-wrap gap-2 mb-3" id="pmGrantedRolesContainer">
-                            ${grantedRoles.map(role => `<span class="bg-primary text-white px-3 py-1 rounded-full text-[14px] font-bold shadow-sm">${role}</span>`).join('')}
-                        </div>
-                        
-                        <div id="pmPendingRolesContainer">
-                            ${pendingRequests.filter(r => r.email === currentUser).map(r => `
-                                <p class="text-[13px] text-ink/60 mt-1 flex items-center gap-1">
-                                    <span class="material-symbols-outlined text-[16px] text-orange-500">pending</span> 
-                                    <strong>'${r.requestedRole}'</strong> 권한 승인 대기 중입니다.
-                                </p>
-                            `).join('')}
-                        </div>
-                        
-                        <div class="mt-4 flex gap-2">
-                            <select id="pmRoleRequestSelect" class="border border-gray-300 rounded-lg px-3 py-1.5 text-[14px] focus:border-primary focus:outline-none flex-1">
-                                <option value="">추가 권한 신청하기...</option>
-                                <option value="학교관리자">학교관리자</option>
-                                <option value="업무배송 담당자">업무배송 담당자</option>
-                                <option value="인생 도서관 멘토">인생 도서관 멘토</option>
-                                <option value="장학사">장학사</option>
-                                <option value="서버관리자">서버관리자</option>
-                            </select>
-                            <button id="pmRequestRoleBtn" class="bg-ink text-white px-4 py-1.5 rounded-lg text-[14px] font-bold hover:bg-ink/80 transition-colors">신청</button>
-                        </div>
-                    </div>
-                </section>
 
                 <div class="flex justify-end mt-4">
                     <button id="pmSaveCloseBtn" class="px-8 py-3 bg-primary text-white font-bold rounded-xl shadow-md hover:bg-primary-active transition-colors">
