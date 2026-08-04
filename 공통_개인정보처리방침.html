@@ -310,11 +310,18 @@
 <p>교육청은 개인정보 보유 기간의 경과, 처리 목적 달성 등 개인정보가 불필요하게 되었을 때에는 지체 없이 해당 개인정보를 파기합니다. 전자적 파일 형태의 정보는 기록을 재생할 수 없는 기술적 방법으로, 종이 문서는 분쇄하거나 소각하여 파기합니다.</p>
 <h2>제7조 (정보주체의 권리·의무 및 행사 방법)</h2>
 <p>이용자는 언제든지 자신의 개인정보에 대해 열람, 전송, 정정·삭제, 처리정지, 동의 철회를 요청할 수 있습니다. 서면, 전화, 이메일, 온라인 등을 통해 요청하시면 지체 없이 조치하며, 법정대리인이나 위임을 받은 자가 대신 청구하는 경우 위임장 등 증빙 서류를 제출해 주셔야 합니다.</p>
-<table>
-<tr><th>담당 부서</th><td>미래교육정보과</td></tr>
-<tr><th>전화</th><td>054-805-3854</td></tr>
-<tr><th>이메일</th><td>zepizegi@gbe.kr</td></tr>
+<div class="flex items-center justify-between mt-md mb-xxs">
+<span class="text-[12px] font-bold text-muted">문의처</span>
+<button class="text-[12px] text-primary hover:underline flex items-center gap-xxs" id="contact-edit-toggle" onclick="efToggleEdit('contact')"><span class="material-symbols-outlined text-[14px]">edit</span>관리자 수정</button>
+</div>
+<table id="contact-table">
+<tr><th>담당 부서</th><td><span class="ef-view text-muted italic" data-ef="contact.dept">미입력 (관리자 설정 필요)</span><input class="ef-input hidden w-full border border-hairline rounded px-sm py-xs text-[14px]" data-ef-input="contact.dept" placeholder="예: 미래교육정보과"/></td></tr>
+<tr><th>전화</th><td><span class="ef-view text-muted italic" data-ef="contact.phone">미입력 (관리자 설정 필요)</span><input class="ef-input hidden w-full border border-hairline rounded px-sm py-xs text-[14px]" data-ef-input="contact.phone" placeholder="예: 054-805-0000"/></td></tr>
+<tr><th>이메일</th><td><span class="ef-view text-muted italic" data-ef="contact.email">미입력 (관리자 설정 필요)</span><input class="ef-input hidden w-full border border-hairline rounded px-sm py-xs text-[14px]" data-ef-input="contact.email" placeholder="예: example@gbe.kr"/></td></tr>
 </table>
+<div class="hidden justify-end mt-xs" id="contact-save-row">
+<button class="px-base py-xxs rounded-full bg-primary text-white text-[13px] font-bold hover:bg-primary-active transition-colors" onclick="efSave('contact', ['dept','phone','email'])">저장</button>
+</div>
 <h2>제8조 (개인정보의 안전성 확보 조치)</h2>
 <p>교육청은 개인정보의 안전성 확보를 위해 다음과 같은 조치를 취하고 있습니다.</p>
 <ul>
@@ -326,11 +333,18 @@
 <p>교육청은 이용자에게 맞춤형 서비스를 제공하기 위해 쿠키(cookie)를 사용합니다. 이용자는 웹브라우저 옵션 설정을 통해 쿠키 저장을 허용하거나 거부할 수 있습니다.</p>
 <h2>제10조 (개인정보 보호책임자)</h2>
 <p>교육청은 개인정보 처리에 관한 업무를 총괄해서 책임지고, 개인정보 처리와 관련한 이용자의 불만처리 및 피해구제 등을 위하여 아래와 같이 개인정보 보호책임자를 지정하고 있습니다.</p>
-<table>
-<tr><th>성명</th><td>박현숙</td></tr>
-<tr><th>직위</th><td>정책국장</td></tr>
-<tr><th>연락처</th><td>054-805-3854</td></tr>
+<div class="flex items-center justify-between mt-md mb-xxs">
+<span class="text-[12px] font-bold text-muted">개인정보 보호책임자</span>
+<button class="text-[12px] text-primary hover:underline flex items-center gap-xxs" id="dpo-edit-toggle" onclick="efToggleEdit('dpo')"><span class="material-symbols-outlined text-[14px]">edit</span>관리자 수정</button>
+</div>
+<table id="dpo-table">
+<tr><th>성명</th><td><span class="ef-view text-muted italic" data-ef="dpo.name">미입력 (관리자 설정 필요)</span><input class="ef-input hidden w-full border border-hairline rounded px-sm py-xs text-[14px]" data-ef-input="dpo.name" placeholder="예: 홍길동"/></td></tr>
+<tr><th>직위</th><td><span class="ef-view text-muted italic" data-ef="dpo.title">미입력 (관리자 설정 필요)</span><input class="ef-input hidden w-full border border-hairline rounded px-sm py-xs text-[14px]" data-ef-input="dpo.title" placeholder="예: 정책국장"/></td></tr>
+<tr><th>연락처</th><td><span class="ef-view text-muted italic" data-ef="dpo.phone">미입력 (관리자 설정 필요)</span><input class="ef-input hidden w-full border border-hairline rounded px-sm py-xs text-[14px]" data-ef-input="dpo.phone" placeholder="예: 054-805-0000"/></td></tr>
 </table>
+<div class="hidden justify-end mt-xs" id="dpo-save-row">
+<button class="px-base py-xxs rounded-full bg-primary text-white text-[13px] font-bold hover:bg-primary-active transition-colors" onclick="efSave('dpo', ['name','title','phone'])">저장</button>
+</div>
 <h2>제11조 (가명정보의 처리)</h2>
 <p>교육청은 통계작성, 과학적 연구, 공익적 기록보존 등을 위하여 개인정보를 가명으로 처리할 수 있습니다. 현재 고려대학교 공공정책연구소와 '2015년 특성화고 졸업생 진로 추적조사' 연구를 위해 가명처리된 정보를 2026년 12월까지 공유하고 있습니다.</p>
 <h2>제12조 (개인정보의 추가적인 이용·제공 판단기준)</h2>
@@ -365,8 +379,8 @@
 <div class="flex flex-wrap gap-base">
 <a class="font-caption text-caption text-body hover:underline decoration-primary transition-all" href="공통_개인정보처리방침.html">개인정보처리방침</a>
 <a class="font-caption text-caption text-body hover:underline decoration-primary transition-all" href="공통_이용약관.html">이용약관</a>
-<a class="font-caption text-caption text-body hover:underline decoration-primary transition-all" href="#">이메일무단수집거부</a>
-<a class="font-caption text-caption text-body hover:underline decoration-primary transition-all" href="#">찾아오시는길</a>
+<a class="font-caption text-caption text-body hover:underline decoration-primary transition-all" href="공통_이메일무단수집거부.html">이메일무단수집거부</a>
+<a class="font-caption text-caption text-body hover:underline decoration-primary transition-all" href="공통_찾아오시는길.html">찾아오시는길</a>
 </div>
 </div>
 <div class="flex flex-col md:flex-row justify-between items-start md:items-center border-t border-hairline/50 pt-base">
@@ -374,5 +388,42 @@
 <p class="font-caption text-caption text-muted">경북 안동시 풍천면 도청대로 511 | 대표전화 054-805-3000</p>
 </div>
 </footer>
+<!-- TODO: 실제 서버 연동 시 이 섹션은 서버 관리자 권한을 가진 사용자에게만 "관리자 수정" 버튼이 노출되도록 하고,
+     저장 값도 localStorage가 아니라 서버(DB)에 저장하도록 교체해야 함. 현재는 브라우저별 임시 저장(localStorage). -->
+<script>
+    function efToggleEdit(group) {
+        document.querySelectorAll('[data-ef^="' + group + '."]').forEach(function (el) { el.classList.toggle('hidden'); });
+        document.querySelectorAll('[data-ef-input^="' + group + '."]').forEach(function (el) { el.classList.toggle('hidden'); });
+        var saveRow = document.getElementById(group + '-save-row');
+        saveRow.classList.toggle('hidden');
+        saveRow.classList.toggle('flex');
+    }
+    function efSave(group, fields) {
+        fields.forEach(function (f) {
+            var input = document.querySelector('[data-ef-input="' + group + '.' + f + '"]');
+            var view = document.querySelector('[data-ef="' + group + '.' + f + '"]');
+            var val = input.value.trim();
+            if (val) {
+                localStorage.setItem('ef_' + group + '_' + f, val);
+                view.textContent = val;
+                view.classList.remove('text-muted', 'italic');
+            }
+        });
+        efToggleEdit(group);
+    }
+    function efLoad(group, fields) {
+        fields.forEach(function (f) {
+            var v = localStorage.getItem('ef_' + group + '_' + f);
+            if (!v) return;
+            var view = document.querySelector('[data-ef="' + group + '.' + f + '"]');
+            var input = document.querySelector('[data-ef-input="' + group + '.' + f + '"]');
+            view.textContent = v;
+            view.classList.remove('text-muted', 'italic');
+            if (input) input.value = v;
+        });
+    }
+    efLoad('contact', ['dept', 'phone', 'email']);
+    efLoad('dpo', ['name', 'title', 'phone']);
+</script>
 </body>
 </html>

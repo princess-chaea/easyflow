@@ -339,7 +339,17 @@
 <p>이지플로우는 회원가입 및 서비스 이용 과정에서 주민등록번호가 입력되지 않도록 조치하고 있으며, 개인정보 처리에 관한 세부 사항은 개인정보 처리방침을 따릅니다.</p>
 <h3>제8조 (정보시스템 안전대책)</h3>
 <p>침입차단시스템 및 웹방화벽을 설치·운영하고 있으며, 정기적인 자료 백업 및 사고 발생 시 신속한 복구를 위한 체계를 구축하고 있습니다.</p>
-<div class="mt-md p-base bg-surface-soft rounded-xl text-caption text-muted">최종 개정일: 2026년 1월 7일 · 담당 부서: 미래교육정보과 (전화: 054-805-3856)</div>
+<div class="mt-md p-base bg-surface-soft rounded-xl text-caption text-muted">
+<div class="flex items-center justify-between mb-xs">
+<span>최종 개정일: 2026년 1월 7일</span>
+<button class="text-[12px] text-primary hover:underline flex items-center gap-xxs" id="contact-edit-toggle" onclick="efToggleEdit('contact')"><span class="material-symbols-outlined text-[14px]">edit</span>관리자 수정</button>
+</div>
+<div>담당 부서: <span class="ef-view italic" data-ef="contact.dept">미입력 (관리자 설정 필요)</span><input class="ef-input hidden border border-hairline rounded px-sm py-xs text-[13px] ml-xs" data-ef-input="contact.dept" placeholder="예: 미래교육정보과"/>
+    (전화: <span class="ef-view italic" data-ef="contact.phone">미입력</span><input class="ef-input hidden border border-hairline rounded px-sm py-xs text-[13px] ml-xs" data-ef-input="contact.phone" placeholder="예: 054-805-0000"/>)</div>
+<div class="hidden justify-end mt-xs" id="contact-save-row">
+<button class="px-base py-xxs rounded-full bg-primary text-white text-[13px] font-bold hover:bg-primary-active transition-colors" onclick="efSave('contact', ['dept','phone'])">저장</button>
+</div>
+</div>
 </div>
 </div>
 </main>
@@ -350,8 +360,8 @@
 <div class="flex flex-wrap gap-base">
 <a class="font-caption text-caption text-body hover:underline decoration-primary transition-all" href="공통_개인정보처리방침.html">개인정보처리방침</a>
 <a class="font-caption text-caption text-body hover:underline decoration-primary transition-all" href="공통_이용약관.html">이용약관</a>
-<a class="font-caption text-caption text-body hover:underline decoration-primary transition-all" href="#">이메일무단수집거부</a>
-<a class="font-caption text-caption text-body hover:underline decoration-primary transition-all" href="#">찾아오시는길</a>
+<a class="font-caption text-caption text-body hover:underline decoration-primary transition-all" href="공통_이메일무단수집거부.html">이메일무단수집거부</a>
+<a class="font-caption text-caption text-body hover:underline decoration-primary transition-all" href="공통_찾아오시는길.html">찾아오시는길</a>
 </div>
 </div>
 <div class="flex flex-col md:flex-row justify-between items-start md:items-center border-t border-hairline/50 pt-base">
@@ -359,5 +369,41 @@
 <p class="font-caption text-caption text-muted">경북 안동시 풍천면 도청대로 511 | 대표전화 054-805-3000</p>
 </div>
 </footer>
+<!-- TODO: 실제 서버 연동 시 이 섹션은 서버 관리자 권한을 가진 사용자에게만 "관리자 수정" 버튼이 노출되도록 하고,
+     저장 값도 localStorage가 아니라 서버(DB)에 저장하도록 교체해야 함. 현재는 브라우저별 임시 저장(localStorage). -->
+<script>
+    function efToggleEdit(group) {
+        document.querySelectorAll('[data-ef^="' + group + '."]').forEach(function (el) { el.classList.toggle('hidden'); });
+        document.querySelectorAll('[data-ef-input^="' + group + '."]').forEach(function (el) { el.classList.toggle('hidden'); });
+        var saveRow = document.getElementById(group + '-save-row');
+        saveRow.classList.toggle('hidden');
+        saveRow.classList.toggle('flex');
+    }
+    function efSave(group, fields) {
+        fields.forEach(function (f) {
+            var input = document.querySelector('[data-ef-input="' + group + '.' + f + '"]');
+            var view = document.querySelector('[data-ef="' + group + '.' + f + '"]');
+            var val = input.value.trim();
+            if (val) {
+                localStorage.setItem('ef_' + group + '_' + f, val);
+                view.textContent = val;
+                view.classList.remove('italic');
+            }
+        });
+        efToggleEdit(group);
+    }
+    function efLoad(group, fields) {
+        fields.forEach(function (f) {
+            var v = localStorage.getItem('ef_' + group + '_' + f);
+            if (!v) return;
+            var view = document.querySelector('[data-ef="' + group + '.' + f + '"]');
+            var input = document.querySelector('[data-ef-input="' + group + '.' + f + '"]');
+            view.textContent = v;
+            view.classList.remove('italic');
+            if (input) input.value = v;
+        });
+    }
+    efLoad('contact', ['dept', 'phone']);
+</script>
 </body>
 </html>
