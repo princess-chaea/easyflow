@@ -314,35 +314,44 @@
             <div class="flex items-center gap-lg">
                 <div class="relative">
                     <div class="w-20 h-20 rounded-full border-4 border-white shadow-sm overflow-hidden">
-                        <img alt="박지민 교사"
-                            data-alt="A professional and friendly portrait of a young Korean female teacher with a welcoming smile. She is dressed in smart business casual attire, a light-colored cardigan over a simple top. The lighting is bright and airy, typical of a modern school office. The overall atmosphere is warm, intelligent, and highly professional, consistent with a premium educational administrative platform."
+                        <img alt="사용자 프로필" id="mp-profile-avatar"
                             src="https://lh3.googleusercontent.com/aida-public/AB6AXuAkNZ3CiViSFlutUR1-Zr7V25mnh4YvxLrnxzFiqs51FL5o_O0NWyraVDt6D5moVs8OTmMs9ewkWzh5GxQtTKY6OLC1JckKkaYYPWd09S7Ytk_F4XuaM9LDIMbKfJQ52iStijzbaECmZS4z7RL0hutc2ojRWoqaah8pRvuUymqib_nfgygS10lSXmmp_hY1oWjeEXbJ0VGtLxOjxF2-C7pWBw1yCVfsGFKPGn8GrQVSQy9EVc2-_W7NVMuBqiY6yE-fQHy5pQ_wUFOB">
                     </div>
-                    <div class="absolute bottom-0 right-0 bg-primary text-white p-1 rounded-full border-2 border-white">
+                    <div class="absolute bottom-0 right-0 bg-primary text-white p-1 rounded-full border-2 border-white cursor-pointer hover:bg-primary-active transition-colors" onclick="document.querySelector('a[href=\'공통_프로필수정.html\']').click()">
                         <span class="material-symbols-outlined text-[14px]" data-icon="edit">edit</span>
                     </div>
                 </div>
                 <div>
                     <div class="flex items-center gap-xs">
-                        <h1 class="font-display-sm text-display-sm font-bold text-on-surface">박지민</h1>
-                        <span
-                            class="px-sm py-xxs bg-primary-fixed text-on-primary-fixed text-caption-strong rounded-full">교사</span>
+                        <h1 class="font-display-sm text-display-sm font-bold text-on-surface" id="mp-profile-name">사용자</h1>
+                        <span id="mp-profile-rank"
+                            class="px-sm py-xxs bg-primary-fixed text-on-primary-fixed text-caption-strong rounded-full">교직원</span>
                     </div>
-                    <p class="font-body-md text-body-md text-muted mt-xxs">○○초등학교 · 교무부</p>
+                    <p class="font-body-md text-body-md text-muted mt-xxs" id="mp-profile-org">소속 없음</p>
                 </div>
             </div>
             <div class="flex gap-sm">
-                <button
-                    class="px-lg h-[44px] bg-primary text-white rounded-full font-button flex items-center gap-xs hover:bg-primary-active transition-all">
-                    <span class="material-symbols-outlined text-[20px]" data-icon="edit_note">edit_note</span>
-                    정보 수정
-                </button>
-                <button
-                    class="px-lg h-[44px] bg-surface-strong text-ink rounded-full font-button border border-hairline hover:bg-surface-variant transition-all">
-                    로그아웃
-                </button>
+                <!-- Removed buttons -->
             </div>
         </section>
+        <script>
+            document.addEventListener('DOMContentLoaded', () => {
+                const currentUser = localStorage.getItem('currentUser');
+                if (currentUser) {
+                    const name = currentUser.split('@')[0];
+                    const org = localStorage.getItem('org_' + currentUser) || '소속 미설정';
+                    const rank = localStorage.getItem('rank_' + currentUser) || '교직원';
+                    const avatar = localStorage.getItem('avatar_' + currentUser);
+                    
+                    document.getElementById('mp-profile-name').textContent = name;
+                    document.getElementById('mp-profile-org').textContent = org;
+                    document.getElementById('mp-profile-rank').textContent = rank;
+                    if (avatar) {
+                        document.getElementById('mp-profile-avatar').src = avatar;
+                    }
+                }
+            });
+        </script>
         <!-- Summary Dashboard -->
         <div class="grid grid-cols-2 md:grid-cols-4 gap-base mb-xl">
             <div class="bg-white p-lg rounded-xxl border border-hairline flex flex-col gap-sm bento-card shadow-sm">
