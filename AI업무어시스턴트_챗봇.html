@@ -356,7 +356,7 @@
 </div>
 </nav>
 <!-- Top Navigation Bar -->
-<main class="pt-[64px] min-h-screen flex flex-col"><div class="w-full max-w-[1600px] mx-auto px-lg py-xl flex flex-col md:flex-row gap-xl" id="global-layout-wrapper">
+<main class="pt-[64px] h-screen flex flex-col overflow-hidden"><div class="w-full max-w-[1600px] mx-auto px-lg py-xl flex flex-col md:flex-row gap-xl flex-1 min-h-0" id="global-layout-wrapper">
 <!-- Added background, padding, and rounded corners for the left menu area -->
 
 <aside class="w-[220px] shrink-0 bg-surface-soft p-lg -ml-lg rounded-2xl hidden md:block" id="main-lnb">
@@ -380,9 +380,13 @@
 </ul>
 </aside>
 
-<div class="flex-1 min-w-0">
+<div class="flex-1 min-w-0 flex flex-col min-h-0">
 <!-- 표준 페이지 헤더 영역 -->
-<div class="flex-1 flex overflow-hidden relative max-w-[1600px] mx-auto w-full h-[calc(100vh-64px)]">
+<div class="mb-lg shrink-0">
+<h1 class="text-[28px] font-bold text-ink mb-xs">AI 상담 (챗봇)</h1>
+<p class="text-[15px] text-ink/70">업무 관련 질문에 AI가 바로 답변하고, 해결되지 않으면 인생도서관 멘토와 연결해드려요.</p>
+</div>
+<div class="flex-1 min-h-0 flex overflow-hidden relative w-full rounded-2xl border border-hairline">
 <!-- Sidebar for Chat History & Mentor Links -->
 <aside class="w-80 border-r border-hairline bg-surface-soft hidden md:flex flex-col">
 <div class="p-4 border-b border-hairline">
@@ -398,23 +402,10 @@
 <li><button class="w-full text-left px-3 py-2 rounded-md text-sm hover:bg-surface-strong truncate">학교 폭력 사안 처리 절차</button></li>
 </ul>
 </div>
-<div>
-<h3 class="text-xs font-bold text-muted mb-2 uppercase tracking-wider">멘토 연계 (인생도서관)</h3>
-<button class="w-full text-left px-3 py-2 rounded-md text-sm bg-secondary-container text-on-secondary-container hover:opacity-90 flex items-center gap-2" onclick="sendArs('멘토연결')">
-<span class="material-symbols-outlined text-[18px]">support_agent</span> 담당 멘토에게 질문하기
-        </button>
-
-</div>
 </div>
 </aside>
 <!-- Main Chat Area -->
-<main class="flex-1 flex flex-col bg-canvas">
-<header class="p-4 border-b border-hairline flex items-center justify-between bg-surface-soft">
-<h2 class="text-lg font-bold text-primary flex items-center gap-2">
-<span class="material-symbols-outlined">smart_toy</span> AI 업무 어시스턴트
-      </h2>
-<button class="md:hidden p-2 text-muted hover:text-primary"><span class="material-symbols-outlined">menu</span></button>
-</header>
+<main class="flex-1 flex flex-col bg-canvas min-w-0">
 <div class="flex-1 overflow-y-auto p-4 md:p-8 space-y-6" id="chatWindow">
 <!-- Greeting & ARS Guide -->
 <div class="flex gap-4" id="welcomeMessage">
@@ -444,13 +435,20 @@
 </div>
 </div>
 <div class="p-4 border-t border-hairline bg-surface-soft">
-<div class="max-w-4xl mx-auto relative">
-<textarea class="w-full resize-none rounded-2xl border border-hairline pl-4 pr-12 py-3 bg-canvas focus:outline-none focus:ring-2 focus:ring-primary/50 text-ink" id="chatInput" onkeydown="if(event.key==='Enter' &amp;&amp; !event.shiftKey) { event.preventDefault(); sendMessage(); }" placeholder="AI 어시스턴트에게 질문하기..." rows="1"></textarea>
-<button class="absolute right-2 bottom-2 w-8 h-8 flex items-center justify-center rounded-full bg-primary text-white hover:bg-primary-active transition-colors" onclick="sendMessage()">
+<div class="max-w-4xl mx-auto">
+<div id="attachmentPreview" class="hidden flex-wrap gap-2 mb-2"></div>
+<div class="flex items-center gap-1 rounded-2xl border border-hairline bg-canvas pl-1.5 pr-1.5 py-1.5 focus-within:ring-2 focus-within:ring-primary/50">
+<input type="file" id="chatFileInput" class="hidden" multiple accept="image/*,.pdf,.doc,.docx,.hwp,.hwpx,.xls,.xlsx,.ppt,.pptx,.txt,.csv,.zip" onchange="handleFileSelect(event)">
+<button type="button" class="shrink-0 w-8 h-8 flex items-center justify-center rounded-full text-muted hover:text-primary hover:bg-surface-strong transition-colors" onclick="document.getElementById('chatFileInput').click()" title="파일 첨부">
+<span class="material-symbols-outlined text-[20px]">add</span>
+</button>
+<textarea class="flex-1 min-w-0 resize-none border-0 bg-transparent px-1 py-1.5 focus:outline-none text-ink max-h-40" id="chatInput" onkeydown="if(event.key==='Enter' &amp;&amp; !event.shiftKey) { event.preventDefault(); sendMessage(); }" placeholder="AI 어시스턴트에게 질문하기..." rows="1"></textarea>
+<button class="shrink-0 w-8 h-8 flex items-center justify-center rounded-full bg-primary text-white hover:bg-primary-active transition-colors" onclick="sendMessage()">
 <span class="material-symbols-outlined text-[18px]">send</span>
 </button>
 </div>
 <p class="text-center text-[11px] text-muted mt-2">AI는 실수를 할 수 있습니다. 중요한 정보는 교육청 공식 지침을 확인하세요.</p>
+</div>
 </div>
 <!-- Monthly Log Modal -->
 <div class="hidden fixed inset-0 z-50 bg-ink/50 flex items-center justify-center p-4 backdrop-blur-sm transition-opacity" id="logModal">
@@ -549,20 +547,40 @@
 
   function resetChat() {
     currentCategoryPath = [];
+    pendingAttachments = [];
+    renderAttachmentPreview();
     document.getElementById('chatWindow').innerHTML = document.getElementById('welcomeMessage').outerHTML;
+  }
+
+  function escapeHtml(str) {
+    const div = document.createElement('div');
+    div.textContent = str;
+    return div.innerHTML;
+  }
+
+  function getMyAvatarUrl() {
+    const currentUser = localStorage.getItem('currentUser') || '';
+    const stored = localStorage.getItem('avatar_' + currentUser);
+    if (stored) return stored;
+    const seedMap = {
+      'test@gbe.kr': 'Mimi', 'test1@gbe.kr': 'Snuggles', 'test2@gbe.kr': 'Buster',
+      'test3@gbe.kr': 'Oliver', 'test4@gbe.kr': 'Bella', 'test5@gbe.kr': 'Simba'
+    };
+    const seed = seedMap[currentUser] || 'Felix';
+    return 'https://api.dicebear.com/7.x/avataaars/svg?seed=' + seed;
   }
 
   function addMessage(text, isUser = false) {
     const chatWindow = document.getElementById('chatWindow');
     const div = document.createElement('div');
     div.className = "flex gap-4 " + (isUser ? "flex-row-reverse" : "entrance-fade visible");
-    
-    let avatar = isUser ? '<div class="w-10 h-10 rounded-full bg-surface-strong overflow-hidden shrink-0"><img src="https://lh3.googleusercontent.com/aida-public/AB6AXuDC4T1JXEVfOTEIvuSGas-vZo6Xrm6Gso-g1t4Ifc8qnWK86nRrH2U8HOTdfdnTsplBb7uebcFVeymcmL2sIdAPhvjovBg9eBquhUSCzN152yf8xwikxJ4E_WZIS6AoZsmFjlNBOS4fEmilnVe9vNRg8OvkOV-BNR6hhdAKBSSULdU9lEfBTz0nTLaBOyVD8VCr72fQSqc3wMrktO117e6OpaN0nuSVbSD2qqq2Ks3RmI91N4fEffpFg9OMmOdWqakRhPaW-FACNKQ3" alt="User"></div>' : '<div class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center shrink-0 shadow-sm"><span class="material-symbols-outlined text-primary">smart_toy</span></div>';
-    
+
+    let avatar = isUser ? '<div class="w-10 h-10 rounded-full bg-surface-strong overflow-hidden shrink-0"><img src="' + getMyAvatarUrl() + '" alt="사용자 프로필"></div>' : '<div class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center shrink-0 shadow-sm"><span class="material-symbols-outlined text-primary">smart_toy</span></div>';
+
     let bubbleClass = isUser ? "bg-primary text-white p-4 rounded-2xl rounded-tr-none shadow-sm max-w-3xl text-body-sm" : "bg-canvas text-ink p-4 rounded-2xl rounded-tl-none shadow-sm border border-hairline max-w-3xl text-body-sm";
-    
+
     div.innerHTML = avatar + '<div class="flex-1 flex ' + (isUser ? "justify-end" : "") + '"><div class="' + bubbleClass + '">' + text + '</div></div>';
-    
+
     chatWindow.appendChild(div);
     chatWindow.scrollTop = chatWindow.scrollHeight;
   }
@@ -648,16 +666,71 @@
     }, 600);
   }
 
+  // ------------------------------------------------------------------
+  // 파일 첨부 (여러 확장자 지원) - 실제 업로드/분석 백엔드는 없고,
+  // 사용자가 첨부한 파일명을 대화창에 함께 표시하는 프론트엔드 프로토타입.
+  // ------------------------------------------------------------------
+  let pendingAttachments = [];
+
+  function fileIconFor(name) {
+    const ext = (name.split('.').pop() || '').toLowerCase();
+    if (['png', 'jpg', 'jpeg', 'gif', 'webp'].includes(ext)) return 'image';
+    if (ext === 'pdf') return 'picture_as_pdf';
+    if (['doc', 'docx', 'hwp', 'hwpx'].includes(ext)) return 'description';
+    if (['xls', 'xlsx', 'csv'].includes(ext)) return 'table_chart';
+    if (['ppt', 'pptx'].includes(ext)) return 'slideshow';
+    if (ext === 'zip') return 'folder_zip';
+    return 'draft';
+  }
+
+  function handleFileSelect(e) {
+    Array.from(e.target.files || []).forEach(f => pendingAttachments.push(f));
+    renderAttachmentPreview();
+    e.target.value = '';
+  }
+
+  function removeAttachment(idx) {
+    pendingAttachments.splice(idx, 1);
+    renderAttachmentPreview();
+  }
+
+  function renderAttachmentPreview() {
+    const wrap = document.getElementById('attachmentPreview');
+    if (pendingAttachments.length === 0) {
+      wrap.className = 'hidden';
+      wrap.innerHTML = '';
+      return;
+    }
+    wrap.className = 'flex flex-wrap gap-2 mb-2';
+    wrap.innerHTML = pendingAttachments.map((f, i) => `
+      <div class="flex items-center gap-1.5 bg-white border border-hairline rounded-full pl-2 pr-1 py-1 text-xs text-ink">
+        <span class="material-symbols-outlined text-[16px] text-primary">${fileIconFor(f.name)}</span>
+        <span class="max-w-[140px] truncate">${escapeHtml(f.name)}</span>
+        <button type="button" onclick="removeAttachment(${i})" class="w-4 h-4 flex items-center justify-center rounded-full hover:bg-surface-strong shrink-0"><span class="material-symbols-outlined text-[14px]">close</span></button>
+      </div>
+    `).join('');
+  }
+
   function sendMessage() {
     const input = document.getElementById('chatInput');
     const text = input.value.trim();
-    if(!text) return;
-    
-    addMessage(text, true);
+    if (!text && pendingAttachments.length === 0) return;
+
+    let userHtml = '';
+    if (pendingAttachments.length > 0) {
+      userHtml += '<div class="flex flex-wrap gap-1.5 justify-end mb-2">' +
+        pendingAttachments.map(f => '<span class="flex items-center gap-1 bg-white/15 rounded-full px-2 py-1 text-xs"><span class="material-symbols-outlined text-[14px]">' + fileIconFor(f.name) + '</span>' + escapeHtml(f.name) + '</span>').join('') +
+        '</div>';
+    }
+    if (text) userHtml += escapeHtml(text);
+
+    addMessage(userHtml, true);
     input.value = '';
-    
+    pendingAttachments = [];
+    renderAttachmentPreview();
+
     showTypingIndicator();
-    
+
     setTimeout(() => {
       hideTypingIndicator();
       let prefix = currentCategoryPath.length > 0 ? `[${currentCategoryPath.join(' > ')}] 관련 질문이시군요.<br><br>` : '';
