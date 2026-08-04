@@ -69,6 +69,9 @@
             50% { opacity: 0.7; transform: scale(0.95); }
         }
         .animate-pulse-soft { animation: pulse-soft 2s infinite ease-in-out; }
+        .status-pulse { animation: pulse-soft 2s infinite ease-in-out; }
+        .glass-overlay { background: rgba(17, 18, 20, 0.5); backdrop-filter: blur(4px); }
+        .modal-content { box-shadow: 0 20px 60px -10px rgba(0, 0, 0, 0.3); }
 
         @keyframes float {
             0%, 100% { transform: translateY(0px); }
@@ -287,7 +290,7 @@
                 안내센터 <span class="material-symbols-outlined text-[18px]">expand_more</span><span class="absolute left-[-22px] right-0 -bottom-[2px] h-[2px] bg-primary" aria-hidden="true"></span>
 </a>
 <div class="absolute top-[64px] left-1/2 -translate-x-1/2 pt-md pb-md min-w-[160px] flex flex-col items-center gap-sm opacity-0 invisible group-hover/mega:opacity-100 group-hover/mega:visible transition-all duration-200 z-50 group-hover/col:bg-surface-container h-[290px] rounded-b-lg">
-<a class="font-nav-link text-[16px] text-on-surface-variant hover:text-primary transition-colors whitespace-nowrap px-sm py-1 w-full text-center" href="안내센터_공지사항.html">공지사항</a><a class="font-nav-link text-[16px] text-on-surface-variant hover:text-primary transition-colors whitespace-nowrap px-sm py-1 w-full text-center" href="안내센터_시스템 안내.html">이용 안내</a><a class="font-nav-link text-[16px] text-on-surface-variant hover:text-primary transition-colors whitespace-nowrap px-sm py-1 w-full text-center" href="안내센터_1대1 문의.html">원격 지원 신청</a>
+<a class="font-nav-link text-[16px] text-on-surface-variant hover:text-primary transition-colors whitespace-nowrap px-sm py-1 w-full text-center" href="안내센터_공지사항.html">공지사항</a><a class="font-nav-link text-[16px] text-on-surface-variant hover:text-primary transition-colors whitespace-nowrap px-sm py-1 w-full text-center" href="안내센터_시스템 안내.html">이용 안내</a>
 </div>
 </div>
 </div>
@@ -325,9 +328,6 @@
 <li>
 <a class="font-nav-link block px-sm py-sm rounded-lg transition-colors text-[16px] bg-primary text-white font-bold" href="안내센터_시스템 안내.html">이용 안내</a>
 </li>
-<li>
-<a class="font-nav-link block px-sm py-sm rounded-lg transition-colors text-[16px] text-on-surface-variant hover:bg-surface hover:text-ink" href="안내센터_1대1 문의.html">원격 지원 신청</a>
-</li>
 </ul>
 </aside>
 
@@ -358,7 +358,7 @@
 <section class="max-w-[1600px] mx-auto px-lg py-section">
 <div class="grid grid-cols-1 md:grid-cols-12 gap-lg">
 <!-- Category: System Usage -->
-<div class="md:col-span-4 glass-card p-xl rounded-2xl flex flex-col gap-base group hover-float animate-fade-in-up stagger-1 cursor-pointer">
+<button class="text-left md:col-span-4 glass-card p-xl rounded-2xl flex flex-col gap-base group hover-float animate-fade-in-up stagger-1 cursor-pointer" onclick="openInfoModal('system')">
 <div class="w-12 h-12 rounded-2xl bg-primary-container flex items-center justify-center text-white">
 <span class="material-symbols-outlined">desktop_windows</span>
 </div>
@@ -369,9 +369,9 @@
 <div class="mt-auto flex items-center text-primary font-button text-button transition-all">
                         자세히 보기 <span class="material-symbols-outlined text-sm ml-xs group-hover:translate-x-1 transition-transform">arrow_forward</span>
 </div>
-</div>
+</button>
 <!-- Category: Administrative Rules -->
-<div class="md:col-span-4 glass-card p-xl rounded-2xl flex flex-col gap-base group hover-float animate-fade-in-up stagger-2 cursor-pointer">
+<a class="md:col-span-4 glass-card p-xl rounded-2xl flex flex-col gap-base group hover-float animate-fade-in-up stagger-2 cursor-pointer" href="인생도서관_업무가이드.html">
 <div class="w-12 h-12 rounded-2xl bg-secondary-container flex items-center justify-center text-ink">
 <span class="material-symbols-outlined">gavel</span>
 </div>
@@ -382,22 +382,37 @@
 <div class="mt-auto flex items-center text-primary font-button text-button transition-all">
                         자세히 보기 <span class="material-symbols-outlined text-sm ml-xs group-hover:translate-x-1 transition-transform">arrow_forward</span>
 </div>
-</div>
-<!-- Category: 1:1 Inquiry -->
-<a class="md:col-span-4 glass-card p-xl rounded-2xl flex flex-col gap-base group hover-float animate-fade-in-up stagger-3 cursor-pointer" href="안내센터_1대1 문의.html">
-<div class="w-12 h-12 rounded-2xl bg-surface-dark flex items-center justify-center text-white">
-<span class="material-symbols-outlined">chat_bubble</span>
-</div>
-<div>
-<h3 class="font-title-lg text-title-lg mb-xs">1:1 문의</h3>
-<p class="font-body-sm text-body-sm text-body">문의 내역 확인 및 새 문의 작성은 원격 지원 신청 페이지에서 할 수 있습니다.</p>
-</div>
-<div class="mt-auto flex items-center text-primary font-button text-button transition-all">
-                        자세히 보기 <span class="material-symbols-outlined text-sm ml-xs group-hover:translate-x-1 transition-transform">arrow_forward</span>
-</div>
 </a>
+<!-- Category: 1:1 Inquiry Status (원격 지원 신청에서 통합) -->
+<div class="md:col-span-4 glass-card p-xl rounded-2xl flex flex-col gap-lg relative overflow-hidden bg-surface-dark text-white animate-fade-in-up stagger-3">
+<div class="relative z-10">
+<div class="flex justify-between items-start mb-base">
+<h3 class="text-xl font-bold">1:1 문의 현황</h3>
+<span class="px-xs py-1 rounded bg-primary-container text-white font-caption-strong text-caption-strong status-pulse">진행중 2건</span>
+</div>
+<div class="space-y-md">
+<div class="flex items-center gap-base group cursor-pointer">
+<div class="flex-grow">
+<p class="font-body-sm text-body-sm truncate group-hover:text-primary-fixed transition-colors">나이스 데이터 연동 오류 문의...</p>
+<span class="font-caption text-caption text-muted">2024.05.20 | 접수완료</span>
+</div>
+<span class="material-symbols-outlined text-muted group-hover:translate-x-1 transition-transform">chevron_right</span>
+</div>
+<div class="flex items-center gap-base group cursor-pointer">
+<div class="flex-grow">
+<p class="font-body-sm text-body-sm truncate group-hover:text-primary-fixed transition-colors">AI Cockpit 대시보드 권한 설정...</p>
+<span class="font-caption text-caption text-secondary">2024.05.18 | 답변완료</span>
+</div>
+<span class="material-symbols-outlined text-muted group-hover:translate-x-1 transition-transform">chevron_right</span>
+</div>
+</div>
+</div>
+<button class="relative z-10 w-full py-sm bg-white text-ink font-button text-button rounded-full hover:bg-surface-container-high transition-colors" onclick="openInquiryModal()">새 문의 작성하기</button>
+<!-- Decorative element -->
+<div class="absolute -bottom-10 -right-10 w-40 h-40 bg-primary opacity-20 blur-3xl"></div>
+</div>
 <!-- Secondary Categories -->
-<div class="md:col-span-3 glass-card p-xl rounded-2xl flex flex-col gap-base group hover-float animate-fade-in-up stagger-4 cursor-pointer">
+<button class="text-left md:col-span-4 glass-card p-xl rounded-2xl flex flex-col gap-base group hover-float animate-fade-in-up stagger-4 cursor-pointer" onclick="openInfoModal('support')">
 <div class="w-12 h-12 rounded-2xl bg-error-container flex items-center justify-center text-error">
 <span class="material-symbols-outlined">build</span>
 </div>
@@ -405,8 +420,8 @@
 <h3 class="font-title-sm text-title-sm mb-xs">기술 지원</h3>
 <p class="font-body-sm text-body-sm text-body">설치 오류 및 하드웨어 연동 기술 문의</p>
 </div>
-</div>
-<div class="md:col-span-3 glass-card p-xl rounded-2xl flex flex-col gap-base group hover-float animate-fade-in-up stagger-4 cursor-pointer">
+</button>
+<button class="text-left md:col-span-4 glass-card p-xl rounded-2xl flex flex-col gap-base group hover-float animate-fade-in-up stagger-4 cursor-pointer" onclick="openInfoModal('faq')">
 <div class="w-12 h-12 rounded-2xl bg-surface-container-highest flex items-center justify-center text-on-surface-variant">
 <span class="material-symbols-outlined">help</span>
 </div>
@@ -414,8 +429,8 @@
 <h3 class="font-title-sm text-title-sm mb-xs">자주 묻는 질문</h3>
 <p class="font-body-sm text-body-sm text-body">사용자들이 가장 많이 찾는 질문 모음</p>
 </div>
-</div>
-<div class="md:col-span-3 glass-card p-xl rounded-2xl flex flex-col gap-base group hover-float animate-fade-in-up stagger-4 cursor-pointer">
+</button>
+<button class="text-left md:col-span-4 glass-card p-xl rounded-2xl flex flex-col gap-base group hover-float animate-fade-in-up stagger-4 cursor-pointer" onclick="openInfoModal('manual')">
 <div class="w-12 h-12 rounded-2xl bg-surface-container-highest flex items-center justify-center text-on-surface-variant">
 <span class="material-symbols-outlined">menu_book</span>
 </div>
@@ -423,100 +438,7 @@
 <h3 class="font-title-sm text-title-sm mb-xs">매뉴얼 다운로드</h3>
 <p class="font-body-sm text-body-sm text-body">PDF 및 영상 매뉴얼 전체 리스트</p>
 </div>
-</div>
-<div class="md:col-span-3 glass-card p-xl rounded-2xl flex flex-col gap-base group hover-float animate-fade-in-up stagger-4 cursor-pointer">
-<div class="w-12 h-12 rounded-2xl bg-surface-container-highest flex items-center justify-center text-on-surface-variant">
-<span class="material-symbols-outlined">settings_remote</span>
-</div>
-<div>
-<h3 class="font-title-sm text-title-sm mb-xs">원격 지원 신청</h3>
-<p class="font-body-sm text-body-sm text-body">전문 상담원의 1:1 원격 화면 제어</p>
-</div>
-</div>
-</div>
-</section>
-<!-- Notices & Updates Section -->
-<section class="bg-surface-container-low py-section">
-<div class="max-w-[1600px] mx-auto px-lg animate-fade-in-up stagger-2">
-<div class="flex justify-between items-end mb-xl">
-<div>
-<h2 class="font-display-sm text-display-sm text-primary mb-xs">업데이트 및 공지사항</h2>
-<p class="font-body-md text-body-md text-body">이지플로우의 최신 소식과 기능 개선 사항을 확인하세요.</p>
-</div>
-<button class="font-button text-button text-primary border-b border-primary pb-xxs hover:text-primary-active transition-colors">전체보기</button>
-</div>
-<div class="grid grid-cols-1 md:grid-cols-2 gap-lg">
-<!-- Notice Item 1 -->
-<div class="notice-item bg-white p-lg rounded-2xl flex gap-lg items-start border border-hairline hover:shadow-md transition-all cursor-pointer group">
-<div class="flex flex-col items-center justify-center min-w-[64px] h-[64px] bg-surface-container rounded-lg">
-<span class="font-number-display text-number-display text-primary">24</span>
-<span class="font-caption-strong text-caption-strong text-muted">MAY</span>
-</div>
-<div class="flex-grow">
-<div class="flex justify-between items-start">
-<span class="inline-block px-xs py-[2px] rounded bg-primary-container/10 text-primary-container font-caption-strong text-caption-strong mb-xs">시스템
-                                    업데이트</span>
-<span class="material-symbols-outlined text-muted arrow-icon group-hover:text-primary">arrow_forward</span>
-</div>
-<h4 class="font-title-md text-title-md mb-xs group-hover:text-primary">AI 업무 지원 도구 v2.1 기능
-                                패치 내역 안내</h4>
-<p class="font-body-sm text-body-sm text-body line-clamp-1">생활기록부 자동 생성 엔진의 정확도 개선 및 속도 향상
-                                작업이 완료되었습니다...</p>
-</div>
-</div>
-<!-- Notice Item 2 -->
-<div class="notice-item bg-white p-lg rounded-2xl flex gap-lg items-start border border-hairline hover:shadow-md transition-all cursor-pointer group">
-<div class="flex flex-col items-center justify-center min-w-[64px] h-[64px] bg-surface-container rounded-lg">
-<span class="font-number-display text-number-display text-primary">22</span>
-<span class="font-caption-strong text-caption-strong text-muted">MAY</span>
-</div>
-<div class="flex-grow">
-<div class="flex justify-between items-start">
-<span class="inline-block px-xs py-[2px] rounded bg-warning/10 text-warning font-caption-strong text-caption-strong mb-xs">정기점검</span>
-<span class="material-symbols-outlined text-muted arrow-icon group-hover:text-primary">arrow_forward</span>
-</div>
-<h4 class="font-title-md text-title-md mb-xs group-hover:text-primary">5월 4주차 주말 정기 시스템 점검
-                                작업 공지</h4>
-<p class="font-body-sm text-body-sm text-body line-clamp-1">안정적인 서비스 제공을 위해 토요일 새벽 02:00 ~
-                                06:00 정기 점검을 실시합니다.</p>
-</div>
-</div>
-<!-- Notice Item 3 -->
-<div class="notice-item bg-white p-lg rounded-2xl flex gap-lg items-start border border-hairline hover:shadow-md transition-all cursor-pointer group">
-<div class="flex flex-col items-center justify-center min-w-[64px] h-[64px] bg-surface-container rounded-lg">
-<span class="font-number-display text-number-display text-primary">15</span>
-<span class="font-caption-strong text-caption-strong text-muted">MAY</span>
-</div>
-<div class="flex-grow">
-<div class="flex justify-between items-start">
-<span class="inline-block px-xs py-[2px] rounded bg-primary-container/10 text-primary-container font-caption-strong text-caption-strong mb-xs">이벤트</span>
-<span class="material-symbols-outlined text-muted arrow-icon group-hover:text-primary">arrow_forward</span>
-</div>
-<h4 class="font-title-md text-title-md mb-xs group-hover:text-primary">디지털 행정 효율화 우수 사례 공모전
-                                안내</h4>
-<p class="font-body-sm text-body-sm text-body line-clamp-1">이지플로우를 활용한 독창적인 업무 자동화 사례를
-                                공유해주시는 선생님들께 선물을 드립니다.</p>
-</div>
-</div>
-<!-- Notice Item 4 -->
-<div class="notice-item bg-white p-lg rounded-2xl flex gap-lg items-start border border-hairline hover:shadow-md transition-all cursor-pointer group">
-<div class="flex flex-col items-center justify-center min-w-[64px] h-[64px] bg-surface-container rounded-lg">
-<span class="font-number-display text-number-display text-primary">10</span>
-<span class="font-caption-strong text-caption-strong text-muted">MAY</span>
-</div>
-<div class="flex-grow">
-<div class="flex justify-between items-start">
-<span class="inline-block px-xs py-[2px] rounded bg-success/10 text-success font-caption-strong text-caption-strong mb-xs">매뉴얼
-                                    업데이트</span>
-<span class="material-symbols-outlined text-muted arrow-icon group-hover:text-primary">arrow_forward</span>
-</div>
-<h4 class="font-title-md text-title-md mb-xs group-hover:text-primary">학부모 소통 채널 관리 매뉴얼 배포
-                                (v1.0)</h4>
-<p class="font-body-sm text-body-sm text-body line-clamp-1">새로 도입된 학부모 알림장 연동 및 통합 메시징 서비스
-                                사용 가이드를 배포합니다.</p>
-</div>
-</div>
-</div>
+</button>
 </div>
 </section>
 <!-- CTA: Quick Support Contact -->
@@ -539,7 +461,7 @@
 </div>
 </div>
 <div class="relative z-10">
-<button class="px-xxl py-base bg-secondary-container text-ink font-button text-button rounded-full hover:scale-105 active:scale-95 transition-all shadow-lg">상담원
+<button class="px-xxl py-base bg-secondary-container text-ink font-button text-button rounded-full hover:scale-105 active:scale-95 transition-all shadow-lg" onclick="openInquiryModal()">상담원
                             연결하기</button>
 </div>
 <!-- Decorative Graphic -->
@@ -548,6 +470,67 @@
 </div>
 </section>
 </div></div></main>
+<!-- 1:1 문의하기 모달 (원격 지원 신청에서 통합) -->
+<div class="hidden opacity-0 fixed inset-0 z-[100] flex items-center justify-center glass-overlay transition-opacity duration-300" id="inquiry-modal">
+<div class="modal-content bg-surface-container-lowest w-full max-w-lg mx-sm rounded-2xl overflow-hidden animate-in fade-in zoom-in duration-300">
+<div class="px-md py-sm border-b border-outline-variant flex justify-between items-center">
+<h3 class="text-lg font-bold text-primary flex items-center gap-xs">
+<span class="material-symbols-outlined text-primary">chat_bubble</span>
+                    1:1 문의하기
+                </h3>
+<button class="p-base hover:bg-surface-container-high rounded-full transition-colors text-on-surface-variant" onclick="closeInquiryModal()">
+<span class="material-symbols-outlined">close</span>
+</button>
+</div>
+<div class="p-md">
+<form class="flex flex-col gap-md" id="inquiryForm">
+<div>
+<label class="block text-sm font-semibold text-on-surface mb-xs">문의 유형 <span class="text-error">*</span></label>
+<div class="grid grid-cols-3 gap-xs">
+<button class="type-btn py-sm px-xs border border-outline-variant rounded-lg text-sm font-medium hover:border-primary-container hover:bg-secondary-container transition-all text-on-surface-variant active:opacity-80" type="button">시스템 오류</button>
+<button class="type-btn py-sm px-xs border border-outline-variant rounded-lg text-sm font-medium hover:border-primary-container hover:bg-secondary-container transition-all text-on-surface-variant active:opacity-80" type="button">기능 제안</button>
+<button class="type-btn py-sm px-xs border border-outline-variant rounded-lg text-sm font-medium hover:border-primary-container hover:bg-secondary-container transition-all text-on-surface-variant active:opacity-80" type="button">기타</button>
+</div>
+</div>
+<div>
+<label class="block text-sm font-semibold text-on-surface mb-xs" for="title">제목 <span class="text-error">*</span></label>
+<input class="w-full px-md py-sm border border-outline-variant rounded-lg focus:outline-none focus:border-primary-container focus:ring-2 focus:ring-primary-container/15 transition-all bg-white text-on-surface" id="title" placeholder="문의 제목을 입력해주세요" type="text"/>
+</div>
+<div>
+<label class="block text-sm font-semibold text-on-surface mb-xs" for="content">문의 내용 <span class="text-error">*</span></label>
+<textarea class="w-full px-md py-sm border border-outline-variant rounded-lg focus:outline-none focus:border-primary-container focus:ring-2 focus:ring-primary-container/15 transition-all bg-white text-on-surface resize-none" id="content" placeholder="문의하실 내용을 상세히 적어주세요. (최대 1,000자)" rows="6"></textarea>
+</div>
+<div class="flex items-center gap-xs text-body-sm text-on-surface-variant bg-surface-container-low p-sm rounded-lg">
+<span class="material-symbols-outlined text-sm">info</span>
+                        문의하신 내용은 담당자 확인 후 1~3일 이내에 답변 드립니다.
+                    </div>
+</form>
+</div>
+<div class="px-md py-sm bg-surface-container-low flex justify-end gap-sm">
+<button class="px-xl py-sm rounded-full font-bold text-on-surface-variant hover:bg-surface-variant transition-colors" onclick="closeInquiryModal()">
+                    취소
+                </button>
+<button class="bg-primary-container text-white px-xl py-sm rounded-full font-bold hover:opacity-90 transition-opacity shadow-lg shadow-primary-container/20" onclick="submitInquiryForm()">
+                    문의 등록
+                </button>
+</div>
+</div>
+</div>
+<!-- 안내 모달 (시스템 이용 안내 / 기술 지원 / FAQ / 매뉴얼 다운로드 공용) -->
+<div class="hidden opacity-0 fixed inset-0 z-[100] flex items-center justify-center glass-overlay transition-opacity duration-300" id="info-modal">
+<div class="modal-content bg-surface-container-lowest w-full max-w-lg mx-sm rounded-2xl overflow-hidden animate-in fade-in zoom-in duration-300 max-h-[80vh] flex flex-col">
+<div class="px-md py-sm border-b border-outline-variant flex justify-between items-center shrink-0">
+<h3 class="text-lg font-bold text-primary flex items-center gap-xs">
+<span class="material-symbols-outlined text-primary" id="infoModalIcon">info</span>
+<span id="infoModalTitle">안내</span>
+</h3>
+<button class="p-base hover:bg-surface-container-high rounded-full transition-colors text-on-surface-variant" onclick="closeInfoModal()">
+<span class="material-symbols-outlined">close</span>
+</button>
+</div>
+<div class="p-md overflow-y-auto" id="infoModalBody"></div>
+</div>
+</div>
 <!-- Footer -->
 <footer class="w-full mt-section px-lg max-w-[1600px] mx-auto flex flex-col gap-base bg-surface-container-low dark:bg-surface-dark border-t border-hairline dark:border-outline-variant py-xl">
 <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-lg">
@@ -567,6 +550,122 @@
         searchInput.addEventListener('blur', () => {
             searchContainer.classList.remove('z-20');
         });
+
+        // ── 1:1 문의하기 모달 ──
+        function closeInquiryModal() {
+            const modal = document.getElementById('inquiry-modal');
+            modal.classList.add('opacity-0');
+            setTimeout(() => { modal.classList.add('hidden'); }, 300);
+        }
+        function openInquiryModal() {
+            const modal = document.getElementById('inquiry-modal');
+            modal.classList.remove('hidden');
+            setTimeout(() => { modal.classList.remove('opacity-0'); }, 10);
+        }
+        function submitInquiryForm() {
+            const title = document.getElementById('title').value;
+            const content = document.getElementById('content').value;
+            if (!title || !content) {
+                alert('모든 필수 항목을 입력해주세요.');
+                return;
+            }
+            alert('문의가 성공적으로 등록되었습니다.');
+            closeInquiryModal();
+        }
+        const typeButtons = document.querySelectorAll('.type-btn');
+        typeButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                typeButtons.forEach(b => {
+                    b.classList.remove('bg-primary-container', 'text-white', 'border-primary-container');
+                    b.classList.add('border-outline-variant', 'text-on-surface-variant');
+                });
+                btn.classList.add('bg-primary-container', 'text-white', 'border-primary-container');
+                btn.classList.remove('border-outline-variant', 'text-on-surface-variant');
+            });
+        });
+        if (typeButtons.length) typeButtons[0].click();
+
+        // ── 안내 모달 (시스템 이용 안내 / 기술 지원 / FAQ / 매뉴얼 다운로드) ──
+        const INFO_MODAL_CONTENT = {
+            system: {
+                icon: 'desktop_windows',
+                title: '시스템 이용 안내',
+                body: `
+                    <ol class="flex flex-col gap-md list-none">
+                        <li class="flex gap-base">
+                            <span class="shrink-0 w-7 h-7 rounded-full bg-primary-container text-white flex items-center justify-center text-sm font-bold">1</span>
+                            <div><p class="font-bold text-on-surface">로그인 및 프로필 설정</p><p class="text-body-sm text-on-surface-variant mt-xxs">우측 상단 프로필 아이콘에서 정보 수정, 로그아웃을 할 수 있습니다.</p></div>
+                        </li>
+                        <li class="flex gap-base">
+                            <span class="shrink-0 w-7 h-7 rounded-full bg-primary-container text-white flex items-center justify-center text-sm font-bold">2</span>
+                            <div><p class="font-bold text-on-surface">메뉴 구성</p><p class="text-body-sm text-on-surface-variant mt-xxs">업무 배송, 인생 도서관, 서식 자료실, 안내센터 4개 영역으로 구성되어 있으며 상단 GNB와 좌측 메뉴로 이동할 수 있습니다.</p></div>
+                        </li>
+                        <li class="flex gap-base">
+                            <span class="shrink-0 w-7 h-7 rounded-full bg-primary-container text-white flex items-center justify-center text-sm font-bold">3</span>
+                            <div><p class="font-bold text-on-surface">AI 기능 활용</p><p class="text-body-sm text-on-surface-variant mt-xxs">AI 상담(챗봇), 공문 분석 등 AI 표시가 있는 기능은 클릭 한 번으로 업무 초안을 받아볼 수 있습니다.</p></div>
+                        </li>
+                    </ol>`
+            },
+            support: {
+                icon: 'build',
+                title: '기술 지원',
+                body: `
+                    <p class="text-body-sm text-on-surface-variant mb-base">설치 오류, 하드웨어 연동(프린터·스캐너 등) 문제는 아래 절차로 문의해 주세요.</p>
+                    <ul class="flex flex-col gap-sm mb-lg">
+                        <li class="flex items-start gap-xs text-body-sm"><span class="material-symbols-outlined text-primary text-base">check_circle</span>발생한 오류 메시지나 화면을 캡처해 주세요.</li>
+                        <li class="flex items-start gap-xs text-body-sm"><span class="material-symbols-outlined text-primary text-base">check_circle</span>사용 중인 브라우저와 운영체제를 함께 알려주시면 빠르게 도와드릴 수 있습니다.</li>
+                    </ul>
+                    <button class="w-full py-sm bg-primary-container text-white font-bold rounded-full hover:opacity-90 transition-opacity" onclick="closeInfoModal(); openInquiryModal();">1:1 문의로 넘어가기</button>`
+            },
+            faq: {
+                icon: 'help',
+                title: '자주 묻는 질문',
+                body: `
+                    <div class="flex flex-col divide-y divide-hairline">
+                        <details class="py-sm" open><summary class="font-bold text-on-surface cursor-pointer">비밀번호를 잊어버렸어요. 어떻게 재설정하나요?</summary><p class="text-body-sm text-on-surface-variant mt-xs">로그인 화면의 '비밀번호 찾기'에서 등록된 이메일로 재설정 링크를 받을 수 있습니다.</p></details>
+                        <details class="py-sm"><summary class="font-bold text-on-surface cursor-pointer">NEIS 데이터가 연동되지 않아요.</summary><p class="text-body-sm text-on-surface-variant mt-xs">스마트 공문 달력의 학교 변경 메뉴에서 기준 학교가 올바르게 설정되어 있는지 확인해 주세요. 계속될 경우 1:1 문의를 남겨주세요.</p></details>
+                        <details class="py-sm"><summary class="font-bold text-on-surface cursor-pointer">AI 챗봇 답변이 부정확할 때는 어떻게 하나요?</summary><p class="text-body-sm text-on-surface-variant mt-xs">AI 상담(챗봇) 화면에서 '담당 멘토에게 질문하기'를 누르면 인생 도서관 멘토에게 직접 확인받을 수 있습니다.</p></details>
+                        <details class="py-sm"><summary class="font-bold text-on-surface cursor-pointer">여러 학교를 동시에 관리할 수 있나요?</summary><p class="text-body-sm text-on-surface-variant mt-xs">스마트 공문 달력 상단의 학교 칩을 눌러 기준 학교를 언제든 변경할 수 있습니다.</p></details>
+                    </div>`
+            },
+            manual: {
+                icon: 'menu_book',
+                title: '매뉴얼 다운로드',
+                body: `
+                    <ul class="flex flex-col gap-sm">
+                        <li class="flex items-center gap-md p-base bg-surface-soft rounded-xl border border-hairline">
+                            <span class="material-symbols-outlined text-error">picture_as_pdf</span>
+                            <div class="flex-1 min-w-0"><p class="font-bold text-body-sm truncate">이지플로우 시작 가이드.pdf</p><p class="text-caption text-muted">2.1MB</p></div>
+                            <span class="material-symbols-outlined text-muted">download</span>
+                        </li>
+                        <li class="flex items-center gap-md p-base bg-surface-soft rounded-xl border border-hairline">
+                            <span class="material-symbols-outlined text-error">picture_as_pdf</span>
+                            <div class="flex-1 min-w-0"><p class="font-bold text-body-sm truncate">스마트 공문 달력 사용법.pdf</p><p class="text-caption text-muted">1.4MB</p></div>
+                            <span class="material-symbols-outlined text-muted">download</span>
+                        </li>
+                        <li class="flex items-center gap-md p-base bg-surface-soft rounded-xl border border-hairline">
+                            <span class="material-symbols-outlined text-primary">smart_display</span>
+                            <div class="flex-1 min-w-0"><p class="font-bold text-body-sm truncate">AI 상담(챗봇) 활용 영상.mp4</p><p class="text-caption text-muted">4:32</p></div>
+                            <span class="material-symbols-outlined text-muted">download</span>
+                        </li>
+                    </ul>`
+            },
+        };
+        function openInfoModal(key) {
+            const data = INFO_MODAL_CONTENT[key];
+            if (!data) return;
+            document.getElementById('infoModalIcon').textContent = data.icon;
+            document.getElementById('infoModalTitle').textContent = data.title;
+            document.getElementById('infoModalBody').innerHTML = data.body;
+            const modal = document.getElementById('info-modal');
+            modal.classList.remove('hidden');
+            setTimeout(() => { modal.classList.remove('opacity-0'); }, 10);
+        }
+        function closeInfoModal() {
+            const modal = document.getElementById('info-modal');
+            modal.classList.add('opacity-0');
+            setTimeout(() => { modal.classList.add('hidden'); }, 300);
+        }
     </script>
 </body>
 </html>
