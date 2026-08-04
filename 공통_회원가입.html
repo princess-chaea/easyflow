@@ -171,21 +171,21 @@
                         <div id="nameError" class="error-msg">이름을 입력해주세요.</div>
                     </div>
 
-                    <!-- 기관(학교) 검색 -- NEIS API 자동완성 -->
+                    <!-- 기관 및 부서(학교) 검색 -- NEIS API + 경북교육청 조직 데이터 자동완성 -->
                     <div class="flex flex-col gap-2">
                         <label class="text-[14px] font-bold text-ink" for="orgSearchInput">
-                            소속 기관·학교
-                            <span class="font-normal text-[12px] text-ink/60 ml-1">(경북교육청 산하 기관 검색)</span>
+                            소속 기관 및 부서·학교
+                            <span class="font-normal text-[12px] text-ink/60 ml-1">(경북교육청 산하 기관 및 부서 검색)</span>
                         </label>
                         <div class="relative">
                             <span class="absolute left-3 top-1/2 -translate-y-1/2 material-symbols-outlined text-[20px] text-muted pointer-events-none">search</span>
                             <input type="text" id="orgSearchInput"
-                                placeholder="학교명 일부를 입력하세요 (예: 아천초, 포항고)"
+                                placeholder="학교명 또는 기관·부서명을 입력하세요 (예: 아천초, 미래정보교육과)"
                                 class="w-full border border-gray-300 rounded-xl pl-10 pr-4 py-3 text-[15px] focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors"
                                 autocomplete="off">
                         </div>
                         <input type="hidden" id="orgSchoolCode">
-                        <div id="orgError" class="error-msg" style="display:none">소속 기관·학교를 선택해주세요.</div>
+                        <div id="orgError" class="error-msg" style="display:none">소속 기관 및 부서·학교를 선택해주세요.</div>
                     </div>
                     
                     <div class="flex flex-col gap-2">

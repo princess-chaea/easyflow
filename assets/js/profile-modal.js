@@ -109,10 +109,10 @@
                     <div class="flex-1 flex flex-col gap-4 w-full">
                         <div class="flex flex-col sm:flex-row gap-4 w-full">
                             <div class="flex flex-col gap-1.5 flex-1">
-                                <label class="text-[14px] font-bold text-ink" for="pmOrgInput">기관</label>
+                                <label class="text-[14px] font-bold text-ink" for="pmOrgInput">기관 및 부서</label>
                                 <div class="relative">
                                     <span class="absolute left-3 top-1/2 -translate-y-1/2 material-symbols-outlined text-[18px] text-muted pointer-events-none">search</span>
-                                    <input type="text" id="pmOrgInput" value="${userOrg}" placeholder="학교명 입력 (예: 아천초, 포항고)" autocomplete="off" class="w-full border border-gray-300 rounded-xl pl-9 pr-4 py-2.5 text-[15px] focus:outline-none focus:border-primary transition-colors bg-white">
+                                    <input type="text" id="pmOrgInput" value="${userOrg}" placeholder="학교명 또는 기관·부서명 입력 (예: 아천초, 미래정보교육과)" autocomplete="off" class="w-full border border-gray-300 rounded-xl pl-9 pr-4 py-2.5 text-[15px] focus:outline-none focus:border-primary transition-colors bg-white">
                                 </div>
                                 <input type="hidden" id="pmOrgSchoolCode">
                             </div>
