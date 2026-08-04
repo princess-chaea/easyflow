@@ -77,6 +77,10 @@
                 });
             }
         });
+        // Load Profile Modal Script dynamically
+        const pmScript = document.createElement('script');
+        pmScript.src = 'assets/js/profile-modal.js';
+        document.body.appendChild(pmScript);
         
     });
 })();
