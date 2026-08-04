@@ -419,42 +419,8 @@
                 <!-- Upcoming Appointment -->
                 <section class="bg-primary text-white p-xl rounded-xxl shadow-lg relative overflow-hidden bento-card">
 
-                    <div class="relative z-10">
-                        <div class="flex items-center justify-between mb-lg">
-                            <h2 class="font-title-md text-title-md">예약된 상담</h2>
-                            <span
-                                class="px-sm py-xxs bg-white/20 backdrop-blur-md rounded-full text-caption-strong">D-2</span>
-                        </div>
-                        <div class="flex flex-col gap-base">
-                            <div class="flex items-start gap-md">
-                                <span class="material-symbols-outlined text-primary-fixed"
-                                    data-icon="person">person</span>
-                                <div>
-                                    <p class="font-caption text-caption text-primary-fixed">멘토</p>
-                                    <p class="font-body-strong text-body-strong">김도윤 수석교사</p>
-                                </div>
-                            </div>
-                            <div class="flex items-start gap-md">
-                                <span class="material-symbols-outlined text-primary-fixed"
-                                    data-icon="schedule">schedule</span>
-                                <div>
-                                    <p class="font-caption text-caption text-primary-fixed">일시</p>
-                                    <p class="font-body-strong text-body-strong">2026-06-15 15:00</p>
-                                </div>
-                            </div>
-                            <div class="flex items-start gap-md">
-                                <span class="material-symbols-outlined text-primary-fixed"
-                                    data-icon="videocam">videocam</span>
-                                <div>
-                                    <p class="font-caption text-caption text-primary-fixed">상담 방식</p>
-                                    <p class="font-body-strong text-body-strong">화상 상담 (Zoom)</p>
-                                </div>
-                            </div>
-                        </div>
-                        <button
-                            class="w-full mt-xl py-base bg-white text-primary font-button rounded-full hover:bg-primary-fixed transition-all">
-                            회의실 입장하기
-                        </button>
+                    <div class="relative z-10" id="upcomingAppointmentContainer">
+                        <!-- JS Rendered -->
                     </div>
                 </section>
                 <!-- Saved Resources -->
@@ -465,50 +431,15 @@
                             <span class="material-symbols-outlined text-muted" data-icon="more_vert">more_vert</span>
                         </button>
                     </div>
-                    <div class="flex flex-col gap-sm">
-                        <a class="group flex items-center gap-md p-base bg-surface-soft hover:bg-surface-strong rounded-xl transition-all border border-hairline"
-                            href="#" onclick="event.preventDefault(); mpToast('2026학년도 교원 복무 가이드.pdf 다운로드를 시작합니다', 'download')">
-                            <div
-                                class="w-10 h-10 bg-error-container text-error rounded-lg flex items-center justify-center">
-                                <span class="material-symbols-outlined" data-icon="picture_as_pdf">picture_as_pdf</span>
-                            </div>
-                            <div class="flex-1 overflow-hidden">
-                                <p class="font-body-sm text-body-sm font-medium truncate text-on-surface">2026학년도 교원 복무
-                                    가이드.pdf</p>
-                                <p class="font-caption text-caption text-muted">2.4MB · 2026.06.11</p>
-                            </div>
-                        </a>
-                        <a class="group flex items-center gap-md p-base bg-surface-soft hover:bg-surface-strong rounded-xl transition-all border border-hairline"
-                            href="#" onclick="event.preventDefault(); mpToast('상담 일지_20260610.docx 다운로드를 시작합니다', 'download')">
-                            <div
-                                class="w-10 h-10 bg-on-primary-fixed-variant text-white rounded-lg flex items-center justify-center">
-                                <span class="material-symbols-outlined" data-icon="description">description</span>
-                            </div>
-                            <div class="flex-1 overflow-hidden">
-                                <p class="font-body-sm text-body-sm font-medium truncate text-on-surface">상담
-                                    일지_20260610.docx</p>
-                                <p class="font-caption text-caption text-muted">45KB · 2026.06.10</p>
-                            </div>
-                        </a>
-                        <a class="group flex items-center gap-md p-base bg-surface-soft hover:bg-surface-strong rounded-xl transition-all border border-hairline"
-                            href="#" onclick="event.preventDefault(); mpToast('학교폭력 대응 매뉴얼 요약.hwp 다운로드를 시작합니다', 'download')">
-                            <div
-                                class="w-10 h-10 bg-secondary-container text-on-secondary-container rounded-lg flex items-center justify-center">
-                                <span class="material-symbols-outlined" data-icon="sticky_note_2">sticky_note_2</span>
-                            </div>
-                            <div class="flex-1 overflow-hidden">
-                                <p class="font-body-sm text-body-sm font-medium truncate text-on-surface">학교폭력 대응 매뉴얼
-                                    요약.hwp</p>
-                                <p class="font-caption text-caption text-muted">1.1MB · 2026.06.05</p>
-                            </div>
-                        </a>
+                    <div class="flex flex-col gap-sm" id="savedResourcesContainer">
+                        <!-- JS Rendered -->
                     </div>
                     <button
                         class="w-full mt-lg py-sm font-button text-muted border border-dashed border-outline-variant rounded-xl hover:bg-surface-soft transition-all"
                         onclick="document.getElementById('mpFileInput').click()">
                         + 자료 추가하기
                     </button>
-                    <input type="file" id="mpFileInput" class="hidden" onchange="if(this.files[0]) mpToast(this.files[0].name + ' 자료를 추가했습니다', 'check_circle')">
+                    <input type="file" id="mpFileInput" class="hidden" onchange="addResource(this.files[0])">
                 </section>
             </div>
         </div>
@@ -660,6 +591,142 @@
             clearTimeout(mpToastTimer);
             mpToastTimer = setTimeout(() => t.classList.add('hidden'), 2600);
         }
+        // --- 저장한 자료 로직 ---
+        function renderSavedResources() {
+            const container = document.getElementById('savedResourcesContainer');
+            if (!container) return;
+            let resources = JSON.parse(localStorage.getItem('ef_saved_resources'));
+            if (!resources) {
+                resources = [
+                    { id: 'res-1', name: '2026학년도 교원 복무 가이드.pdf', size: '2.4MB', date: '2026.06.11', icon: 'picture_as_pdf', colorClass: 'bg-error-container text-error' },
+                    { id: 'res-2', name: '상담 일지_20260610.docx', size: '45KB', date: '2026.06.10', icon: 'description', colorClass: 'bg-on-primary-fixed-variant text-white' },
+                    { id: 'res-3', name: '학교폭력 대응 매뉴얼 요약.hwp', size: '1.1MB', date: '2026.06.05', icon: 'sticky_note_2', colorClass: 'bg-secondary-container text-on-secondary-container' }
+                ];
+                localStorage.setItem('ef_saved_resources', JSON.stringify(resources));
+            }
+            
+            if (resources.length === 0) {
+                container.innerHTML = '<p class="text-center text-muted py-md text-[13px]">저장한 자료가 없습니다.</p>';
+            } else {
+                container.innerHTML = resources.map(res => `
+                    <div class="group flex items-center justify-between p-base bg-surface-soft hover:bg-surface-strong rounded-xl transition-all border border-hairline">
+                        <a class="flex items-center gap-md flex-1 overflow-hidden" href="#" onclick="event.preventDefault(); mpToast('${res.name} 다운로드를 시작합니다', 'download')">
+                            <div class="w-10 h-10 ${res.colorClass} rounded-lg flex items-center justify-center">
+                                <span class="material-symbols-outlined" data-icon="${res.icon}">${res.icon}</span>
+                            </div>
+                            <div class="flex-1 overflow-hidden">
+                                <p class="font-body-sm text-body-sm font-medium truncate text-on-surface">${res.name}</p>
+                                <p class="font-caption text-caption text-muted">${res.size} · ${res.date}</p>
+                            </div>
+                        </a>
+                        <button class="p-xs text-muted hover:text-danger opacity-0 group-hover:opacity-100 transition-opacity" onclick="deleteResource('${res.id}')">
+                            <span class="material-symbols-outlined text-[18px]">delete</span>
+                        </button>
+                    </div>
+                `).join('');
+            }
+        }
+
+        window.deleteResource = function(id) {
+            let resources = JSON.parse(localStorage.getItem('ef_saved_resources')) || [];
+            resources = resources.filter(r => r.id !== id);
+            localStorage.setItem('ef_saved_resources', JSON.stringify(resources));
+            renderSavedResources();
+            mpToast('자료가 삭제되었습니다.', 'delete');
+        };
+
+        window.addResource = function(file) {
+            if (!file) return;
+            let resources = JSON.parse(localStorage.getItem('ef_saved_resources')) || [];
+            const today = new Date().toLocaleDateString('ko-KR', { year: 'numeric', month: '2-digit', day: '2-digit' }).replace(/\. /g, '.').replace(/\.$/, '');
+            resources.unshift({
+                id: 'res-' + Date.now(),
+                name: file.name,
+                size: Math.round(file.size / 1024) + 'KB',
+                date: today,
+                icon: 'insert_drive_file',
+                colorClass: 'bg-primary/10 text-primary'
+            });
+            localStorage.setItem('ef_saved_resources', JSON.stringify(resources));
+            renderSavedResources();
+            mpToast(file.name + ' 자료를 추가했습니다', 'check_circle');
+        };
+
+        // --- 예약된 상담 로직 ---
+        function renderUpcomingAppointment() {
+            const container = document.getElementById('upcomingAppointmentContainer');
+            if (!container) return;
+            let appointments = JSON.parse(localStorage.getItem('ef_upcoming_appointments'));
+            if (!appointments) {
+                appointments = [
+                    { id: 'app-1', role: '멘토', name: '김도윤 수석교사', date: '2026-06-15 15:00', type: '화상 상담 (Zoom)', dDay: 'D-2' }
+                ];
+                localStorage.setItem('ef_upcoming_appointments', JSON.stringify(appointments));
+            }
+
+            if (appointments.length === 0) {
+                container.innerHTML = `
+                    <div class="flex items-center justify-between mb-lg">
+                        <h2 class="font-title-md text-title-md">예약된 상담</h2>
+                    </div>
+                    <div class="py-xl text-center">
+                        <p class="text-white/80">예약된 상담이 없습니다.</p>
+                    </div>
+                `;
+            } else {
+                const app = appointments[0]; // 제일 빠른거 하나만
+                container.innerHTML = `
+                    <div class="flex items-center justify-between mb-lg">
+                        <h2 class="font-title-md text-title-md">예약된 상담</h2>
+                        <span class="px-sm py-xxs bg-white/20 backdrop-blur-md rounded-full text-caption-strong">${app.dDay}</span>
+                    </div>
+                    <div class="flex flex-col gap-base">
+                        <div class="flex items-start gap-md">
+                            <span class="material-symbols-outlined text-primary-fixed" data-icon="person">person</span>
+                            <div>
+                                <p class="font-caption text-caption text-primary-fixed">${app.role}</p>
+                                <p class="font-body-strong text-body-strong">${app.name}</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-md">
+                            <span class="material-symbols-outlined text-primary-fixed" data-icon="schedule">schedule</span>
+                            <div>
+                                <p class="font-caption text-caption text-primary-fixed">일시</p>
+                                <p class="font-body-strong text-body-strong">${app.date}</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-md">
+                            <span class="material-symbols-outlined text-primary-fixed" data-icon="videocam">videocam</span>
+                            <div>
+                                <p class="font-caption text-caption text-primary-fixed">상담 방식</p>
+                                <p class="font-body-strong text-body-strong">${app.type}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex gap-sm mt-xl">
+                        <button class="flex-1 py-base border border-white/30 text-white font-button rounded-full hover:bg-white/10 transition-all text-[14px]" onclick="cancelAppointment('${app.id}')">
+                            예약 취소
+                        </button>
+                        <button class="flex-1 py-base bg-white text-primary font-button rounded-full hover:bg-primary-fixed transition-all text-[14px]" onclick="mpToast('회의실 링크를 열고 있습니다...', 'video_camera_front')">
+                            회의실 입장
+                        </button>
+                    </div>
+                `;
+            }
+        }
+
+        window.cancelAppointment = function(id) {
+            if (!confirm('예약을 취소하시겠습니까?')) return;
+            let appointments = JSON.parse(localStorage.getItem('ef_upcoming_appointments')) || [];
+            appointments = appointments.filter(a => a.id !== id);
+            localStorage.setItem('ef_upcoming_appointments', JSON.stringify(appointments));
+            renderUpcomingAppointment();
+            mpToast('예약이 취소되었습니다.', 'check_circle');
+        };
+
+        renderSavedResources();
+        renderUpcomingAppointment();
+
     </script>
 
 

@@ -465,21 +465,25 @@
         };
         const DUE_BADGE = { danger: 'bg-danger/10 text-danger', warning: 'bg-warning/10 text-warning', muted: 'bg-surface-strong text-ink/60' };
 
-        // 업무 배송 담당자가 각 업무 분야 구독자에게 보낸 우편함 더미 데이터
-        const MAIL_DATA = [
-            { id: 'mail-1', dept: '행정실', category: '복지', date: '2026.08.01', title: '2026학년도 제1차 추가경정예산(안) 편성 및 학교운영위원회 심의 요청', desc: '추경 예산(안) 검토 후 붙임 서식에 부서별 요구액을 취합하여 회신 바랍니다.', file: '추경예산_요청기안문.hwp', due: '마감 D-1', dueTone: 'danger', read: false },
-            { id: 'mail-2', dept: '교무실', category: '교무', date: '2026.07.30', title: '[2학기 준비] 교육과정 워크숍 및 학년협의회 자료 배포', desc: '학년별 교육과정 재구성안을 첨부 서식에 작성하여 제출해 주세요.', file: '2학기_교육과정_재구성안.hwp', due: '마감 D-1', dueTone: 'danger', read: false },
-            { id: 'mail-3', dept: '행정실', category: '늘봄', date: '2026.07.28', title: '2학기 방과후학교 외부강사 계약 및 운영 준비 안내', desc: '외부강사 채용 시 첨부된 표준 계약서 양식을 사용해 주세요.', file: '방과후강사_표준계약서.hwp', due: '마감 D-7', dueTone: 'warning', read: true },
-            { id: 'mail-4', dept: '생활안전부', category: '안전', date: '2026.07.25', title: '개학 맞이 교내 안전점검 및 소방 시설 확인 협조 요청', desc: '담당 구역 점검표를 작성하여 안전점검일 전까지 제출 바랍니다.', file: '안전점검표_2학기.hwp', due: '마감 D-9', dueTone: 'warning', read: true },
-            { id: 'mail-5', dept: '연구실', category: '연구', date: '2026.07.20', title: '2학기 교육과정 운영 계획 수정 및 학사일정 변경 심의', desc: '수정된 학사일정(안)을 검토 후 의견을 회신해 주세요.', file: '학사일정_변경(안).hwp', due: '마감 D-14', dueTone: 'muted', read: true },
-            { id: 'mail-6', dept: '인성진로부', category: '인성', date: '2026.07.19', title: '2학기 학생 인성교육 프로그램 운영 계획 제출 안내', desc: '학급별 인성교육 프로그램 운영 계획을 첨부 서식에 작성해 제출해 주세요.', file: '인성교육_운영계획서.hwp', due: '마감 D-10', dueTone: 'warning', read: true },
-            { id: 'mail-7', dept: '인성진로부', category: '진로', date: '2026.07.18', title: '2학기 진로체험의 날 운영 계획 및 참가 신청', desc: '학급별 참가 인원과 희망 체험처를 신청서에 기입해 회신해 주세요.', file: '진로체험의날_참가신청서.hwp', due: '마감 D-11', dueTone: 'warning', read: true },
-            { id: 'mail-8', dept: '다문화지원센터', category: '다문화', date: '2026.07.17', title: '다문화가정 학생 한국어 교육 지원 프로그램 안내', desc: '대상 학생 명단을 확인 후 신청서를 회신해 주세요.', file: '다문화_한국어지원_신청서.hwp', due: '마감 D-12', dueTone: 'warning', read: true },
-            { id: 'mail-9', dept: '체육부', category: '체육', date: '2026.07.16', title: '학교스포츠클럽 리그 대회 참가 신청 및 명단 제출', desc: '참가 종목과 선수 명단을 첨부 서식에 작성하여 제출해 주세요.', file: '스포츠클럽리그_참가명단.hwp', due: '마감 D-13', dueTone: 'muted', read: true },
-            { id: 'mail-10', dept: '보건실', category: '보건', date: '2026.07.15', title: '학생 건강검진 결과 통보 및 사후관리 협조 요청', desc: '재검진 대상자 명단을 확인하고 보호자 안내를 진행해 주세요.', file: '건강검진_사후관리_안내.hwp', due: '마감 D-14', dueTone: 'muted', read: true },
-            { id: 'mail-11', dept: '정보부', category: '정보', date: '2026.07.14', title: 'NEIS 대국민서비스 개인정보 설정 점검 안내', desc: '학생·보호자 개인정보 노출 설정을 학기 초 기준으로 재점검해 주세요.', file: 'NEIS_개인정보설정_점검표.hwp', due: '마감 D-15', dueTone: 'muted', read: true },
-            { id: 'mail-12', dept: '도서관', category: '독서', date: '2026.07.13', title: '2학기 온책읽기 프로그램 도서 신청 및 예산 집행 안내', desc: '학년별 선정 도서 목록과 희망 수량을 신청서에 작성해 주세요.', file: '온책읽기_도서신청서.hwp', due: '마감 D-16', dueTone: 'muted', read: true },
-        ];
+        // 업무 배송 담당자가 각 업무 분야 구독자에게 보낸 우편함 데이터 (LocalStorage 연동)
+        let MAIL_DATA = JSON.parse(localStorage.getItem('ef_mail_data'));
+        if (!MAIL_DATA) {
+            MAIL_DATA = [
+                { id: 'mail-1', dept: '행정실', category: '복지', date: '2026.08.01', title: '2026학년도 제1차 추가경정예산(안) 편성 및 학교운영위원회 심의 요청', desc: '추경 예산(안) 검토 후 붙임 서식에 부서별 요구액을 취합하여 회신 바랍니다.', file: '추경예산_요청기안문.hwp', due: '마감 D-1', dueTone: 'danger', read: false },
+                { id: 'mail-2', dept: '교무실', category: '교무', date: '2026.07.30', title: '[2학기 준비] 교육과정 워크숍 및 학년협의회 자료 배포', desc: '학년별 교육과정 재구성안을 첨부 서식에 작성하여 제출해 주세요.', file: '2학기_교육과정_재구성안.hwp', due: '마감 D-1', dueTone: 'danger', read: false },
+                { id: 'mail-3', dept: '행정실', category: '늘봄', date: '2026.07.28', title: '2학기 방과후학교 외부강사 계약 및 운영 준비 안내', desc: '외부강사 채용 시 첨부된 표준 계약서 양식을 사용해 주세요.', file: '방과후강사_표준계약서.hwp', due: '마감 D-7', dueTone: 'warning', read: true },
+                { id: 'mail-4', dept: '생활안전부', category: '안전', date: '2026.07.25', title: '개학 맞이 교내 안전점검 및 소방 시설 확인 협조 요청', desc: '담당 구역 점검표를 작성하여 안전점검일 전까지 제출 바랍니다.', file: '안전점검표_2학기.hwp', due: '마감 D-9', dueTone: 'warning', read: true },
+                { id: 'mail-5', dept: '연구실', category: '연구', date: '2026.07.20', title: '2학기 교육과정 운영 계획 수정 및 학사일정 변경 심의', desc: '수정된 학사일정(안)을 검토 후 의견을 회신해 주세요.', file: '학사일정_변경(안).hwp', due: '마감 D-14', dueTone: 'muted', read: true },
+                { id: 'mail-6', dept: '인성진로부', category: '인성', date: '2026.07.19', title: '2학기 학생 인성교육 프로그램 운영 계획 제출 안내', desc: '학급별 인성교육 프로그램 운영 계획을 첨부 서식에 작성해 제출해 주세요.', file: '인성교육_운영계획서.hwp', due: '마감 D-10', dueTone: 'warning', read: true },
+                { id: 'mail-7', dept: '인성진로부', category: '진로', date: '2026.07.18', title: '2학기 진로체험의 날 운영 계획 및 참가 신청', desc: '학급별 참가 인원과 희망 체험처를 신청서에 기입해 회신해 주세요.', file: '진로체험의날_참가신청서.hwp', due: '마감 D-11', dueTone: 'warning', read: true },
+                { id: 'mail-8', dept: '다문화지원센터', category: '다문화', date: '2026.07.17', title: '다문화가정 학생 한국어 교육 지원 프로그램 안내', desc: '대상 학생 명단을 확인 후 신청서를 회신해 주세요.', file: '다문화_한국어지원_신청서.hwp', due: '마감 D-12', dueTone: 'warning', read: true },
+                { id: 'mail-9', dept: '체육부', category: '체육', date: '2026.07.16', title: '학교스포츠클럽 리그 대회 참가 신청 및 명단 제출', desc: '참가 종목과 선수 명단을 첨부 서식에 작성하여 제출해 주세요.', file: '스포츠클럽리그_참가명단.hwp', due: '마감 D-13', dueTone: 'muted', read: true },
+                { id: 'mail-10', dept: '보건실', category: '보건', date: '2026.07.15', title: '학생 건강검진 결과 통보 및 사후관리 협조 요청', desc: '재검진 대상자 명단을 확인하고 보호자 안내를 진행해 주세요.', file: '건강검진_사후관리_안내.hwp', due: '마감 D-14', dueTone: 'muted', read: true },
+                { id: 'mail-11', dept: '정보부', category: '정보', date: '2026.07.14', title: 'NEIS 대국민서비스 개인정보 설정 점검 안내', desc: '학생·보호자 개인정보 노출 설정을 학기 초 기준으로 재점검해 주세요.', file: 'NEIS_개인정보설정_점검표.hwp', due: '마감 D-15', dueTone: 'muted', read: true },
+                { id: 'mail-12', dept: '도서관', category: '독서', date: '2026.07.13', title: '2학기 온책읽기 프로그램 도서 신청 및 예산 집행 안내', desc: '학년별 선정 도서 목록과 희망 수량을 신청서에 작성해 주세요.', file: '온책읽기_도서신청서.hwp', due: '마감 D-16', dueTone: 'muted', read: true },
+            ];
+            localStorage.setItem('ef_mail_data', JSON.stringify(MAIL_DATA));
+        }
 
         const currentUser = localStorage.getItem('currentUser') || 'guest';
         const SUB_KEY = 'ef_mailSubscriptions_' + currentUser;

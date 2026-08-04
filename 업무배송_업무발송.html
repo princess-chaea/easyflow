@@ -383,7 +383,7 @@
 </div>
 </div>
 <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-lg sm:p-xl flex-1">
-<form class="flex flex-col gap-xl w-full" onsubmit="event.preventDefault(); showToast();">
+<form class="flex flex-col gap-xl w-full" id="mailSendForm" onsubmit="submitMailForm(event)">
 <!-- 담당 업무 카테고리 -->
 <div class="flex flex-col gap-sm">
 <label class="text-[16px] font-bold text-ink flex items-center gap-xs">
@@ -396,12 +396,12 @@
 <!-- 제목 -->
 <div class="flex flex-col gap-sm">
 <label class="text-[16px] font-bold text-ink">발송 제목</label>
-<input class="w-full border border-gray-300 rounded-xl px-md py-sm text-[15px] focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors" placeholder="예: 2학기 방과후학교 외부강사 계약 서식 안내" type="text"/>
+<input id="mailTitleInput" class="w-full border border-gray-300 rounded-xl px-md py-sm text-[15px] focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors" placeholder="예: 2학기 방과후학교 외부강사 계약 서식 안내" type="text" required/>
 </div>
 <!-- 내용 -->
 <div class="flex flex-col gap-sm">
 <label class="text-[16px] font-bold text-ink">상세 내용 (메모)</label>
-<textarea class="w-full border border-gray-300 rounded-xl px-md py-sm text-[15px] focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors resize-none" placeholder="수신자가 참고할 내용을 적어주세요." rows="4"></textarea>
+<textarea id="mailDescInput" class="w-full border border-gray-300 rounded-xl px-md py-sm text-[15px] focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors resize-none" placeholder="수신자가 참고할 내용을 적어주세요." rows="4" required></textarea>
 </div>
 <!-- 파일 첨부 -->
 <div class="flex flex-col gap-sm">
@@ -518,6 +518,63 @@
             setTimeout(() => {
                 toast.classList.add('translate-y-20', 'opacity-0');
             }, 3000);
+        }
+
+        function submitMailForm(e) {
+            e.preventDefault();
+
+            // 1. Get Selected Categories
+            const checkedBoxes = document.querySelectorAll('input[name="taskCategory"]:checked');
+            if (checkedBoxes.length === 0) {
+                EF_MODAL.alert('발송할 업무 분야를 최소 1개 이상 선택해주세요.');
+                return;
+            }
+            const categories = Array.from(checkedBoxes).map(cb => cb.value);
+
+            // 2. Get Form Values
+            const title = document.getElementById('mailTitleInput').value.trim();
+            const desc = document.getElementById('mailDescInput').value.trim();
+            const fileInput = document.getElementById('sendFileInput');
+            let fileName = '';
+            if (fileInput.files && fileInput.files.length > 0) {
+                fileName = fileInput.files[0].name;
+            }
+
+            // 3. Load Existing Mail Data
+            let mailData = JSON.parse(localStorage.getItem('ef_mail_data'));
+            if (!mailData) mailData = [];
+
+            // 4. Create New Mail Entry for each category
+            const today = new Date().toLocaleDateString('ko-KR', { year: 'numeric', month: '2-digit', day: '2-digit' }).replace(/\. /g, '.').replace(/\.$/, '');
+            
+            const currentUser = JSON.parse(localStorage.getItem('currentUser')) || {};
+            const senderDept = currentUser.dept || '해당부서';
+
+            categories.forEach(cat => {
+                const newMail = {
+                    id: 'mail-' + Date.now() + '-' + Math.floor(Math.random() * 1000),
+                    dept: senderDept,
+                    category: cat,
+                    date: today,
+                    title: title,
+                    desc: desc,
+                    file: fileName,
+                    due: '진행중',
+                    dueTone: 'warning',
+                    read: false
+                };
+                // Prepend to show at top
+                mailData.unshift(newMail);
+            });
+
+            // 5. Save back to LocalStorage
+            localStorage.setItem('ef_mail_data', JSON.stringify(mailData));
+
+            // 6. Show Notification & Reset
+            showToast();
+            sendResetForm();
+            document.getElementById('mailSendForm').reset();
+            document.querySelectorAll('input[name="taskCategory"]').forEach(cb => cb.checked = false);
         }
 
         function sendUpdateFileList(files) {
