@@ -4668,7 +4668,9 @@
                         var s = (saved[period] && saved[period][sect] && saved[period][sect][cat.id] && saved[period][sect][cat.id][item.no]) || {};
                         userProgress[period][sect][cat.id][item.no] = {
                             result: s.result || '',
-                            action: s.action || ''
+                            action: s.action || '',
+                            checkedBy: s.checkedBy || '',
+                            checkedDate: s.checkedDate || ''
                         };
                     });
                 });
@@ -4791,6 +4793,10 @@
             var tdContent = document.createElement('td');
             tdContent.className = 'item-content py-3 px-4 text-ink text-[13px] leading-relaxed';
             tdContent.textContent = item.content;
+            var badge = document.createElement('div');
+            badge.id = 'badge-' + cat.id + '-' + item.no;
+            setBadgeContent(badge, state);
+            tdContent.appendChild(badge);
             tr.appendChild(tdContent);
 
             var tdResult = document.createElement('td');
@@ -4850,6 +4856,19 @@
         updateLocalProgressText();
     }
 
+    function setBadgeContent(el, state) {
+        if (state.result && state.checkedBy) {
+            var colorClass = 'text-success bg-success/10';
+            if (state.result === 'S') colorClass = 'text-warning bg-warning/10';
+            else if (state.result === 'X') colorClass = 'text-danger bg-danger/10';
+            el.className = 'inline-flex items-center gap-1 text-[10px] font-semibold ' + colorClass + ' px-2 py-0.5 rounded-full mt-1.5';
+            el.innerHTML = '<span class="material-symbols-outlined text-[11px]">person</span><span>' + state.checkedBy + ' (' + state.checkedDate + ' 점검)</span>';
+        } else {
+            el.className = 'text-[10px] text-muted mt-1.5 font-medium flex items-center gap-1';
+            el.innerHTML = '<span class="material-symbols-outlined text-[11px]">hourglass_empty</span>점검 대기중';
+        }
+    }
+
     function updateLocalProgressText() {
         var cat = checklistDatabase[currentSector].categories[currentCategoryIndex];
         if (!cat) { document.getElementById('catProgressText').textContent = '진행률: 0/0 (0%)'; return; }
@@ -4863,11 +4882,26 @@
         document.getElementById('catProgressText').textContent = '진행률: ' + checked + '/' + total + '문항 (' + pct + '%)';
     }
 
+    function currentCheckerLabel() {
+        return localStorage.getItem('currentUser') || '알 수 없음';
+    }
+
+    function todayDateString() {
+        return new Date().toISOString().split('T')[0];
+    }
+
     function setItemResult(catId, itemNo, value) {
         var stateObj = userProgress[currentPeriod][currentSector][catId][itemNo];
         stateObj.result = (stateObj.result === value) ? '' : value;
         if (stateObj.result === 'O' || stateObj.result === '') {
             stateObj.action = '';
+        }
+        if (stateObj.result) {
+            stateObj.checkedBy = currentCheckerLabel();
+            stateObj.checkedDate = todayDateString();
+        } else {
+            stateObj.checkedBy = '';
+            stateObj.checkedDate = '';
         }
         saveProgress();
         loadActiveCategoryItems();
@@ -4879,7 +4913,11 @@
         var stateObj = userProgress[currentPeriod][currentSector][catId][itemNo];
         if (stateObj.action === value) return;
         stateObj.action = value;
+        stateObj.checkedBy = currentCheckerLabel();
+        stateObj.checkedDate = todayDateString();
         saveProgress();
+        var badge = document.getElementById('badge-' + catId + '-' + itemNo);
+        if (badge) setBadgeContent(badge, stateObj);
     }
 
     function updateDashboardStats() {
