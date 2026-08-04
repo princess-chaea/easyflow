@@ -102,10 +102,23 @@
             });
         }
 
-        // Load Profile Modal Script dynamically
-        const pmScript = document.createElement('script');
-        pmScript.src = 'assets/js/profile-modal.js';
-        document.body.appendChild(pmScript);
+        // Load School Search Script (NEIS API)
+        const ssScript = document.createElement('script');
+        ssScript.src = 'assets/js/school-search.js';
+        document.body.appendChild(ssScript);
+
+        // Load Profile Modal Script dynamically (after school-search)
+        ssScript.onload = () => {
+            const pmScript = document.createElement('script');
+            pmScript.src = 'assets/js/profile-modal.js';
+            document.body.appendChild(pmScript);
+        };
+        // Fallback if school-search.js already loaded
+        ssScript.onerror = () => {
+            const pmScript = document.createElement('script');
+            pmScript.src = 'assets/js/profile-modal.js';
+            document.body.appendChild(pmScript);
+        };
         
     });
 })();

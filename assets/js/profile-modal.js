@@ -109,8 +109,12 @@
                     <div class="flex-1 flex flex-col gap-4 w-full">
                         <div class="flex flex-col sm:flex-row gap-4 w-full">
                             <div class="flex flex-col gap-1.5 flex-1">
-                                <label class="text-[14px] font-bold text-ink">기관</label>
-                                <input type="text" id="pmOrgInput" value="${userOrg}" placeholder="예) 경상북도교육청" class="w-full border border-gray-300 rounded-xl px-4 py-2.5 text-[15px] focus:outline-none focus:border-primary transition-colors bg-white">
+                                <label class="text-[14px] font-bold text-ink" for="pmOrgInput">기관</label>
+                                <div class="relative">
+                                    <span class="absolute left-3 top-1/2 -translate-y-1/2 material-symbols-outlined text-[18px] text-muted pointer-events-none">search</span>
+                                    <input type="text" id="pmOrgInput" value="${userOrg}" placeholder="학교명 입력 (예: 아천초, 포항고)" autocomplete="off" class="w-full border border-gray-300 rounded-xl pl-9 pr-4 py-2.5 text-[15px] focus:outline-none focus:border-primary transition-colors bg-white">
+                                </div>
+                                <input type="hidden" id="pmOrgSchoolCode">
                             </div>
                             <div class="flex flex-col gap-1.5 flex-1">
                                 <label class="text-[14px] font-bold text-ink">직위</label>
@@ -177,6 +181,11 @@
     `;
 
     document.body.insertAdjacentHTML('beforeend', modalHTML);
+
+    // NEIS 학교 자동완성 초기화 (school-search.js가 로드된 경우에만)
+    if (window.EF_SCHOOL) {
+        EF_SCHOOL.initSchoolSearch('pmOrgInput', 'pmOrgSchoolCode');
+    }
 
     const overlay = document.getElementById('profileModalOverlay');
     const closeBtn = document.getElementById('pmCloseBtn');
