@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 
 <html lang="ko">
 <head>
@@ -360,32 +360,35 @@
 <!-- 표준 페이지 헤더 영역 -->
 <section class="max-w-[1600px] mx-auto py-xl">
 <div class="flex flex-col lg:flex-row gap-xl items-start">
-<aside class="w-full md:w-[280px] shrink-0 bg-surface-container-low border border-hairline flex flex-col p-xl gap-md rounded-2xl h-fit hidden md:flex">
-<div class="mb-8 px-2">
-<h1 class="font-title-lg text-title-lg text-primary">EasyGongmun</h1>
-<p class="text-sm text-on-surface-variant">Template Creation</p>
-</div>
-<div class="space-y-2">
-<div class="flex items-center gap-3 p-3 text-on-surface-variant hover:bg-surface-variant rounded-lg cursor-pointer font-label-mono text-label-mono" onclick="location.href='서식 자료실_한글파일서식선택.html'">
-<span class="material-symbols-outlined">description</span>
-<span>서식 선택</span>
-</div>
-<div class="flex items-center gap-3 p-3 text-on-surface-variant hover:bg-surface-variant rounded-lg cursor-pointer font-label-mono text-label-mono" onclick="location.href='서식 자료실_학교정보확인.html'">
-<span class="material-symbols-outlined">school</span>
-<span>학교 정보 확인</span>
-</div>
-<div class="flex items-center gap-3 p-3 bg-secondary-container text-on-secondary-container font-bold rounded-lg cursor-default font-label-mono text-label-mono">
-<span class="material-symbols-outlined">check_circle</span>
-<span>생성 완료</span>
-</div>
-</div>
-<div class="mt-auto p-4 bg-surface-card rounded-2xl border border-hairline shadow-sm">
-<p class="text-xs text-on-surface-variant mb-2">도움이 필요하신가요?</p>
-<button class="w-full py-2 bg-primary-fixed text-on-primary-fixed rounded-lg text-sm font-bold flex items-center justify-center gap-2">
-<span class="material-symbols-outlined text-sm">support_agent</span>
-                    관리자 문의
-                </button>
-</div>
+<aside class="w-full md:w-[280px] shrink-0 bg-canvas border border-hairline flex flex-col p-lg gap-md rounded-2xl h-fit hidden md:flex shadow-sm">
+    <div class="mb-sm">
+        <h2 class="font-title-md text-title-md text-ink">서식 자동 완성</h2>
+        <p class="text-caption text-muted mt-xxs">단계별 문서 작성기</p>
+    </div>
+    <div class="space-y-2">
+        <div class="text-on-surface-variant hover:bg-surface-variant rounded-lg p-3 flex items-center gap-3 transition-all duration-200 cursor-pointer" onclick="location.href='서식 자료실_한글파일서식선택.html'">
+            <span class="material-symbols-outlined">description</span>
+            <span class="font-label-mono text-label-mono">서식 선택</span>
+        </div>
+        <div class="text-on-surface-variant hover:bg-surface-variant rounded-lg p-3 flex items-center gap-3 transition-all duration-200 cursor-pointer" onclick="location.href='서식 자료실_학교정보확인.html'">
+            <span class="material-symbols-outlined">school</span>
+            <span class="font-label-mono text-label-mono">학교 정보 확인</span>
+        </div>
+        <div class="bg-primary-container/10 text-primary font-bold rounded-lg p-3 flex items-center gap-3 transition-all duration-200 cursor-pointer">
+            <span class="material-symbols-outlined">check_circle</span>
+            <span class="font-label-mono text-label-mono">생성 완료</span>
+        </div>
+    </div>
+    <div class="mt-auto p-4 glass-card rounded-2xl">
+        <div class="flex items-center gap-2 mb-2">
+            <span class="material-symbols-outlined text-secondary">info</span>
+            <span class="font-bold text-sm">도움말</span>
+        </div>
+        <p class="text-xs text-on-surface-variant leading-relaxed">
+            원하는 서식을 찾지 못하셨나요? <br/>
+            <a class="text-secondary underline" href="서식자료실_공문OCR요약.html">HWP 파일 업로드</a>를 통해 <br/>AI가 직접 서식을 분석해 드립니다.
+        </p>
+    </div>
 </aside>
 <div class="flex-1 w-full min-w-0 flex flex-col gap-lg w-full max-w-full">
 <section class="max-w-[1600px] mx-auto px-lg py-xl">
