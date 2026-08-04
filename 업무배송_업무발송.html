@@ -442,22 +442,28 @@
 <div class="flex flex-col sm:flex-row gap-lg">
 <div class="flex flex-col gap-sm flex-1">
 <label class="text-[16px] font-bold text-ink flex items-center gap-xs">
-<span class="material-symbols-outlined text-primary text-[20px]">calendar_today</span> 
-                                    업무(마감) 일자
+<span class="material-symbols-outlined text-primary text-[20px]">calendar_today</span>
+                                    업무 처리 시기
                                 </label>
-<input class="w-full border border-gray-300 rounded-xl px-md py-sm text-[15px] focus:outline-none focus:border-primary transition-colors" type="date"/>
+<p class="text-[12px] text-ink/50 -mt-xs">학교마다 정확한 일정이 달라 특정 날짜 대신 처리 기간(주간)으로 안내됩니다.</p>
+<div class="flex items-center gap-xs">
+<input class="w-full border border-gray-300 rounded-xl px-md py-sm text-[15px] focus:outline-none focus:border-primary transition-colors" id="taskStartDate" type="date"/>
+<span class="text-ink/40 shrink-0">~</span>
+<input class="w-full border border-gray-300 rounded-xl px-md py-sm text-[15px] focus:outline-none focus:border-primary transition-colors" id="taskEndDate" type="date"/>
+</div>
 </div>
 <div class="flex flex-col gap-sm flex-1">
 <label class="text-[16px] font-bold text-ink flex items-center gap-xs">
-<span class="material-symbols-outlined text-primary text-[20px]">schedule_send</span> 
-                                    우편 배송 시기 (공개 일시)
+<span class="material-symbols-outlined text-primary text-[20px]">schedule_send</span>
+                                    업무 발송 시기
                                 </label>
-<select class="w-full border border-gray-300 rounded-xl px-md py-sm text-[15px] focus:outline-none focus:border-primary transition-colors appearance-none bg-white">
-<option>등록 즉시 발송</option>
-<option>업무일 기준 7일 전 자동 발송</option>
-<option>업무일 기준 3일 전 자동 발송</option>
-<option>직접 지정...</option>
+<select class="w-full border border-gray-300 rounded-xl px-md py-sm text-[15px] focus:outline-none focus:border-primary transition-colors appearance-none bg-white" id="sendTimingSelect" onchange="sendTimingChanged(this.value)">
+<option value="now">등록 즉시 발송</option>
+<option value="d7">업무 시작일 기준 7일 전 자동 발송</option>
+<option value="d3">업무 시작일 기준 3일 전 자동 발송</option>
+<option value="custom">직접 지정...</option>
 </select>
+<input class="hidden w-full border border-gray-300 rounded-xl px-md py-sm text-[15px] focus:outline-none focus:border-primary transition-colors" id="sendCustomDate" type="datetime-local"/>
 </div>
 </div>
 <hr class="border-gray-200"/>
@@ -520,6 +526,18 @@
         function sendResetForm() {
             document.getElementById('sendFileChips').innerHTML = '';
             document.getElementById('sendDropzoneText').textContent = '클릭하여 파일 선택 또는 여기로 드래그';
+            document.getElementById('sendCustomDate').classList.add('hidden');
+            document.getElementById('sendCustomDate').value = '';
+        }
+
+        function sendTimingChanged(value) {
+            const customInput = document.getElementById('sendCustomDate');
+            const isCustom = value === 'custom';
+            customInput.classList.toggle('hidden', !isCustom);
+            if (isCustom) {
+                customInput.focus();
+                if (typeof customInput.showPicker === 'function') customInput.showPicker();
+            }
         }
     </script>
 </body>

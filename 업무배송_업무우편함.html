@@ -377,7 +377,7 @@
 <div class="mb-lg flex flex-col sm:flex-row sm:items-end sm:justify-between gap-sm">
 <div>
 <h1 class="text-[28px] font-bold text-ink mb-xs">업무 우편함</h1>
-<p class="text-[15px] text-ink/70">업무 배송 담당자가 보낸 서식·공문·자료를 확인하세요. 마감일은 자동으로 나의 학사일정 달력에 반영됩니다.</p>
+<p class="text-[15px] text-ink/70">업무 배송 담당자가 보낸 서식·공문·자료를 확인하세요. <span class="material-symbols-outlined text-[14px] align-middle">bookmark</span> 책갈피로 표시된 업무만 나의 학사일정 달력에 반영됩니다.</p>
 </div>
 <div class="flex items-center gap-xs">
 <button class="mailbox-tab px-md py-xs rounded-full text-[14px] font-bold transition-colors bg-primary text-white" data-filter="all" onclick="filterMail('all', this)">전체 <span class="opacity-80">5</span></button>
@@ -385,7 +385,7 @@
 </div>
 </div>
 <div class="bg-white rounded-2xl shadow-sm border border-gray-200 flex-1 divide-y divide-gray-100 overflow-hidden" id="mailList">
-<div class="mail-item is-unread flex items-start gap-md p-lg hover:bg-surface-soft/60 transition-colors cursor-pointer" data-read="unread">
+<div class="mail-item is-unread flex items-start gap-md p-lg hover:bg-surface-soft/60 transition-colors cursor-pointer" data-read="unread" data-mail-id="mail-1" data-dept="행정실" data-date="2026.08.01" data-title="2026학년도 제1차 추가경정예산(안) 편성 및 학교운영위원회 심의 요청" data-desc="추경 예산(안) 검토 후 붙임 서식에 부서별 요구액을 취합하여 회신 바랍니다." data-file="추경예산_요청기안문.hwp" data-due="마감 D-1">
 <span class="mt-1 w-2 h-2 rounded-full bg-primary shrink-0" title="안 읽음"></span>
 <div class="flex-1 min-w-0">
 <div class="flex flex-wrap items-center gap-xs mb-1">
@@ -399,9 +399,12 @@
 <span class="inline-flex items-center gap-1 px-sm py-1 rounded-lg bg-danger/10 text-danger text-[12px] font-bold"><span class="material-symbols-outlined text-[14px]">event</span>마감 D-1</span>
 </div>
 </div>
-<button class="shrink-0 p-xs rounded-full hover:bg-surface-strong text-ink/50 hover:text-primary transition-colors" title="다운로드"><span class="material-symbols-outlined text-[20px]">download</span></button>
+<div class="flex items-center gap-xxs shrink-0">
+<button class="bookmark-btn p-xs rounded-full hover:bg-surface-strong transition-colors" title="내 학사일정 달력에 표시 중 — 클릭하면 제외"><span class="material-symbols-outlined text-[20px] text-primary">bookmark</span></button>
+<button class="p-xs rounded-full hover:bg-surface-strong text-ink/50 hover:text-primary transition-colors" title="다운로드"><span class="material-symbols-outlined text-[20px]">download</span></button>
 </div>
-<div class="mail-item is-unread flex items-start gap-md p-lg hover:bg-surface-soft/60 transition-colors cursor-pointer" data-read="unread">
+</div>
+<div class="mail-item is-unread flex items-start gap-md p-lg hover:bg-surface-soft/60 transition-colors cursor-pointer" data-read="unread" data-mail-id="mail-2" data-dept="교무실" data-date="2026.07.30" data-title="[2학기 준비] 교육과정 워크숍 및 학년협의회 자료 배포" data-desc="학년별 교육과정 재구성안을 첨부 서식에 작성하여 제출해 주세요." data-file="2학기_교육과정_재구성안.hwp" data-due="마감 D-1">
 <span class="mt-1 w-2 h-2 rounded-full bg-primary shrink-0" title="안 읽음"></span>
 <div class="flex-1 min-w-0">
 <div class="flex flex-wrap items-center gap-xs mb-1">
@@ -415,9 +418,12 @@
 <span class="inline-flex items-center gap-1 px-sm py-1 rounded-lg bg-danger/10 text-danger text-[12px] font-bold"><span class="material-symbols-outlined text-[14px]">event</span>마감 D-1</span>
 </div>
 </div>
-<button class="shrink-0 p-xs rounded-full hover:bg-surface-strong text-ink/50 hover:text-primary transition-colors" title="다운로드"><span class="material-symbols-outlined text-[20px]">download</span></button>
+<div class="flex items-center gap-xxs shrink-0">
+<button class="bookmark-btn p-xs rounded-full hover:bg-surface-strong transition-colors" title="내 학사일정 달력에 표시 중 — 클릭하면 제외"><span class="material-symbols-outlined text-[20px] text-primary">bookmark</span></button>
+<button class="p-xs rounded-full hover:bg-surface-strong text-ink/50 hover:text-primary transition-colors" title="다운로드"><span class="material-symbols-outlined text-[20px]">download</span></button>
 </div>
-<div class="mail-item flex items-start gap-md p-lg hover:bg-surface-soft/60 transition-colors cursor-pointer" data-read="read">
+</div>
+<div class="mail-item flex items-start gap-md p-lg hover:bg-surface-soft/60 transition-colors cursor-pointer" data-read="read" data-mail-id="mail-3" data-dept="행정실" data-date="2026.07.28" data-title="2학기 방과후학교 외부강사 계약 및 운영 준비 안내" data-desc="외부강사 채용 시 첨부된 표준 계약서 양식을 사용해 주세요." data-file="방과후강사_표준계약서.hwp" data-due="마감 D-7">
 <span class="mt-1 w-2 h-2 rounded-full bg-transparent shrink-0"></span>
 <div class="flex-1 min-w-0">
 <div class="flex flex-wrap items-center gap-xs mb-1">
@@ -431,9 +437,12 @@
 <span class="inline-flex items-center gap-1 px-sm py-1 rounded-lg bg-warning/10 text-warning text-[12px] font-bold"><span class="material-symbols-outlined text-[14px]">event</span>마감 D-7</span>
 </div>
 </div>
-<button class="shrink-0 p-xs rounded-full hover:bg-surface-strong text-ink/50 hover:text-primary transition-colors" title="다운로드"><span class="material-symbols-outlined text-[20px]">download</span></button>
+<div class="flex items-center gap-xxs shrink-0">
+<button class="bookmark-btn p-xs rounded-full hover:bg-surface-strong transition-colors" title="내 학사일정 달력에 표시 중 — 클릭하면 제외"><span class="material-symbols-outlined text-[20px] text-primary">bookmark</span></button>
+<button class="p-xs rounded-full hover:bg-surface-strong text-ink/50 hover:text-primary transition-colors" title="다운로드"><span class="material-symbols-outlined text-[20px]">download</span></button>
 </div>
-<div class="mail-item flex items-start gap-md p-lg hover:bg-surface-soft/60 transition-colors cursor-pointer" data-read="read">
+</div>
+<div class="mail-item flex items-start gap-md p-lg hover:bg-surface-soft/60 transition-colors cursor-pointer" data-read="read" data-mail-id="mail-4" data-dept="생활안전부" data-date="2026.07.25" data-title="개학 맞이 교내 안전점검 및 소방 시설 확인 협조 요청" data-desc="담당 구역 점검표를 작성하여 안전점검일 전까지 제출 바랍니다." data-file="안전점검표_2학기.hwp" data-due="마감 D-9">
 <span class="mt-1 w-2 h-2 rounded-full bg-transparent shrink-0"></span>
 <div class="flex-1 min-w-0">
 <div class="flex flex-wrap items-center gap-xs mb-1">
@@ -447,9 +456,12 @@
 <span class="inline-flex items-center gap-1 px-sm py-1 rounded-lg bg-warning/10 text-warning text-[12px] font-bold"><span class="material-symbols-outlined text-[14px]">event</span>마감 D-9</span>
 </div>
 </div>
-<button class="shrink-0 p-xs rounded-full hover:bg-surface-strong text-ink/50 hover:text-primary transition-colors" title="다운로드"><span class="material-symbols-outlined text-[20px]">download</span></button>
+<div class="flex items-center gap-xxs shrink-0">
+<button class="bookmark-btn p-xs rounded-full hover:bg-surface-strong transition-colors" title="내 학사일정 달력에 표시 중 — 클릭하면 제외"><span class="material-symbols-outlined text-[20px] text-primary">bookmark</span></button>
+<button class="p-xs rounded-full hover:bg-surface-strong text-ink/50 hover:text-primary transition-colors" title="다운로드"><span class="material-symbols-outlined text-[20px]">download</span></button>
 </div>
-<div class="mail-item flex items-start gap-md p-lg hover:bg-surface-soft/60 transition-colors cursor-pointer" data-read="read">
+</div>
+<div class="mail-item flex items-start gap-md p-lg hover:bg-surface-soft/60 transition-colors cursor-pointer" data-read="read" data-mail-id="mail-5" data-dept="연구실" data-date="2026.07.20" data-title="2학기 교육과정 운영 계획 수정 및 학사일정 변경 심의" data-desc="수정된 학사일정(안)을 검토 후 의견을 회신해 주세요." data-file="학사일정_변경(안).hwp" data-due="마감 D-14">
 <span class="mt-1 w-2 h-2 rounded-full bg-transparent shrink-0"></span>
 <div class="flex-1 min-w-0">
 <div class="flex flex-wrap items-center gap-xs mb-1">
@@ -463,12 +475,49 @@
 <span class="inline-flex items-center gap-1 px-sm py-1 rounded-lg bg-surface-strong text-ink/60 text-[12px] font-bold"><span class="material-symbols-outlined text-[14px]">event</span>마감 D-14</span>
 </div>
 </div>
-<button class="shrink-0 p-xs rounded-full hover:bg-surface-strong text-ink/50 hover:text-primary transition-colors" title="다운로드"><span class="material-symbols-outlined text-[20px]">download</span></button>
+<div class="flex items-center gap-xxs shrink-0">
+<button class="bookmark-btn p-xs rounded-full hover:bg-surface-strong transition-colors" title="내 학사일정 달력에 표시 중 — 클릭하면 제외"><span class="material-symbols-outlined text-[20px] text-primary">bookmark</span></button>
+<button class="p-xs rounded-full hover:bg-surface-strong text-ink/50 hover:text-primary transition-colors" title="다운로드"><span class="material-symbols-outlined text-[20px]">download</span></button>
+</div>
 </div>
 </div>
 </div>
 </div>
 </main>
+
+<!-- Mail Detail Modal -->
+<div id="mailDetailModal" class="fixed inset-0 z-[200] hidden items-center justify-center p-lg">
+<div class="absolute inset-0 bg-black/40 backdrop-blur-sm" onclick="closeMailDetail()"></div>
+<div class="relative bg-white rounded-2xl w-full max-w-[560px] max-h-[85vh] overflow-y-auto shadow-2xl flex flex-col">
+<div class="flex items-start justify-between gap-base p-lg border-b border-hairline">
+<div class="flex-1 min-w-0">
+<div class="flex flex-wrap items-center gap-xs mb-xs">
+<span class="px-xs py-0.5 rounded-md text-[12px] font-bold bg-primary/10 text-primary" id="mdDept">—</span>
+<span class="text-[13px] text-ink/50" id="mdDate">—</span>
+</div>
+<h3 class="text-[19px] font-bold text-ink leading-snug" id="mdTitle">—</h3>
+</div>
+<button class="shrink-0 p-xs rounded-full hover:bg-surface-strong text-ink/50 hover:text-ink transition-colors" onclick="closeMailDetail()"><span class="material-symbols-outlined text-[22px]">close</span></button>
+</div>
+<div class="p-lg flex flex-col gap-base">
+<p class="text-[15px] text-ink/80 leading-relaxed" id="mdDesc">—</p>
+<div class="flex flex-wrap items-center gap-sm">
+<span class="inline-flex items-center gap-1 px-sm py-1.5 rounded-lg bg-surface-soft text-[13px] text-ink/70"><span class="material-symbols-outlined text-[16px]">attach_file</span><span id="mdFile">—</span></span>
+<span class="inline-flex items-center gap-1 px-sm py-1.5 rounded-lg bg-danger/10 text-danger text-[13px] font-bold"><span class="material-symbols-outlined text-[16px]">event</span><span id="mdDue">—</span></span>
+</div>
+</div>
+<div class="flex items-center justify-between gap-sm p-lg border-t border-hairline bg-surface-soft/50">
+<button class="flex items-center gap-xxs px-md py-sm rounded-full text-[14px] font-bold transition-colors hover:bg-white" id="mdBookmarkBtn">
+<span class="material-symbols-outlined text-[18px]" id="mdBookmarkIcon">bookmark</span>
+<span id="mdBookmarkLabel">내 달력에 표시 중</span>
+</button>
+<div class="flex items-center gap-xs">
+<button class="px-md py-sm rounded-full text-[14px] font-bold bg-surface-strong text-ink hover:bg-hairline transition-colors flex items-center gap-xxs"><span class="material-symbols-outlined text-[18px]">download</span>서식 다운로드</button>
+<button class="px-md py-sm rounded-full text-[14px] font-bold bg-primary text-white hover:bg-primary-active transition-colors" onclick="closeMailDetail()">확인</button>
+</div>
+</div>
+</div>
+</div>
 <script>
         function filterMail(filter, btn) {
             document.querySelectorAll('.mailbox-tab').forEach(b => {
@@ -484,6 +533,81 @@
             });
         }
 
+        /* ── 책갈피(내 학사일정 달력 표시 여부) ─────────────────────────── */
+        const currentUser = localStorage.getItem('currentUser') || 'guest';
+        const BOOKMARK_KEY = 'ef_mailCalendarBookmarks_' + currentUser;
+        const allMailIds = Array.from(document.querySelectorAll('#mailList .mail-item')).map(i => i.dataset.mailId);
+
+        let bookmarked;
+        try {
+            const saved = JSON.parse(localStorage.getItem(BOOKMARK_KEY));
+            bookmarked = new Set(Array.isArray(saved) ? saved : allMailIds); // 기본값: 전부 내 달력에 표시(기존 동작과 동일)
+        } catch {
+            bookmarked = new Set(allMailIds);
+        }
+        const saveBookmarks = () => localStorage.setItem(BOOKMARK_KEY, JSON.stringify([...bookmarked]));
+
+        function syncBookmarkIcon(iconEl, on) {
+            iconEl.textContent = on ? 'bookmark' : 'bookmark_border';
+            iconEl.classList.toggle('text-primary', on);
+            iconEl.classList.toggle('text-ink/40', !on);
+        }
+
+        function syncMailBookmarkUI(item) {
+            const on = bookmarked.has(item.dataset.mailId);
+            const btn = item.querySelector('.bookmark-btn');
+            syncBookmarkIcon(btn.querySelector('.material-symbols-outlined'), on);
+            btn.title = on ? '내 학사일정 달력에 표시 중 — 클릭하면 제외' : '내 달력에서 제외됨 — 클릭하면 추가';
+        }
+
+        function toggleBookmark(mailId) {
+            if (bookmarked.has(mailId)) bookmarked.delete(mailId); else bookmarked.add(mailId);
+            saveBookmarks();
+            document.querySelectorAll('#mailList .mail-item').forEach(i => { if (i.dataset.mailId === mailId) syncMailBookmarkUI(i); });
+            if (document.getElementById('mailDetailModal').dataset.mailId === mailId) syncModalBookmark();
+        }
+
+        document.querySelectorAll('#mailList .mail-item').forEach(item => {
+            syncMailBookmarkUI(item);
+            item.querySelector('.bookmark-btn').addEventListener('click', (e) => {
+                e.stopPropagation();
+                toggleBookmark(item.dataset.mailId);
+            });
+        });
+
+        /* ── 상세 모달 ──────────────────────────────────────────────── */
+        const mailDetailModal = document.getElementById('mailDetailModal');
+
+        function syncModalBookmark() {
+            const on = bookmarked.has(mailDetailModal.dataset.mailId);
+            syncBookmarkIcon(document.getElementById('mdBookmarkIcon'), on);
+            document.getElementById('mdBookmarkLabel').textContent = on ? '내 달력에 표시 중' : '내 달력에서 제외됨';
+        }
+
+        document.getElementById('mdBookmarkBtn').addEventListener('click', () => {
+            toggleBookmark(mailDetailModal.dataset.mailId);
+        });
+
+        function openMailDetail(item) {
+            mailDetailModal.dataset.mailId = item.dataset.mailId;
+            document.getElementById('mdDept').textContent = item.dataset.dept;
+            document.getElementById('mdDate').textContent = item.dataset.date + ' 발송';
+            document.getElementById('mdTitle').textContent = item.dataset.title;
+            document.getElementById('mdDesc').textContent = item.dataset.desc;
+            document.getElementById('mdFile').textContent = item.dataset.file;
+            document.getElementById('mdDue').textContent = item.dataset.due;
+            syncModalBookmark();
+            mailDetailModal.classList.remove('hidden');
+            mailDetailModal.classList.add('flex');
+        }
+        function closeMailDetail() {
+            mailDetailModal.classList.add('hidden');
+            mailDetailModal.classList.remove('flex');
+        }
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && !mailDetailModal.classList.contains('hidden')) closeMailDetail();
+        });
+
         document.querySelectorAll('#mailList .mail-item').forEach(item => {
             item.addEventListener('click', (e) => {
                 if (e.target.closest('button')) return;
@@ -494,6 +618,7 @@
                     const title = item.querySelector('p.font-bold, p.font-medium');
                     if (title) { title.classList.remove('font-bold', 'text-ink'); title.classList.add('font-medium', 'text-ink/80'); }
                 }
+                openMailDetail(item);
             });
         });
     </script>

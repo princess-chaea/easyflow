@@ -2934,11 +2934,6 @@
           + '<p class="text-caption text-muted-soft mt-xxs">기간을 넓히거나 부서 필터를 확인해 보세요.</p></div>';
         return;
       }
-      document.getElementById('btnSidebar').addEventListener('click', () => {
-        S.sidebar = S.sidebar === 'open' ? 'closed' : 'open';
-        saveSettings(); applySettings();
-      });
-
       listEl.innerHTML = head + items.map(t => {
         const st = statusOf(t);
         const d = parse(t.due);
@@ -3455,6 +3450,17 @@
         asideBtn.querySelector('.material-symbols-outlined').textContent = open ? 'left_panel_close' : 'left_panel_open';
         document.getElementById('sidebarBtnLabel').textContent = open ? '메뉴 접기' : '메뉴 펴기';
         asideBtn.title = open ? '사이드바 접기 — 달력을 넓게 봅니다' : '사이드바 펴기';
+      }
+      {
+        const sideCol = document.getElementById('sideCol');
+        const mainGrid = document.getElementById('mainGrid');
+        if (sideCol && mainGrid) {
+          const open = S.sidebar === 'open';
+          // 인라인 style로 강제 — Tailwind CDN이 런타임에 클래스를 주입하는 순서에 따라
+          // .hidden 유틸리티가 기존 flex 클래스를 못 이길 수 있어 신뢰할 수 없음
+          sideCol.style.display = open ? '' : 'none';
+          mainGrid.style.gridTemplateColumns = open ? '' : '1fr';
+        }
       }
       // body 데이터 속성 (CSS가 밀도·글자크기·주말을 처리)
       document.body.dataset.density = S.density;
@@ -4152,10 +4158,10 @@
     // document.getElementById('btnCloseSchool').addEventListener('click', closeSchoolModal);
     // document.getElementById('schoolScrim').addEventListener('click', closeSchoolModal);
 
-    // document.getElementById('btnSidebar').addEventListener('click', () => {
-    //   S.sidebar = S.sidebar === 'open' ? 'closed' : 'open';
-    //   saveSettings(); applySettings();
-    // });
+    document.getElementById('btnSidebar').addEventListener('click', () => {
+      S.sidebar = S.sidebar === 'open' ? 'closed' : 'open';
+      saveSettings(); applySettings();
+    });
 
     /* 사이드바 섹션 아코디언 — 각 섹션 제목을 눌러 접었다 펼 수 있고 상태가 저장된다 */
     let sideOpen = {};
