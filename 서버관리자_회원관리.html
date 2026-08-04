@@ -389,12 +389,12 @@
 <div class="flex flex-col md:flex-row gap-base">
 <div class="flex-grow relative">
 <span class="material-symbols-outlined absolute left-base top-1/2 -translate-y-1/2 text-muted">search</span>
-<input class="w-full pl-[48px] pr-base py-sm bg-surface-soft border border-hairline rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all font-body-md" placeholder="이름, 학교명, 또는 사번으로 검색하세요" type="text"/>
+<input class="w-full pl-[48px] pr-base py-sm bg-surface-soft border border-hairline rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all font-body-md" placeholder="이름, 기관명, 또는 사번으로 검색하세요" type="text"/>
 </div>
 <div class="flex gap-base">
 <select class="px-base py-sm bg-surface-soft border border-hairline rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all font-body-sm appearance-none min-w-[140px]">
 <option>전체 역할</option>
-<option>총괄 관리자</option>
+<option>서버 관리자</option>
 <option>학교 관리자</option>
 <option>교사</option>
 </select>
@@ -418,7 +418,7 @@
 <th class="px-lg py-base font-caption-strong text-caption-strong text-on-surface-variant uppercase tracking-wider">
                                 이름 / 업무포털 아이디</th>
 <th class="px-lg py-base font-caption-strong text-caption-strong text-on-surface-variant uppercase tracking-wider">
-                                소속 학교 / 부서</th>
+                                소속 기관 / 부서</th>
 <th class="px-lg py-base font-caption-strong text-caption-strong text-on-surface-variant uppercase tracking-wider">
                                 현재 역할</th>
 <th class="px-lg py-base font-caption-strong text-caption-strong text-on-surface-variant uppercase tracking-wider">
@@ -428,13 +428,13 @@
 
 </tr>
 </thead>
+
 <tbody class="divide-y divide-hairline">
-<!-- Table Row 1 -->
+<!-- Table Row 1 (서버 관리자) -->
 <tr class="stagger-in transition-table-row" style="animation-delay: 0.1s;">
 <td class="px-lg py-base">
 <div class="flex items-center gap-sm">
-<div class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold">
-                                        김</div>
+<div class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold">김</div>
 <div>
 <div class="font-body-strong text-body-strong">김철수</div>
 <div class="font-caption text-caption text-muted">chulsoo</div>
@@ -442,27 +442,24 @@
 </div>
 </td>
 <td class="px-lg py-base">
-<div class="font-body-md text-body-md text-on-surface-variant">경북고등학교</div>
-<div class="font-caption text-caption text-muted">행정지원부</div>
+<div class="font-body-md text-body-md text-on-surface-variant">경상북도교육청연구원</div>
+<div class="font-caption text-caption text-muted">정보화운영실</div>
 </td>
 <td class="px-lg py-base">
-<span class="px-sm py-xxs rounded-full bg-primary/10 text-primary font-caption-strong">총괄
-                                    관리자</span>
+<span class="px-sm py-xxs rounded-full bg-primary/10 text-primary font-caption-strong">서버 관리자</span>
 </td>
 <td class="px-lg py-base font-number-display text-caption text-muted">2023.03.12</td>
 <td class="px-lg py-base text-center">
 <span class="inline-flex items-center gap-xs px-sm py-xxs rounded-full bg-success/10 text-success font-caption-strong">
 <span class="w-1.5 h-1.5 rounded-full bg-success"></span> 활성
-                                </span>
+</span>
 </td>
-
 </tr>
-<!-- Table Row 2 -->
+<!-- Table Row 2 (학교 관리자) -->
 <tr class="stagger-in transition-table-row" style="animation-delay: 0.15s;">
 <td class="px-lg py-base">
 <div class="flex items-center gap-sm">
-<div class="w-10 h-10 rounded-full bg-secondary/10 flex items-center justify-center text-secondary font-bold">
-                                        이</div>
+<div class="w-10 h-10 rounded-full bg-secondary/10 flex items-center justify-center text-secondary font-bold">이</div>
 <div>
 <div class="font-body-strong text-body-strong">이영희</div>
 <div class="font-caption text-caption text-muted">younghee</div>
@@ -474,23 +471,20 @@
 <div class="font-caption text-caption text-muted">교무실</div>
 </td>
 <td class="px-lg py-base">
-<span class="px-sm py-xxs rounded-full bg-secondary-container/20 text-on-secondary-container font-caption-strong">학교
-                                    관리자</span>
+<span class="px-sm py-xxs rounded-full bg-secondary-container/20 text-on-secondary-container font-caption-strong">학교 관리자</span>
 </td>
 <td class="px-lg py-base font-number-display text-caption text-muted">2023.05.20</td>
 <td class="px-lg py-base text-center">
 <span class="inline-flex items-center gap-xs px-sm py-xxs rounded-full bg-success/10 text-success font-caption-strong">
 <span class="w-1.5 h-1.5 rounded-full bg-success"></span> 활성
-                                </span>
+</span>
 </td>
-
 </tr>
-<!-- Table Row 3 -->
+<!-- Table Row 3 (교사) -->
 <tr class="stagger-in transition-table-row" style="animation-delay: 0.2s;">
 <td class="px-lg py-base">
 <div class="flex items-center gap-sm">
-<div class="w-10 h-10 rounded-full bg-on-surface-variant/10 flex items-center justify-center text-on-surface-variant font-bold">
-                                        박</div>
+<div class="w-10 h-10 rounded-full bg-on-surface-variant/10 flex items-center justify-center text-on-surface-variant font-bold">박</div>
 <div>
 <div class="font-body-strong text-body-strong">박민수</div>
 <div class="font-caption text-caption text-muted">minsoo</div>
@@ -499,7 +493,7 @@
 </td>
 <td class="px-lg py-base">
 <div class="font-body-md text-body-md text-on-surface-variant">구미정보고등학교</div>
-<div class="font-caption text-caption text-muted">교육행정실</div>
+<div class="font-caption text-caption text-muted">교육연구부</div>
 </td>
 <td class="px-lg py-base">
 <span class="px-sm py-xxs rounded-full bg-surface-container-highest text-on-surface-variant font-caption-strong">교사</span>
@@ -508,16 +502,14 @@
 <td class="px-lg py-base text-center">
 <span class="inline-flex items-center gap-xs px-sm py-xxs rounded-full bg-muted/10 text-muted font-caption-strong">
 <span class="w-1.5 h-1.5 rounded-full bg-muted"></span> 비활성
-                                </span>
+</span>
 </td>
-
 </tr>
-<!-- Table Row 4 -->
+<!-- Table Row 4 (장학사) -->
 <tr class="stagger-in transition-table-row" style="animation-delay: 0.25s;">
 <td class="px-lg py-base">
 <div class="flex items-center gap-sm">
-<div class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold">
-                                        정</div>
+<div class="w-10 h-10 rounded-full bg-tertiary-fixed-dim/20 flex items-center justify-center text-tertiary font-bold">정</div>
 <div>
 <div class="font-body-strong text-body-strong">정소라</div>
 <div class="font-caption text-caption text-muted">sora</div>
@@ -525,21 +517,46 @@
 </div>
 </td>
 <td class="px-lg py-base">
-<div class="font-body-md text-body-md text-on-surface-variant">포항제철고등학교</div>
-<div class="font-caption text-caption text-muted">정보화전략팀</div>
+<div class="font-body-md text-body-md text-on-surface-variant">경상북도교육청</div>
+<div class="font-caption text-caption text-muted">초등교육과</div>
 </td>
 <td class="px-lg py-base">
-<span class="px-sm py-xxs rounded-full bg-surface-container-highest text-on-surface-variant font-caption-strong">교사</span>
+<span class="px-sm py-xxs rounded-full bg-blue-100 text-blue-700 font-caption-strong">장학사</span>
 </td>
 <td class="px-lg py-base font-number-display text-caption text-muted">2022.11.02</td>
 <td class="px-lg py-base text-center">
 <span class="inline-flex items-center gap-xs px-sm py-xxs rounded-full bg-success/10 text-success font-caption-strong">
 <span class="w-1.5 h-1.5 rounded-full bg-success"></span> 활성
-                                </span>
+</span>
 </td>
-
+</tr>
+<!-- Table Row 5 (멘토) -->
+<tr class="stagger-in transition-table-row" style="animation-delay: 0.3s;">
+<td class="px-lg py-base">
+<div class="flex items-center gap-sm">
+<div class="w-10 h-10 rounded-full bg-orange-100 flex items-center justify-center text-orange-600 font-bold">최</div>
+<div>
+<div class="font-body-strong text-body-strong">최진우</div>
+<div class="font-caption text-caption text-muted">jinwoo</div>
+</div>
+</div>
+</td>
+<td class="px-lg py-base">
+<div class="font-body-md text-body-md text-on-surface-variant">포항제철고등학교</div>
+<div class="font-caption text-caption text-muted">정보화부</div>
+</td>
+<td class="px-lg py-base">
+<span class="px-sm py-xxs rounded-full bg-purple-100 text-purple-700 font-caption-strong">멘토</span>
+</td>
+<td class="px-lg py-base font-number-display text-caption text-muted">2023.08.19</td>
+<td class="px-lg py-base text-center">
+<span class="inline-flex items-center gap-xs px-sm py-xxs rounded-full bg-success/10 text-success font-caption-strong">
+<span class="w-1.5 h-1.5 rounded-full bg-success"></span> 활성
+</span>
+</td>
 </tr>
 </tbody>
+
 </table>
 </div>
 <!-- Pagination -->
