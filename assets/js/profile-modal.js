@@ -17,12 +17,10 @@
         avatarUrl = `https://api.dicebear.com/7.x/avataaars/svg?seed=${avatarSeed}`;
     }
 
-    // Replace header avatar
-    const headerImages = document.querySelectorAll('header img');
-    headerImages.forEach(img => {
-        if (img.src.includes('avataaars/svg') || img.src.includes('googleusercontent')) {
-            img.src = avatarUrl;
-        }
+    // Replace header/nav avatar globally
+    const globalAvatars = document.querySelectorAll('img[alt="사용자 프로필"]');
+    globalAvatars.forEach(img => {
+        img.src = avatarUrl;
     });
 
     // 2. Remove Gear Icon globally
@@ -229,7 +227,7 @@
         const avatarWrapper = document.getElementById('pmAvatarWrapper');
         const changeImageBtn = document.getElementById('pmChangeImageBtn');
         const pmAvatarImg = document.getElementById('pmAvatarImg');
-        const headerImages = document.querySelectorAll('img[src*="avatar"]'); // Assuming standard avatar elements
+        const headerImages = document.querySelectorAll('img[alt="사용자 프로필"]'); // Match all global avatars
 
         const triggerFileInput = () => avatarInput.click();
         avatarWrapper.addEventListener('click', triggerFileInput);
