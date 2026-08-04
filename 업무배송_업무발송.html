@@ -425,15 +425,17 @@
 <span class="material-symbols-outlined text-primary text-[20px]">attach_file</span> 
                                 배송할 자료 첨부
                             </label>
-<div class="border-2 border-dashed border-gray-300 rounded-2xl p-xl flex flex-col items-center justify-center gap-sm bg-surface-soft/50 hover:bg-surface transition-colors cursor-pointer group">
+<div class="border-2 border-dashed border-gray-300 rounded-2xl p-xl flex flex-col items-center justify-center gap-sm bg-surface-soft/50 hover:bg-surface transition-colors cursor-pointer group" id="sendDropzone" onclick="document.getElementById('sendFileInput').click()">
 <div class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center text-primary group-hover:scale-110 transition-transform">
 <span class="material-symbols-outlined text-[24px]">cloud_upload</span>
 </div>
 <div class="text-center">
-<p class="text-[15px] font-bold text-ink mb-1">클릭하여 파일 선택 또는 여기로 드래그</p>
+<p class="text-[15px] font-bold text-ink mb-1" id="sendDropzoneText">클릭하여 파일 선택 또는 여기로 드래그</p>
 <p class="text-[13px] text-ink/50">HWP, PDF, Excel 파일 등을 첨부하여 발송할 수 있습니다.</p>
 </div>
+<input type="file" id="sendFileInput" class="hidden" multiple onchange="sendUpdateFileList(this.files)"/>
 </div>
+<div class="flex flex-wrap gap-xs" id="sendFileChips"></div>
 </div>
 <!-- 날짜 선택 -->
 <div class="flex flex-col sm:flex-row gap-lg">
@@ -459,7 +461,7 @@
 </div>
 <hr class="border-gray-200"/>
 <div class="flex justify-end gap-sm">
-<button class="px-xl py-sm rounded-xl font-bold text-[15px] text-ink/70 hover:bg-surface-strong transition-colors border border-transparent" type="button">
+<button class="px-xl py-sm rounded-xl font-bold text-[15px] text-ink/70 hover:bg-surface-strong transition-colors border border-transparent" type="reset" onclick="sendResetForm()">
                                 취소
                             </button>
 <button class="px-xl py-sm rounded-xl font-bold text-[15px] bg-primary text-white hover:bg-primary-active transition-colors shadow-sm flex items-center gap-xs" type="submit">
@@ -480,10 +482,43 @@
         function showToast() {
             const toast = document.getElementById('toast');
             toast.classList.remove('translate-y-20', 'opacity-0');
-            
+
             setTimeout(() => {
                 toast.classList.add('translate-y-20', 'opacity-0');
             }, 3000);
+        }
+
+        function sendUpdateFileList(files) {
+            const chips = document.getElementById('sendFileChips');
+            const text = document.getElementById('sendDropzoneText');
+            chips.innerHTML = '';
+            if (!files || !files.length) {
+                text.textContent = '클릭하여 파일 선택 또는 여기로 드래그';
+                return;
+            }
+            text.textContent = files.length + '개 파일 선택됨';
+            Array.from(files).forEach(f => {
+                const chip = document.createElement('span');
+                chip.className = 'inline-flex items-center gap-xxs px-sm py-1 rounded-full bg-surface-strong text-[13px] text-ink/70';
+                chip.innerHTML = '<span class="material-symbols-outlined text-[14px]">description</span>' + f.name;
+                chips.appendChild(chip);
+            });
+        }
+
+        const sendDropzone = document.getElementById('sendDropzone');
+        sendDropzone.addEventListener('dragover', e => { e.preventDefault(); sendDropzone.classList.add('border-primary', 'bg-surface'); });
+        sendDropzone.addEventListener('dragleave', () => sendDropzone.classList.remove('border-primary', 'bg-surface'));
+        sendDropzone.addEventListener('drop', e => {
+            e.preventDefault();
+            sendDropzone.classList.remove('border-primary', 'bg-surface');
+            const input = document.getElementById('sendFileInput');
+            input.files = e.dataTransfer.files;
+            sendUpdateFileList(input.files);
+        });
+
+        function sendResetForm() {
+            document.getElementById('sendFileChips').innerHTML = '';
+            document.getElementById('sendDropzoneText').textContent = '클릭하여 파일 선택 또는 여기로 드래그';
         }
     </script>
 </body>

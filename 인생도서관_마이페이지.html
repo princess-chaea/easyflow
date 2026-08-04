@@ -510,7 +510,7 @@
                     </div>
                     <div class="flex flex-col gap-sm">
                         <a class="group flex items-center gap-md p-base bg-surface-soft hover:bg-surface-strong rounded-xl transition-all border border-hairline"
-                            href="#">
+                            href="#" onclick="event.preventDefault(); mpToast('2026학년도 교원 복무 가이드.pdf 다운로드를 시작합니다', 'download')">
                             <div
                                 class="w-10 h-10 bg-error-container text-error rounded-lg flex items-center justify-center">
                                 <span class="material-symbols-outlined" data-icon="picture_as_pdf">picture_as_pdf</span>
@@ -522,7 +522,7 @@
                             </div>
                         </a>
                         <a class="group flex items-center gap-md p-base bg-surface-soft hover:bg-surface-strong rounded-xl transition-all border border-hairline"
-                            href="#">
+                            href="#" onclick="event.preventDefault(); mpToast('상담 일지_20260610.docx 다운로드를 시작합니다', 'download')">
                             <div
                                 class="w-10 h-10 bg-on-primary-fixed-variant text-white rounded-lg flex items-center justify-center">
                                 <span class="material-symbols-outlined" data-icon="description">description</span>
@@ -534,7 +534,7 @@
                             </div>
                         </a>
                         <a class="group flex items-center gap-md p-base bg-surface-soft hover:bg-surface-strong rounded-xl transition-all border border-hairline"
-                            href="#">
+                            href="#" onclick="event.preventDefault(); mpToast('학교폭력 대응 매뉴얼 요약.hwp 다운로드를 시작합니다', 'download')">
                             <div
                                 class="w-10 h-10 bg-secondary-container text-on-secondary-container rounded-lg flex items-center justify-center">
                                 <span class="material-symbols-outlined" data-icon="sticky_note_2">sticky_note_2</span>
@@ -547,9 +547,11 @@
                         </a>
                     </div>
                     <button
-                        class="w-full mt-lg py-sm font-button text-muted border border-dashed border-outline-variant rounded-xl hover:bg-surface-soft transition-all">
+                        class="w-full mt-lg py-sm font-button text-muted border border-dashed border-outline-variant rounded-xl hover:bg-surface-soft transition-all"
+                        onclick="document.getElementById('mpFileInput').click()">
                         + 자료 추가하기
                     </button>
+                    <input type="file" id="mpFileInput" class="hidden" onchange="if(this.files[0]) mpToast(this.files[0].name + ' 자료를 추가했습니다', 'check_circle')">
                 </section>
             </div>
         </div>
@@ -569,6 +571,7 @@
         </div>
         <p class="font-caption text-caption text-on-surface-variant">© 경상북도교육청. All Rights Reserved.</p>
     </footer>
+    <div id="mpToastEl" class="hidden fixed bottom-lg left-1/2 -translate-x-1/2 z-[70] px-md py-sm rounded-pill bg-surface-dark text-white text-body-sm shadow-modal flex items-center gap-xs"></div>
     <script>
         // Micro-interactions and effects
         document.querySelectorAll('.bento-card').forEach(card => {
@@ -579,6 +582,15 @@
                 card.style.borderColor = '';
             });
         });
+
+        let mpToastTimer;
+        function mpToast(msg, icon) {
+            const t = document.getElementById('mpToastEl');
+            t.innerHTML = '<span class="material-symbols-outlined text-[18px]">' + (icon || 'info') + '</span><span>' + msg + '</span>';
+            t.classList.remove('hidden');
+            clearTimeout(mpToastTimer);
+            mpToastTimer = setTimeout(() => t.classList.add('hidden'), 2600);
+        }
     </script>
 
 

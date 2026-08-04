@@ -534,14 +534,14 @@
 </tr>
 </thead>
 <tbody class="divide-y divide-hairline">
-<tr class="group hover:bg-surface-container-lowest transition-colors cursor-pointer">
+<tr class="group hover:bg-surface-container-lowest transition-colors cursor-pointer" onclick="ocrFormToast('2024년 하계 연수 운영 기안서', 'visibility')">
 <td class="px-lg py-md">
 <div class="flex items-center gap-md">
 <span class="material-symbols-outlined text-primary/60 group-hover:text-primary">description</span>
 <div class="flex items-center gap-xs">
 <span class="font-body-md text-ink group-hover:text-primary transition-colors">2024년
                                                         하계 연수 운영 기안서</span>
-<div class="tooltip-container"><span class="material-symbols-outlined text-[18px] text-muted hover:text-primary cursor-pointer" title="미리보기">visibility</span></div>
+<div class="tooltip-container"><span class="material-symbols-outlined text-[18px] text-muted hover:text-primary cursor-pointer" title="미리보기" onclick="event.stopPropagation(); ocrFormToast('2024년 하계 연수 운영 기안서', 'visibility')">visibility</span></div>
 </div>
 </div>
 </td>
@@ -551,19 +551,19 @@
 <td class="px-lg text-right font-mono-data text-muted text-caption py-md">
                                             2024.05.15</td>
 <td class="px-lg text-right py-md">
-<button class="p-xs text-secondary hover:text-primary transition-colors hover:bg-surface-container rounded-full">
+<button class="p-xs text-secondary hover:text-primary transition-colors hover:bg-surface-container rounded-full" onclick="event.stopPropagation(); ocrFormToast('2024년 하계 연수 운영 기안서', 'download')">
 <span class="material-symbols-outlined">download</span>
 </button>
 </td>
 </tr>
-<tr class="group hover:bg-surface-container-lowest transition-colors cursor-pointer">
+<tr class="group hover:bg-surface-container-lowest transition-colors cursor-pointer" onclick="ocrFormToast('학교 스마트기기 보급 관리 계획', 'visibility')">
 <td class="px-lg py-md">
 <div class="flex items-center gap-md">
 <span class="material-symbols-outlined text-primary/60 group-hover:text-primary">laptop_mac</span>
 <div class="flex items-center gap-xs">
 <span class="font-body-md text-ink group-hover:text-primary transition-colors">학교
                                                         스마트기기 보급 관리 계획</span>
-<div class="tooltip-container"><span class="material-symbols-outlined text-[18px] text-muted hover:text-primary cursor-pointer" title="미리보기">visibility</span></div>
+<div class="tooltip-container"><span class="material-symbols-outlined text-[18px] text-muted hover:text-primary cursor-pointer" title="미리보기" onclick="event.stopPropagation(); ocrFormToast('학교 스마트기기 보급 관리 계획', 'visibility')">visibility</span></div>
 </div>
 </div>
 </td>
@@ -573,19 +573,19 @@
 <td class="px-lg text-right font-mono-data text-muted text-caption py-md">
                                             2024.05.12</td>
 <td class="px-lg text-right py-md">
-<button class="p-xs text-secondary hover:text-primary transition-colors hover:bg-surface-container rounded-full">
+<button class="p-xs text-secondary hover:text-primary transition-colors hover:bg-surface-container rounded-full" onclick="event.stopPropagation(); ocrFormToast('학교 스마트기기 보급 관리 계획', 'download')">
 <span class="material-symbols-outlined">download</span>
 </button>
 </td>
 </tr>
-<tr class="group hover:bg-surface-container-lowest transition-colors cursor-pointer">
+<tr class="group hover:bg-surface-container-lowest transition-colors cursor-pointer" onclick="ocrFormToast('교육시설 환경 위생 점검 보고서', 'visibility')">
 <td class="px-lg py-md">
 <div class="flex items-center gap-md">
 <span class="material-symbols-outlined text-primary/60 group-hover:text-primary">health_and_safety</span>
 <div class="flex items-center gap-xs">
 <span class="font-body-md text-ink group-hover:text-primary transition-colors">교육시설
                                                         환경 위생 점검 보고서</span>
-<div class="tooltip-container"><span class="material-symbols-outlined text-[18px] text-muted hover:text-primary cursor-pointer" title="미리보기">visibility</span></div>
+<div class="tooltip-container"><span class="material-symbols-outlined text-[18px] text-muted hover:text-primary cursor-pointer" title="미리보기" onclick="event.stopPropagation(); ocrFormToast('교육시설 환경 위생 점검 보고서', 'visibility')">visibility</span></div>
 </div>
 </div>
 </td>
@@ -595,7 +595,7 @@
 <td class="px-lg text-right font-mono-data text-muted text-caption py-md">
                                             2024.05.10</td>
 <td class="px-lg text-right py-md">
-<button class="p-xs text-secondary hover:text-primary transition-colors hover:bg-surface-container rounded-full">
+<button class="p-xs text-secondary hover:text-primary transition-colors hover:bg-surface-container rounded-full" onclick="event.stopPropagation(); ocrFormToast('교육시설 환경 위생 점검 보고서', 'download')">
 <span class="material-symbols-outlined">download</span>
 </button>
 </td>
@@ -727,5 +727,18 @@
         });
     </script>
 <script class="">function updateListSize(size) { const rows = document.querySelectorAll('tbody.divide-y tr'); rows.forEach((row, index) => { if (index < parseInt(size)) { row.classList.remove('hidden'); } else { row.classList.add('hidden'); } }); } // Initialize with default value updateListSize(document.getElementById('list-size-selector').value);</script>
+<div class="hidden fixed bottom-lg left-1/2 -translate-x-1/2 z-[70] px-md py-sm rounded-pill bg-surface-dark text-white text-body-sm shadow-2xl flex items-center gap-xs" id="ocrToastEl"></div>
+<script>
+    let ocrToastTimer;
+    function ocrFormToast(name, kind) {
+        const t = document.getElementById('ocrToastEl');
+        const msg = kind === 'download' ? (name + ' 다운로드를 시작합니다') : (name + ' 미리보기를 새 창에서 엽니다');
+        const icon = kind === 'download' ? 'download' : 'visibility';
+        t.innerHTML = '<span class="material-symbols-outlined text-[18px]">' + icon + '</span><span>' + msg + '</span>';
+        t.classList.remove('hidden');
+        clearTimeout(ocrToastTimer);
+        ocrToastTimer = setTimeout(() => t.classList.add('hidden'), 2600);
+    }
+</script>
 </body>
 </html>

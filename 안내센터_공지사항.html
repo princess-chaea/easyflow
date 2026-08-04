@@ -373,7 +373,7 @@
 <span class="flex items-center gap-xxs"><span class="material-symbols-outlined text-[16px]" data-icon="visibility">visibility</span>1,284</span>
 </div>
 </a>
-<a class="flex flex-col sm:flex-row sm:items-center justify-between gap-sm p-lg hover:bg-surface-container-high transition-colors" href="#">
+<a class="flex flex-col sm:flex-row sm:items-center justify-between gap-sm p-lg hover:bg-surface-container-high transition-colors" href="#" onclick="event.preventDefault(); openNoticeModal('guideline')">
 <div class="flex items-center gap-md min-w-0">
 <span class="shrink-0 inline-flex items-center px-sm py-1 bg-surface-container text-on-surface-variant rounded-full text-label-sm font-label-sm uppercase tracking-wider">일반</span>
 <span class="font-title-sm text-on-surface truncate">교육용 AI 보조 도구 사용 가이드라인 배포</span>
@@ -383,7 +383,7 @@
 <span class="flex items-center gap-xxs"><span class="material-symbols-outlined text-[16px]" data-icon="visibility">visibility</span>892</span>
 </div>
 </a>
-<a class="flex flex-col sm:flex-row sm:items-center justify-between gap-sm p-lg hover:bg-surface-container-high transition-colors" href="#">
+<a class="flex flex-col sm:flex-row sm:items-center justify-between gap-sm p-lg hover:bg-surface-container-high transition-colors" href="#" onclick="event.preventDefault(); openNoticeModal('security')">
 <div class="flex items-center gap-md min-w-0">
 <span class="shrink-0 inline-flex items-center px-sm py-1 bg-surface-container text-on-surface-variant rounded-full text-label-sm font-label-sm uppercase tracking-wider">일반</span>
 <span class="font-title-sm text-on-surface truncate">6월 정기 보안 점검 및 서버 점검 안내</span>
@@ -393,7 +393,7 @@
 <span class="flex items-center gap-xxs"><span class="material-symbols-outlined text-[16px]" data-icon="visibility">visibility</span>456</span>
 </div>
 </a>
-<a class="flex flex-col sm:flex-row sm:items-center justify-between gap-sm p-lg hover:bg-surface-container-high transition-colors" href="#">
+<a class="flex flex-col sm:flex-row sm:items-center justify-between gap-sm p-lg hover:bg-surface-container-high transition-colors" href="#" onclick="event.preventDefault(); openNoticeModal('privacy')">
 <div class="flex items-center gap-md min-w-0">
 <span class="shrink-0 inline-flex items-center px-sm py-1 bg-surface-container text-on-surface-variant rounded-full text-label-sm font-label-sm uppercase tracking-wider">일반</span>
 <span class="font-title-sm text-on-surface truncate">개인정보 처리방침 개정 안내</span>
@@ -403,7 +403,7 @@
 <span class="flex items-center gap-xxs"><span class="material-symbols-outlined text-[16px]" data-icon="visibility">visibility</span>623</span>
 </div>
 </a>
-<a class="flex flex-col sm:flex-row sm:items-center justify-between gap-sm p-lg hover:bg-surface-container-high transition-colors" href="#">
+<a class="flex flex-col sm:flex-row sm:items-center justify-between gap-sm p-lg hover:bg-surface-container-high transition-colors" href="#" onclick="event.preventDefault(); openNoticeModal('summer')">
 <div class="flex items-center gap-md min-w-0">
 <span class="shrink-0 inline-flex items-center px-sm py-1 bg-surface-container text-on-surface-variant rounded-full text-label-sm font-label-sm uppercase tracking-wider">일반</span>
 <span class="font-title-sm text-on-surface truncate">여름방학 중 시스템 이용 안내</span>
@@ -416,6 +416,17 @@
 </div>
 </div>
 </div></div></main>
+<!-- 공지 상세 모달 -->
+<div class="hidden opacity-0 fixed inset-0 z-[100] flex items-center justify-center bg-ink/50 backdrop-blur-sm transition-opacity duration-300" id="notice-modal">
+<div class="bg-white w-full max-w-lg mx-sm rounded-2xl overflow-hidden shadow-2xl">
+<div class="px-lg py-base border-b border-hairline flex justify-between items-center">
+<h3 class="text-title-sm font-bold text-ink" id="noticeModalTitle">공지사항</h3>
+<button class="p-xs hover:bg-surface-strong rounded-full transition-colors text-on-surface-variant" onclick="closeNoticeModal()"><span class="material-symbols-outlined">close</span></button>
+</div>
+<div class="px-lg py-base text-caption text-muted border-b border-hairline" id="noticeModalMeta"></div>
+<div class="p-lg text-body-sm text-on-surface leading-relaxed" id="noticeModalBody"></div>
+</div>
+</div>
 <!-- Footer -->
 <footer class="w-full mt-auto px-lg max-w-[1600px] mx-auto flex flex-col gap-base bg-surface-container-low dark:bg-surface-dark py-xl border-t border-hairline dark:border-outline-variant">
 <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-md">
@@ -444,6 +455,28 @@
                 el.style.transform = 'translateY(0)';
             });
         });
+
+        const NOTICES = {
+            guideline: { title: '교육용 AI 보조 도구 사용 가이드라인 배포', date: '2024.05.10', views: 892, body: '생성형 AI를 활용해 수업 자료나 행정 문서를 작성할 때 유의해야 할 저작권, 개인정보, 사실 검증 기준을 담은 가이드라인을 배포합니다. AI 상담(챗봇) 화면 우측 도움말에서도 동일한 내용을 확인하실 수 있습니다.' },
+            security: { title: '6월 정기 보안 점검 및 서버 점검 안내', date: '2024.06.01', views: 456, body: '안정적인 서비스 제공을 위해 6월 넷째 주 토요일 새벽 02:00~06:00 정기 보안 점검을 실시합니다. 점검 시간 동안 일부 기능 이용이 제한될 수 있습니다.' },
+            privacy: { title: '개인정보 처리방침 개정 안내', date: '2024.04.15', views: 623, body: '이용자 개인정보 보호 강화를 위해 개인정보 처리방침 일부 조항이 개정되었습니다. 주요 변경 사항은 위탁 처리 업체 목록 갱신 및 보관 기간 조정입니다.' },
+            summer: { title: '여름방학 중 시스템 이용 안내', date: '2024.07.01', views: 301, body: '여름방학 기간에도 이지플로우는 정상적으로 운영됩니다. 다만 학교 현장 문의 응대는 평일 오전 9시~오후 5시로 단축 운영되니 참고해 주세요.' },
+        };
+        function openNoticeModal(key) {
+            const n = NOTICES[key];
+            if (!n) return;
+            document.getElementById('noticeModalTitle').textContent = n.title;
+            document.getElementById('noticeModalMeta').textContent = n.date + ' · 조회 ' + n.views;
+            document.getElementById('noticeModalBody').textContent = n.body;
+            const modal = document.getElementById('notice-modal');
+            modal.classList.remove('hidden');
+            setTimeout(() => modal.classList.remove('opacity-0'), 10);
+        }
+        function closeNoticeModal() {
+            const modal = document.getElementById('notice-modal');
+            modal.classList.add('opacity-0');
+            setTimeout(() => modal.classList.add('hidden'), 300);
+        }
     </script>
 </body>
 </html>
