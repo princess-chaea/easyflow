@@ -1,5 +1,5 @@
 (function() {
-    const currentPath = window.location.pathname;
+    const currentPath = decodeURIComponent(window.location.pathname);
     const isLoginPage = currentPath.includes('공통_로그인.html');
     const isSignupPage = currentPath.includes('공통_회원가입.html');
     
