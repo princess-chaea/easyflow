@@ -232,7 +232,21 @@
             localStorage.setItem('roleRequests', JSON.stringify(pendingRequests));
             showToast('권한 신청이 완료되었습니다.');
             
-            setTimeout(() => location.reload(), 1500); // Quick refresh to update UI
+            // Update DOM instead of reloading
+            const pendingContainer = document.getElementById('pmPendingRolesContainer');
+            if (pendingContainer) {
+                pendingContainer.insertAdjacentHTML('beforeend', `
+                    <p class="text-[13px] text-ink/60 mt-1 flex items-center gap-1">
+                        <span class="material-symbols-outlined text-[16px] text-orange-500">pending</span> 
+                        <strong>'${requestedRole}'</strong> 권한 승인 대기 중입니다.
+                    </p>
+                `);
+            }
+            
+            const optionToRemove = roleSelect.querySelector(`option[value="${requestedRole}"]`);
+            if (optionToRemove) optionToRemove.remove();
+            
+            roleSelect.value = '';
         });
     }
 })();
