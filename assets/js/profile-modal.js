@@ -5,15 +5,17 @@
     if (!currentUser) return;
 
     // Mapping avatar
-    let avatarSeed = 'Felix';
-    if (currentUser === 'test@gbe.kr') avatarSeed = 'Mimi';
-    else if (currentUser === 'test1@gbe.kr') avatarSeed = 'Snuggles';
-    else if (currentUser === 'test2@gbe.kr') avatarSeed = 'Buster';
-    else if (currentUser === 'test3@gbe.kr') avatarSeed = 'Oliver';
-    else if (currentUser === 'test4@gbe.kr') avatarSeed = 'Bella';
-    else if (currentUser === 'test5@gbe.kr') avatarSeed = 'Simba';
-
-    const avatarUrl = `https://api.dicebear.com/7.x/avataaars/svg?seed=${avatarSeed}`;
+    let avatarUrl = localStorage.getItem('avatar_' + currentUser);
+    if (!avatarUrl) {
+        let avatarSeed = 'Felix';
+        if (currentUser === 'test@gbe.kr') avatarSeed = 'Mimi';
+        else if (currentUser === 'test1@gbe.kr') avatarSeed = 'Snuggles';
+        else if (currentUser === 'test2@gbe.kr') avatarSeed = 'Buster';
+        else if (currentUser === 'test3@gbe.kr') avatarSeed = 'Oliver';
+        else if (currentUser === 'test4@gbe.kr') avatarSeed = 'Bella';
+        else if (currentUser === 'test5@gbe.kr') avatarSeed = 'Simba';
+        avatarUrl = `https://api.dicebear.com/7.x/avataaars/svg?seed=${avatarSeed}`;
+    }
 
     // Replace header avatar
     const headerImages = document.querySelectorAll('header img');
@@ -95,15 +97,16 @@
                 <!-- 아바타 및 기본 정보 -->
                 <section class="flex flex-col sm:flex-row gap-8 items-start">
                     <div class="flex flex-col items-center gap-3 shrink-0">
-                        <div class="relative group cursor-pointer">
+                        <div class="relative group cursor-pointer" id="pmAvatarWrapper">
                             <div class="w-28 h-28 rounded-full overflow-hidden border-4 border-surface shadow-sm group-hover:opacity-80 transition-opacity">
-                                <img src="${avatarUrl}" alt="프로필" class="w-full h-full object-cover">
+                                <img src="${avatarUrl}" alt="프로필" class="w-full h-full object-cover" id="pmAvatarImg">
                             </div>
                             <div class="absolute inset-0 bg-black/40 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
                                 <span class="material-symbols-outlined text-white text-[28px]">photo_camera</span>
                             </div>
                         </div>
-                        <button class="text-[13px] font-bold text-primary hover:underline">이미지 변경</button>
+                        <button id="pmChangeImageBtn" class="text-[13px] font-bold text-primary hover:underline">이미지 변경</button>
+                        <input type="file" id="pmAvatarInput" accept="image/*" class="hidden">
                     </div>
 
                     <div class="flex-1 flex flex-col gap-4 w-full">
@@ -221,6 +224,36 @@
 
     // 6. Role Request Logic
     if (requestBtn) {
+        // Avatar Image Change Logic
+        const avatarInput = document.getElementById('pmAvatarInput');
+        const avatarWrapper = document.getElementById('pmAvatarWrapper');
+        const changeImageBtn = document.getElementById('pmChangeImageBtn');
+        const pmAvatarImg = document.getElementById('pmAvatarImg');
+        const headerImages = document.querySelectorAll('img[src*="avatar"]'); // Assuming standard avatar elements
+
+        const triggerFileInput = () => avatarInput.click();
+        avatarWrapper.addEventListener('click', triggerFileInput);
+        changeImageBtn.addEventListener('click', triggerFileInput);
+
+        avatarInput.addEventListener('change', function(e) {
+            if (this.files && this.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(evt) {
+                    const dataUrl = evt.target.result;
+                    // Save to localStorage
+                    localStorage.setItem('avatar_' + currentUser, dataUrl);
+                    // Update modal avatar
+                    pmAvatarImg.src = dataUrl;
+                    // Update global headers
+                    headerImages.forEach(img => {
+                        img.src = dataUrl;
+                    });
+                    showToast('프로필 이미지가 변경되었습니다.');
+                };
+                reader.readAsDataURL(this.files[0]);
+            }
+        });
+
         requestBtn.addEventListener('click', () => {
             const requestedRole = roleSelect.value;
             if (!requestedRole) return;
