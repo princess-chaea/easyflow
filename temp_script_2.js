@@ -1524,6 +1524,7 @@
     try { sideOpen = JSON.parse(localStorage.getItem('ef_sideopen') || '{}'); } catch (e) { }
     function initSideAccordion() {
       document.querySelectorAll('#sideCol > section').forEach((sec, i) => {
+        if (sec.dataset.noAcc) return;
         const head = sec.firstElementChild;
         if (!head || sec.dataset.acc) return;
         sec.dataset.acc = '1';

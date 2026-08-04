@@ -586,7 +586,7 @@
 <!-- ── 사이드바 ── (좁은 화면에서는 달력을 먼저 보여주고 뒤로 밀린다) -->
 <aside class="order-1 flex flex-col gap-base w-full no-print" id="sideCol">
 <!-- 오늘의 필수 업무 -->
-<section class="bg-canvas rounded-2xl border border-hairline shadow-soft p-md">
+<section class="bg-canvas rounded-2xl border border-hairline shadow-soft p-md" data-no-acc="true">
 <div class="flex items-center gap-xs mb-xs">
 <span class="w-7 h-7 rounded-full bg-accent-gold/10 grid place-items-center shrink-0">
 <span class="material-symbols-outlined text-[17px] text-accent-gold ms-fill">bolt</span></span>
@@ -603,8 +603,8 @@
 <div class="hidden mt-sm" id="aiBriefOut"></div>
 </div>
 </section>
-<!-- 학사일정 맞춤 준비 서식 — "학사 일정에 최적화된 업무 가이드 자동 매칭" (발표자료 핵심 서비스 가-3) -->
-<section class="bg-canvas rounded-2xl border border-hairline shadow-soft p-md">
+<!-- 학사일정 맞춤 준비 서식 -->
+<section class="bg-canvas rounded-2xl border border-hairline shadow-soft p-md" data-no-acc="true">
 <div class="flex items-center gap-xs mb-xs">
 <span class="w-7 h-7 rounded-full bg-success/10 grid place-items-center shrink-0">
 <span class="material-symbols-outlined text-[17px] text-success">fact_check</span></span>
@@ -621,15 +621,17 @@
 <span class="material-symbols-outlined text-[17px] text-primary">groups</span></span>
 <h2 class="text-title-sm text-primary whitespace-nowrap">주관 부서</h2>
 </div>
-<div class="flex items-center gap-xs shrink-0">
-<button class="text-caption text-primary hover:underline" id="btnDeptAll" onclick="event.stopPropagation()">전체</button>
-<button aria-label="부서·색상 관리" class="h-7 px-xs grid place-items-center rounded-pill bg-surface-strong text-body hover:text-primary hover:bg-hairline transition-colors" id="btnDeptEdit" onclick="event.stopPropagation()" title="부서·색상 관리">
-<span class="flex items-center gap-xxs text-caption-strong"><span class="material-symbols-outlined text-[14px]">edit</span>편집</span>
-</button>
-<span class="material-symbols-outlined transition-transform group-open:rotate-180 text-muted ml-1">expand_more</span>
+<div class="flex items-center gap-2 shrink-0">
+<span class="material-symbols-outlined transition-transform group-open:rotate-180 text-muted">expand_more</span>
 </div>
 </summary>
 <div class="px-md pb-md border-t border-hairline pt-sm">
+<div class="flex items-center gap-xs mb-sm">
+<button class="h-7 px-sm rounded-pill bg-surface-strong text-caption-strong hover:bg-hairline hover:text-primary transition-colors" id="btnDeptAll">전체</button>
+<button aria-label="부서·색상 관리" class="h-7 px-xs grid place-items-center rounded-pill bg-surface-strong text-body hover:text-primary hover:bg-hairline transition-colors" id="btnDeptEdit" title="부서·색상 관리">
+<span class="flex items-center gap-xxs text-caption-strong"><span class="material-symbols-outlined text-[14px]">edit</span>편집</span>
+</button>
+</div>
 <div class="space-y-xxs" id="deptFilters"></div>
 </div>
 </details>
@@ -642,11 +644,15 @@
 <h2 class="text-title-sm text-primary whitespace-nowrap">보기 설정</h2>
 </div>
 <div class="flex items-center gap-2">
-<button class="text-caption text-muted hover:text-primary hover:underline shrink-0" id="btnResetOpts" onclick="event.stopPropagation()">초기화</button>
 <span class="material-symbols-outlined transition-transform group-open:rotate-180 text-muted">expand_more</span>
 </div>
 </summary>
 <div class="px-md pb-md border-t border-hairline pt-sm">
+<div class="flex justify-end mb-sm">
+<button class="h-7 px-sm rounded-pill bg-surface-strong text-caption text-muted hover:text-danger hover:bg-danger/5 transition-colors flex items-center gap-xxs" id="btnResetOpts">
+<span class="material-symbols-outlined text-[14px]">restart_alt</span>초기화
+</button>
+</div>
 <!-- 색상 기준 -->
 <fieldset class="mb-md">
 <legend class="text-caption-strong text-body mb-xs">색상 기준</legend>
@@ -868,29 +874,6 @@
 </section>
 </div>
 </div>
-
-<!-- CTA — 인생도서관 페이지와 동일한 GBE 딥블루 밴드 -->
-<section class="bg-primary text-on-primary mt-xl no-print">
-<div class="w-full px-lg py-xxl grid md:grid-cols-3 gap-lg items-center">
-<div class="md:col-span-2">
-<div class="flex items-center gap-xs mb-xs">
-<span class="material-symbols-outlined text-[22px] text-accent-gold ms-fill">bolt</span>
-<span class="text-caption-strong text-accent-gold">업무 경감 목표</span>
-</div>
-<h2 class="text-display-sm text-on-primary">찾으러 다니지 마세요. 달력이 가져다 드립니다.</h2>
-<p class="text-body-md text-white/80 mt-sm">
-            업무 하나를 처리하려고 공문함 · 자료실 · 작년 폴더를 오가던 평균 30분을,
-            업무 클릭 한 번 <b class="text-on-primary font-semibold">5분 이내</b>로 줄이는 것이 이 화면의 목표입니다.
-          </p>
-</div>
-<div class="flex md:justify-end">
-<button class="h-14 px-xl rounded-pill bg-canvas text-primary text-btn hover:bg-surface-strong transition-colors flex items-center gap-xs shadow-soft" id="btnAskMentor">
-            인생도서관 멘토에게 묻기
-            <span class="material-symbols-outlined text-[20px]">arrow_forward</span>
-</button>
-</div>
-</div>
-</section>
 <footer class="w-full mt-section px-lg flex flex-col gap-base pb-xl border-t border-hairline pt-xl opacity-60 hover:opacity-100 transition-opacity">
 <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-base">
 <span class="font-title-sm text-title-sm text-on-surface" data-ef="footer.org">경상북도교육청</span>
@@ -4175,6 +4158,7 @@
     try { sideOpen = JSON.parse(localStorage.getItem('ef_sideopen') || '{}'); } catch (e) { }
     function initSideAccordion() {
       document.querySelectorAll('#sideCol > section').forEach((sec, i) => {
+        if (sec.dataset.noAcc) return;
         const head = sec.firstElementChild;
         if (!head || sec.dataset.acc) return;
         sec.dataset.acc = '1';
@@ -5159,5 +5143,21 @@ function outlookShowState(id) {
         efLoadFooter();
     })();
 </script>
+
+<!-- 초기화 확인 모달 -->
+<div aria-modal="true" class="hidden fixed inset-0 z-[100] flex items-center justify-center" id="resetConfirmModal" role="dialog">
+  <div class="absolute inset-0 bg-ink/50 backdrop-blur-sm" onclick="document.getElementById('resetConfirmModal').classList.add('hidden')"></div>
+  <div class="relative bg-canvas rounded-2xl shadow-2xl p-lg w-[90vw] max-w-sm text-center">
+    <div class="w-14 h-14 rounded-full bg-warning/10 flex items-center justify-center mx-auto mb-md">
+      <span class="material-symbols-outlined text-warning text-[28px]">restart_alt</span>
+    </div>
+    <h3 class="text-title-md font-bold mb-xs">보기 설정 초기화</h3>
+    <p class="text-body text-muted mb-lg">모든 보기 설정을 기본값으로 되돌립니다.<br>계속하시겠습니까?</p>
+    <div class="flex gap-sm">
+      <button class="flex-1 h-11 rounded-pill bg-surface-strong text-body font-semibold hover:bg-hairline transition-colors" onclick="document.getElementById('resetConfirmModal').classList.add('hidden')">취소</button>
+      <button class="flex-1 h-11 rounded-pill bg-warning text-white font-semibold hover:bg-warning/80 transition-colors" id="btnResetConfirm">초기화</button>
+    </div>
+  </div>
+</div>
 </body>
 </html>
