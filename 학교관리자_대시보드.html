@@ -633,10 +633,10 @@
 <footer class="w-full mt-section px-lg border-t border-hairline py-xl">
 <div class="max-w-[1600px] mx-auto flex flex-col gap-base">
 <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-base">
-<span class="font-title-sm text-title-sm text-on-surface">경상북도교육청 이지플로우</span>
+<span class="font-title-sm text-title-sm text-on-surface" data-ef="footer.org">경상북도교육청 이지플로우</span>
 </div>
 <div class="flex justify-between items-center text-muted font-caption text-caption">
-<p>© 경상북도교육청. All Rights Reserved.</p>
+<p data-ef="footer.copyright">© 경상북도교육청. All Rights Reserved.</p>
 <div class="flex gap-base">
 <span class="material-symbols-outlined">qr_code_2</span>
 <span class="material-symbols-outlined">share</span>
@@ -658,5 +658,20 @@
             });
         });
     </script>
+<!-- TODO: 실제 서버 연동 시 이 값들은 localStorage가 아니라 서버(DB)에서 불러오도록 교체해야 함.
+     푸터 정보는 서버관리자_푸터관리.html 에서만 수정할 수 있음(브라우저별 임시 저장). -->
+<script>
+    (function () {
+        function efLoadFooter() {
+            ['org', 'address', 'copyright'].forEach(function (f) {
+                var v = localStorage.getItem('ef_footer_' + f);
+                if (!v) return;
+                var view = document.querySelector('[data-ef="footer.' + f + '"]');
+                if (view) view.textContent = v;
+            });
+        }
+        efLoadFooter();
+    })();
+</script>
 </body>
 </html>

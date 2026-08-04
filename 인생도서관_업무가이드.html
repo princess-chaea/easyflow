@@ -740,7 +740,7 @@
     <footer
         class="bg-surface-container-low dark:bg-surface-dark border-t border-hairline dark:border-outline-variant w-full mt-section px-lg max-w-[1600px] mx-auto flex flex-col gap-base py-xl">
         <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-base">
-            <h2 class="font-title-sm text-title-sm text-on-surface dark:text-surface-bright">경상북도교육청</h2>
+            <h2 class="font-title-sm text-title-sm text-on-surface dark:text-surface-bright" data-ef="footer.org">경상북도교육청</h2>
             <div class="flex flex-wrap gap-base">
                 <a class="font-caption text-caption text-body dark:text-muted hover:underline decoration-primary"
                     href="공통_개인정보처리방침.html">개인정보처리방침</a>
@@ -752,7 +752,7 @@
                     href="공통_찾아오시는길.html">찾아오시는길</a>
             </div>
         </div>
-        <p class="font-caption text-caption text-on-surface-variant dark:text-surface-variant">© 경상북도교육청. All Rights
+        <p class="font-caption text-caption text-on-surface-variant dark:text-surface-variant" data-ef="footer.copyright">© 경상북도교육청. All Rights
             Reserved.</p>
     </footer>
     <script>
@@ -769,6 +769,21 @@
     </script>
 
 
+<!-- TODO: 실제 서버 연동 시 이 값들은 localStorage가 아니라 서버(DB)에서 불러오도록 교체해야 함.
+     푸터 정보는 서버관리자_푸터관리.html 에서만 수정할 수 있음(브라우저별 임시 저장). -->
+<script>
+    (function () {
+        function efLoadFooter() {
+            ['org', 'address', 'copyright'].forEach(function (f) {
+                var v = localStorage.getItem('ef_footer_' + f);
+                if (!v) return;
+                var view = document.querySelector('[data-ef="footer.' + f + '"]');
+                if (view) view.textContent = v;
+            });
+        }
+        efLoadFooter();
+    })();
+</script>
 </body>
 
 </html>

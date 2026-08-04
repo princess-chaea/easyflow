@@ -564,7 +564,7 @@
 <a class="font-caption text-caption text-body hover:underline decoration-primary transition-all" href="공통_찾아오시는길.html">찾아오시는길</a>
 </div>
 </div>
-<p class="font-caption text-caption text-on-surface-variant dark:text-surface-variant">© 경상북도교육청. All Rights
+<p class="font-caption text-caption text-on-surface-variant dark:text-surface-variant" data-ef="footer.copyright">© 경상북도교육청. All Rights
             Reserved.</p>
 </footer>
 <script>
@@ -724,5 +724,20 @@
             setTimeout(() => { modal.classList.add('hidden'); }, 300);
         }
     </script>
+<!-- TODO: 실제 서버 연동 시 이 값들은 localStorage가 아니라 서버(DB)에서 불러오도록 교체해야 함.
+     푸터 정보는 서버관리자_푸터관리.html 에서만 수정할 수 있음(브라우저별 임시 저장). -->
+<script>
+    (function () {
+        function efLoadFooter() {
+            ['org', 'address', 'copyright'].forEach(function (f) {
+                var v = localStorage.getItem('ef_footer_' + f);
+                if (!v) return;
+                var view = document.querySelector('[data-ef="footer.' + f + '"]');
+                if (view) view.textContent = v;
+            });
+        }
+        efLoadFooter();
+    })();
+</script>
 </body>
 </html>

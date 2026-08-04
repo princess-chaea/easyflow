@@ -342,13 +342,9 @@
 <div class="mt-md p-base bg-surface-soft rounded-xl text-caption text-muted">
 <div class="flex items-center justify-between mb-xs">
 <span>최종 개정일: 2026년 1월 7일</span>
-<button class="text-[12px] text-primary hover:underline flex items-center gap-xxs" id="contact-edit-toggle" onclick="efToggleEdit('contact')"><span class="material-symbols-outlined text-[14px]">edit</span>관리자 수정</button>
 </div>
-<div>담당 부서: <span class="ef-view italic" data-ef="contact.dept">미입력 (관리자 설정 필요)</span><input class="ef-input hidden border border-hairline rounded px-sm py-xs text-[13px] ml-xs" data-ef-input="contact.dept" placeholder="예: 미래교육정보과"/>
-    (전화: <span class="ef-view italic" data-ef="contact.phone">미입력</span><input class="ef-input hidden border border-hairline rounded px-sm py-xs text-[13px] ml-xs" data-ef-input="contact.phone" placeholder="예: 054-805-0000"/>)</div>
-<div class="hidden justify-end mt-xs" id="contact-save-row">
-<button class="px-base py-xxs rounded-full bg-primary text-white text-[13px] font-bold hover:bg-primary-active transition-colors" onclick="efSave('contact', ['dept','phone'])">저장</button>
-</div>
+<div>담당 부서: <span class="ef-view italic" data-ef="contact.dept">미입력 (관리자 설정 필요)</span>
+    (전화: <span class="ef-view italic" data-ef="contact.phone">미입력</span>)</div>
 </div>
 </div>
 </div>
@@ -356,7 +352,7 @@
 <!-- Footer -->
 <footer class="w-full mt-section px-lg max-w-[1600px] mx-auto flex flex-col gap-base pb-xl border-t border-hairline pt-xl opacity-60 hover:opacity-100 transition-opacity">
 <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-base">
-<span class="font-title-sm text-title-sm text-on-surface">경상북도교육청</span>
+<span class="font-title-sm text-title-sm text-on-surface" data-ef="footer.org">경상북도교육청</span>
 <div class="flex flex-wrap gap-base">
 <a class="font-caption text-caption text-body hover:underline decoration-primary transition-all" href="공통_개인정보처리방침.html">개인정보처리방침</a>
 <a class="font-caption text-caption text-body hover:underline decoration-primary transition-all" href="공통_이용약관.html">이용약관</a>
@@ -365,45 +361,25 @@
 </div>
 </div>
 <div class="flex flex-col md:flex-row justify-between items-start md:items-center border-t border-hairline/50 pt-base">
-<p class="font-caption text-caption text-on-surface-variant">© 경상북도교육청. All Rights Reserved.</p>
-<p class="font-caption text-caption text-muted">경북 안동시 풍천면 도청대로 511 | 대표전화 054-805-3000</p>
+<p class="font-caption text-caption text-on-surface-variant" data-ef="footer.copyright">© 경상북도교육청. All Rights Reserved.</p>
+<p class="font-caption text-caption text-muted" data-ef="footer.address">경북 안동시 풍천면 도청대로 511 | 대표전화 054-805-3000</p>
 </div>
 </footer>
-<!-- TODO: 실제 서버 연동 시 이 섹션은 서버 관리자 권한을 가진 사용자에게만 "관리자 수정" 버튼이 노출되도록 하고,
-     저장 값도 localStorage가 아니라 서버(DB)에 저장하도록 교체해야 함. 현재는 브라우저별 임시 저장(localStorage). -->
+<!-- TODO: 실제 서버 연동 시 이 값들은 localStorage가 아니라 서버(DB)에서 불러오도록 교체해야 함.
+     문의처/담당자/푸터 정보는 서버관리자_푸터관리.html 에서만 수정할 수 있음(브라우저별 임시 저장). -->
 <script>
-    function efToggleEdit(group) {
-        document.querySelectorAll('[data-ef^="' + group + '."]').forEach(function (el) { el.classList.toggle('hidden'); });
-        document.querySelectorAll('[data-ef-input^="' + group + '."]').forEach(function (el) { el.classList.toggle('hidden'); });
-        var saveRow = document.getElementById(group + '-save-row');
-        saveRow.classList.toggle('hidden');
-        saveRow.classList.toggle('flex');
-    }
-    function efSave(group, fields) {
-        fields.forEach(function (f) {
-            var input = document.querySelector('[data-ef-input="' + group + '.' + f + '"]');
-            var view = document.querySelector('[data-ef="' + group + '.' + f + '"]');
-            var val = input.value.trim();
-            if (val) {
-                localStorage.setItem('ef_' + group + '_' + f, val);
-                view.textContent = val;
-                view.classList.remove('italic');
-            }
-        });
-        efToggleEdit(group);
-    }
     function efLoad(group, fields) {
         fields.forEach(function (f) {
             var v = localStorage.getItem('ef_' + group + '_' + f);
             if (!v) return;
             var view = document.querySelector('[data-ef="' + group + '.' + f + '"]');
-            var input = document.querySelector('[data-ef-input="' + group + '.' + f + '"]');
+            if (!view) return;
             view.textContent = v;
             view.classList.remove('italic');
-            if (input) input.value = v;
         });
     }
     efLoad('contact', ['dept', 'phone']);
+    efLoad('footer', ['org', 'address', 'copyright']);
 </script>
 </body>
 </html>
