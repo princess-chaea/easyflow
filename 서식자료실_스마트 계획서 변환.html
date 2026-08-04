@@ -1,0 +1,758 @@
+﻿<!DOCTYPE html>
+
+<html lang="ko">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>AI 문서 갱신 및 스마트 계획서 변환 | 이지플로우 (EasyFlow) - 경상북도교육청</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link rel="preload" as="font" type="font/ttf" href="./font/Hakgyoansim_PosterB.ttf" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        html { overflow-y: scroll; }
+        @font-face {
+            font-family: 'HakgyoansimPoster';
+            src: url('./font/Hakgyoansim_PosterB.ttf') format('truetype');
+            font-weight: 700;
+        }
+        @font-face {
+            font-family: 'KerisBaeum';
+            src: url('./font/KERISBAEUM_L.ttf') format('truetype');
+            font-weight: 300;
+        }
+        @font-face {
+            font-family: 'KerisBaeum';
+            src: url('./font/KERISBAEUM_R.ttf') format('truetype');
+            font-weight: 400;
+        }
+        @font-face {
+            font-family: 'KerisBaeum';
+            src: url('./font/KERISBAEUM_B.ttf') format('truetype');
+            font-weight: 700;
+        }
+        @font-face {
+            font-family: 'KerisBaeum';
+            src: url('./font/KERISBAEUM_EB.ttf') format('truetype');
+            font-weight: 800;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        body {
+            font-family: 'KerisBaeum', sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .ai-gradient {
+            background: linear-gradient(135deg, #003893 0%, #12419b 100%);
+        }
+        .ripple {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            transform: scale(0);
+            animation: ripple-animation 0.6s linear;
+            pointer-events: none;
+        }
+        @keyframes ripple-animation {
+            to { transform: scale(4); opacity: 0; }
+        }
+
+        /* Micro-interactions & Animations */
+        @keyframes pulse-soft {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.7; transform: scale(0.95); }
+        }
+        .animate-pulse-soft { animation: pulse-soft 2s infinite ease-in-out; }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+        .animate-float { animation: float 6s infinite ease-in-out; }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+        .shimmer-effect::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transform: translateX(-100%);
+            animation: shimmer 3s infinite;
+        }
+
+        .hover-lift {
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.4s ease;
+        }
+        .hover-lift:hover {
+            transform: translateY(-8px) scale(1.01);
+            box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+        }
+
+        .nav-link-underline {
+            position: relative;
+        }
+        .nav-link-underline::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: currentColor;
+            transition: width 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .nav-link-underline:hover::after {
+            width: 100%;
+        }
+
+        .entrance-fade {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275), transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .entrance-fade.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+                scroll-behavior: auto !important;
+            }
+        }
+
+        /* 스마트 계획서 변환 페이지 전용 스타일 */
+        .page-header { margin-bottom: 24px; }
+        .page-header h1 { font-size: 28px; font-weight: 700; color: #111214; margin-bottom: 8px; }
+        .page-header p { font-size: 15px; color: rgba(17,18,20,0.7); }
+
+        .card { background: #ffffff; border: 1px solid #e5e8eb; border-radius: 16px; padding: 32px; margin-bottom: 24px; }
+
+        .upload-zone { border: 2px dashed #c9ccd3; border-radius: 12px; padding: 48px 24px; text-align: center; transition: all 0.2s ease; }
+        .upload-zone.dragover { border-color: #003893; background: rgba(0, 56, 147, 0.04); }
+        .upload-icon { font-size: 40px; margin-bottom: 12px; }
+        .upload-text { font-size: 16px; font-weight: 600; color: #111214; margin-bottom: 4px; }
+        .upload-subtext { font-size: 13px; color: #868b94; margin-bottom: 20px; }
+        .btn-upload { background: #003893; color: #fff; border: none; padding: 10px 24px; border-radius: 999px; font-size: 14px; font-weight: 700; cursor: pointer; transition: background 0.2s; }
+        .btn-upload:hover { background: #002463; }
+
+        .progress-section { display: none; margin-top: 24px; padding-top: 24px; border-top: 1px solid #e5e8eb; }
+        .progress-header { display: flex; justify-content: space-between; font-size: 13px; font-weight: 600; color: #111214; margin-bottom: 8px; }
+        .progress-bar-bg { background: #f2f4f6; border-radius: 999px; height: 8px; overflow: hidden; }
+        .progress-bar-fill { background: #003893; height: 100%; width: 0%; border-radius: 999px; transition: width 0.1s linear; }
+        .progress-status-text { font-size: 12px; color: #868b94; margin-top: 8px; }
+
+        .preview-container { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        @media (max-width: 900px) { .preview-container { grid-template-columns: 1fr; } }
+        .preview-box { border: 1px solid #e5e8eb; border-radius: 12px; padding: 20px; background: #f8f9fa; }
+        .preview-box.after { background: #f5f8ff; border-color: #c7d3f0; }
+        .preview-header { font-size: 13px; font-weight: 700; color: #003893; margin-bottom: 12px; }
+        .document-mockup { font-size: 13px; }
+        .mockup-row { margin-bottom: 10px; line-height: 1.6; }
+        .placeholder-text { color: #868b94; font-style: italic; }
+        .result-text { color: #111214; font-weight: 600; }
+
+        .input-group { margin-bottom: 14px; }
+        .input-group label { display: block; font-size: 12px; font-weight: 700; color: #4e535e; margin-bottom: 4px; }
+        .input-group input { width: 100%; padding: 10px 12px; border: 1px solid #e5e8eb; border-radius: 8px; font-size: 14px; box-sizing: border-box; }
+        .input-group input:focus { outline: none; border-color: #003893; }
+
+        .date-input-wrapper { position: relative; }
+        .calendar-icon-btn { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); cursor: pointer; }
+        .custom-calendar-popup { display: none; position: absolute; top: 110%; left: 0; z-index: 30; background: #fff; border: 1px solid #e5e8eb; border-radius: 12px; box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12); padding: 12px; width: 260px; }
+        .calendar-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; font-weight: 700; }
+        .calendar-header button { background: none; border: none; cursor: pointer; font-size: 14px; padding: 4px 8px; }
+        .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; text-align: center; font-size: 12px; }
+        .day-name { color: #868b94; font-weight: 700; padding: 4px 0; }
+        .day-name.sun { color: #df2c2c; }
+        .day-name.sat { color: #003893; }
+        .day-cell { padding: 6px 0; border-radius: 6px; cursor: pointer; }
+        .day-cell:hover { background: #f2f4f6; }
+        .day-cell.empty { cursor: default; }
+
+        .btn-convert { width: 100%; margin-top: 16px; background: #003893; color: #fff; border: none; padding: 12px; border-radius: 999px; font-size: 14px; font-weight: 700; cursor: pointer; transition: background 0.2s; }
+        .btn-convert:disabled { opacity: 0.6; cursor: not-allowed; }
+        .btn-convert:hover:not(:disabled) { background: #002463; }
+
+        .live-preview-card { background: #fff; border: 1px solid #e5e8eb; border-radius: 16px; padding: 32px; margin-top: 24px; }
+        .live-preview-title { font-size: 15px; font-weight: 700; color: #111214; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid #e5e8eb; }
+        .doc-paper { background: #fff; border: 1px solid #e5e8eb; padding: 32px; font-family: 'KerisBaeum', sans-serif; }
+        .doc-header-text { text-align: center; font-size: 18px; font-weight: 700; margin-bottom: 24px; }
+        .doc-body { font-size: 14px; line-height: 1.9; color: #111214; }
+        .highlight-preview { background: rgba(0, 56, 147, 0.08); color: #003893; font-weight: 700; padding: 0 4px; border-radius: 4px; }
+        .doc-footer { text-align: right; margin-top: 32px; font-size: 14px; }
+
+        .result-download-card { margin-top: 24px; background: #f0f7ff; border: 1px solid #b3c5ff; border-radius: 16px; padding: 24px; text-align: center; display: none; }
+        .result-download-card h4 { font-size: 16px; font-weight: 700; color: #003893; margin-bottom: 8px; }
+        .result-download-card p { font-size: 13px; color: #4e535e; margin-bottom: 16px; }
+        .btn-download-file { background: #003893; color: #fff; border: none; padding: 12px 28px; border-radius: 999px; font-size: 14px; font-weight: 700; cursor: pointer; transition: background 0.2s; }
+        .btn-download-file:hover { background: #002463; }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "secondary-fixed": "#ffdea8",
+                      "tertiary": "#501400",
+                      "on-primary-fixed": "#001849",
+                      "on-tertiary-container": "#ff8a62",
+                      "surface-tint": "#335ab4",
+                      "ink": "#111214",
+                      "surface-soft": "#f8f9fa",
+                      "on-primary-container": "#88a7ff",
+                      "background": "#faf8ff",
+                      "danger": "#df2c2c",
+                      "surface-container": "#eeedf5",
+                      "tertiary-fixed-dim": "#ffb59d",
+                      "secondary-container": "#feb700",
+                      "on-tertiary": "#ffffff",
+                      "on-primary": "#ffffff",
+                      "secondary-fixed-dim": "#ffba20",
+                      "inverse-surface": "#2f3036",
+                      "inverse-on-surface": "#f1f0f8",
+                      "surface-variant": "#e2e2ea",
+                      "on-secondary-fixed": "#271900",
+                      "on-tertiary-fixed": "#390c00",
+                      "surface-container-lowest": "#ffffff",
+                      "on-primary-fixed-variant": "#12419b",
+                      "on-surface": "#1a1b21",
+                      "body": "#4e535e",
+                      "primary-fixed-dim": "#b3c5ff",
+                      "on-error": "#ffffff",
+                      "surface-strong": "#f2f4f6",
+                      "on-secondary-fixed-variant": "#5e4200",
+                      "surface-container-low": "#f4f3fb",
+                      "primary-container": "#003893",
+                      "error-container": "#ffdad6",
+                      "on-background": "#1a1b21",
+                      "success": "#00a261",
+                      "on-surface-variant": "#434652",
+                      "primary-active": "#002463",
+                      "outline-variant": "#c4c6d4",
+                      "tertiary-fixed": "#ffdbd0",
+                      "inverse-primary": "#b3c5ff",
+                      "surface": "#faf8ff",
+                      "primary-disabled": "#9eb9e5",
+                      "outline": "#747683",
+                      "surface-container-high": "#e8e7f0",
+                      "on-secondary": "#ffffff",
+                      "on-tertiary-fixed-variant": "#802a07",
+                      "on-error-container": "#93000a",
+                      "error": "#ba1a1a",
+                      "on-secondary-container": "#6b4b00",
+                      "secondary": "#7c5800",
+                      "surface-dim": "#dad9e1",
+                      "surface-dark": "#111214",
+                      "surface-bright": "#faf8ff",
+                      "canvas": "#ffffff",
+                      "muted": "#868b94",
+                      "warning": "#ff9000",
+                      "tertiary-container": "#752201",
+                      "primary-fixed": "#dae1ff",
+                      "hairline": "#e5e8eb",
+                      "surface-container-highest": "#e2e2ea",
+                      "primary": "#003893"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "base": "16px",
+                      "xxs": "4px",
+                      "section": "96px",
+                      "lg": "24px",
+                      "xl": "32px",
+                      "xxl": "48px",
+                      "xs": "8px",
+                      "md": "20px",
+                      "sm": "12px"
+              },
+              "fontFamily": {
+                      "display-lg": ["'HakgyoansimPoster'", "sans-serif"],
+                      "display-md": ["'HakgyoansimPoster'", "sans-serif"],
+                      "display-sm": ["'HakgyoansimPoster'", "sans-serif"],
+                      "title-lg": ["'KerisBaeum'", "sans-serif"],
+                      "title-md": ["'KerisBaeum'", "sans-serif"],
+                      "title-sm": ["'KerisBaeum'", "sans-serif"],
+                      "nav-link": ["'KerisBaeum'", "sans-serif"],
+                      "button": ["'KerisBaeum'", "sans-serif"],
+                      "body-strong": ["'KerisBaeum'", "sans-serif"],
+                      "body-md": ["'KerisBaeum'", "sans-serif"],
+                      "body-sm": ["'KerisBaeum'", "sans-serif"],
+                      "caption": ["'KerisBaeum'", "sans-serif"]
+              },
+              "fontSize": {
+                      "display-lg": ["57px", "64px"],
+                      "display-md": ["45px", "52px"],
+                      "display-sm": ["36px", "44px"],
+                      "title-lg": ["28px", "36px"],
+                      "title-md": ["22px", "28px"],
+                      "title-sm": ["18px", "24px"],
+                      "body-lg": ["16px", "24px"],
+                      "body-md": ["14px", "20px"],
+                      "body-sm": ["12px", "16px"],
+                      "nav-link": ["18px", "24px"],
+                      "caption": ["12px", "16px"]
+              }
+            },
+          },
+        }
+      </script>
+    <script src="assets/js/auth.js"></script>
+</head>
+<body class="bg-surface-soft text-on-surface">
+<nav class="fixed top-0 w-full z-50 h-[64px] bg-canvas">
+<div class="max-w-[1600px] w-full mx-auto h-full flex justify-between items-center px-lg">
+<div class="flex items-center gap-[60px]">
+<span class="font-display-sm text-display-sm font-semibold text-primary tracking-tight entrance-fade visible" style="transition-delay: 0ms;"><h1 class="font-display-sm text-display-sm font-semibold text-primary-container" style="--tw-border-spacing-y: 0; --tw-translate-x: 0; --tw-translate-y: 0; --tw-rotate: 0; --tw-skew-x: 0; --tw-skew-y: 0; --tw-scale-x: 1; --tw-scale-y: 1; --tw-pan-x: ; --tw-pan-y: ; --tw-pinch-zoom: ; --tw-scroll-snap-strictness: proximity; --tw-gradient-from-position: ; --tw-gradient-via-position: ; --tw-gradient-to-position: ; --tw-ordinal: ; --tw-slashed-zero: ; --tw-numeric-figure: ; --tw-numeric-spacing: ; --tw-numeric-fraction: ; --tw-ring-inset: ; --tw-ring-offset-width: 0px; --tw-ring-offset-color: #fff; --tw-ring-color: rgb(59 130 246 / 0.5); --tw-ring-offset-shadow: 0 0 #0000; --tw-ring-shadow: 0 0 #0000; --tw-shadow: 0 0 #0000; --tw-shadow-colored: 0 0 #0000; --tw-blur: ; --tw-brightness: ; --tw-contrast: ; --tw-grayscale: ; --tw-hue-rotate: ; --tw-invert: ; --tw-saturate: ; --tw-sepia: ; --tw-drop-shadow: ; --tw-backdrop-blur: ; --tw-backdrop-brightness: ; --tw-backdrop-contrast: ; --tw-backdrop-grayscale: ; --tw-backdrop-hue-rotate: ; --tw-backdrop-invert: ; --tw-backdrop-opacity: ; --tw-backdrop-saturate: ; --tw-backdrop-sepia: ; --tw-contain-size: ; --tw-contain-layout: ; --tw-contain-paint: ; --tw-contain-style: ; font-size: 26px; --tw-text-opacity: 1; color: rgb(0, 56, 147); letter-spacing: normal; white-space: nowrap; line-height: 1.4;">이지플로우 (EasyFlow)</h1></span>
+
+<div class="hidden md:flex gap-[80px] group/mega h-[64px] items-center relative">
+<div class="absolute top-[64px] left-1/2 -translate-x-1/2 w-[100vw] bg-white shadow-md border-b border-hairline opacity-0 invisible group-hover/mega:opacity-100 group-hover/mega:visible transition-all duration-200 z-40 h-[290px]"></div>
+<div class="relative h-full flex flex-col justify-start">
+<a class="font-nav-link text-nav-link text-on-surface-variant hover:text-primary transition-colors h-[64px] flex items-center" href="index.html">홈</a>
+</div>
+<div class="relative h-full flex flex-col justify-start group/col">
+<a class="font-nav-link text-nav-link transition-colors h-[64px] flex items-center gap-xxs whitespace-nowrap group-hover/col:text-primary group-hover/col:font-bold text-on-surface-variant hover:text-primary" href="업무배송_스마트공문달력.html">
+                업무 배송 <span class="material-symbols-outlined text-[18px]">expand_more</span>
+</a>
+<div class="absolute top-[64px] left-1/2 -translate-x-1/2 pt-md pb-md min-w-[160px] flex flex-col items-center gap-sm opacity-0 invisible group-hover/mega:opacity-100 group-hover/mega:visible transition-all duration-200 z-50 group-hover/col:bg-surface-container h-[290px] rounded-b-lg">
+<a class="font-nav-link text-[16px] text-on-surface-variant hover:text-primary transition-colors whitespace-nowrap px-sm py-1 w-full text-center" href="업무배송_스마트공문달력.html">스마트 공문 달력</a><a class="font-nav-link text-[16px] text-on-surface-variant hover:text-primary transition-colors whitespace-nowrap px-sm py-1 w-full text-center" href="업무배송_업무우편함.html">업무 우편함</a><a class="font-nav-link text-[16px] text-on-surface-variant hover:text-primary transition-colors whitespace-nowrap px-sm py-1 w-full text-center" href="업무배송_업무발송.html">업무 발송</a><a class="font-nav-link text-[16px] text-on-surface-variant hover:text-primary transition-colors whitespace-nowrap px-sm py-1 w-full text-center" href="업무배송_맞춤형업무가이드.html">맞춤형 업무 가이드</a>
+</div>
+</div>
+<div class="relative h-full flex flex-col justify-start group/col">
+<a class="font-nav-link text-nav-link transition-colors h-[64px] flex items-center gap-xxs whitespace-nowrap group-hover/col:text-primary group-hover/col:font-bold text-on-surface-variant hover:text-primary" href="인생도서관_업무가이드.html">
+                인생 도서관 <span class="material-symbols-outlined text-[18px]">expand_more</span>
+</a>
+<div class="absolute top-[64px] left-1/2 -translate-x-1/2 pt-md pb-md min-w-[160px] flex flex-col items-center gap-sm opacity-0 invisible group-hover/mega:opacity-100 group-hover/mega:visible transition-all duration-200 z-50 group-hover/col:bg-surface-container h-[290px] rounded-b-lg"><a class="font-nav-link text-[16px] text-on-surface-variant hover:text-primary transition-colors whitespace-nowrap px-sm py-1 w-full text-center" href="인생도서관_업무가이드.html">업무 가이드</a><a class="font-nav-link text-[16px] text-on-surface-variant hover:text-primary transition-colors whitespace-nowrap px-sm py-1 w-full text-center" href="AI업무어시스턴트_챗봇.html">AI 상담 (챗봇)</a><a class="font-nav-link text-[16px] text-on-surface-variant hover:text-primary transition-colors whitespace-nowrap px-sm py-1 w-full text-center" href="인생도서관_마이페이지.html">멘토 찾기·신청</a><a class="font-nav-link text-[16px] text-on-surface-variant hover:text-primary transition-colors whitespace-nowrap px-sm py-1 w-full text-center" href="인생도서관_멘토상담함.html">멘토 상담함</a><a class="font-nav-link text-[16px] text-on-surface-variant hover:text-primary transition-colors whitespace-nowrap px-sm py-1 w-full text-center" href="인생도서관_장학사 및 업무담당자 통합 대시보드.html">인생 도서관 기록</a></div>
+</div>
+<div class="relative h-full flex flex-col justify-start group/col">
+<a class="font-nav-link text-nav-link transition-colors h-[64px] flex items-center gap-xxs whitespace-nowrap group-hover/col:text-primary group-hover/col:font-bold text-primary font-bold relative" href="서식자료실_통합검색.html">
+                서식 자료실 <span class="material-symbols-outlined text-[18px]">expand_more</span><span class="absolute left-[-22px] right-0 -bottom-[2px] h-[2px] bg-primary" aria-hidden="true"></span>
+</a>
+<div class="absolute top-[64px] left-1/2 -translate-x-1/2 pt-md pb-md min-w-[160px] flex flex-col items-center gap-sm opacity-0 invisible group-hover/mega:opacity-100 group-hover/mega:visible transition-all duration-200 z-50 group-hover/col:bg-surface-container h-[290px] rounded-b-lg">
+<a class="font-nav-link text-[16px] text-on-surface-variant hover:text-primary transition-colors whitespace-nowrap px-sm py-1 w-full text-center" href="서식자료실_통합검색.html">통합 검색</a><a class="font-nav-link text-[16px] text-on-surface-variant hover:text-primary transition-colors whitespace-nowrap px-sm py-1 w-full text-center" href="서식 자료실_한글파일서식선택.html">서식 자동 완성</a><a class="font-nav-link text-[16px] text-on-surface-variant hover:text-primary transition-colors whitespace-nowrap px-sm py-1 w-full text-center" href="서식자료실_공문OCR요약.html">공문 분석</a><a class="font-nav-link text-[16px] text-on-surface-variant hover:text-primary transition-colors whitespace-nowrap px-sm py-1 w-full text-center" href="서식자료실_스마트 계획서 변환.html">스마트 계획서 변환</a>
+</div>
+</div>
+<div class="relative h-full flex flex-col justify-start group/col">
+<a class="font-nav-link text-nav-link transition-colors h-[64px] flex items-center gap-xxs whitespace-nowrap group-hover/col:text-primary group-hover/col:font-bold text-on-surface-variant hover:text-primary" href="안내센터_공지사항.html">
+                안내센터 <span class="material-symbols-outlined text-[18px]">expand_more</span>
+</a>
+<div class="absolute top-[64px] left-1/2 -translate-x-1/2 pt-md pb-md min-w-[160px] flex flex-col items-center gap-sm opacity-0 invisible group-hover/mega:opacity-100 group-hover/mega:visible transition-all duration-200 z-50 group-hover/col:bg-surface-container h-[290px] rounded-b-lg">
+<a class="font-nav-link text-[16px] text-on-surface-variant hover:text-primary transition-colors whitespace-nowrap px-sm py-1 w-full text-center" href="안내센터_공지사항.html">공지사항</a><a class="font-nav-link text-[16px] text-on-surface-variant hover:text-primary transition-colors whitespace-nowrap px-sm py-1 w-full text-center" href="안내센터_시스템 안내.html">이용 안내</a><a class="font-nav-link text-[16px] text-on-surface-variant hover:text-primary transition-colors whitespace-nowrap px-sm py-1 w-full text-center" href="안내센터_1대1문의관리.html">1:1 문의 답변</a>
+</div>
+</div>
+</div>
+
+</div>
+<div class="flex items-center gap-base">
+<div class="relative group">
+<button aria-label="알림" class="p-xs text-on-surface-variant hover:bg-surface-strong rounded-full transition-colors relative"><span class="material-symbols-outlined" data-icon="notifications">notifications</span><span class="absolute top-0.5 right-0.5 w-2 h-2 bg-danger rounded-full" id="notifDot"></span></button>
+<div class="absolute top-full right-0 mt-xs w-80 bg-white rounded-xl shadow-xl border border-hairline opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 overflow-hidden">
+<div class="px-base py-sm border-b border-hairline flex items-center justify-between">
+<span class="font-nav-link text-[15px] font-bold text-ink">알림</span>
+<button class="text-[12px] text-primary hover:underline" onclick="event.preventDefault(); const d=document.getElementById('notifDot'); if(d) d.remove(); event.target.textContent='확인 완료';">모두 읽음</button>
+</div>
+<div class="max-h-[320px] overflow-y-auto divide-y divide-hairline">
+<a class="flex gap-sm px-base py-sm hover:bg-surface-soft transition-colors" href="업무배송_업무우편함.html">
+<span class="material-symbols-outlined text-primary text-[20px] mt-xxs">mail</span>
+<span class="flex-1 min-w-0"><span class="block text-[13px] text-ink">새 업무 우편이 도착했습니다.</span><span class="block text-[12px] text-muted mt-xxs">방금 전</span></span>
+</a>
+<a class="flex gap-sm px-base py-sm hover:bg-surface-soft transition-colors" href="안내센터_시스템 안내.html">
+<span class="material-symbols-outlined text-primary text-[20px] mt-xxs">chat_bubble</span>
+<span class="flex-1 min-w-0"><span class="block text-[13px] text-ink">1:1 문의에 답변이 등록되었습니다.</span><span class="block text-[12px] text-muted mt-xxs">1시간 전</span></span>
+</a>
+<a class="flex gap-sm px-base py-sm hover:bg-surface-soft transition-colors" href="업무배송_스마트공문달력.html">
+<span class="material-symbols-outlined text-muted text-[20px] mt-xxs">event</span>
+<span class="flex-1 min-w-0"><span class="block text-[13px] text-ink">기한이 임박한 업무가 3건 있습니다.</span><span class="block text-[12px] text-muted mt-xxs">어제</span></span>
+</a>
+</div>
+</div>
+</div>
+<a aria-label="설정" class="p-xs text-on-surface-variant hover:text-primary hover:bg-surface-strong rounded-full transition-colors" href="공통_프로필수정.html"><span class="material-symbols-outlined" data-icon="settings">settings</span></a>
+<div class="relative group">
+<div class="w-10 h-10 rounded-full bg-surface-container overflow-hidden cursor-pointer active:opacity-80 transition-opacity border border-hairline hover:ring-2 ring-primary/20 profile-dropdown-trigger">
+<img alt="사용자 프로필" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDC4T1JXEVfOTEIvuSGas-vZo6Xrm6Gso-g1t4Ifc8qnWK86nRrH2U8HOTdfdnTsplBb7uebcFVeymcmL2sIdAPhvjovBg9eBquhUSCzN152yf8xwikxJ4E_WZIS6AoZsmFjlNBOS4fEmilnVe9vNRg8OvkOV-BNR6hhdAKBSSULdU9lEfBTz0nTLaBOyVD8VCr72fQSqc3wMrktO117e6OpaN0nuSVbSD2qqq2Ks3RmI91N4fEffpFg9OMmOdWqakRhPaW-FACNKQ3"/>
+</div>
+<div class="absolute top-full right-0 mt-xs w-48 bg-white rounded-xl shadow-xl border border-hairline opacity-0 invisible transition-all duration-200 z-50 p-xs profile-dropdown-menu">
+<a class="block px-base py-sm font-nav-link text-[15px] hover:bg-surface-soft rounded-lg transition-colors flex items-center gap-2" href="공통_프로필수정.html"><span class="material-symbols-outlined text-[18px]">person</span> 프로필 설정</a>
+<a class="block px-base py-sm font-nav-link text-[15px] hover:bg-surface-soft rounded-lg transition-colors flex items-center gap-2 text-danger" href="공통_로그인.html"><span class="material-symbols-outlined text-[18px]">logout</span> 로그아웃</a>
+<div class="border-t border-hairline my-1"></div>
+<div class="px-base py-1 text-[11px] text-muted font-bold">관리자 메뉴</div>
+<a class="block px-base py-sm font-nav-link text-[15px] hover:bg-surface-soft rounded-lg transition-colors flex items-center gap-2" href="학교관리자_대시보드.html"><span class="material-symbols-outlined text-[18px]">school</span> 학교 관리</a>
+<a class="block px-base py-sm font-nav-link text-[15px] hover:bg-surface-soft rounded-lg transition-colors flex items-center gap-2" href="서버관리자_대시보드.html"><span class="material-symbols-outlined text-[18px]">dns</span> 서버 관리</a>
+</div>
+</div>
+</div>
+</div>
+</nav>
+<main class="pt-[64px] min-h-screen"><div class="w-full max-w-[1600px] mx-auto px-lg py-xl flex flex-col md:flex-row gap-xl" id="global-layout-wrapper">
+<!-- Added background, padding, and rounded corners for the left menu area -->
+
+<aside class="w-[220px] shrink-0 bg-surface-soft p-lg -ml-lg rounded-2xl hidden md:block" id="main-lnb">
+<h2 class="font-nav-link text-[22px] font-bold text-ink mb-md pb-sm border-b-2 border-ink">서식 자료실</h2>
+<ul class="flex flex-col gap-1"><li>
+<a class="font-nav-link block px-sm py-sm rounded-lg transition-colors text-[16px] text-on-surface-variant hover:bg-surface hover:text-ink" href="서식자료실_통합검색.html">통합 검색</a>
+</li>
+<li>
+<a class="font-nav-link block px-sm py-sm rounded-lg transition-colors text-[16px] text-on-surface-variant hover:bg-surface hover:text-ink" href="서식 자료실_한글파일서식선택.html">서식 자동 완성</a>
+</li>
+<li>
+<a class="font-nav-link block px-sm py-sm rounded-lg transition-colors text-[16px] text-on-surface-variant hover:bg-surface hover:text-ink" href="서식자료실_공문OCR요약.html">공문 분석</a>
+</li>
+<li>
+<a class="font-nav-link block px-sm py-sm rounded-lg transition-colors text-[16px] bg-primary text-white font-bold" href="서식자료실_스마트 계획서 변환.html">스마트 계획서 변환</a>
+</li></ul>
+</aside>
+
+<div class="flex-1 min-w-0">
+<!-- 표준 페이지 헤더 영역 -->
+<div class="page-header">
+<h1>스마트 계획서 변환</h1>
+<p>교사가 전년도 결재 계획서(HWP)를 업로드하면 당해 연도 날짜와 정보로 자동 변환해 줍니다.</p>
+</div>
+<div class="card">
+<div class="upload-zone" id="drop-zone">
+<div class="upload-icon">📄</div>
+<div class="upload-text">전년도 계획서 (HWP) 파일을 이곳에 드래그 하세요</div>
+<div class="upload-subtext">또는 버튼을 클릭하여 내 PC에서 파일을 선택해주세요.</div>
+<button class="btn-upload" onclick="simulateUpload()">파일 선택하기</button>
+</div>
+<!-- 진척도(프로그레스 바) -->
+<div class="progress-section" id="progress-section">
+<div class="progress-header">
+<span id="progress-msg">전년도 HWP 문서 구조 분석 중...</span>
+<span id="progress-percent">0%</span>
+</div>
+<div class="progress-bar-bg">
+<div class="progress-bar-fill" id="progress-bar"></div>
+</div>
+<div class="progress-status-text" id="progress-submsg">파일을 안전하게 업로드하고 있습니다. 잠시만 기다려주세요.</div>
+</div>
+</div>
+<div class="card">
+<h3 style="margin-bottom: 12px; font-size: 15px; color: #1e293b; font-weight: 700;">변환 전후 설정</h3>
+<div class="preview-container">
+<div class="preview-box before">
+<div class="preview-header">원본 문서 인식 정보</div>
+<div class="document-mockup">
+<div>
+<div class="mockup-row">
+<strong>문서 제목:</strong> <span class="placeholder-text" id="doc-title">(HWP 파일 업로드 시 자동 인식)</span>
+</div>
+<div class="mockup-row">
+<strong>일시:</strong> <span class="placeholder-text" id="doc-date">(HWP 파일 업로드 시 자동 인식)</span>
+</div>
+<div class="mockup-row">
+<strong>내용:</strong> <span class="placeholder-text" id="doc-content">(HWP 파일 업로드 시 자동 인식)</span>
+</div>
+</div>
+</div>
+</div>
+<div class="preview-box after">
+<div class="preview-header">변환 정보 입력</div>
+<div class="document-mockup">
+<div>
+<div class="input-group">
+<label for="new-title">새 문서 제목</label>
+<input id="new-title" placeholder="변경할 새로운 문서 제목 입력" type="text"/>
+</div>
+<div class="input-group">
+<label for="new-date">변환 적용 날짜</label>
+<div class="date-input-wrapper">
+<input id="new-date" placeholder="예: 2026. 7. 5.(일)" readonly="" type="text"/>
+<span class="calendar-icon-btn" id="calendar-icon">📅</span>
+<div class="custom-calendar-popup" id="calendar-popup">
+<div class="calendar-header">
+<button id="prev-month" type="button">◀</button>
+<span class="month-year" id="calendar-month-year"></span>
+<button id="next-month" type="button">▶</button>
+</div>
+<div class="calendar-grid" id="calendar-grid"></div>
+</div>
+</div>
+</div>
+<div class="input-group">
+<label for="new-content">변환 적용 내용</label>
+<input id="new-content" placeholder="변경할 내용 입력" type="text"/>
+</div>
+</div>
+<button class="btn-convert" id="btn-convert">문서 변환하기</button>
+</div>
+</div>
+</div>
+</div>
+<div class="live-preview-card">
+<div class="live-preview-title">
+<span>공문 문서 실시간 미리보기</span>
+</div>
+<div class="doc-paper">
+<div class="doc-header-text" id="preview-doc-title">
+                    2026학년도 AI 디지털 활용 선도학교 연수 계획서
+                </div>
+<div class="doc-body">
+<div class="doc-field">1. 관련: 초중등교육법 제23조 및 2026학년도 교원 연수 운영 지침</div>
+<div class="doc-field">2. 교원의 디지털 기반 수업 역량 강화를 위해 아래와 같이 연수를 추진하고자 합니다.</div>
+<div style="margin-left: 15px; margin-top: 10px;">
+<div class="doc-field">가. 연수명: <span class="highlight-preview" id="preview-doc-title-sub">2026학년도 AI 디지털 활용 선도학교 연수</span></div>
+<div class="doc-field">나. 일시: <span class="highlight-preview" id="preview-doc-date">2026. 7. 5.(일)</span></div>
+<div class="doc-field">다. 주요 내용: <span class="highlight-preview" id="preview-doc-content">AI 디지털 교과서(AIDT) 실습 및 적용</span></div>
+<div class="doc-field">라. 대상: 전 교직원</div>
+</div>
+<div class="doc-field" style="margin-top: 15px;">붙임  2026학년도 연수 세부 계획서 1부.  끝.</div>
+</div>
+<div class="doc-footer">
+                    이지초등학교장 [직인생략]
+                </div>
+</div>
+</div>
+<div class="result-download-card" id="result-card">
+<h4>✨ 문서 갱신 및 변환이 완료되었습니다!</h4>
+<p>올해 연도 정보가 반영된 새로운 계획서 파일이 준비되었습니다. 아래 버튼을 눌러 다운로드하세요.</p>
+<button class="btn-download-file" onclick="EF_MODAL.alert('변환된 파일(HWP) 다운로드가 시작됩니다.')">📥 변환된 파일 다운로드 (.hwp)</button>
+</div>
+</div></div></main>
+    <!-- Footer -->
+    <footer class="w-full mt-section px-lg max-w-7xl mx-auto flex flex-col gap-base py-xl border-t border-hairline">
+        <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-lg">
+            <span class="font-title-sm text-title-sm text-on-surface" data-ef="footer.org">경상북도교육청</span>
+            <div class="flex flex-wrap gap-lg">
+                <a class="font-caption text-caption text-body hover:underline decoration-primary" href="공통_개인정보처리방침.html">개인정보처리방침</a>
+                <a class="font-caption text-caption text-body hover:underline decoration-primary" href="공통_이용약관.html">이용약관</a>
+                <a class="font-caption text-caption text-body hover:underline decoration-primary" href="공통_이메일무단수집거부.html">이메일무단수집거부</a>
+                <a class="font-caption text-caption text-body hover:underline decoration-primary" href="공통_찾아오시는길.html">찾아오시는길</a>
+            </div>
+        </div>
+        <p class="font-caption text-caption text-on-surface-variant" data-ef="footer.copyright">© 경상북도교육청. All Rights Reserved.</p>
+    </footer>
+<script>
+        const dropZone = document.getElementById('drop-zone');
+        const progressSection = document.getElementById('progress-section');
+        const progressBar = document.getElementById('progress-bar');
+        const progressPercent = document.getElementById('progress-percent');
+        const progressMsg = document.getElementById('progress-msg');
+        const progressSubmsg = document.getElementById('progress-submsg');
+        
+        const docTitle = document.getElementById('doc-title');
+        const docDate = document.getElementById('doc-date');
+        const docContent = document.getElementById('doc-content');
+        const btnConvert = document.getElementById('btn-convert');
+        const resultCard = document.getElementById('result-card');
+
+        const newTitleInput = document.getElementById('new-title');
+        const newDateInput = document.getElementById('new-date');
+        const newContentInput = document.getElementById('new-content');
+
+        const previewDocTitle = document.getElementById('preview-doc-title');
+        const previewDocTitleSub = document.getElementById('preview-doc-title-sub');
+        const previewDocDate = document.getElementById('preview-doc-date');
+        const previewDocContent = document.getElementById('preview-doc-content');
+
+        const calendarIcon = document.getElementById('calendar-icon');
+        const calendarPopup = document.getElementById('calendar-popup');
+        const calendarMonthYear = document.getElementById('calendar-month-year');
+        const calendarGrid = document.getElementById('calendar-grid');
+        const prevMonthBtn = document.getElementById('prev-month');
+        const nextMonthBtn = document.getElementById('next-month');
+
+        let currentYear = 2026;
+        let currentMonth = 6;
+
+        function updateLivePreview() {
+            const titleVal = newTitleInput.value.trim() || '문서 제목을 입력해주세요';
+            const dateVal = newDateInput.value.trim() || '날짜를 선택해주세요';
+            const contentVal = newContentInput.value.trim() || '내용을 입력해주세요';
+
+            previewDocTitle.innerText = titleVal;
+            previewDocTitleSub.innerText = titleVal;
+            previewDocDate.innerText = dateVal;
+            previewDocContent.innerText = contentVal;
+        }
+
+        newTitleInput.addEventListener('input', updateLivePreview);
+        newContentInput.addEventListener('input', updateLivePreview);
+
+        function renderCalendar(year, month) {
+            calendarGrid.innerHTML = '';
+            calendarMonthYear.innerText = `${year}년 ${month + 1}월`;
+
+            const dayNames = ['일', '월', '화', '수', '목', '금', '토'];
+            dayNames.forEach((day, index) => {
+                const dayNameElem = document.createElement('div');
+                dayNameElem.className = 'day-name';
+                if (index === 0) dayNameElem.classList.add('sun');
+                if (index === 6) dayNameElem.classList.add('sat');
+                dayNameElem.innerText = day;
+                calendarGrid.appendChild(dayNameElem);
+            });
+
+            const firstDay = new Date(year, month, 1).getDay();
+            const lastDate = new Date(year, month + 1, 0).getDate();
+
+            for (let i = 0; i < firstDay; i++) {
+                const emptyCell = document.createElement('div');
+                emptyCell.className = 'day-cell empty';
+                calendarGrid.appendChild(emptyCell);
+            }
+
+            for (let date = 1; date <= lastDate; date++) {
+                const dayCell = document.createElement('div');
+                dayCell.className = 'day-cell';
+                dayCell.innerText = date;
+
+                dayCell.addEventListener('click', () => {
+                    const selectedDate = new Date(year, month, date);
+                    const days = ['일', '월', '화', '수', '목', '금', '토'];
+                    const dayOfWeek = days[selectedDate.getDay()];
+                    
+                    newDateInput.value = `${year}. ${month + 1}. ${date}.(${dayOfWeek})`;
+                    updateLivePreview(); 
+                    calendarPopup.style.display = 'none';
+                });
+
+                calendarGrid.appendChild(dayCell);
+            }
+        }
+
+        function toggleCalendar() {
+            const isVisible = calendarPopup.style.display === 'block';
+            calendarPopup.style.display = isVisible ? 'none' : 'block';
+            if (!isVisible) {
+                renderCalendar(currentYear, currentMonth);
+            }
+        }
+
+        newDateInput.addEventListener('click', toggleCalendar);
+        calendarIcon.addEventListener('click', toggleCalendar);
+
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('.date-input-wrapper')) {
+                calendarPopup.style.display = 'none';
+            }
+        });
+
+        prevMonthBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            currentMonth--;
+            if (currentMonth < 0) {
+                currentMonth = 11;
+                currentYear--;
+            }
+            renderCalendar(currentYear, currentMonth);
+        });
+
+        nextMonthBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            currentMonth++;
+            if (currentMonth > 11) {
+                currentMonth = 0;
+                currentYear++;
+            }
+            renderCalendar(currentYear, currentMonth);
+        });
+
+        function simulateUpload() {
+            progressSection.style.display = 'block';
+            progressBar.style.width = '0%';
+            progressPercent.innerText = '0%';
+            
+            let width = 0;
+            const interval = setInterval(() => {
+                width += 2;
+                progressBar.style.width = width + '%';
+                progressPercent.innerText = width + '%';
+
+                if (width === 30) {
+                    progressMsg.innerText = "문서 메타데이터 추출 중...";
+                    progressSubmsg.innerText = "전년도 결재 계획서의 본문 텍스트를 파싱하고 있습니다.";
+                } else if (width === 70) {
+                    progressMsg.innerText = "당해 연도 정보 자동 매핑 중...";
+                    progressSubmsg.innerText = "연도, 날짜 및 내용 정보를 2026학년도 기준으로 정렬 중입니다.";
+                }
+
+                if (width >= 100) {
+                    clearInterval(interval);
+                    progressMsg.innerText = "문서 분석 및 데이터 갱신 완료!";
+                    progressSubmsg.innerText = "원본 문서 정보가 성공적으로 인식되었습니다.";
+                    
+                    setTimeout(() => {
+                        docTitle.innerHTML = '<span class="result-text">2025학년도 AI 디지털 활용 선도학교 연수 계획서.hwp</span>';
+                        docDate.innerHTML = '<span class="result-text">2025. 7. 5.(토)</span>';
+                        docContent.innerHTML = '<span class="result-text">에듀테크 활용 수업 역량 강화 연수</span>';
+                        docTitle.classList.remove('placeholder-text');
+                        docDate.classList.remove('placeholder-text');
+                        docContent.classList.remove('placeholder-text');
+                        
+                        newTitleInput.value = "2026학년도 AI 디지털 활용 선도학교 연수 계획서";
+                        newDateInput.value = "2026. 7. 5.(일)";
+                        newContentInput.value = "AI 디지털 교과서(AIDT) 실습 및 적용";
+                        
+                        updateLivePreview(); 
+                    }, 300);
+                }
+            }, 30);
+        }
+
+        dropZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dropZone.classList.add('dragover');
+        });
+
+        dropZone.addEventListener('dragleave', (e) => {
+            e.preventDefault();
+            dropZone.classList.remove('dragover');
+        });
+
+        dropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropZone.classList.remove('dragover');
+            simulateUpload();
+        });
+
+        btnConvert.addEventListener('click', () => {
+            btnConvert.innerText = "변환 처리 중...";
+            btnConvert.disabled = true;
+
+            setTimeout(() => {
+                btnConvert.innerText = "문서 변환하기";
+                btnConvert.disabled = false;
+                resultCard.style.display = 'block';
+                resultCard.scrollIntoView({ behavior: 'smooth' });
+            }, 1000);
+        });
+
+        updateLivePreview();
+    </script>
+<!-- TODO: 실제 서버 연동 시 이 값들은 localStorage가 아니라 서버(DB)에서 불러오도록 교체해야 함.
+     푸터 정보는 서버관리자_푸터관리.html 에서만 수정할 수 있음(브라우저별 임시 저장). -->
+<script>
+    (function () {
+        function efLoadFooter() {
+            ['org', 'address', 'copyright'].forEach(function (f) {
+                var v = localStorage.getItem('ef_footer_' + f);
+                if (!v) return;
+                var view = document.querySelector('[data-ef="footer.' + f + '"]');
+                if (view) view.textContent = v;
+            });
+        }
+        efLoadFooter();
+    })();
+</script>
+</body>
+</html>
