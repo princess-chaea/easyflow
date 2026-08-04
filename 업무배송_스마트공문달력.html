@@ -4765,7 +4765,7 @@ function outlookShowState(id) {
         document.querySelectorAll('#outlookModal > div > section').forEach(sec => sec.classList.add('hidden'));
         document.getElementById(id).classList.remove('hidden');
     }
-    function devShowState(id) { outlookShowState(id); }
+    function devOutlookShowState(id) { outlookShowState(id); }
 
     function openOutlookPermissionModal(mode) {
         const granted = confirm('이지플로우가 다음 권한에 접근하도록 허용하시겠습니까?\n\n· Outlook 캘린더 읽기\n· Outlook 캘린더 쓰기\n\n허용을 누르면 계정이 연동됩니다.');
@@ -4813,7 +4813,7 @@ function outlookShowState(id) {
         }, 600);
     }
 
-    function showToast() {
+    function showOutlookToast() {
         toast('연동 설정을 저장했습니다', 'check_circle');
     }
 </script>
@@ -5114,7 +5114,7 @@ function outlookShowState(id) {
 </div>
 <!-- 저장 버튼 -->
 <div class="flex justify-end">
-<button class="w-full sm:w-auto bg-primary text-white px-xl py-base rounded-full font-bold hover:bg-primary-active active:scale-95 transition-all shadow-md" onclick="showToast()">설정 저장</button>
+<button class="w-full sm:w-auto bg-primary text-white px-xl py-base rounded-full font-bold hover:bg-primary-active active:scale-95 transition-all shadow-md" onclick="showOutlookToast()">설정 저장</button>
 </div>
 </section><section class="hidden" id="stateExpired">
 <div class="bg-warning/5 border border-warning/30 rounded-2xl p-lg sm:p-xxl text-center">
@@ -5135,7 +5135,7 @@ function outlookShowState(id) {
 </div>
 <h3 class="text-[19px] font-bold mb-xs text-danger">동기화 설정에 실패했습니다</h3>
 <p class="text-[14px] text-on-surface-variant mb-xl max-w-md mx-auto">Outlook 캘린더 접근 권한이 거부되었거나 일시적인 네트워크 오류가 발생했습니다. 권한 승인 시 모든 항목에 체크해 주시기 바랍니다.</p>
-<button class="inline-flex items-center gap-sm bg-white border border-danger text-danger px-xl py-base rounded-full font-bold hover:bg-danger/5 active:scale-95 transition-all shadow-sm" onclick="devShowState('outlookStateDisconnected')">
+<button class="inline-flex items-center gap-sm bg-white border border-danger text-danger px-xl py-base rounded-full font-bold hover:bg-danger/5 active:scale-95 transition-all shadow-sm" onclick="devOutlookShowState('outlookStateDisconnected')">
 <span class="material-symbols-outlined text-[20px]">arrow_back</span>
                 처음으로 돌아가기
             </button>
