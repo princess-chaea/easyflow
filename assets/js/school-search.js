@@ -148,7 +148,7 @@ const EF_SCHOOL = (() => {
       dd = document.createElement('div');
       dd.id = 'ef-school-dropdown';
       dd.className = [
-        'absolute z-[200] left-0 right-0 mt-1',
+        'absolute z-[10050] left-0 right-0 mt-1',
         'bg-white border border-gray-200 rounded-2xl shadow-xl',
         'overflow-hidden max-h-[280px] overflow-y-auto',
         'divide-y divide-gray-100'
@@ -224,11 +224,13 @@ const EF_SCHOOL = (() => {
     // 검색 힌트 텍스트
     if (!input.placeholder) input.placeholder = '학교명 또는 기관·부서명 입력 (예: 아천초, 미래정보교육과)';
 
-    let statusEl = input.nextElementSibling;
+    // 상태 문구는 아이콘+입력창을 감싼 relative wrapper 바깥에 붙여야
+    // wrapper 높이가 늘어나 검색 아이콘이 아래로 밀리는 현상을 피할 수 있음
+    let statusEl = wrapper.nextElementSibling;
     if (!statusEl || statusEl.tagName !== 'P') {
       statusEl = document.createElement('p');
       statusEl.className = 'text-[12px] text-muted mt-1 hidden';
-      input.insertAdjacentElement('afterend', statusEl);
+      wrapper.insertAdjacentElement('afterend', statusEl);
     }
 
     const setStatus = (msg, isLoading = false) => {
