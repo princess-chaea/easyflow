@@ -49,7 +49,9 @@
     let userRank = localStorage.getItem(`rank_${currentUser}`) || '';
     
     const allRoles = ['학교 관리자', '업무배송 담당자', '멘토', '장학사', '서버 관리자'];
-    const availableRoles = allRoles.filter(r => !grantedRoles.includes(r));
+    const normalizeRole = r => r.replace(/\s+/g, '');
+    const normalizedGranted = grantedRoles.map(normalizeRole);
+    const availableRoles = allRoles.filter(r => !normalizedGranted.includes(normalizeRole(r)));
     
 
     // Custom Toast function
