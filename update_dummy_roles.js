@@ -61,7 +61,7 @@ const newTbody = `
 </span>
 </td>
 </tr>
-<!-- Table Row 3 (교사) -->
+<!-- Table Row 3 (교직원) -->
 <tr class="stagger-in transition-table-row" style="animation-delay: 0.2s;">
 <td class="px-lg py-base">
 <div class="flex items-center gap-sm">
@@ -77,7 +77,7 @@ const newTbody = `
 <div class="font-caption text-caption text-muted">교육연구부</div>
 </td>
 <td class="px-lg py-base">
-<span class="px-sm py-xxs rounded-full bg-surface-container-highest text-on-surface-variant font-caption-strong">교사</span>
+<span class="px-sm py-xxs rounded-full bg-surface-container-highest text-on-surface-variant font-caption-strong">교직원</span>
 </td>
 <td class="px-lg py-base font-number-display text-caption text-muted">2024.01.15</td>
 <td class="px-lg py-base text-center">

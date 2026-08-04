@@ -96,7 +96,7 @@ const tableReplacement = `
             const req = pendingRequests[index];
             let userGrantedRoles = JSON.parse(localStorage.getItem(\`grantedRoles_\${req.email}\`)) || [];
             if (userGrantedRoles.length === 0) {
-                let r = '교사'; // Changed from 일반 교원 to 교사 based on user request
+                let r = '교직원'; // Changed from 일반 교원 to 교사 based on user request
                 if (req.email === 'test@gbe.kr') r = '서버 관리자';
                 else if (req.email === 'test1@gbe.kr') r = '학교 관리자';
                 else if (req.email === 'test2@gbe.kr') r = '업무배송 담당자';

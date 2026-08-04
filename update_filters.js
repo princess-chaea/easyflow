@@ -9,14 +9,14 @@ files.forEach(file => {
     const oldOptions = `<option>전체 역할</option>
 <option>총괄 관리자</option>
 <option>학교 관리자</option>
-<option>교사</option>`;
+<option>교직원</option>`;
     
     const newOptions = `<option>전체 역할</option>
 <option>서버 관리자</option>
 <option>학교 관리자</option>
 <option>장학사</option>
 <option>멘토</option>
-<option>교사</option>`;
+<option>교직원</option>`;
 
     content = content.replace(oldOptions, newOptions);
 
