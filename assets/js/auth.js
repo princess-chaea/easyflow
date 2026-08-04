@@ -76,7 +76,30 @@
                     localStorage.removeItem('currentRole');
                 });
             }
-        });
+        // Profile Dropdown Click Toggle
+        const profileTrigger = document.querySelector('.profile-dropdown-trigger');
+        const profileMenu = document.querySelector('.profile-dropdown-menu');
+        if (profileTrigger && profileMenu) {
+            profileTrigger.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const isVisible = profileMenu.style.opacity === '1';
+                if (isVisible) {
+                    profileMenu.style.opacity = '0';
+                    profileMenu.style.visibility = 'hidden';
+                } else {
+                    profileMenu.style.opacity = '1';
+                    profileMenu.style.visibility = 'visible';
+                }
+            });
+            
+            document.addEventListener('click', (e) => {
+                if (!profileTrigger.contains(e.target) && !profileMenu.contains(e.target)) {
+                    profileMenu.style.opacity = '0';
+                    profileMenu.style.visibility = 'hidden';
+                }
+            });
+        }
+
         // Load Profile Modal Script dynamically
         const pmScript = document.createElement('script');
         pmScript.src = 'assets/js/profile-modal.js';

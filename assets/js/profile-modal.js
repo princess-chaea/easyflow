@@ -41,10 +41,28 @@
     let grantedRoles = JSON.parse(localStorage.getItem(`grantedRoles_${currentUser}`)) || [currentRole];
     let pendingRequests = JSON.parse(localStorage.getItem('roleRequests')) || [];
 
-    // Admin Check
-    const isAdmin = (currentRole === '서버관리자' || currentRole === '장학사');
+    // Custom Toast function
+    const showToast = (message, type = 'success') => {
+        const toast = document.createElement('div');
+        toast.className = `fixed bottom-10 left-1/2 transform -translate-x-1/2 px-6 py-3 rounded-xl shadow-lg text-white font-bold text-[15px] z-[10000] transition-all duration-300 ${type === 'success' ? 'bg-primary' : 'bg-danger'}`;
+        toast.style.opacity = '0';
+        toast.style.transform = 'translate(-50%, 20px)';
+        toast.innerText = message;
+        document.body.appendChild(toast);
+        
+        requestAnimationFrame(() => {
+            toast.style.opacity = '1';
+            toast.style.transform = 'translate(-50%, 0)';
+        });
+        
+        setTimeout(() => {
+            toast.style.opacity = '0';
+            toast.style.transform = 'translate(-50%, -20px)';
+            setTimeout(() => toast.remove(), 300);
+        }, 3000);
+    };
 
-    // 4. Build Modal HTML
+    // 4. Build Modal HTML (Removed Admin Section)
     const modalHTML = `
     <div id="profileModalOverlay">
         <div id="profileModalContent">
@@ -126,33 +144,6 @@
                     </div>
                 </section>
 
-                ${isAdmin ? `
-                <hr class="border-gray-100">
-                <!-- 관리자용: 권한 요청 관리 -->
-                <section class="flex flex-col gap-4">
-                    <h2 class="text-[18px] font-bold text-primary flex items-center gap-1">
-                        <span class="material-symbols-outlined text-[20px]">admin_panel_settings</span> 권한 요청 관리 (관리자 전용)
-                    </h2>
-                    <div class="bg-orange-50 rounded-xl p-4 border border-orange-200">
-                        ${pendingRequests.length === 0 ? '<p class="text-[13px] text-ink/60">현재 대기 중인 요청이 없습니다.</p>' : ''}
-                        <ul class="flex flex-col gap-3">
-                            ${pendingRequests.map((req, idx) => `
-                                <li class="flex items-center justify-between bg-white p-3 rounded-lg shadow-sm border border-orange-100">
-                                    <div class="flex flex-col">
-                                        <span class="text-[14px] font-bold text-ink">${req.email}</span>
-                                        <span class="text-[13px] text-ink/70">신청 권한: <strong>${req.requestedRole}</strong></span>
-                                    </div>
-                                    <div class="flex gap-2">
-                                        <button class="pm-approve-btn px-3 py-1 bg-success/10 text-success font-bold text-[13px] rounded-md hover:bg-success hover:text-white transition-colors" data-index="${idx}" data-email="${req.email}" data-role="${req.requestedRole}">승인</button>
-                                        <button class="pm-reject-btn px-3 py-1 bg-danger/10 text-danger font-bold text-[13px] rounded-md hover:bg-danger hover:text-white transition-colors" data-index="${idx}">반려</button>
-                                    </div>
-                                </li>
-                            `).join('')}
-                        </ul>
-                    </div>
-                </section>
-                ` : ''}
-
                 <div class="flex justify-end mt-4">
                     <button id="pmSaveCloseBtn" class="px-8 py-3 bg-primary text-white font-bold rounded-xl shadow-md hover:bg-primary-active transition-colors">
                         확인 및 닫기
@@ -177,6 +168,13 @@
         link.addEventListener('click', function(e) {
             e.preventDefault();
             overlay.classList.add('active');
+            
+            // Hide the dropdown menu when modal opens
+            const profileMenu = document.querySelector('.profile-dropdown-menu');
+            if(profileMenu) {
+                profileMenu.style.opacity = '0';
+                profileMenu.style.visibility = 'hidden';
+            }
         });
     });
 
@@ -196,59 +194,23 @@
             const requestedRole = roleSelect.value;
             if (!requestedRole) return;
             if (grantedRoles.includes(requestedRole)) {
-                alert('이미 보유한 권한입니다.');
+                showToast('이미 보유한 권한입니다.', 'danger');
                 return;
             }
             
-            const req = { email: currentUser, requestedRole };
+            // Check if already requested
+            const alreadyRequested = pendingRequests.some(r => r.email === currentUser && r.requestedRole === requestedRole);
+            if (alreadyRequested) {
+                showToast('이미 승인 대기 중인 권한입니다.', 'danger');
+                return;
+            }
+            
+            const req = { email: currentUser, requestedRole, id: Date.now() };
             pendingRequests.push(req);
             localStorage.setItem('roleRequests', JSON.stringify(pendingRequests));
-            alert('권한 신청이 완료되었습니다. 관리자 승인을 대기합니다.');
-            location.reload(); // Quick refresh to update UI
+            showToast('권한 신청이 완료되었습니다.');
+            
+            setTimeout(() => location.reload(), 1500); // Quick refresh to update UI
         });
     }
-
-    // 7. Admin Approve/Reject Logic
-    document.querySelectorAll('.pm-approve-btn').forEach(btn => {
-        btn.addEventListener('click', (e) => {
-            const idx = e.target.getAttribute('data-index');
-            const targetEmail = e.target.getAttribute('data-email');
-            const targetRole = e.target.getAttribute('data-role');
-
-            let userGrantedRoles = JSON.parse(localStorage.getItem(`grantedRoles_${targetEmail}`)) || [];
-            // If they are approving a base role and haven't loaded base, default to their initial
-            if (userGrantedRoles.length === 0) {
-                // Approximate initial role
-                let r = '일반 교원';
-                if (targetEmail === 'test@gbe.kr') r = '서버관리자';
-                else if (targetEmail === 'test1@gbe.kr') r = '학교관리자';
-                else if (targetEmail === 'test2@gbe.kr') r = '업무배송 담당자';
-                else if (targetEmail === 'test3@gbe.kr') r = '인생 도서관 멘토';
-                else if (targetEmail === 'test4@gbe.kr') r = '장학사';
-                userGrantedRoles.push(r);
-            }
-            
-            if (!userGrantedRoles.includes(targetRole)) {
-                userGrantedRoles.push(targetRole);
-            }
-            localStorage.setItem(`grantedRoles_${targetEmail}`, JSON.stringify(userGrantedRoles));
-            
-            pendingRequests.splice(idx, 1);
-            localStorage.setItem('roleRequests', JSON.stringify(pendingRequests));
-            
-            alert(`${targetEmail} 님의 [${targetRole}] 권한을 승인했습니다.`);
-            location.reload();
-        });
-    });
-
-    document.querySelectorAll('.pm-reject-btn').forEach(btn => {
-        btn.addEventListener('click', (e) => {
-            const idx = e.target.getAttribute('data-index');
-            pendingRequests.splice(idx, 1);
-            localStorage.setItem('roleRequests', JSON.stringify(pendingRequests));
-            alert('요청을 반려했습니다.');
-            location.reload();
-        });
-    });
-
 })();

@@ -4,7 +4,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>이지플로우 (EasyFlow) - 학교 통합 관리</title>
+<title>역할 관리 - 이지플로우</title>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <link rel="preload" as="font" type="font/ttf" href="./font/Hakgyoansim_PosterB.ttf" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
@@ -335,334 +335,340 @@
 </div>
 </div>
 </nav>
-<!-- Top Navigation Bar -->
-<main class="pt-[64px] min-h-screen"><div class="w-full max-w-[1600px] mx-auto px-lg py-xl flex flex-col md:flex-row gap-xl" id="global-layout-wrapper">
+<main class="flex-grow pt-[64px] px-lg mx-auto w-full pb-section"><div class="w-full max-w-[1600px] mx-auto px-lg py-xl flex flex-col md:flex-row gap-xl" id="global-layout-wrapper">
 <!-- Added background, padding, and rounded corners for the left menu area -->
 
 <aside class="w-[220px] shrink-0 bg-surface-soft p-lg -ml-lg rounded-2xl hidden md:block" id="main-lnb">
-<h2 class="font-nav-link text-[22px] font-bold text-ink mb-md pb-sm border-b-2 border-ink">학교 관리</h2>
+<h2 class="font-nav-link text-[22px] font-bold text-ink mb-md pb-sm border-b-2 border-ink">서버 관리</h2>
 <ul class="flex flex-col gap-1">
 <li>
-<a class="font-nav-link block px-sm py-sm rounded-lg transition-colors text-[16px] text-on-surface-variant hover:bg-surface hover:text-ink" href="학교관리자_대시보드.html">대시보드</a>
+<a class="font-nav-link block px-sm py-sm rounded-lg transition-colors text-[16px] text-on-surface-variant hover:bg-surface hover:text-ink" href="서버관리자_대시보드.html">대시보드</a>
 </li>
 <li>
-<a class="font-nav-link block px-sm py-sm rounded-lg transition-colors text-[16px] bg-primary text-white font-bold" href="학교관리자_학교통합관리.html">학교 통합 관리</a>
+<a class="font-nav-link block px-sm py-sm rounded-lg transition-colors text-[16px] text-on-surface-variant hover:bg-surface hover:text-ink" href="서버관리자_리소스 모니터링.html">리소스 모니터링</a>
 </li>
 <li>
-<a class="font-nav-link block px-sm py-sm rounded-lg transition-colors text-[16px] text-on-surface-variant hover:bg-surface hover:text-ink" href="학교관리자_데이터 리포트.html">데이터 리포트</a>
+<a class="font-nav-link block px-sm py-sm rounded-lg transition-colors text-[16px] text-on-surface-variant hover:bg-surface hover:text-ink" href="서버관리자_보안설정.html">보안 설정</a>
 </li>
 <li>
-<a class="font-nav-link block px-sm py-sm rounded-lg transition-colors text-[16px] text-on-surface-variant hover:bg-surface hover:text-ink" href="학교관리자_RAG데이터갱신.html">RAG 데이터 갱신</a>
+<a class="font-nav-link block px-sm py-sm rounded-lg transition-colors text-[16px] bg-primary text-white font-bold" href="서버관리자_회원관리.html">회원 관리</a>
+</li>
+<li>
+<a class="font-nav-link block px-sm py-sm rounded-lg transition-colors text-[16px] text-on-surface-variant hover:bg-surface hover:text-ink" href="서버관리자_RAG데이터관리.html">RAG 데이터 관리</a>
+</li>
+<li>
+<a class="font-nav-link block px-sm py-sm rounded-lg transition-colors text-[16px] text-on-surface-variant hover:bg-surface hover:text-ink" href="서버관리자_푸터관리.html">푸터 관리</a>
 </li>
 </ul>
 </aside>
 
 <div class="flex-1 min-w-0">
 <!-- 표준 페이지 헤더 영역 -->
-<header class="bg-canvas border-b border-hairline py-xl">
-<div class="max-w-[1600px] mx-auto flex flex-col md:flex-row md:items-end justify-between gap-base">
+<!-- Header Section -->
+<section class="mt-xl mb-lg flex flex-col md:flex-row md:items-end justify-between gap-base">
 <div>
-<h1 class="text-[28px] font-bold text-ink mb-xs">학교 통합 관리</h1>
-<p class="text-[15px] text-ink/70">학교의 모든 부서 업무 및 인력 현황을 실시간으로 모니터링하고 조정합니다.
-                    </p>
+<h1 class="text-[28px] font-bold text-ink mb-xs">사용자 권한 관리</h1>
+<p class="text-[15px] text-ink/70">시스템 전체 사용자 리스트를 조회하고 권한을 변경할 수 있습니다.</p>
 </div>
 <div class="flex gap-sm">
-<button class="px-base py-sm bg-surface-strong text-ink rounded-full font-button flex items-center gap-xs hover:opacity-80 transition-opacity">
-<span class="material-symbols-outlined">download</span>
-<span>보고서 출력</span>
-</button>
-<button class="px-base py-sm bg-primary text-on-primary rounded-full font-button flex items-center gap-xs hover:opacity-90 transition-opacity">
-<span class="material-symbols-outlined">person_add</span>
-<span>신규 인원 등록</span>
-</button>
+<div class="bg-surface-container-low px-base py-sm rounded-lg flex items-center gap-sm">
+<span class="font-caption text-caption text-muted">전체 사용자</span>
+<span class="font-title-md text-title-md text-primary font-number-display">1,248</span>
+</div>
+<div class="bg-primary-container px-base py-sm rounded-lg flex items-center gap-sm">
+<span class="font-caption text-caption text-primary-fixed">관리자 수</span>
+<span class="font-title-md text-title-md text-on-primary-container font-number-display">12</span>
 </div>
 </div>
-</header>
-<div class="max-w-[1600px] mx-auto px-lg py-xl">
-<!-- Summary Grid (Bento Style) -->
-<div class="grid grid-cols-1 md:grid-cols-4 gap-lg mb-xl">
-<!-- Status Card -->
-<div class="col-span-1 md:col-span-2 bg-canvas p-xl rounded-xl border border-hairline shadow-sm flex flex-col justify-between">
-<div>
-<span class="font-caption-strong text-caption-strong text-primary uppercase tracking-wider">업무
-                            분장 현황</span>
-<div class="flex items-baseline gap-xs mt-sm">
-<span class="font-display-lg text-display-lg text-primary">84%</span>
-<span class="font-body-sm text-success flex items-center">
-<span class="material-symbols-outlined text-[18px]">trending_up</span>
-                                12% 증가
-                            </span>
+</section>
+<!-- Search & Filter Bar -->
+<section class="bg-canvas border border-hairline rounded-2xl p-base mb-xl shadow-sm">
+<div class="flex flex-col md:flex-row gap-base">
+<div class="flex-grow relative">
+<span class="material-symbols-outlined absolute left-base top-1/2 -translate-y-1/2 text-muted">search</span>
+<input class="w-full pl-[48px] pr-base py-sm bg-surface-soft border border-hairline rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all font-body-md" placeholder="이름, 학교명, 또는 사번으로 검색하세요" type="text"/>
+</div>
+<div class="flex gap-base">
+<select class="px-base py-sm bg-surface-soft border border-hairline rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all font-body-sm appearance-none min-w-[140px]">
+<option>전체 역할</option>
+<option>총괄 관리자</option>
+<option>학교 관리자</option>
+<option>교사</option>
+</select>
+<select class="px-base py-sm bg-surface-soft border border-hairline rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all font-body-sm appearance-none min-w-[140px]">
+<option>전체 상태</option>
+<option>활성</option>
+<option>비활성</option>
+</select>
+<button class="bg-primary text-white font-button px-xl py-sm rounded-full hover:bg-primary-active transition-all active:scale-95 shadow-sm">
+                        검색 적용
+                    </button>
 </div>
 </div>
-<div class="mt-xl">
-<div class="w-full bg-surface-container rounded-full h-2">
-<div class="bg-primary h-2 rounded-full w-[84%]"></div>
-</div>
-<p class="font-caption text-caption text-muted mt-xs">총 120개 과업 중 101개 배정 완료</p>
-</div>
-</div>
-<!-- Dept Quick Stats -->
-<div class="bg-surface-container-low p-xl rounded-xl border border-hairline flex flex-col justify-center text-center">
-<span class="material-symbols-outlined text-primary text-[32px] mb-xs">account_balance</span>
-<span class="font-title-lg text-title-lg text-primary">교무실</span>
-<span class="font-caption text-caption text-on-surface-variant">총 42명 / 4개 학년</span>
-</div>
-<div class="bg-surface-container-low p-xl rounded-xl border border-hairline flex flex-col justify-center text-center">
-<span class="material-symbols-outlined text-secondary text-[32px] mb-xs">corporate_fare</span>
-<span class="font-title-lg text-title-lg text-secondary">행정실</span>
-<span class="font-caption text-caption text-on-surface-variant">총 15명 / 3개 팀</span>
-</div>
-</div>
-<div class="grid grid-cols-1 lg:grid-cols-3 gap-lg">
-<!-- Personnel Management Table (Main Content) -->
-<div class="lg:col-span-2 bg-canvas rounded-xl border border-hairline overflow-hidden shadow-sm">
-<div class="p-lg border-b border-hairline flex justify-between items-center bg-surface-soft">
-<h2 class="font-title-md text-title-md text-primary flex items-center gap-xs">
-<span class="material-symbols-outlined">group</span>
-                            부서별 인원 관리
-                        </h2>
-<div class="relative">
-<span class="material-symbols-outlined absolute left-sm top-1/2 -translate-y-1/2 text-on-surface-variant">search</span>
-<input class="pl-xl pr-base py-xs bg-canvas border border-hairline rounded-lg text-body-sm focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all w-48" placeholder="이름 또는 직위 검색" type="text"/>
-</div>
-</div>
+</section>
+<!-- User Table Section -->
+<section class="bg-canvas border border-hairline rounded-2xl overflow-hidden shadow-sm">
 <div class="overflow-x-auto">
 <table class="w-full text-left border-collapse">
 <thead>
-<tr class="bg-surface-container-lowest border-b border-hairline">
-<th class="px-lg py-sm font-caption-strong text-caption-strong text-on-surface-variant">
-                                        이름</th>
-<th class="px-lg py-sm font-caption-strong text-caption-strong text-on-surface-variant">
-                                        소속/직위</th>
-<th class="px-lg py-sm font-caption-strong text-caption-strong text-on-surface-variant">
-                                        주요 업무</th>
-<th class="px-lg py-sm font-caption-strong text-caption-strong text-on-surface-variant">
-                                        상태</th>
-<th class="px-lg py-sm font-caption-strong text-caption-strong text-on-surface-variant text-center">
-                                        관리</th>
+<tr class="bg-surface-container-low border-b border-hairline">
+<th class="px-lg py-base font-caption-strong text-caption-strong text-on-surface-variant uppercase tracking-wider">
+                                이름 / 사번</th>
+<th class="px-lg py-base font-caption-strong text-caption-strong text-on-surface-variant uppercase tracking-wider">
+                                소속 학교 / 부서</th>
+<th class="px-lg py-base font-caption-strong text-caption-strong text-on-surface-variant uppercase tracking-wider">
+                                현재 역할</th>
+<th class="px-lg py-base font-caption-strong text-caption-strong text-on-surface-variant uppercase tracking-wider">
+                                가입일</th>
+<th class="px-lg py-base font-caption-strong text-caption-strong text-on-surface-variant uppercase tracking-wider text-center">
+                                상태</th>
+<th class="px-lg py-base font-caption-strong text-caption-strong text-on-surface-variant uppercase tracking-wider text-right">
+                                관리</th>
 </tr>
 </thead>
 <tbody class="divide-y divide-hairline">
-<tr class="hover:bg-surface-container-lowest transition-colors">
+<!-- Table Row 1 -->
+<tr class="stagger-in transition-table-row" style="animation-delay: 0.1s;">
 <td class="px-lg py-base">
 <div class="flex items-center gap-sm">
-<div class="w-8 h-8 rounded-full bg-primary-fixed flex items-center justify-center text-on-primary-fixed font-title-sm">
-                                                김</div>
-<span class="font-body-strong text-body-strong">김철수</span>
+<div class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold">
+                                        김</div>
+<div>
+<div class="font-body-strong text-body-strong">김철수</div>
+<div class="font-caption text-caption text-muted">EMP2023001</div>
+</div>
 </div>
 </td>
 <td class="px-lg py-base">
-<div class="flex flex-col">
-<span class="font-body-md text-body-md">교무실</span>
-<span class="font-caption text-caption text-muted">교감</span>
-</div>
+<div class="font-body-md text-body-md text-on-surface-variant">경북고등학교</div>
+<div class="font-caption text-caption text-muted">행정지원부</div>
 </td>
 <td class="px-lg py-base">
-<span class="font-body-sm text-body-sm">학사 일정 총괄</span>
+<span class="px-sm py-xxs rounded-full bg-primary/10 text-primary font-caption-strong">총괄
+                                    관리자</span>
 </td>
-<td class="px-lg py-base">
-<span class="px-sm py-xxs bg-success/10 text-success rounded-full font-caption-strong text-[11px]">재직
-                                            중</span>
-</td>
+<td class="px-lg py-base font-number-display text-caption text-muted">2023.03.12</td>
 <td class="px-lg py-base text-center">
-<button class="p-xxs hover:bg-surface-container rounded text-muted">
-<span class="material-symbols-outlined">more_vert</span>
-</button>
+<span class="inline-flex items-center gap-xs px-sm py-xxs rounded-full bg-success/10 text-success font-caption-strong">
+<span class="w-1.5 h-1.5 rounded-full bg-success"></span> 활성
+                                </span>
+</td>
+<td class="px-lg py-base text-right">
+<button class="text-primary hover:underline font-button text-body-sm" onclick="openModal('김철수', '총괄 관리자')">권한 설정</button>
 </td>
 </tr>
-<tr class="hover:bg-surface-container-lowest transition-colors">
+<!-- Table Row 2 -->
+<tr class="stagger-in transition-table-row" style="animation-delay: 0.15s;">
 <td class="px-lg py-base">
 <div class="flex items-center gap-sm">
-<div class="w-8 h-8 rounded-full bg-secondary-fixed flex items-center justify-center text-on-secondary-fixed font-title-sm">
-                                                이</div>
-<span class="font-body-strong text-body-strong">이영희</span>
+<div class="w-10 h-10 rounded-full bg-secondary/10 flex items-center justify-center text-secondary font-bold">
+                                        이</div>
+<div>
+<div class="font-body-strong text-body-strong">이영희</div>
+<div class="font-caption text-caption text-muted">EMP2023045</div>
+</div>
 </div>
 </td>
 <td class="px-lg py-base">
-<div class="flex flex-col">
-<span class="font-body-md text-body-md">행정실</span>
-<span class="font-caption text-caption text-muted">행정실장</span>
-</div>
+<div class="font-body-md text-body-md text-on-surface-variant">안동초등학교</div>
+<div class="font-caption text-caption text-muted">교무실</div>
 </td>
 <td class="px-lg py-base">
-<span class="font-body-sm text-body-sm">예산 편성 및 집행</span>
+<span class="px-sm py-xxs rounded-full bg-secondary-container/20 text-on-secondary-container font-caption-strong">학교
+                                    관리자</span>
 </td>
-<td class="px-lg py-base">
-<span class="px-sm py-xxs bg-success/10 text-success rounded-full font-caption-strong text-[11px]">재직
-                                            중</span>
-</td>
+<td class="px-lg py-base font-number-display text-caption text-muted">2023.05.20</td>
 <td class="px-lg py-base text-center">
-<button class="p-xxs hover:bg-surface-container rounded text-muted">
-<span class="material-symbols-outlined">more_vert</span>
-</button>
+<span class="inline-flex items-center gap-xs px-sm py-xxs rounded-full bg-success/10 text-success font-caption-strong">
+<span class="w-1.5 h-1.5 rounded-full bg-success"></span> 활성
+                                </span>
+</td>
+<td class="px-lg py-base text-right">
+<button class="text-primary hover:underline font-button text-body-sm" onclick="openModal('이영희', '학교 관리자')">권한 설정</button>
 </td>
 </tr>
-<tr class="hover:bg-surface-container-lowest transition-colors">
+<!-- Table Row 3 -->
+<tr class="stagger-in transition-table-row" style="animation-delay: 0.2s;">
 <td class="px-lg py-base">
 <div class="flex items-center gap-sm">
-<div class="w-8 h-8 rounded-full bg-surface-container-highest flex items-center justify-center text-on-surface-variant font-title-sm">
-                                                박</div>
-<span class="font-body-strong text-body-strong">박민준</span>
+<div class="w-10 h-10 rounded-full bg-on-surface-variant/10 flex items-center justify-center text-on-surface-variant font-bold">
+                                        박</div>
+<div>
+<div class="font-body-strong text-body-strong">박민수</div>
+<div class="font-caption text-caption text-muted">EMP2024102</div>
+</div>
 </div>
 </td>
 <td class="px-lg py-base">
-<div class="flex flex-col">
-<span class="font-body-md text-body-md">1학년부</span>
-<span class="font-caption text-caption text-muted">교사</span>
-</div>
+<div class="font-body-md text-body-md text-on-surface-variant">구미정보고등학교</div>
+<div class="font-caption text-caption text-muted">교육행정실</div>
 </td>
 <td class="px-lg py-base">
-<span class="font-body-sm text-body-sm">창의적 체험활동</span>
+<span class="px-sm py-xxs rounded-full bg-surface-container-highest text-on-surface-variant font-caption-strong">교사</span>
 </td>
-<td class="px-lg py-base">
-<span class="px-sm py-xxs bg-warning/10 text-warning rounded-full font-caption-strong text-[11px]">출장
-                                            중</span>
-</td>
+<td class="px-lg py-base font-number-display text-caption text-muted">2024.01.15</td>
 <td class="px-lg py-base text-center">
-<button class="p-xxs hover:bg-surface-container rounded text-muted">
-<span class="material-symbols-outlined">more_vert</span>
-</button>
+<span class="inline-flex items-center gap-xs px-sm py-xxs rounded-full bg-muted/10 text-muted font-caption-strong">
+<span class="w-1.5 h-1.5 rounded-full bg-muted"></span> 비활성
+                                </span>
+</td>
+<td class="px-lg py-base text-right">
+<button class="text-primary hover:underline font-button text-body-sm" onclick="openModal('박민수', '교사')">권한 설정</button>
 </td>
 </tr>
-<tr class="hover:bg-surface-container-lowest transition-colors">
+<!-- Table Row 4 -->
+<tr class="stagger-in transition-table-row" style="animation-delay: 0.25s;">
 <td class="px-lg py-base">
 <div class="flex items-center gap-sm">
-<div class="w-8 h-8 rounded-full bg-surface-container-highest flex items-center justify-center text-on-surface-variant font-title-sm">
-                                                정</div>
-<span class="font-body-strong text-body-strong">정다혜</span>
+<div class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold">
+                                        정</div>
+<div>
+<div class="font-body-strong text-body-strong">정소라</div>
+<div class="font-caption text-caption text-muted">EMP2022119</div>
+</div>
 </div>
 </td>
 <td class="px-lg py-base">
-<div class="flex flex-col">
-<span class="font-body-md text-body-md">방과후팀</span>
-<span class="font-caption text-caption text-muted">실무원</span>
-</div>
+<div class="font-body-md text-body-md text-on-surface-variant">포항제철고등학교</div>
+<div class="font-caption text-caption text-muted">정보화전략팀</div>
 </td>
 <td class="px-lg py-base">
-<span class="font-body-sm text-body-sm">강사 채용 및 관리</span>
+<span class="px-sm py-xxs rounded-full bg-surface-container-highest text-on-surface-variant font-caption-strong">교사</span>
 </td>
-<td class="px-lg py-base">
-<span class="px-sm py-xxs bg-success/10 text-success rounded-full font-caption-strong text-[11px]">재직
-                                            중</span>
-</td>
+<td class="px-lg py-base font-number-display text-caption text-muted">2022.11.02</td>
 <td class="px-lg py-base text-center">
-<button class="p-xxs hover:bg-surface-container rounded text-muted">
-<span class="material-symbols-outlined">more_vert</span>
-</button>
+<span class="inline-flex items-center gap-xs px-sm py-xxs rounded-full bg-success/10 text-success font-caption-strong">
+<span class="w-1.5 h-1.5 rounded-full bg-success"></span> 활성
+                                </span>
+</td>
+<td class="px-lg py-base text-right">
+<button class="text-primary hover:underline font-button text-body-sm" onclick="openModal('정소라', '교사')">권한 설정</button>
 </td>
 </tr>
 </tbody>
 </table>
 </div>
-</div>
-<!-- Right Sidebar / Quick Actions & Task Dist -->
-<div class="space-y-lg">
-<!-- Task Distribution Status -->
-<div class="bg-canvas p-xl rounded-xl border border-hairline shadow-sm">
-<h3 class="font-title-sm text-title-sm text-primary mb-lg flex items-center gap-xs">
-<span class="material-symbols-outlined">analytics</span>
-                            부서별 업무 배분율
-                        </h3>
-<div class="space-y-base">
-<div class="space-y-xxs">
-<div class="flex justify-between font-caption text-caption">
-<span>교무기획부</span>
-<span class="font-bold">92%</span>
-</div>
-<div class="w-full bg-surface-container rounded-full h-1.5 overflow-hidden">
-<div class="bg-primary h-full w-[92%]"></div>
-</div>
-</div>
-<div class="space-y-xxs">
-<div class="flex justify-between font-caption text-caption">
-<span>인성교육부</span>
-<span class="font-bold">78%</span>
-</div>
-<div class="w-full bg-surface-container rounded-full h-1.5 overflow-hidden">
-<div class="bg-primary h-full w-[78%]"></div>
-</div>
-</div>
-<div class="space-y-xxs">
-<div class="flex justify-between font-caption text-caption">
-<span>정보과학부</span>
-<span class="font-bold">45%</span>
-</div>
-<div class="w-full bg-surface-container rounded-full h-1.5 overflow-hidden">
-<div class="bg-secondary h-full w-[45%]"></div>
-</div>
-<p class="text-[10px] text-danger mt-1">※ 업무 재배치 필요</p>
-</div>
-</div>
-</div>
-<!-- AI Personnel Recommendation -->
-<div class="ai-glass p-xl rounded-xl border border-outline-variant shadow-lg text-on-primary">
-<div class="flex items-center gap-xs mb-md">
-<span class="material-symbols-outlined text-secondary-fixed">auto_awesome</span>
-<span class="font-title-sm text-title-sm text-white">AI 업무 최적화 제안</span>
-</div>
-<p class="font-body-sm text-surface-variant mb-lg leading-relaxed">
-                            현재 <strong>정보과학부</strong>의 업무량이 타 부서 대비 현저히 낮습니다. 학사 관리 시스템 고도화 작업을 이영희 행정실장에서 정보과학부로 이관하는
-                            것을 추천합니다.
-                        </p>
-<button class="w-full py-sm bg-white text-primary rounded-full font-button hover:bg-surface-bright transition-colors">
-                            제안 적용하기
-                        </button>
-</div>
-<!-- Quick Actions -->
-<div class="bg-surface-strong p-xl rounded-xl flex flex-col gap-sm">
-<h3 class="font-caption-strong text-caption-strong text-muted mb-xs">빠른 설정</h3>
-<button class="w-full flex items-center justify-between p-base bg-canvas rounded-lg border border-hairline hover:border-primary transition-all">
-<div class="flex items-center gap-base">
-<span class="material-symbols-outlined text-primary">assignment_ind</span>
-<span class="font-body-md">업무 분장표 생성</span>
-</div>
-<span class="material-symbols-outlined text-muted">chevron_right</span>
+<!-- Pagination -->
+<div class="px-lg py-base border-t border-hairline flex items-center justify-between bg-surface-soft">
+<p class="font-caption text-caption text-muted">1-10 / 1,248 사용자</p>
+<div class="flex gap-xxs">
+<button class="w-8 h-8 flex items-center justify-center rounded bg-canvas border border-hairline text-muted hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-[18px]">chevron_left</span>
 </button>
-<button class="w-full flex items-center justify-between p-base bg-canvas rounded-lg border border-hairline hover:border-primary transition-all">
-<div class="flex items-center gap-base">
-<span class="material-symbols-outlined text-primary">swap_horiz</span>
-<span class="font-body-md">인사 이동 처리</span>
-</div>
-<span class="material-symbols-outlined text-muted">chevron_right</span>
+<button class="w-8 h-8 flex items-center justify-center rounded bg-primary text-white font-number-display text-caption">1</button>
+<button class="w-8 h-8 flex items-center justify-center rounded bg-canvas border border-hairline text-on-surface-variant hover:text-primary transition-colors font-number-display text-caption">2</button>
+<button class="w-8 h-8 flex items-center justify-center rounded bg-canvas border border-hairline text-on-surface-variant hover:text-primary transition-colors font-number-display text-caption">3</button>
+<button class="w-8 h-8 flex items-center justify-center rounded bg-canvas border border-hairline text-muted hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-[18px]">chevron_right</span>
 </button>
 </div>
 </div>
-</div>
-</div>
+</section>
 </div></div></main>
-<footer class="w-full mt-section px-lg max-w-[1600px] mx-auto flex flex-col gap-base py-xl border-t border-hairline">
-<div class="flex flex-col md:flex-row justify-between items-center gap-md">
-<span class="font-title-sm text-title-sm text-on-surface dark:text-surface-bright" data-ef="footer.org">경상북도교육청</span>
-<div class="flex gap-lg">
-<a class="font-caption text-caption text-body hover:underline decoration-primary" href="공통_개인정보처리방침.html">개인정보처리방침</a>
-<a class="font-caption text-caption text-body hover:underline decoration-primary" href="공통_이용약관.html">이용약관</a>
-<a class="font-caption text-caption text-body hover:underline decoration-primary" href="공통_이메일무단수집거부.html">이메일무단수집거부</a>
-<a class="font-caption text-caption text-body hover:underline decoration-primary" href="공통_찾아오시는길.html">찾아오시는길</a>
+<!-- Role Management Modal -->
+<div class="hidden fixed inset-0 z-[100] flex items-center justify-center p-base" id="role-modal">
+<div class="modal-overlay absolute inset-0" onclick="closeModal()"></div>
+<div class="bg-canvas w-full max-w-md rounded-2xl shadow-xl z-10 overflow-hidden transform transition-all scale-95 opacity-0 duration-200" id="modal-content">
+<div class="px-lg py-base border-b border-hairline flex justify-between items-center bg-surface-soft">
+<h3 class="font-title-md text-title-md text-primary">권한 설정 관리</h3>
+<button class="text-muted hover:text-on-surface" onclick="closeModal()">
+<span class="material-symbols-outlined">close</span>
+</button>
+</div>
+<div class="p-lg">
+<div class="flex items-center gap-base mb-xl">
+<div class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center text-primary text-xl font-bold" id="modal-user-initial">김</div>
+<div>
+<div class="font-title-md text-title-md" id="modal-user-name">김철수</div>
+<div class="font-caption text-caption text-muted" id="modal-user-current-role">현재 권한: 총괄 관리자
+                        </div>
 </div>
 </div>
-<p class="font-caption text-caption text-on-surface-variant text-center md:text-left" data-ef="footer.copyright">© 경상북도교육청. All Rights
-            Reserved.</p>
+<div class="space-y-base">
+<label class="block">
+<span class="font-caption-strong text-caption-strong text-muted block mb-xs">변경할 권한 선택</span>
+<div class="space-y-sm">
+<label class="flex items-center p-base border border-hairline rounded-lg cursor-pointer hover:border-primary/50 transition-colors bg-surface-soft/50">
+<input class="w-4 h-4 text-primary focus:ring-primary" name="role" type="radio" value="admin"/>
+<div class="ml-base">
+<div class="font-body-strong text-body-strong text-on-surface">총괄 관리자</div>
+<div class="font-caption text-caption text-muted">시스템 전반의 모든 기능 제어 권한</div>
+</div>
+</label>
+<label class="flex items-center p-base border border-hairline rounded-lg cursor-pointer hover:border-primary/50 transition-colors">
+<input class="w-4 h-4 text-primary focus:ring-primary" name="role" type="radio" value="school"/>
+<div class="ml-base">
+<div class="font-body-strong text-body-strong text-on-surface">학교 관리자</div>
+<div class="font-caption text-caption text-muted">소속 학교의 교사 및 데이터 관리 권한</div>
+</div>
+</label>
+<label class="flex items-center p-base border border-hairline rounded-lg cursor-pointer hover:border-primary/50 transition-colors">
+<input class="w-4 h-4 text-primary focus:ring-primary" name="role" type="radio" value="teacher"/>
+<div class="ml-base">
+<div class="font-body-strong text-body-strong text-on-surface">교사</div>
+<div class="font-caption text-caption text-muted">표준 서비스 및 AI 비서 기능 활용 권한</div>
+</div>
+</label>
+</div>
+</label>
+</div>
+<div class="mt-xl pt-lg border-t border-hairline flex gap-base">
+<button class="flex-1 px-base py-sm border border-outline-variant rounded-full font-button text-on-surface hover:bg-surface-soft transition-colors" onclick="closeModal()">취소</button>
+<button class="flex-1 px-base py-sm bg-primary text-white rounded-full font-button hover:bg-primary-active transition-colors shadow-sm">변경
+                        사항 저장</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Footer -->
+<footer class="w-full mt-auto px-lg max-w-[1600px] mx-auto flex flex-col gap-base py-xl border-t border-hairline dark:border-outline-variant">
+<div class="flex flex-col md:flex-row justify-between items-center gap-base">
+<div class="font-title-sm text-title-sm text-on-surface dark:text-surface-bright font-bold">이지플로우 (EasyFlow)
+            </div>
+<div class="flex flex-wrap gap-base">
+<a class="font-caption text-caption text-body hover:underline decoration-primary transition-all" href="공통_개인정보처리방침.html">개인정보처리방침</a>
+<a class="font-caption text-caption text-body hover:underline decoration-primary transition-all" href="공통_이용약관.html">이용약관</a>
+<a class="font-caption text-caption text-body hover:underline decoration-primary transition-all" href="공통_이메일무단수집거부.html">이메일무단수집거부</a>
+<a class="font-caption text-caption text-body hover:underline decoration-primary transition-all" href="공통_찾아오시는길.html">찾아오시는길</a>
+</div>
+</div>
+<p class="font-caption text-caption text-on-surface-variant dark:text-surface-variant text-center md:text-left" data-ef="footer.copyright">
+            © 경상북도교육청. All Rights Reserved.
+        </p>
 </footer>
 <script>
-        // Simple micro-interaction for rows
-        document.querySelectorAll('tbody tr').forEach(row => {
-            row.addEventListener('click', () => {
-                row.classList.add('opacity-80');
-                setTimeout(() => row.classList.remove('opacity-80'), 150);
-            });
-        });
+        function openModal(name, role) {
+            const modal = document.getElementById('role-modal');
+            const content = document.getElementById('modal-content');
 
-        // Search highlight mock
-        const searchInput = document.querySelector('input[type="text"]');
-        searchInput.addEventListener('input', (e) => {
-            const query = e.target.value.toLowerCase();
-            document.querySelectorAll('tbody tr').forEach(row => {
-                const name = row.querySelector('.font-body-strong').textContent.toLowerCase();
-                if (name.includes(query)) {
-                    row.style.display = 'table-row';
-                } else {
-                    row.style.display = 'none';
-                }
+            document.getElementById('modal-user-name').innerText = name;
+            document.getElementById('modal-user-initial').innerText = name.charAt(0);
+            document.getElementById('modal-user-current-role').innerText = `현재 권한: ${role}`;
+
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                content.classList.remove('scale-95', 'opacity-0');
+                content.classList.add('scale-100', 'opacity-100');
+            }, 10);
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('role-modal');
+            const content = document.getElementById('modal-content');
+
+            content.classList.add('scale-95', 'opacity-0');
+            content.classList.remove('scale-100', 'opacity-100');
+
+            setTimeout(() => {
+                modal.classList.add('hidden');
+            }, 200);
+        }
+
+        // Apply staggering animations to table rows on load
+        document.addEventListener('DOMContentLoaded', () => {
+            const rows = document.querySelectorAll('.stagger-in');
+            rows.forEach((row, index) => {
+                row.style.animationDelay = `${index * 0.05}s`;
             });
         });
     </script>
