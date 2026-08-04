@@ -1,10 +1,9 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 
-<html lang="ko">
-<head>
+<html lang="ko" style=""><head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>이지플로우 (EasyFlow) - 공지사항</title>
+<title>이용약관 - 이지플로우 (EasyFlow) | 경상북도교육청</title>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <link rel="preload" as="font" type="font/ttf" href="./font/Hakgyoansim_PosterB.ttf" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
@@ -43,94 +42,54 @@
             font-family: 'KerisBaeum', sans-serif;
             -webkit-font-smoothing: antialiased;
         }
-        .glass-card {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+        .policy-body h2 {
+            font-size: 19px;
+            font-weight: 700;
+            color: #111214;
+            margin-top: 40px;
+            margin-bottom: 12px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #111214;
         }
-        .ai-gradient {
-            background: linear-gradient(135deg, #003893 0%, #12419b 100%);
+        .policy-body h2:first-child { margin-top: 0; }
+        .policy-body h3 {
+            font-size: 16px;
+            font-weight: 700;
+            color: #111214;
+            margin-top: 20px;
+            margin-bottom: 8px;
         }
-        .ripple {
-            position: absolute;
-            background: rgba(255, 255, 255, 0.3);
-            border-radius: 50%;
-            transform: scale(0);
-            animation: ripple-animation 0.6s linear;
-            pointer-events: none;
+        .policy-body p, .policy-body li {
+            font-size: 15px;
+            line-height: 1.8;
+            color: #434652;
         }
-        @keyframes ripple-animation {
-            to { transform: scale(4); opacity: 0; }
+        .policy-body ul, .policy-body ol {
+            margin: 8px 0 16px 0;
+            padding-left: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
         }
-
-        /* Micro-interactions & Animations */
-        @keyframes pulse-soft {
-            0%, 100% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.7; transform: scale(0.95); }
-        }
-        .animate-pulse-soft { animation: pulse-soft 2s infinite ease-in-out; }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-10px); }
-        }
-        .animate-float { animation: float 6s infinite ease-in-out; }
-
-        @keyframes shimmer {
-            0% { transform: translateX(-100%); }
-            100% { transform: translateX(100%); }
-        }
-        .shimmer-effect::after {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-            transform: translateX(-100%);
-            animation: shimmer 3s infinite;
-        }
-
-        .hover-lift {
-            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.4s ease;
-        }
-        .hover-lift:hover {
-            transform: translateY(-8px) scale(1.01);
-            box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
-        }
-
-        .nav-link-underline {
-            position: relative;
-        }
-        .nav-link-underline::after {
-            content: '';
-            position: absolute;
-            bottom: -4px;
-            left: 0;
-            width: 0;
-            height: 2px;
-            background-color: currentColor;
-            transition: width 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-        .nav-link-underline:hover::after {
+        .policy-body ul { list-style: disc; }
+        .policy-body ol { list-style: decimal; }
+        .policy-body table {
             width: 100%;
+            border-collapse: collapse;
+            margin: 12px 0 20px 0;
+            font-size: 14px;
         }
-
-        .entrance-fade {
-            opacity: 0;
-            transform: translateY(20px);
-            transition: opacity 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275), transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        .policy-body th, .policy-body td {
+            border: 1px solid #e5e8eb;
+            padding: 10px 14px;
+            text-align: left;
+            color: #434652;
         }
-        .entrance-fade.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        @media (prefers-reduced-motion: reduce) {
-            * {
-                animation-duration: 0.01ms !important;
-                animation-iteration-count: 1 !important;
-                transition-duration: 0.01ms !important;
-                scroll-behavior: auto !important;
-            }
+        .policy-body th {
+            background: #f8f9fa;
+            font-weight: 700;
+            color: #111214;
+            width: 160px;
         }
     </style>
 <script id="tailwind-config">
@@ -250,11 +209,11 @@
       </script>
 </head>
 <body class="bg-surface-soft text-on-surface">
+<!-- Top Navigation Bar -->
 <nav class="fixed top-0 w-full z-50 h-[64px] bg-canvas">
 <div class="max-w-[1600px] w-full mx-auto h-full flex justify-between items-center px-lg">
 <div class="flex items-center gap-[60px]">
-<span class="font-display-sm text-display-sm font-semibold text-primary tracking-tight entrance-fade visible" style="transition-delay: 0ms;"><h1 class="font-display-sm text-display-sm font-semibold text-primary-container" style="--tw-border-spacing-y: 0; --tw-translate-x: 0; --tw-translate-y: 0; --tw-rotate: 0; --tw-skew-x: 0; --tw-skew-y: 0; --tw-scale-x: 1; --tw-scale-y: 1; --tw-pan-x: ; --tw-pan-y: ; --tw-pinch-zoom: ; --tw-scroll-snap-strictness: proximity; --tw-gradient-from-position: ; --tw-gradient-via-position: ; --tw-gradient-to-position: ; --tw-ordinal: ; --tw-slashed-zero: ; --tw-numeric-figure: ; --tw-numeric-spacing: ; --tw-numeric-fraction: ; --tw-ring-inset: ; --tw-ring-offset-width: 0px; --tw-ring-offset-color: #fff; --tw-ring-color: rgb(59 130 246 / 0.5); --tw-ring-offset-shadow: 0 0 #0000; --tw-ring-shadow: 0 0 #0000; --tw-shadow: 0 0 #0000; --tw-shadow-colored: 0 0 #0000; --tw-blur: ; --tw-brightness: ; --tw-contrast: ; --tw-grayscale: ; --tw-hue-rotate: ; --tw-invert: ; --tw-saturate: ; --tw-sepia: ; --tw-drop-shadow: ; --tw-backdrop-blur: ; --tw-backdrop-brightness: ; --tw-backdrop-contrast: ; --tw-backdrop-grayscale: ; --tw-backdrop-hue-rotate: ; --tw-backdrop-invert: ; --tw-backdrop-opacity: ; --tw-backdrop-saturate: ; --tw-backdrop-sepia: ; --tw-contain-size: ; --tw-contain-layout: ; --tw-contain-paint: ; --tw-contain-style: ; font-size: 26px; --tw-text-opacity: 1; color: rgb(0, 56, 147); letter-spacing: normal; white-space: nowrap; line-height: 1.4;">이지플로우 (EasyFlow)</h1></span>
-
+<span class="font-display-sm text-display-sm font-semibold text-primary tracking-tight"><h1 class="font-display-sm text-display-sm font-semibold text-primary-container" style="font-size: 26px; color: rgb(0, 56, 147); letter-spacing: normal; white-space: nowrap; line-height: 1.4;">이지플로우 (EasyFlow)</h1></span>
 <div class="hidden md:flex gap-[80px] group/mega h-[64px] items-center relative">
 <div class="absolute top-[64px] left-1/2 -translate-x-1/2 w-[100vw] bg-white shadow-md border-b border-hairline opacity-0 invisible group-hover/mega:opacity-100 group-hover/mega:visible transition-all duration-200 z-40 h-[290px]"></div>
 <div class="relative h-full flex flex-col justify-start">
@@ -283,15 +242,13 @@
 </div>
 </div>
 <div class="relative h-full flex flex-col justify-start group/col">
-<a class="font-nav-link text-nav-link transition-colors h-[64px] flex items-center gap-xxs whitespace-nowrap group-hover/col:text-primary group-hover/col:font-bold text-primary font-bold relative" href="안내센터_공지사항.html">
-                안내센터 <span class="material-symbols-outlined text-[18px]">expand_more</span><span class="absolute left-[-22px] right-0 -bottom-[2px] h-[2px] bg-primary" aria-hidden="true"></span>
+<a class="font-nav-link text-nav-link transition-colors h-[64px] flex items-center gap-xxs whitespace-nowrap group-hover/col:text-primary group-hover/col:font-bold text-on-surface-variant hover:text-primary" href="안내센터_공지사항.html">
+                안내센터 <span class="material-symbols-outlined text-[18px]">expand_more</span>
 </a>
 <div class="absolute top-[64px] left-1/2 -translate-x-1/2 pt-md pb-md min-w-[160px] flex flex-col items-center gap-sm opacity-0 invisible group-hover/mega:opacity-100 group-hover/mega:visible transition-all duration-200 z-50 group-hover/col:bg-surface-container h-[290px] rounded-b-lg">
-<a class="font-nav-link text-[16px] text-on-surface-variant hover:text-primary transition-colors whitespace-nowrap px-sm py-1 w-full text-center" href="안내센터_공지사항.html">공지사항</a><a class="font-nav-link text-[16px] text-on-surface-variant hover:text-primary transition-colors whitespace-nowrap px-sm py-1 w-full text-center" href="안내센터_시스템 안내.html">이용 안내</a>
+<a class="font-nav-link text-[16px] text-on-surface-variant hover:text-primary transition-colors whitespace-nowrap px-sm py-1 w-full text-center" href="안내센터_공지사항.html">공지사항</a><a class="font-nav-link text-[16px] text-on-surface-variant hover:text-primary transition-colors whitespace-nowrap px-sm py-1 w-full text-center" href="안내센터_시스템 안내.html">이용 안내</a></div>
 </div>
 </div>
-</div>
-
 </div>
 <div class="flex items-center gap-base">
 <div class="relative group">
@@ -334,149 +291,73 @@
 </div>
 </div>
 </nav>
-<!-- TopNavBar -->
-<main class="pt-[64px] min-h-screen"><div class="w-full max-w-[1600px] mx-auto px-lg py-xl flex flex-col md:flex-row gap-xl" id="global-layout-wrapper">
-<!-- Added background, padding, and rounded corners for the left menu area -->
-
-<aside class="w-[220px] shrink-0 bg-surface-soft p-lg -ml-lg rounded-2xl hidden md:block" id="main-lnb">
-<h2 class="font-nav-link text-[22px] font-bold text-ink mb-md pb-sm border-b-2 border-ink">안내센터</h2>
-<ul class="flex flex-col gap-1">
-<li>
-<a class="font-nav-link block px-sm py-sm rounded-lg transition-colors text-[16px] bg-primary text-white font-bold" href="안내센터_공지사항.html">공지사항</a>
-</li>
-<li>
-<a class="font-nav-link block px-sm py-sm rounded-lg transition-colors text-[16px] text-on-surface-variant hover:bg-surface hover:text-ink" href="안내센터_시스템 안내.html">이용 안내</a>
-</li>
+<main class="pt-[64px] min-h-screen">
+<div class="max-w-[860px] mx-auto px-lg py-xl">
+<div class="mb-lg">
+<h1 class="text-[28px] font-bold text-ink mb-xs">이용약관</h1>
+<p class="text-[15px] text-ink/70">경상북도교육청 이지플로우(EasyFlow) 누리집의 체계적인 운영과 이용자 여러분의 편의를 위한 운영 지침입니다.</p>
+</div>
+<div class="bg-white rounded-2xl border border-hairline p-xl sm:p-xxl policy-body">
+<h2>제1장 총칙</h2>
+<h3>제1조 (목적)</h3>
+<p>이 지침은 경상북도교육청 이지플로우(EasyFlow, www.gbe.kr 연계 서비스)의 체계적인 운영을 위해 제정되었습니다. 이지플로우는 다음 각 호의 기능을 수행합니다.</p>
+<ul>
+<li>교육 정책 및 행정 업무 정보 홍보</li>
+<li>의견 수렴 및 전자민원(1:1 문의 등) 서비스 제공</li>
+<li>행정·재정·교육 통계 정보 제공</li>
+<li>유관 기관 및 학교 현장과의 정보 교류</li>
 </ul>
-</aside>
-
-<div class="flex-1 min-w-0">
-<!-- 표준 페이지 헤더 영역 -->
-<div class="max-w-4xl mx-auto">
-<!-- Breadcrumb -->
-<div class="flex items-center gap-xs text-on-surface-variant mb-md font-body-sm">
-<span>안내센터</span>
-<span class="material-symbols-outlined text-[16px]" data-icon="chevron_right">chevron_right</span>
-<span class="text-primary font-semibold">공지사항</span>
-</div>
-<h1 class="text-[28px] font-bold text-ink mb-xs">공지사항</h1>
-<p class="text-[15px] text-ink/70 mb-lg">이지플로우의 새 기능, 시스템 점검, 정책 변경 등 주요 소식을 안내합니다.</p>
-<!-- Notice List -->
-<div class="bg-surface-container-lowest rounded-2xl border border-outline-variant content-shadow overflow-hidden divide-y divide-outline-variant">
-<a class="flex flex-col sm:flex-row sm:items-center justify-between gap-sm p-lg hover:bg-surface-container-high transition-colors" href="안내센터_공지사항_상세.html">
-<div class="flex items-center gap-md min-w-0">
-<span class="shrink-0 inline-flex items-center px-sm py-1 bg-primary-container text-on-primary rounded-full text-label-sm font-label-sm uppercase tracking-wider">Update</span>
-<span class="font-title-sm text-on-surface truncate">2024년 상반기 행정 시스템 고도화 업데이트 안내</span>
-</div>
-<div class="shrink-0 flex items-center gap-md text-on-surface-variant font-body-sm">
-<span>2024.05.24</span>
-<span class="flex items-center gap-xxs"><span class="material-symbols-outlined text-[16px]" data-icon="visibility">visibility</span>1,284</span>
-</div>
-</a>
-<a class="flex flex-col sm:flex-row sm:items-center justify-between gap-sm p-lg hover:bg-surface-container-high transition-colors" href="#" onclick="event.preventDefault(); openNoticeModal('guideline')">
-<div class="flex items-center gap-md min-w-0">
-<span class="shrink-0 inline-flex items-center px-sm py-1 bg-surface-container text-on-surface-variant rounded-full text-label-sm font-label-sm uppercase tracking-wider">일반</span>
-<span class="font-title-sm text-on-surface truncate">교육용 AI 보조 도구 사용 가이드라인 배포</span>
-</div>
-<div class="shrink-0 flex items-center gap-md text-on-surface-variant font-body-sm">
-<span>2024.05.10</span>
-<span class="flex items-center gap-xxs"><span class="material-symbols-outlined text-[16px]" data-icon="visibility">visibility</span>892</span>
-</div>
-</a>
-<a class="flex flex-col sm:flex-row sm:items-center justify-between gap-sm p-lg hover:bg-surface-container-high transition-colors" href="#" onclick="event.preventDefault(); openNoticeModal('security')">
-<div class="flex items-center gap-md min-w-0">
-<span class="shrink-0 inline-flex items-center px-sm py-1 bg-surface-container text-on-surface-variant rounded-full text-label-sm font-label-sm uppercase tracking-wider">일반</span>
-<span class="font-title-sm text-on-surface truncate">6월 정기 보안 점검 및 서버 점검 안내</span>
-</div>
-<div class="shrink-0 flex items-center gap-md text-on-surface-variant font-body-sm">
-<span>2024.06.01</span>
-<span class="flex items-center gap-xxs"><span class="material-symbols-outlined text-[16px]" data-icon="visibility">visibility</span>456</span>
-</div>
-</a>
-<a class="flex flex-col sm:flex-row sm:items-center justify-between gap-sm p-lg hover:bg-surface-container-high transition-colors" href="#" onclick="event.preventDefault(); openNoticeModal('privacy')">
-<div class="flex items-center gap-md min-w-0">
-<span class="shrink-0 inline-flex items-center px-sm py-1 bg-surface-container text-on-surface-variant rounded-full text-label-sm font-label-sm uppercase tracking-wider">일반</span>
-<span class="font-title-sm text-on-surface truncate">개인정보 처리방침 개정 안내</span>
-</div>
-<div class="shrink-0 flex items-center gap-md text-on-surface-variant font-body-sm">
-<span>2024.04.15</span>
-<span class="flex items-center gap-xxs"><span class="material-symbols-outlined text-[16px]" data-icon="visibility">visibility</span>623</span>
-</div>
-</a>
-<a class="flex flex-col sm:flex-row sm:items-center justify-between gap-sm p-lg hover:bg-surface-container-high transition-colors" href="#" onclick="event.preventDefault(); openNoticeModal('summer')">
-<div class="flex items-center gap-md min-w-0">
-<span class="shrink-0 inline-flex items-center px-sm py-1 bg-surface-container text-on-surface-variant rounded-full text-label-sm font-label-sm uppercase tracking-wider">일반</span>
-<span class="font-title-sm text-on-surface truncate">여름방학 중 시스템 이용 안내</span>
-</div>
-<div class="shrink-0 flex items-center gap-md text-on-surface-variant font-body-sm">
-<span>2024.07.01</span>
-<span class="flex items-center gap-xxs"><span class="material-symbols-outlined text-[16px]" data-icon="visibility">visibility</span>301</span>
-</div>
-</a>
+<h2>제2장 서비스 운영 및 자료 관리</h2>
+<h3>제2조 (운영 체계)</h3>
+<table>
+<tr><th>총괄 부서</th><td>경상북도교육청 미래교육정보과</td></tr>
+<tr><th>자료 관리</th><td>해당 메뉴(업무 배송·인생 도서관·서식 자료실·안내센터) 소관 부서</td></tr>
+<tr><th>정보시스템</th><td>경상북도교육청정보센터</td></tr>
+</table>
+<h3>제3조 (게시 자료의 범위)</h3>
+<p>「전자정부법」 제12조 및 같은 법 시행령 제14조에 해당하는 정보를 게시함을 원칙으로 하되, 「공공기관의 정보공개에 관한 법률」 제9조에 따른 비공개 대상 정보는 제외합니다.</p>
+<h3>제4조 (메뉴 관리)</h3>
+<p>신규 메뉴 개설 또는 기존 메뉴 변경 시 총괄 부서와 사전 협의가 필요합니다. 1년 이상 활용 실적이 없는 메뉴는 총괄 부서 판단에 따라 폐쇄될 수 있습니다.</p>
+<h3>제5조 (자료의 관리 기간)</h3>
+<p>게시된 자료는 원칙적으로 3년간 보관하며, 시스템 운영 여건에 따라 보관 기간이 조정될 수 있습니다.</p>
+<h3>제6조 (삭제 대상 게시물)</h3>
+<p>다음 각 호에 해당하는 게시물은 사전 경고 없이 삭제될 수 있습니다.</p>
+<ol>
+<li>국가의 안전이나 보안을 위배하는 내용</li>
+<li>특정 정치적 성향을 포함하는 내용</li>
+<li>객관적 근거 없이 기관·개인을 비난하는 내용</li>
+<li>타인의 명예를 훼손할 우려가 있는 내용</li>
+<li>영리 목적의 광고 또는 저작권을 침해하는 내용</li>
+<li>욕설, 비속어, 음란물 등 미풍양속을 해치는 내용</li>
+<li>동일한 내용을 반복적으로 게시하는 경우</li>
+<li>실명을 기입하지 않은 게시물 (실명 게시가 원칙인 게시판의 경우)</li>
+<li>해당 게시판의 설치 목적에 어긋나는 내용</li>
+<li>타인의 게시물을 무단으로 전재한 내용</li>
+</ol>
+<h2>제3장 개인정보 보호 및 정보시스템 안전대책</h2>
+<h3>제7조 (개인정보 보호)</h3>
+<p>이지플로우는 회원가입 및 서비스 이용 과정에서 주민등록번호가 입력되지 않도록 조치하고 있으며, 개인정보 처리에 관한 세부 사항은 개인정보 처리방침을 따릅니다.</p>
+<h3>제8조 (정보시스템 안전대책)</h3>
+<p>침입차단시스템 및 웹방화벽을 설치·운영하고 있으며, 정기적인 자료 백업 및 사고 발생 시 신속한 복구를 위한 체계를 구축하고 있습니다.</p>
+<div class="mt-md p-base bg-surface-soft rounded-xl text-caption text-muted">최종 개정일: 2026년 1월 7일 · 담당 부서: 미래교육정보과 (전화: 054-805-3856)</div>
 </div>
 </div>
-</div></div></main>
-<!-- 공지 상세 모달 -->
-<div class="hidden opacity-0 fixed inset-0 z-[100] flex items-center justify-center bg-ink/50 backdrop-blur-sm transition-opacity duration-300" id="notice-modal">
-<div class="bg-white w-full max-w-lg mx-sm rounded-2xl overflow-hidden shadow-2xl">
-<div class="px-lg py-base border-b border-hairline flex justify-between items-center">
-<h3 class="text-title-sm font-bold text-ink" id="noticeModalTitle">공지사항</h3>
-<button class="p-xs hover:bg-surface-strong rounded-full transition-colors text-on-surface-variant" onclick="closeNoticeModal()"><span class="material-symbols-outlined">close</span></button>
-</div>
-<div class="px-lg py-base text-caption text-muted border-b border-hairline" id="noticeModalMeta"></div>
-<div class="p-lg text-body-sm text-on-surface leading-relaxed" id="noticeModalBody"></div>
-</div>
-</div>
+</main>
 <!-- Footer -->
-<footer class="w-full mt-auto px-lg max-w-[1600px] mx-auto flex flex-col gap-base bg-surface-container-low dark:bg-surface-dark py-xl border-t border-hairline dark:border-outline-variant">
-<div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-md">
-<div>
-<span class="font-title-sm text-title-sm text-on-surface dark:text-surface-bright block mb-xs">경상북도교육청</span>
-<p class="font-caption text-caption text-on-surface-variant dark:text-surface-variant">© 경상북도교육청. All
-                    Rights Reserved.</p>
+<footer class="w-full mt-section px-lg max-w-[1600px] mx-auto flex flex-col gap-base pb-xl border-t border-hairline pt-xl opacity-60 hover:opacity-100 transition-opacity">
+<div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-base">
+<span class="font-title-sm text-title-sm text-on-surface">경상북도교육청</span>
+<div class="flex flex-wrap gap-base">
+<a class="font-caption text-caption text-body hover:underline decoration-primary transition-all" href="공통_개인정보처리방침.html">개인정보처리방침</a>
+<a class="font-caption text-caption text-body hover:underline decoration-primary transition-all" href="공통_이용약관.html">이용약관</a>
+<a class="font-caption text-caption text-body hover:underline decoration-primary transition-all" href="#">이메일무단수집거부</a>
+<a class="font-caption text-caption text-body hover:underline decoration-primary transition-all" href="#">찾아오시는길</a>
 </div>
-<div class="flex flex-wrap gap-md">
-<a class="text-body dark:text-muted hover:underline decoration-primary font-caption text-caption" href="공통_개인정보처리방침.html">개인정보처리방침</a>
-<a class="text-body dark:text-muted hover:underline decoration-primary font-caption text-caption" href="공통_이용약관.html">이용약관</a>
-<a class="text-body dark:text-muted hover:underline decoration-primary font-caption text-caption" href="#">이메일무단수집거부</a>
-<a class="text-body dark:text-muted hover:underline decoration-primary font-caption text-caption" href="#">찾아오시는길</a>
 </div>
+<div class="flex flex-col md:flex-row justify-between items-start md:items-center border-t border-hairline/50 pt-base">
+<p class="font-caption text-caption text-on-surface-variant">© 경상북도교육청. All Rights Reserved.</p>
+<p class="font-caption text-caption text-muted">경북 안동시 풍천면 도청대로 511 | 대표전화 054-805-3000</p>
 </div>
 </footer>
-<script>
-        // Micro-interaction: Subtle hover effects
-        document.querySelectorAll('a, button').forEach(el => {
-            el.addEventListener('mouseenter', () => {
-                if (!el.classList.contains('active')) {
-                    el.style.transform = 'translateY(-1px)';
-                }
-            });
-            el.addEventListener('mouseleave', () => {
-                el.style.transform = 'translateY(0)';
-            });
-        });
-
-        const NOTICES = {
-            guideline: { title: '교육용 AI 보조 도구 사용 가이드라인 배포', date: '2024.05.10', views: 892, body: '생성형 AI를 활용해 수업 자료나 행정 문서를 작성할 때 유의해야 할 저작권, 개인정보, 사실 검증 기준을 담은 가이드라인을 배포합니다. AI 상담(챗봇) 화면 우측 도움말에서도 동일한 내용을 확인하실 수 있습니다.' },
-            security: { title: '6월 정기 보안 점검 및 서버 점검 안내', date: '2024.06.01', views: 456, body: '안정적인 서비스 제공을 위해 6월 넷째 주 토요일 새벽 02:00~06:00 정기 보안 점검을 실시합니다. 점검 시간 동안 일부 기능 이용이 제한될 수 있습니다.' },
-            privacy: { title: '개인정보 처리방침 개정 안내', date: '2024.04.15', views: 623, body: '이용자 개인정보 보호 강화를 위해 개인정보 처리방침 일부 조항이 개정되었습니다. 주요 변경 사항은 위탁 처리 업체 목록 갱신 및 보관 기간 조정입니다.' },
-            summer: { title: '여름방학 중 시스템 이용 안내', date: '2024.07.01', views: 301, body: '여름방학 기간에도 이지플로우는 정상적으로 운영됩니다. 다만 학교 현장 문의 응대는 평일 오전 9시~오후 5시로 단축 운영되니 참고해 주세요.' },
-        };
-        function openNoticeModal(key) {
-            const n = NOTICES[key];
-            if (!n) return;
-            document.getElementById('noticeModalTitle').textContent = n.title;
-            document.getElementById('noticeModalMeta').textContent = n.date + ' · 조회 ' + n.views;
-            document.getElementById('noticeModalBody').textContent = n.body;
-            const modal = document.getElementById('notice-modal');
-            modal.classList.remove('hidden');
-            setTimeout(() => modal.classList.remove('opacity-0'), 10);
-        }
-        function closeNoticeModal() {
-            const modal = document.getElementById('notice-modal');
-            modal.classList.add('opacity-0');
-            setTimeout(() => modal.classList.add('hidden'), 300);
-        }
-    </script>
 </body>
 </html>
