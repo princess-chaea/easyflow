@@ -104,6 +104,23 @@
             </div>
 
             <form id="loginForm" class="flex flex-col gap-4" novalidate>
+                <!-- [개발용] 빠른 역할 로그인 (추후 제거) -->
+                <div class="flex flex-col gap-1.5 p-3 bg-primary/10 rounded-xl mb-2 border border-primary/20">
+                    <label class="text-[13px] font-bold text-primary flex items-center gap-1">
+                        <span class="material-symbols-outlined text-[16px]">bug_report</span> 
+                        [개발용] 빠른 역할 선택
+                    </label>
+                    <select id="devRoleSelect" class="w-full border border-primary/20 rounded-lg px-3 py-2 text-[14px] text-primary focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors bg-white">
+                        <option value="">직접 입력하기</option>
+                        <option value="test@gbe.kr">서버관리자 (test@gbe.kr)</option>
+                        <option value="test1@gbe.kr">학교관리자 (test1@gbe.kr)</option>
+                        <option value="test2@gbe.kr">업무배송 담당자 (test2@gbe.kr)</option>
+                        <option value="test3@gbe.kr">인생 도서관 멘토 (test3@gbe.kr)</option>
+                        <option value="test4@gbe.kr">장학사 (test4@gbe.kr)</option>
+                        <option value="test5@gbe.kr">일반 교원 (test5@gbe.kr)</option>
+                    </select>
+                </div>
+
                 <div class="flex flex-col gap-1.5">
                     <label class="text-[14px] font-bold text-ink">GBE 이메일</label>
                     <input type="email" id="emailInput" placeholder="example@gbe.kr" class="w-full border border-gray-300 rounded-xl px-4 py-3 text-[15px] focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors">
@@ -130,7 +147,18 @@
         </div>
     </div>
 
-    <script>
+        <script>
+        // [개발용] 빠른 역할 선택 로직
+        document.getElementById('devRoleSelect').addEventListener('change', function(e) {
+            if (e.target.value) {
+                document.getElementById('emailInput').value = e.target.value;
+                document.getElementById('pwInput').value = 'test1234!';
+            } else {
+                document.getElementById('emailInput').value = '';
+                document.getElementById('pwInput').value = '';
+            }
+        });
+
         document.getElementById('loginForm').addEventListener('submit', function(e) {
             e.preventDefault();
             
