@@ -210,12 +210,12 @@
                             </label>
                             
                             <label class="flex items-center gap-2 p-3 border border-gray-200 rounded-xl cursor-pointer hover:bg-surface-soft transition-colors has-[:checked]:border-primary has-[:checked]:bg-primary/5">
-                                <input type="checkbox" name="role" value="학교관리자" class="w-4 h-4 accent-primary">
+                                <input type="checkbox" name="role" value="학교 관리자" class="w-4 h-4 accent-primary">
                                 <span class="text-[15px] font-bold text-ink">학교 관리자 <span class="text-[13px] font-normal text-ink/60 ml-1">(소속 학교 교직원 관리)</span></span>
                             </label>
                             
                             <label class="flex items-center gap-2 p-3 border border-gray-200 rounded-xl cursor-pointer hover:bg-surface-soft transition-colors has-[:checked]:border-primary has-[:checked]:bg-primary/5">
-                                <input type="checkbox" name="role" value="업무배송" class="w-4 h-4 accent-primary">
+                                <input type="checkbox" name="role" value="업무배송 담당자" class="w-4 h-4 accent-primary">
                                 <span class="text-[15px] font-bold text-ink">업무 배송 담당자 <span class="text-[13px] font-normal text-ink/60 ml-1">(업무 우편 발송 권한)</span></span>
                             </label>
                             
@@ -474,6 +474,15 @@
                     firstErrorElement.focus();
                 }
             } else {
+                // 선택한 관리자/멘토 권한을 승인 대기열에 등록 (서버관리자_역할관리.html에서 승인/반려 처리)
+                const requestedRoles = Array.from(document.querySelectorAll('input[name="role"]:checked')).map(cb => cb.value);
+                if (requestedRoles.length) {
+                    let pending = [];
+                    try { pending = JSON.parse(localStorage.getItem('roleRequests')) || []; } catch (err) { pending = []; }
+                    requestedRoles.forEach(role => pending.push({ email: emailInput.value.trim(), requestedRole: role }));
+                    localStorage.setItem('roleRequests', JSON.stringify(pending));
+                }
+
                 // Success Modal
                 document.getElementById('signupSuccessName').innerText = nameInput.value.trim();
                 const successModal = document.getElementById('signupSuccessModal');
