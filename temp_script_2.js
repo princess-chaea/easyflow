@@ -300,6 +300,10 @@
           + '<p class="text-caption text-muted-soft mt-xxs">기간을 넓히거나 부서 필터를 확인해 보세요.</p></div>';
         return;
       }
+      document.getElementById('btnSidebar').addEventListener('click', () => {
+        S.sidebar = S.sidebar === 'open' ? 'closed' : 'open';
+        saveSettings(); applySettings();
+      });
 
       listEl.innerHTML = head + items.map(t => {
         const st = statusOf(t);

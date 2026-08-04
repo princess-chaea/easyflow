@@ -531,7 +531,7 @@
 <div class="w-full py-lg">
 <!-- 컴팩트 페이지 타이틀 — "들어가자마자 달력" 원칙을 지키기 위해 설명문 없이 제목만 한 줄로 -->
 <h1 class="text-[20px] font-bold text-ink mb-sm">스마트 공문 달력</h1>
-<div class="grid grid-cols-1 xl:grid-cols-[280px_1fr] gap-lg items-start w-full" id="mainGrid">
+<div class="grid grid-cols-1 xl:grid-cols-[280px_1fr] gap-lg items-start w-full" id="mainGrid" data-sidebar-target="true">
 <!-- 하단 안내 밴드 -->
 <section class="w-full no-print col-span-full">
 <div>
@@ -2934,6 +2934,10 @@
           + '<p class="text-caption text-muted-soft mt-xxs">기간을 넓히거나 부서 필터를 확인해 보세요.</p></div>';
         return;
       }
+      document.getElementById('btnSidebar').addEventListener('click', () => {
+        S.sidebar = S.sidebar === 'open' ? 'closed' : 'open';
+        saveSettings(); applySettings();
+      });
 
       listEl.innerHTML = head + items.map(t => {
         const st = statusOf(t);
