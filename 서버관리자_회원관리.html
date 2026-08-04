@@ -425,8 +425,7 @@
                                 가입일</th>
 <th class="px-lg py-base font-caption-strong text-caption-strong text-on-surface-variant uppercase tracking-wider text-center">
                                 상태</th>
-<th class="px-lg py-base font-caption-strong text-caption-strong text-on-surface-variant uppercase tracking-wider text-right">
-                                관리</th>
+
 </tr>
 </thead>
 <tbody class="divide-y divide-hairline">
@@ -456,9 +455,7 @@
 <span class="w-1.5 h-1.5 rounded-full bg-success"></span> 활성
                                 </span>
 </td>
-<td class="px-lg py-base text-right">
-<button class="text-primary hover:underline font-button text-body-sm" onclick="openModal('김철수', '총괄 관리자')">권한 설정</button>
-</td>
+
 </tr>
 <!-- Table Row 2 -->
 <tr class="stagger-in transition-table-row" style="animation-delay: 0.15s;">
@@ -486,9 +483,7 @@
 <span class="w-1.5 h-1.5 rounded-full bg-success"></span> 활성
                                 </span>
 </td>
-<td class="px-lg py-base text-right">
-<button class="text-primary hover:underline font-button text-body-sm" onclick="openModal('이영희', '학교 관리자')">권한 설정</button>
-</td>
+
 </tr>
 <!-- Table Row 3 -->
 <tr class="stagger-in transition-table-row" style="animation-delay: 0.2s;">
@@ -515,9 +510,7 @@
 <span class="w-1.5 h-1.5 rounded-full bg-muted"></span> 비활성
                                 </span>
 </td>
-<td class="px-lg py-base text-right">
-<button class="text-primary hover:underline font-button text-body-sm" onclick="openModal('박민수', '교사')">권한 설정</button>
-</td>
+
 </tr>
 <!-- Table Row 4 -->
 <tr class="stagger-in transition-table-row" style="animation-delay: 0.25s;">
@@ -544,9 +537,7 @@
 <span class="w-1.5 h-1.5 rounded-full bg-success"></span> 활성
                                 </span>
 </td>
-<td class="px-lg py-base text-right">
-<button class="text-primary hover:underline font-button text-body-sm" onclick="openModal('정소라', '교사')">권한 설정</button>
-</td>
+
 </tr>
 </tbody>
 </table>
@@ -568,113 +559,7 @@
 </div>
 </section>
 </div></div></main>
-<!-- Role Management Modal -->
-<div class="hidden fixed inset-0 z-[100] flex items-center justify-center p-base" id="role-modal">
-<div class="modal-overlay absolute inset-0" onclick="closeModal()"></div>
-<div class="bg-canvas w-full max-w-md rounded-2xl shadow-xl z-10 overflow-hidden transform transition-all scale-95 opacity-0 duration-200" id="modal-content">
-<div class="px-lg py-base border-b border-hairline flex justify-between items-center bg-surface-soft">
-<h3 class="font-title-md text-title-md text-primary">권한 설정 관리</h3>
-<button class="text-muted hover:text-on-surface" onclick="closeModal()">
-<span class="material-symbols-outlined">close</span>
-</button>
-</div>
-<div class="p-lg">
-<div class="flex items-center gap-base mb-xl">
-<div class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center text-primary text-xl font-bold" id="modal-user-initial">김</div>
-<div>
-<div class="font-title-md text-title-md" id="modal-user-name">김철수</div>
-<div class="font-caption text-caption text-muted" id="modal-user-current-role">현재 권한: 총괄 관리자
-                        </div>
-</div>
-</div>
-<div class="space-y-base">
-<label class="block">
-<span class="font-caption-strong text-caption-strong text-muted block mb-xs">변경할 권한 선택</span>
-<div class="space-y-sm">
-<label class="flex items-center p-base border border-hairline rounded-lg cursor-pointer hover:border-primary/50 transition-colors bg-surface-soft/50">
-<input class="w-4 h-4 text-primary focus:ring-primary" name="role" type="radio" value="admin"/>
-<div class="ml-base">
-<div class="font-body-strong text-body-strong text-on-surface">총괄 관리자</div>
-<div class="font-caption text-caption text-muted">시스템 전반의 모든 기능 제어 권한</div>
-</div>
-</label>
-<label class="flex items-center p-base border border-hairline rounded-lg cursor-pointer hover:border-primary/50 transition-colors">
-<input class="w-4 h-4 text-primary focus:ring-primary" name="role" type="radio" value="school"/>
-<div class="ml-base">
-<div class="font-body-strong text-body-strong text-on-surface">학교 관리자</div>
-<div class="font-caption text-caption text-muted">소속 학교의 교사 및 데이터 관리 권한</div>
-</div>
-</label>
-<label class="flex items-center p-base border border-hairline rounded-lg cursor-pointer hover:border-primary/50 transition-colors">
-<input class="w-4 h-4 text-primary focus:ring-primary" name="role" type="radio" value="teacher"/>
-<div class="ml-base">
-<div class="font-body-strong text-body-strong text-on-surface">교사</div>
-<div class="font-caption text-caption text-muted">표준 서비스 및 AI 비서 기능 활용 권한</div>
-</div>
-</label>
-</div>
-</label>
-</div>
-<div class="mt-xl pt-lg border-t border-hairline flex gap-base">
-<button class="flex-1 px-base py-sm border border-outline-variant rounded-full font-button text-on-surface hover:bg-surface-soft transition-colors" onclick="closeModal()">취소</button>
-<button class="flex-1 px-base py-sm bg-primary text-white rounded-full font-button hover:bg-primary-active transition-colors shadow-sm">변경
-                        사항 저장</button>
-</div>
-</div>
-</div>
-</div>
-<!-- Footer -->
-<footer class="w-full mt-auto px-lg max-w-[1600px] mx-auto flex flex-col gap-base py-xl border-t border-hairline dark:border-outline-variant">
-<div class="flex flex-col md:flex-row justify-between items-center gap-base">
-<div class="font-title-sm text-title-sm text-on-surface dark:text-surface-bright font-bold">이지플로우 (EasyFlow)
-            </div>
-<div class="flex flex-wrap gap-base">
-<a class="font-caption text-caption text-body hover:underline decoration-primary transition-all" href="공통_개인정보처리방침.html">개인정보처리방침</a>
-<a class="font-caption text-caption text-body hover:underline decoration-primary transition-all" href="공통_이용약관.html">이용약관</a>
-<a class="font-caption text-caption text-body hover:underline decoration-primary transition-all" href="공통_이메일무단수집거부.html">이메일무단수집거부</a>
-<a class="font-caption text-caption text-body hover:underline decoration-primary transition-all" href="공통_찾아오시는길.html">찾아오시는길</a>
-</div>
-</div>
-<p class="font-caption text-caption text-on-surface-variant dark:text-surface-variant text-center md:text-left" data-ef="footer.copyright">
-            © 경상북도교육청. All Rights Reserved.
-        </p>
-</footer>
-<script>
-        function openModal(name, role) {
-            const modal = document.getElementById('role-modal');
-            const content = document.getElementById('modal-content');
 
-            document.getElementById('modal-user-name').innerText = name;
-            document.getElementById('modal-user-initial').innerText = name.charAt(0);
-            document.getElementById('modal-user-current-role').innerText = `현재 권한: ${role}`;
-
-            modal.classList.remove('hidden');
-            setTimeout(() => {
-                content.classList.remove('scale-95', 'opacity-0');
-                content.classList.add('scale-100', 'opacity-100');
-            }, 10);
-        }
-
-        function closeModal() {
-            const modal = document.getElementById('role-modal');
-            const content = document.getElementById('modal-content');
-
-            content.classList.add('scale-95', 'opacity-0');
-            content.classList.remove('scale-100', 'opacity-100');
-
-            setTimeout(() => {
-                modal.classList.add('hidden');
-            }, 200);
-        }
-
-        // Apply staggering animations to table rows on load
-        document.addEventListener('DOMContentLoaded', () => {
-            const rows = document.querySelectorAll('.stagger-in');
-            rows.forEach((row, index) => {
-                row.style.animationDelay = `${index * 0.05}s`;
-            });
-        });
-    </script>
 <!-- TODO: 실제 서버 연동 시 이 값들은 localStorage가 아니라 서버(DB)에서 불러오도록 교체해야 함.
      푸터 정보는 서버관리자_푸터관리.html 에서만 수정할 수 있음(브라우저별 임시 저장). -->
 <script>

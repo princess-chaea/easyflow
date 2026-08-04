@@ -351,7 +351,7 @@
 <a class="font-nav-link block px-sm py-sm rounded-lg transition-colors text-[16px] text-on-surface-variant hover:bg-surface hover:text-ink" href="서버관리자_보안설정.html">보안 설정</a>
 </li>
 <li>
-<a class="font-nav-link block px-sm py-sm rounded-lg transition-colors text-[16px] bg-primary text-white font-bold" href="서버관리자_회원관리.html">회원 관리</a>
+<a class="font-nav-link block px-sm py-sm rounded-lg transition-colors text-[16px] text-on-surface-variant hover:bg-surface hover:text-ink" href="서버관리자_회원관리.html">회원 관리</a>
 </li>
 <li>
 <a class="font-nav-link block px-sm py-sm rounded-lg transition-colors text-[16px] bg-primary text-white font-bold" href="서버관리자_역할관리.html">역할 관리</a>
@@ -370,8 +370,8 @@
 <!-- Header Section -->
 <section class="mt-xl mb-lg flex flex-col md:flex-row md:items-end justify-between gap-base">
 <div>
-<h1 class="text-[28px] font-bold text-ink mb-xs">사용자 권한 관리</h1>
-<p class="text-[15px] text-ink/70">시스템 전체 사용자 리스트를 조회하고 권한을 변경할 수 있습니다.</p>
+<h1 class="text-[28px] font-bold text-ink mb-xs">역할 관리</h1>
+<p class="text-[15px] text-ink/70">사용자들이 신청한 권한(역할)을 일괄 승인하거나 반려할 수 있습니다.</p>
 </div>
 <div class="flex gap-sm">
 <div class="bg-surface-container-low px-base py-sm rounded-lg flex items-center gap-sm">
@@ -384,190 +384,148 @@
 </div>
 </div>
 </section>
-<!-- Search & Filter Bar -->
-<section class="bg-canvas border border-hairline rounded-2xl p-base mb-xl shadow-sm">
-<div class="flex flex-col md:flex-row gap-base">
-<div class="flex-grow relative">
-<span class="material-symbols-outlined absolute left-base top-1/2 -translate-y-1/2 text-muted">search</span>
-<input class="w-full pl-[48px] pr-base py-sm bg-surface-soft border border-hairline rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all font-body-md" placeholder="이름, 학교명, 또는 사번으로 검색하세요" type="text"/>
+
+<!-- Role Management Controls -->
+<div class="flex items-center justify-between mb-4 mt-8">
+    <div class="flex gap-2">
+        <button id="bulkApproveBtn" class="px-4 py-2 bg-green-600 text-white font-bold rounded-lg text-[14px] shadow-sm hover:bg-green-700 transition-colors">일괄 승인</button>
+        <button id="bulkRejectBtn" class="px-4 py-2 bg-red-600 text-white font-bold rounded-lg text-[14px] shadow-sm hover:bg-red-700 transition-colors">일괄 반려</button>
+    </div>
 </div>
-<div class="flex gap-base">
-<select class="px-base py-sm bg-surface-soft border border-hairline rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all font-body-sm appearance-none min-w-[140px]">
-<option>전체 역할</option>
-<option>총괄 관리자</option>
-<option>학교 관리자</option>
-<option>교사</option>
-</select>
-<select class="px-base py-sm bg-surface-soft border border-hairline rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all font-body-sm appearance-none min-w-[140px]">
-<option>전체 상태</option>
-<option>활성</option>
-<option>비활성</option>
-</select>
-<button class="bg-primary text-white font-button px-xl py-sm rounded-full hover:bg-primary-active transition-all active:scale-95 shadow-sm">
-                        검색 적용
-                    </button>
+
+<!-- Table -->
+<div class="border border-gray-200 rounded-2xl overflow-hidden bg-white shadow-sm mb-12">
+    <table class="w-full text-left border-collapse">
+        <thead>
+            <tr class="bg-surface-soft border-b border-gray-200">
+                <th class="p-4 text-[14px] font-bold text-ink/70 w-[50px] text-center">
+                    <input type="checkbox" id="selectAllCheckbox" class="w-4 h-4 cursor-pointer accent-primary">
+                </th>
+                <th class="p-4 text-[14px] font-bold text-ink/70 text-center">아이디 (이메일)</th>
+                <th class="p-4 text-[14px] font-bold text-ink/70 text-center">신청 권한</th>
+                <th class="p-4 text-[14px] font-bold text-ink/70 text-center">상태</th>
+                <th class="p-4 text-[14px] font-bold text-ink/70 text-center">작업</th>
+            </tr>
+        </thead>
+        <tbody id="roleTableBody" class="divide-y divide-gray-100">
+            <!-- JS injected rows -->
+        </tbody>
+    </table>
 </div>
-</div>
-</section>
-<!-- User Table Section -->
-<section class="bg-canvas border border-hairline rounded-2xl overflow-hidden shadow-sm">
-<div class="overflow-x-auto">
-<table class="w-full text-left border-collapse">
-<thead>
-<tr class="bg-surface-container-low border-b border-hairline">
-<th class="px-lg py-base font-caption-strong text-caption-strong text-on-surface-variant uppercase tracking-wider">
-                                이름 / 사번</th>
-<th class="px-lg py-base font-caption-strong text-caption-strong text-on-surface-variant uppercase tracking-wider">
-                                소속 학교 / 부서</th>
-<th class="px-lg py-base font-caption-strong text-caption-strong text-on-surface-variant uppercase tracking-wider">
-                                현재 역할</th>
-<th class="px-lg py-base font-caption-strong text-caption-strong text-on-surface-variant uppercase tracking-wider">
-                                가입일</th>
-<th class="px-lg py-base font-caption-strong text-caption-strong text-on-surface-variant uppercase tracking-wider text-center">
-                                상태</th>
-<th class="px-lg py-base font-caption-strong text-caption-strong text-on-surface-variant uppercase tracking-wider text-right">
-                                관리</th>
-</tr>
-</thead>
-<tbody class="divide-y divide-hairline">
-<!-- Table Row 1 -->
-<tr class="stagger-in transition-table-row" style="animation-delay: 0.1s;">
-<td class="px-lg py-base">
-<div class="flex items-center gap-sm">
-<div class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold">
-                                        김</div>
-<div>
-<div class="font-body-strong text-body-strong">김철수</div>
-<div class="font-caption text-caption text-muted">EMP2023001</div>
-</div>
-</div>
-</td>
-<td class="px-lg py-base">
-<div class="font-body-md text-body-md text-on-surface-variant">경북고등학교</div>
-<div class="font-caption text-caption text-muted">행정지원부</div>
-</td>
-<td class="px-lg py-base">
-<span class="px-sm py-xxs rounded-full bg-primary/10 text-primary font-caption-strong">총괄
-                                    관리자</span>
-</td>
-<td class="px-lg py-base font-number-display text-caption text-muted">2023.03.12</td>
-<td class="px-lg py-base text-center">
-<span class="inline-flex items-center gap-xs px-sm py-xxs rounded-full bg-success/10 text-success font-caption-strong">
-<span class="w-1.5 h-1.5 rounded-full bg-success"></span> 활성
-                                </span>
-</td>
-<td class="px-lg py-base text-right">
-<button class="text-primary hover:underline font-button text-body-sm" onclick="openModal('김철수', '총괄 관리자')">권한 설정</button>
-</td>
-</tr>
-<!-- Table Row 2 -->
-<tr class="stagger-in transition-table-row" style="animation-delay: 0.15s;">
-<td class="px-lg py-base">
-<div class="flex items-center gap-sm">
-<div class="w-10 h-10 rounded-full bg-secondary/10 flex items-center justify-center text-secondary font-bold">
-                                        이</div>
-<div>
-<div class="font-body-strong text-body-strong">이영희</div>
-<div class="font-caption text-caption text-muted">EMP2023045</div>
-</div>
-</div>
-</td>
-<td class="px-lg py-base">
-<div class="font-body-md text-body-md text-on-surface-variant">안동초등학교</div>
-<div class="font-caption text-caption text-muted">교무실</div>
-</td>
-<td class="px-lg py-base">
-<span class="px-sm py-xxs rounded-full bg-secondary-container/20 text-on-secondary-container font-caption-strong">학교
-                                    관리자</span>
-</td>
-<td class="px-lg py-base font-number-display text-caption text-muted">2023.05.20</td>
-<td class="px-lg py-base text-center">
-<span class="inline-flex items-center gap-xs px-sm py-xxs rounded-full bg-success/10 text-success font-caption-strong">
-<span class="w-1.5 h-1.5 rounded-full bg-success"></span> 활성
-                                </span>
-</td>
-<td class="px-lg py-base text-right">
-<button class="text-primary hover:underline font-button text-body-sm" onclick="openModal('이영희', '학교 관리자')">권한 설정</button>
-</td>
-</tr>
-<!-- Table Row 3 -->
-<tr class="stagger-in transition-table-row" style="animation-delay: 0.2s;">
-<td class="px-lg py-base">
-<div class="flex items-center gap-sm">
-<div class="w-10 h-10 rounded-full bg-on-surface-variant/10 flex items-center justify-center text-on-surface-variant font-bold">
-                                        박</div>
-<div>
-<div class="font-body-strong text-body-strong">박민수</div>
-<div class="font-caption text-caption text-muted">EMP2024102</div>
-</div>
-</div>
-</td>
-<td class="px-lg py-base">
-<div class="font-body-md text-body-md text-on-surface-variant">구미정보고등학교</div>
-<div class="font-caption text-caption text-muted">교육행정실</div>
-</td>
-<td class="px-lg py-base">
-<span class="px-sm py-xxs rounded-full bg-surface-container-highest text-on-surface-variant font-caption-strong">교사</span>
-</td>
-<td class="px-lg py-base font-number-display text-caption text-muted">2024.01.15</td>
-<td class="px-lg py-base text-center">
-<span class="inline-flex items-center gap-xs px-sm py-xxs rounded-full bg-muted/10 text-muted font-caption-strong">
-<span class="w-1.5 h-1.5 rounded-full bg-muted"></span> 비활성
-                                </span>
-</td>
-<td class="px-lg py-base text-right">
-<button class="text-primary hover:underline font-button text-body-sm" onclick="openModal('박민수', '교사')">권한 설정</button>
-</td>
-</tr>
-<!-- Table Row 4 -->
-<tr class="stagger-in transition-table-row" style="animation-delay: 0.25s;">
-<td class="px-lg py-base">
-<div class="flex items-center gap-sm">
-<div class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold">
-                                        정</div>
-<div>
-<div class="font-body-strong text-body-strong">정소라</div>
-<div class="font-caption text-caption text-muted">EMP2022119</div>
-</div>
-</div>
-</td>
-<td class="px-lg py-base">
-<div class="font-body-md text-body-md text-on-surface-variant">포항제철고등학교</div>
-<div class="font-caption text-caption text-muted">정보화전략팀</div>
-</td>
-<td class="px-lg py-base">
-<span class="px-sm py-xxs rounded-full bg-surface-container-highest text-on-surface-variant font-caption-strong">교사</span>
-</td>
-<td class="px-lg py-base font-number-display text-caption text-muted">2022.11.02</td>
-<td class="px-lg py-base text-center">
-<span class="inline-flex items-center gap-xs px-sm py-xxs rounded-full bg-success/10 text-success font-caption-strong">
-<span class="w-1.5 h-1.5 rounded-full bg-success"></span> 활성
-                                </span>
-</td>
-<td class="px-lg py-base text-right">
-<button class="text-primary hover:underline font-button text-body-sm" onclick="openModal('정소라', '교사')">권한 설정</button>
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-<!-- Pagination -->
-<div class="px-lg py-base border-t border-hairline flex items-center justify-between bg-surface-soft">
-<p class="font-caption text-caption text-muted">1-10 / 1,248 사용자</p>
-<div class="flex gap-xxs">
-<button class="w-8 h-8 flex items-center justify-center rounded bg-canvas border border-hairline text-muted hover:text-primary transition-colors">
-<span class="material-symbols-outlined text-[18px]">chevron_left</span>
-</button>
-<button class="w-8 h-8 flex items-center justify-center rounded bg-primary text-white font-number-display text-caption">1</button>
-<button class="w-8 h-8 flex items-center justify-center rounded bg-canvas border border-hairline text-on-surface-variant hover:text-primary transition-colors font-number-display text-caption">2</button>
-<button class="w-8 h-8 flex items-center justify-center rounded bg-canvas border border-hairline text-on-surface-variant hover:text-primary transition-colors font-number-display text-caption">3</button>
-<button class="w-8 h-8 flex items-center justify-center rounded bg-canvas border border-hairline text-muted hover:text-primary transition-colors">
-<span class="material-symbols-outlined text-[18px]">chevron_right</span>
-</button>
-</div>
-</div>
-</section>
-</div></div></main>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        let pendingRequests = JSON.parse(localStorage.getItem('roleRequests')) || [];
+        const tbody = document.getElementById('roleTableBody');
+        const selectAll = document.getElementById('selectAllCheckbox');
+        const bulkApproveBtn = document.getElementById('bulkApproveBtn');
+        const bulkRejectBtn = document.getElementById('bulkRejectBtn');
+        
+        const renderTable = () => {
+            tbody.innerHTML = '';
+            if(pendingRequests.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5" class="p-8 text-center text-ink/50 text-[14px]">현재 대기 중인 권한 요청이 없습니다.</td></tr>';
+                return;
+            }
+            
+            pendingRequests.forEach((req, idx) => {
+                const tr = document.createElement('tr');
+                tr.className = 'hover:bg-gray-50 transition-colors';
+                tr.innerHTML = `
+                    <td class="p-4 text-center">
+                        <input type="checkbox" class="row-checkbox w-4 h-4 cursor-pointer accent-primary" data-index="${idx}">
+                    </td>
+                    <td class="p-4 text-[15px] font-bold text-ink text-center">${req.email}</td>
+                    <td class="p-4 text-[14px] text-ink/70 text-center"><span class="bg-blue-100 text-blue-700 px-3 py-1 rounded-full font-bold">${req.requestedRole}</span></td>
+                    <td class="p-4 text-center"><span class="text-orange-600 font-bold text-[13px] bg-orange-100 px-2 py-1 rounded-md">대기 중</span></td>
+                    <td class="p-4 flex gap-2 justify-center">
+                        <button class="px-3 py-1.5 bg-green-500 text-white font-bold rounded-lg text-[13px] hover:bg-green-600 transition-colors btn-approve" data-index="${idx}">승인</button>
+                        <button class="px-3 py-1.5 bg-red-500 text-white font-bold rounded-lg text-[13px] hover:bg-red-600 transition-colors btn-reject" data-index="${idx}">반려</button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        };
+        
+        renderTable();
+        
+        const showToast = (message) => {
+            const toast = document.createElement('div');
+            toast.className = 'fixed bottom-10 left-1/2 transform -translate-x-1/2 px-6 py-3 rounded-xl shadow-lg bg-blue-600 text-white font-bold text-[15px] z-[10000] transition-all duration-300';
+            toast.style.opacity = '0';
+            toast.style.transform = 'translate(-50%, 20px)';
+            toast.innerText = message;
+            document.body.appendChild(toast);
+            requestAnimationFrame(() => { toast.style.opacity = '1'; toast.style.transform = 'translate(-50%, 0)'; });
+            setTimeout(() => { toast.style.opacity = '0'; toast.style.transform = 'translate(-50%, -20px)'; setTimeout(() => toast.remove(), 300); }, 3000);
+        };
+        
+        const approveRole = (index) => {
+            const req = pendingRequests[index];
+            let userGrantedRoles = JSON.parse(localStorage.getItem(`grantedRoles_${req.email}`)) || [];
+            if (userGrantedRoles.length === 0) {
+                let r = '교사'; // Changed from 일반 교원 to 교사 based on user request
+                if (req.email === 'test@gbe.kr') r = '서버 관리자';
+                else if (req.email === 'test1@gbe.kr') r = '학교 관리자';
+                else if (req.email === 'test2@gbe.kr') r = '업무배송 담당자';
+                else if (req.email === 'test3@gbe.kr') r = '멘토';
+                else if (req.email === 'test4@gbe.kr') r = '장학사';
+                userGrantedRoles.push(r);
+            }
+            if (!userGrantedRoles.includes(req.requestedRole)) {
+                userGrantedRoles.push(req.requestedRole);
+                localStorage.setItem(`grantedRoles_${req.email}`, JSON.stringify(userGrantedRoles));
+            }
+        };
+        
+        tbody.addEventListener('click', (e) => {
+            if(e.target.classList.contains('btn-approve')) {
+                const idx = e.target.getAttribute('data-index');
+                approveRole(idx);
+                pendingRequests.splice(idx, 1);
+                localStorage.setItem('roleRequests', JSON.stringify(pendingRequests));
+                renderTable();
+                showToast('승인되었습니다.');
+            } else if(e.target.classList.contains('btn-reject')) {
+                const idx = e.target.getAttribute('data-index');
+                pendingRequests.splice(idx, 1);
+                localStorage.setItem('roleRequests', JSON.stringify(pendingRequests));
+                renderTable();
+                showToast('반려되었습니다.');
+            }
+        });
+        
+        selectAll.addEventListener('change', (e) => {
+            document.querySelectorAll('.row-checkbox').forEach(cb => cb.checked = e.target.checked);
+        });
+        
+        const getSelectedIndices = () => {
+            return Array.from(document.querySelectorAll('.row-checkbox:checked')).map(cb => parseInt(cb.getAttribute('data-index'))).sort((a,b)=>b-a);
+        };
+        
+        bulkApproveBtn.addEventListener('click', () => {
+            const indices = getSelectedIndices();
+            if(indices.length === 0) return showToast('선택된 항목이 없습니다.');
+            indices.forEach(idx => approveRole(idx));
+            indices.forEach(idx => pendingRequests.splice(idx, 1));
+            localStorage.setItem('roleRequests', JSON.stringify(pendingRequests));
+            selectAll.checked = false;
+            renderTable();
+            showToast(`${indices.length}건이 일괄 승인되었습니다.`);
+        });
+        
+        bulkRejectBtn.addEventListener('click', () => {
+            const indices = getSelectedIndices();
+            if(indices.length === 0) return showToast('선택된 항목이 없습니다.');
+            indices.forEach(idx => pendingRequests.splice(idx, 1));
+            localStorage.setItem('roleRequests', JSON.stringify(pendingRequests));
+            selectAll.checked = false;
+            renderTable();
+            showToast(`${indices.length}건이 일괄 반려되었습니다.`);
+        });
+    });
+</script>
+</main>
 <!-- Role Management Modal -->
 <div class="hidden fixed inset-0 z-[100] flex items-center justify-center p-base" id="role-modal">
 <div class="modal-overlay absolute inset-0" onclick="closeModal()"></div>
