@@ -83,9 +83,6 @@
                     <p class="text-[14px] text-ink/60">개인정보, 시스템 권한, 그리고 알림 수신 여부를 관리합니다.</p>
                 </div>
                 <div class="flex items-center gap-3">
-                    <button onclick="window.location.href='공통_로그인.html'" class="px-4 py-2 border border-gray-300 rounded-xl text-ink/70 font-bold hover:bg-gray-50 transition-colors text-[14px] flex items-center gap-1">
-                        <span class="material-symbols-outlined text-[18px]">logout</span> 로그아웃
-                    </button>
                     <button id="pmCloseBtn" class="pm-close-btn p-2 rounded-full hover:bg-gray-100 transition-colors">
                         <span class="material-symbols-outlined text-[24px]">close</span>
                     </button>
@@ -185,7 +182,7 @@
     const requestBtn = document.getElementById('pmRequestRoleBtn');
     const roleSelect = document.getElementById('pmRoleRequestSelect');
 
-    // 5. Override Dropdown '프로필 수정' links to open modal
+    // 5. Override Dropdown '프로필 설정' links to open modal
     const profileLinks = document.querySelectorAll('a[href="공통_프로필수정.html"]');
     profileLinks.forEach(link => {
         link.addEventListener('click', function(e) {
