@@ -355,6 +355,9 @@
 <li>
 <a class="font-nav-link block px-sm py-sm rounded-lg transition-colors text-[16px] bg-primary text-white font-bold" href="서버관리자_RAG데이터관리.html">RAG 데이터 관리</a>
 </li>
+<li>
+<a class="font-nav-link block px-sm py-sm rounded-lg transition-colors text-[16px] text-on-surface-variant hover:bg-surface hover:text-ink" href="서버관리자_푸터관리.html">푸터 관리</a>
+</li>
 </ul>
 </aside>
 
@@ -646,7 +649,7 @@
 <!-- Footer -->
 <footer class="w-full mt-section px-lg max-w-[1600px] mx-auto flex flex-col gap-base border-t border-hairline py-xl mb-xl">
 <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-lg">
-<div class="font-title-sm text-title-sm text-on-surface">경상북도교육청 EasyFlow</div>
+<div class="font-title-sm text-title-sm text-on-surface" data-ef="footer.org">경상북도교육청 EasyFlow</div>
 <div class="flex flex-wrap gap-md">
 <a class="font-caption text-caption text-body hover:underline decoration-primary" href="공통_개인정보처리방침.html">개인정보처리방침</a>
 <a class="font-caption text-caption text-body hover:underline decoration-primary" href="공통_이용약관.html">이용약관</a>
@@ -654,7 +657,7 @@
 <a class="font-caption text-caption text-body hover:underline decoration-primary" href="공통_찾아오시는길.html">찾아오시는길</a>
 </div>
 </div>
-<div class="font-caption text-caption text-muted">© 경상북도교육청. All Rights Reserved.</div>
+<div class="font-caption text-caption text-muted" data-ef="footer.copyright">© 경상북도교육청. All Rights Reserved.</div>
 </footer>
 <script>
         const dropZone = document.getElementById('drop-zone');
@@ -733,5 +736,20 @@
             }
         });
     </script>
+<!-- TODO: 실제 서버 연동 시 이 값들은 localStorage가 아니라 서버(DB)에서 불러오도록 교체해야 함.
+     푸터 정보는 서버관리자_푸터관리.html 에서만 수정할 수 있음(브라우저별 임시 저장). -->
+<script>
+    (function () {
+        function efLoadFooter() {
+            ['org', 'address', 'copyright'].forEach(function (f) {
+                var v = localStorage.getItem('ef_footer_' + f);
+                if (!v) return;
+                var view = document.querySelector('[data-ef="footer.' + f + '"]');
+                if (view) view.textContent = v;
+            });
+        }
+        efLoadFooter();
+    })();
+</script>
 </body>
 </html>

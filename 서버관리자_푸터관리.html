@@ -1,10 +1,10 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 
 <html lang="ko">
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>이지플로우 (EasyFlow)</title>
+<title>이지플로우 서버 관리자 - 푸터 관리</title>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <link rel="preload" as="font" type="font/ttf" href="./font/Hakgyoansim_PosterB.ttf" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
@@ -47,90 +47,6 @@
             background: rgba(255, 255, 255, 0.05);
             backdrop-filter: blur(12px);
             border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-        .ai-gradient {
-            background: linear-gradient(135deg, #003893 0%, #12419b 100%);
-        }
-        .ripple {
-            position: absolute;
-            background: rgba(255, 255, 255, 0.3);
-            border-radius: 50%;
-            transform: scale(0);
-            animation: ripple-animation 0.6s linear;
-            pointer-events: none;
-        }
-        @keyframes ripple-animation {
-            to { transform: scale(4); opacity: 0; }
-        }
-
-        /* Micro-interactions & Animations */
-        @keyframes pulse-soft {
-            0%, 100% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.7; transform: scale(0.95); }
-        }
-        .animate-pulse-soft { animation: pulse-soft 2s infinite ease-in-out; }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-10px); }
-        }
-        .animate-float { animation: float 6s infinite ease-in-out; }
-
-        @keyframes shimmer {
-            0% { transform: translateX(-100%); }
-            100% { transform: translateX(100%); }
-        }
-        .shimmer-effect::after {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-            transform: translateX(-100%);
-            animation: shimmer 3s infinite;
-        }
-
-        .hover-lift {
-            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.4s ease;
-        }
-        .hover-lift:hover {
-            transform: translateY(-8px) scale(1.01);
-            box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
-        }
-
-        .nav-link-underline {
-            position: relative;
-        }
-        .nav-link-underline::after {
-            content: '';
-            position: absolute;
-            bottom: -4px;
-            left: 0;
-            width: 0;
-            height: 2px;
-            background-color: currentColor;
-            transition: width 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-        .nav-link-underline:hover::after {
-            width: 100%;
-        }
-
-        .entrance-fade {
-            opacity: 0;
-            transform: translateY(20px);
-            transition: opacity 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275), transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-        .entrance-fade.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        @media (prefers-reduced-motion: reduce) {
-            * {
-                animation-duration: 0.01ms !important;
-                animation-iteration-count: 1 !important;
-                transition-duration: 0.01ms !important;
-                scroll-behavior: auto !important;
-            }
         }
     </style>
 <script id="tailwind-config">
@@ -253,8 +169,7 @@
 <nav class="fixed top-0 w-full z-50 h-[64px] bg-canvas">
 <div class="max-w-[1600px] w-full mx-auto h-full flex justify-between items-center px-lg">
 <div class="flex items-center gap-[60px]">
-<span class="font-display-sm text-display-sm font-semibold text-primary tracking-tight entrance-fade visible" style="transition-delay: 0ms;"><h1 class="font-display-sm text-display-sm font-semibold text-primary-container" style="--tw-border-spacing-y: 0; --tw-translate-x: 0; --tw-translate-y: 0; --tw-rotate: 0; --tw-skew-x: 0; --tw-skew-y: 0; --tw-scale-x: 1; --tw-scale-y: 1; --tw-pan-x: ; --tw-pan-y: ; --tw-pinch-zoom: ; --tw-scroll-snap-strictness: proximity; --tw-gradient-from-position: ; --tw-gradient-via-position: ; --tw-gradient-to-position: ; --tw-ordinal: ; --tw-slashed-zero: ; --tw-numeric-figure: ; --tw-numeric-spacing: ; --tw-numeric-fraction: ; --tw-ring-inset: ; --tw-ring-offset-width: 0px; --tw-ring-offset-color: #fff; --tw-ring-color: rgb(59 130 246 / 0.5); --tw-ring-offset-shadow: 0 0 #0000; --tw-ring-shadow: 0 0 #0000; --tw-shadow: 0 0 #0000; --tw-shadow-colored: 0 0 #0000; --tw-blur: ; --tw-brightness: ; --tw-contrast: ; --tw-grayscale: ; --tw-hue-rotate: ; --tw-invert: ; --tw-saturate: ; --tw-sepia: ; --tw-drop-shadow: ; --tw-backdrop-blur: ; --tw-backdrop-brightness: ; --tw-backdrop-contrast: ; --tw-backdrop-grayscale: ; --tw-backdrop-hue-rotate: ; --tw-backdrop-invert: ; --tw-backdrop-opacity: ; --tw-backdrop-saturate: ; --tw-backdrop-sepia: ; --tw-contain-size: ; --tw-contain-layout: ; --tw-contain-paint: ; --tw-contain-style: ; font-size: 26px; --tw-text-opacity: 1; color: rgb(0, 56, 147); letter-spacing: normal; white-space: nowrap; line-height: 1.4;">이지플로우 (EasyFlow)</h1></span>
-
+<span class="font-display-sm text-display-sm font-semibold text-primary tracking-tight"><h1 class="font-display-sm text-display-sm font-semibold text-primary-container" style="font-size: 26px; color: rgb(0, 56, 147); letter-spacing: normal; white-space: nowrap; line-height: 1.4;">이지플로우 (EasyFlow)</h1></span>
 <div class="hidden md:flex gap-[80px] group/mega h-[64px] items-center relative">
 <div class="absolute top-[64px] left-1/2 -translate-x-1/2 w-[100vw] bg-white shadow-md border-b border-hairline opacity-0 invisible group-hover/mega:opacity-100 group-hover/mega:visible transition-all duration-200 z-40 h-[290px]"></div>
 <div class="relative h-full flex flex-col justify-start">
@@ -291,7 +206,6 @@
 </div>
 </div>
 </div>
-
 </div>
 <div class="flex items-center gap-base">
 <div class="relative group">
@@ -348,7 +262,7 @@
 <a class="font-nav-link block px-sm py-sm rounded-lg transition-colors text-[16px] text-on-surface-variant hover:bg-surface hover:text-ink" href="서버관리자_리소스 모니터링.html">리소스 모니터링</a>
 </li>
 <li>
-<a class="font-nav-link block px-sm py-sm rounded-lg transition-colors text-[16px] bg-primary text-white font-bold" href="서버관리자_보안설정.html">보안 설정</a>
+<a class="font-nav-link block px-sm py-sm rounded-lg transition-colors text-[16px] text-on-surface-variant hover:bg-surface hover:text-ink" href="서버관리자_보안설정.html">보안 설정</a>
 </li>
 <li>
 <a class="font-nav-link block px-sm py-sm rounded-lg transition-colors text-[16px] text-on-surface-variant hover:bg-surface hover:text-ink" href="서버관리자_회원관리.html">회원 관리</a>
@@ -357,7 +271,7 @@
 <a class="font-nav-link block px-sm py-sm rounded-lg transition-colors text-[16px] text-on-surface-variant hover:bg-surface hover:text-ink" href="서버관리자_RAG데이터관리.html">RAG 데이터 관리</a>
 </li>
 <li>
-<a class="font-nav-link block px-sm py-sm rounded-lg transition-colors text-[16px] text-on-surface-variant hover:bg-surface hover:text-ink" href="서버관리자_푸터관리.html">푸터 관리</a>
+<a class="font-nav-link block px-sm py-sm rounded-lg transition-colors text-[16px] bg-primary text-white font-bold" href="서버관리자_푸터관리.html">푸터 관리</a>
 </li>
 </ul>
 </aside>
@@ -367,229 +281,113 @@
 <!-- Page Header -->
 <div class="mt-xl mb-xl flex flex-col md:flex-row md:items-end justify-between gap-base">
 <div>
-<h1 class="text-[28px] font-bold text-ink mb-xs">보안 설정</h1>
-<p class="text-[15px] text-ink/70">서버 보안 및 관리자 접속 권한을 통합 관리합니다.</p>
-</div>
-<div class="flex gap-xs">
-<button class="px-base py-xs rounded-full bg-surface-strong text-on-surface font-button hover:opacity-80 transition-opacity">
-                    전체 로그 내보내기
-                </button>
-<button class="px-base py-xs rounded-full bg-primary text-on-primary font-button hover:opacity-90 transition-opacity shadow-sm">
-                    설정 변경 저장
-                </button>
+<h1 class="text-[28px] font-bold text-ink mb-xs">푸터 관리</h1>
+<p class="text-[15px] text-ink/70">사이트 하단 푸터에 표시되는 기관 정보와 개인정보처리방침·이용약관 담당자 연락처를 관리합니다. 여기서 저장한 내용은 사이트 전체 페이지에 즉시 반영됩니다.</p>
 </div>
 </div>
-<!-- Bento Grid Layout -->
-<div class="grid grid-cols-1 md:grid-cols-12 gap-lg">
-<!-- IP Access Control (Large Card) -->
-<section class="md:col-span-7 flex flex-col gap-base">
-<div class="glass-card rounded-2xl p-xl shadow-sm h-full">
-<div class="flex items-center justify-between mb-xl">
+
+<!-- Live Preview -->
+<div class="bg-surface-dark rounded-2xl p-lg shadow-sm mb-lg text-white">
+<p class="font-caption-strong text-outline-variant mb-base flex items-center gap-xs"><span class="material-symbols-outlined text-[16px]">visibility</span>실시간 미리보기 — 사이트 전체 푸터에 이렇게 표시됩니다</p>
+<div class="border-t border-white/10 pt-base flex flex-col gap-xxs">
+<span class="font-title-sm text-title-sm text-white" id="prevOrg">경상북도교육청</span>
+<p class="font-caption text-caption text-outline-variant" id="prevCopyright">© 경상북도교육청. All Rights Reserved.</p>
+<p class="font-caption text-caption text-outline-variant" id="prevAddress">경북 안동시 풍천면 도청대로 511 | 대표전화 054-805-3000</p>
+</div>
+</div>
+
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-lg">
+<!-- Section 1: Site-wide footer info -->
+<section class="lg:col-span-2">
+<div class="glass-card bg-canvas border border-hairline rounded-2xl p-xl shadow-sm">
+<div class="flex items-center justify-between mb-lg">
 <div class="flex items-center gap-sm">
-<span class="material-symbols-outlined text-primary" data-icon="security">security</span>
-<h3 class="font-title-lg text-title-lg text-primary">접속 IP 제어</h3>
-</div>
-<button class="text-primary hover:underline font-button text-body-sm flex items-center gap-xxs">
-<span class="material-symbols-outlined text-[18px]" data-icon="add">add</span> IP 추가
-                        </button>
-</div>
-<div class="space-y-base">
-<div class="flex flex-col gap-xs">
-<span class="font-caption-strong text-muted px-xxs">관리자 허용 화이트리스트</span>
-<div class="bg-surface-container-low rounded-lg border border-hairline">
-<div class="p-base border-b border-hairline flex justify-between items-center">
-<div>
-<p class="font-body-strong text-primary">211.234.XX.12</p>
-<p class="font-caption text-muted">본청 메인 서버망 (고정)</p>
-</div>
-<span class="px-xs py-xxs bg-success/10 text-success rounded font-caption-strong">활성</span>
-</div>
-<div class="p-base border-b border-hairline flex justify-between items-center">
-<div>
-<p class="font-body-strong text-primary">125.141.XX.89</p>
-<p class="font-caption text-muted">교육지원청 보안 VPN</p>
-</div>
-<span class="px-xs py-xxs bg-success/10 text-success rounded font-caption-strong">활성</span>
-</div>
-<div class="p-base flex justify-between items-center">
-<div>
-<p class="font-body-strong text-primary">112.169.XX.45</p>
-<p class="font-caption text-muted">외부 기술 지원 (임시)</p>
-</div>
-<button class="text-danger hover:opacity-70 transition-opacity">
-<span class="material-symbols-outlined" data-icon="delete">delete</span>
-</button>
+<span class="material-symbols-outlined text-primary" data-icon="dns">dns</span>
+<h3 class="font-title-lg text-title-lg text-primary">사이트 공통 푸터 정보</h3>
 </div>
 </div>
+<p class="font-caption text-muted mb-lg">기본 문구가 이미 채워져 있습니다. 필요하면 아래 텍스트 상자를 직접 수정한 뒤 저장하세요.</p>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-base mb-base">
+<div class="flex flex-col gap-xxs">
+<label class="font-caption-strong text-muted" for="fld_footer_org">기관명</label>
+<input class="w-full border border-hairline rounded-lg px-base py-sm text-[15px] focus:outline-none focus:ring-2 focus:ring-primary/30" id="fld_footer_org" oninput="updateFooterPreview()" type="text"/>
 </div>
-<div class="flex flex-col gap-xs mt-lg">
-<span class="font-caption-strong text-muted px-xxs">차단된 IP (블랙리스트)</span>
-<div class="bg-surface-container-low rounded-lg border border-hairline">
-<div class="p-base flex justify-between items-center">
-<div class="flex items-center gap-sm">
-<span class="material-symbols-outlined text-danger text-[20px]" data-icon="block">block</span>
-<div>
-<p class="font-body-strong text-danger">45.12.XXX.21</p>
-<p class="font-caption text-muted">반복적 로그인 실패 감지 (해외)</p>
+<div class="flex flex-col gap-xxs">
+<label class="font-caption-strong text-muted" for="fld_footer_address">주소 · 대표전화</label>
+<input class="w-full border border-hairline rounded-lg px-base py-sm text-[15px] focus:outline-none focus:ring-2 focus:ring-primary/30" id="fld_footer_address" oninput="updateFooterPreview()" type="text"/>
+</div>
+<div class="flex flex-col gap-xxs">
+<label class="font-caption-strong text-muted" for="fld_footer_copyright">저작권 문구</label>
+<input class="w-full border border-hairline rounded-lg px-base py-sm text-[15px] focus:outline-none focus:ring-2 focus:ring-primary/30" id="fld_footer_copyright" oninput="updateFooterPreview()" type="text"/>
 </div>
 </div>
-<button class="font-button text-body-sm text-primary hover:underline">차단 해제</button>
-</div>
-</div>
-</div>
+<div class="flex justify-end gap-xs">
+<button class="px-base py-xs rounded-full bg-surface-strong text-on-surface font-button hover:opacity-80 transition-opacity" onclick="resetFooterSection()">기본값으로 초기화</button>
+<button class="px-base py-xs rounded-full bg-primary text-on-primary font-button hover:opacity-90 transition-opacity shadow-sm" onclick="saveFooterSection()">저장</button>
 </div>
 </div>
 </section>
-<!-- Authentication Policy (Smaller Card) -->
-<section class="md:col-span-5 flex flex-col gap-base">
-<div class="glass-card rounded-2xl p-xl shadow-sm flex flex-col gap-xl h-full">
-<div class="flex items-center gap-sm">
-<span class="material-symbols-outlined text-primary" data-icon="verified_user">verified_user</span>
-<h3 class="font-title-lg text-title-lg text-primary">인증 정책 관리</h3>
+
+<!-- Section 2: Privacy/Terms contact -->
+<section>
+<div class="glass-card bg-canvas border border-hairline rounded-2xl p-xl shadow-sm h-full flex flex-col">
+<div class="flex items-center gap-sm mb-lg">
+<span class="material-symbols-outlined text-primary" data-icon="support_agent">support_agent</span>
+<h3 class="font-title-lg text-title-lg text-primary">개인정보처리방침·이용약관 문의처</h3>
 </div>
-<div class="space-y-xl">
-<div class="flex items-center justify-between">
-<div>
-<p class="font-body-strong text-on-surface">2단계 인증 (MFA)</p>
-<p class="font-caption text-muted">로그인 시 OTP 또는 SMS 인증 필수</p>
+<p class="font-caption text-muted mb-lg">비워두면 해당 공개 페이지에 "미입력 (관리자 설정 필요)"로 표시됩니다.</p>
+<div class="flex flex-col gap-base flex-1">
+<div class="flex flex-col gap-xxs">
+<label class="font-caption-strong text-muted" for="fld_contact_dept">담당 부서</label>
+<input class="w-full border border-hairline rounded-lg px-base py-sm text-[15px] focus:outline-none focus:ring-2 focus:ring-primary/30" id="fld_contact_dept" placeholder="예: 미래교육정보과" type="text"/>
 </div>
-<label class="relative inline-flex items-center cursor-pointer">
-<input checked="" class="sr-only peer" type="checkbox"/>
-<div class="w-11 h-6 bg-surface-container-highest peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary">
+<div class="flex flex-col gap-xxs">
+<label class="font-caption-strong text-muted" for="fld_contact_phone">전화</label>
+<input class="w-full border border-hairline rounded-lg px-base py-sm text-[15px] focus:outline-none focus:ring-2 focus:ring-primary/30" id="fld_contact_phone" placeholder="예: 054-805-0000" type="text"/>
 </div>
-</label>
+<div class="flex flex-col gap-xxs">
+<label class="font-caption-strong text-muted" for="fld_contact_email">이메일</label>
+<input class="w-full border border-hairline rounded-lg px-base py-sm text-[15px] focus:outline-none focus:ring-2 focus:ring-primary/30" id="fld_contact_email" placeholder="예: example@gbe.kr" type="text"/>
 </div>
-<div class="space-y-xs">
-<div class="flex justify-between items-center">
-<p class="font-body-strong text-on-surface">비밀번호 만료 주기</p>
-<span class="text-primary font-number-display">90일</span>
 </div>
-<input class="w-full h-2 bg-surface-container-highest rounded-lg appearance-none cursor-pointer accent-primary" max="365" min="30" type="range" value="90"/>
-</div>
-<div class="pt-base border-t border-hairline">
-<p class="font-caption-strong text-muted mb-base">보안 강화 기능</p>
-<ul class="space-y-sm">
-<li class="flex items-center gap-sm">
-<span class="material-symbols-outlined text-[20px] text-success" data-icon="check_circle">check_circle</span>
-<span class="font-body-sm">비밀번호 복잡성 규정 적용</span>
-</li>
-<li class="flex items-center gap-sm">
-<span class="material-symbols-outlined text-[20px] text-success" data-icon="check_circle">check_circle</span>
-<span class="font-body-sm">최근 3회 비밀번호 재사용 제한</span>
-</li>
-<li class="flex items-center gap-sm">
-<span class="material-symbols-outlined text-[20px] text-muted/40" data-icon="radio_button_unchecked">radio_button_unchecked</span>
-<span class="font-body-sm text-muted">동시 접속 세션 수 제한 (미사용)</span>
-</li>
-</ul>
-</div>
+<div class="flex justify-end gap-xs mt-lg">
+<button class="px-base py-xs rounded-full bg-surface-strong text-on-surface font-button hover:opacity-80 transition-opacity" onclick="resetContactSection()">초기화</button>
+<button class="px-base py-xs rounded-full bg-primary text-on-primary font-button hover:opacity-90 transition-opacity shadow-sm" onclick="saveContactSection()">저장</button>
 </div>
 </div>
 </section>
-<!-- Security Audit Log (Full Width Card) -->
-<section class="md:col-span-12">
-<div class="glass-card rounded-2xl p-xl shadow-sm">
-<div class="flex flex-col md:flex-row md:items-center justify-between mb-xl gap-base">
-<div class="flex items-center gap-sm">
-<span class="material-symbols-outlined text-primary" data-icon="list_alt">list_alt</span>
-<h3 class="font-title-lg text-title-lg text-primary">최근 보안 로그</h3>
+
+<!-- Section 3: DPO -->
+<section>
+<div class="glass-card bg-canvas border border-hairline rounded-2xl p-xl shadow-sm h-full flex flex-col">
+<div class="flex items-center gap-sm mb-lg">
+<span class="material-symbols-outlined text-primary" data-icon="badge">badge</span>
+<h3 class="font-title-lg text-title-lg text-primary">개인정보보호책임자(DPO)</h3>
 </div>
-<div class="flex items-center gap-xs bg-surface-container p-xxs rounded-lg">
-<button class="px-base py-xxs bg-white rounded-md shadow-sm text-primary font-button text-body-sm">전체</button>
-<button class="px-base py-xxs text-on-surface-variant font-button text-body-sm hover:bg-white/50 rounded-md transition-all">이상
-                                징후</button>
-<button class="px-base py-xxs text-on-surface-variant font-button text-body-sm hover:bg-white/50 rounded-md transition-all">인증
-                                성공</button>
+<p class="font-caption text-muted mb-lg">담당자가 바뀌면 이곳에서 성명·직책·전화만 갱신하면 됩니다.</p>
+<div class="flex flex-col gap-base flex-1">
+<div class="flex flex-col gap-xxs">
+<label class="font-caption-strong text-muted" for="fld_dpo_name">성명</label>
+<input class="w-full border border-hairline rounded-lg px-base py-sm text-[15px] focus:outline-none focus:ring-2 focus:ring-primary/30" id="fld_dpo_name" placeholder="예: 홍길동" type="text"/>
+</div>
+<div class="flex flex-col gap-xxs">
+<label class="font-caption-strong text-muted" for="fld_dpo_title">직책</label>
+<input class="w-full border border-hairline rounded-lg px-base py-sm text-[15px] focus:outline-none focus:ring-2 focus:ring-primary/30" id="fld_dpo_title" placeholder="예: 정책국장" type="text"/>
+</div>
+<div class="flex flex-col gap-xxs">
+<label class="font-caption-strong text-muted" for="fld_dpo_phone">전화</label>
+<input class="w-full border border-hairline rounded-lg px-base py-sm text-[15px] focus:outline-none focus:ring-2 focus:ring-primary/30" id="fld_dpo_phone" placeholder="예: 054-805-0000" type="text"/>
 </div>
 </div>
-<div class="overflow-x-auto">
-<table class="w-full text-left">
-<thead class="border-b border-hairline">
-<tr class="font-caption-strong text-muted uppercase">
-<th class="pb-base px-xxs">타임스탬프</th>
-<th class="pb-base px-xxs">이벤트 유형</th>
-<th class="pb-base px-xxs">소스 IP</th>
-<th class="pb-base px-xxs">관리자 계정</th>
-<th class="pb-base px-xxs">상태</th>
-<th class="pb-base px-xxs text-right">상세</th>
-</tr>
-</thead>
-<tbody class="divide-y divide-hairline">
-<tr>
-<td class="py-base font-number-display text-body-sm">2024-05-20 14:22:15</td>
-<td class="py-base">
-<div class="flex items-center gap-xs">
-<span class="material-symbols-outlined text-[18px] text-primary" data-icon="login">login</span>
-<span class="font-body-sm">로그인 시도</span>
-</div>
-</td>
-<td class="py-base font-number-display text-body-sm">211.234.XX.12</td>
-<td class="py-base font-body-sm">admin_gbe_01</td>
-<td class="py-base">
-<span class="px-xs py-xxs bg-success/10 text-success rounded-full font-caption-strong">성공</span>
-</td>
-<td class="py-base text-right">
-<button class="text-primary hover:opacity-70"><span class="material-symbols-outlined" data-icon="open_in_new">open_in_new</span></button>
-</td>
-</tr>
-<tr class="bg-error-container/5">
-<td class="py-base font-number-display text-body-sm">2024-05-20 13:45:02</td>
-<td class="py-base">
-<div class="flex items-center gap-xs">
-<span class="material-symbols-outlined text-[18px] text-danger" data-icon="warning">warning</span>
-<span class="font-body-sm text-danger">이상 징후 감지</span>
-</div>
-</td>
-<td class="py-base font-number-display text-body-sm">45.12.XXX.21</td>
-<td class="py-base font-body-sm">unknown</td>
-<td class="py-base">
-<span class="px-xs py-xxs bg-error/10 text-error rounded-full font-caption-strong">차단됨</span>
-</td>
-<td class="py-base text-right">
-<button class="text-primary hover:opacity-70"><span class="material-symbols-outlined" data-icon="open_in_new">open_in_new</span></button>
-</td>
-</tr>
-<tr>
-<td class="py-base font-number-display text-body-sm">2024-05-20 11:10:48</td>
-<td class="py-base">
-<div class="flex items-center gap-xs">
-<span class="material-symbols-outlined text-[18px] text-primary" data-icon="settings_input_component">settings_input_component</span>
-<span class="font-body-sm">정책 변경</span>
-</div>
-</td>
-<td class="py-base font-number-display text-body-sm">125.141.XX.89</td>
-<td class="py-base font-body-sm">sec_manager_03</td>
-<td class="py-base">
-<span class="px-xs py-xxs bg-success/10 text-success rounded-full font-caption-strong">완료</span>
-</td>
-<td class="py-base text-right">
-<button class="text-primary hover:opacity-70"><span class="material-symbols-outlined" data-icon="open_in_new">open_in_new</span></button>
-</td>
-</tr>
-<tr>
-<td class="py-base font-number-display text-body-sm">2024-05-20 09:05:33</td>
-<td class="py-base">
-<div class="flex items-center gap-xs">
-<span class="material-symbols-outlined text-[18px] text-primary" data-icon="logout">logout</span>
-<span class="font-body-sm">로그아웃</span>
-</div>
-</td>
-<td class="py-base font-number-display text-body-sm">211.234.XX.12</td>
-<td class="py-base font-body-sm">admin_gbe_01</td>
-<td class="py-base">
-<span class="px-xs py-xxs bg-surface-container-highest text-muted rounded-full font-caption-strong">일반</span>
-</td>
-<td class="py-base text-right">
-<button class="text-primary hover:opacity-70"><span class="material-symbols-outlined" data-icon="open_in_new">open_in_new</span></button>
-</td>
-</tr>
-</tbody>
-</table>
+<div class="flex justify-end gap-xs mt-lg">
+<button class="px-base py-xs rounded-full bg-surface-strong text-on-surface font-button hover:opacity-80 transition-opacity" onclick="resetDpoSection()">초기화</button>
+<button class="px-base py-xs rounded-full bg-primary text-on-primary font-button hover:opacity-90 transition-opacity shadow-sm" onclick="saveDpoSection()">저장</button>
 </div>
 </div>
 </section>
 </div>
-</div></div></main>
+</div>
+</div></main>
 <!-- Footer -->
 <footer class="w-full mt-section px-lg max-w-[1600px] mx-auto flex flex-col gap-base py-xl border-t border-hairline">
 <div class="flex flex-col md:flex-row justify-between items-center gap-lg">
@@ -605,38 +403,106 @@
 </div>
 </div>
 </footer>
+<div class="fixed bottom-lg left-1/2 -translate-x-1/2 z-[70] px-md py-sm rounded-full bg-surface-dark text-white text-body-sm shadow-xl hidden" id="footerAdminToast">저장되었습니다.</div>
+<!-- TODO: 실제 서버 연동 시 이 페이지는 서버 관리자 권한 인증 후에만 접근 가능하도록 하고,
+     저장 값도 localStorage가 아니라 서버(DB)에 저장하도록 교체해야 함. 현재는 브라우저별 임시 저장(localStorage). -->
 <script>
-        // Micro-interaction for toggle switches
-        document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
-            checkbox.addEventListener('change', function () {
-                const parent = this.closest('div');
-                if (this.checked) {
-                    console.log('Policy Enabled');
-                } else {
-                    console.log('Policy Disabled');
-                }
-            });
-        });
+        var FOOTER_DEFAULTS = {
+            footer_org: '경상북도교육청',
+            footer_address: '경북 안동시 풍천면 도청대로 511 | 대표전화 054-805-3000',
+            footer_copyright: '© 경상북도교육청. All Rights Reserved.'
+        };
+        var CONTACT_FIELDS = ['contact_dept', 'contact_phone', 'contact_email'];
+        var DPO_FIELDS = ['dpo_name', 'dpo_title', 'dpo_phone'];
 
-        // Hover animation for table rows
-        document.querySelectorAll('tbody tr').forEach(row => {
-            row.classList.add('transition-all', 'duration-200', 'hover:bg-surface-container-low/50', 'cursor-default');
-        });
-    </script>
-<!-- TODO: 실제 서버 연동 시 이 값들은 localStorage가 아니라 서버(DB)에서 불러오도록 교체해야 함.
-     푸터 정보는 서버관리자_푸터관리.html 에서만 수정할 수 있음(브라우저별 임시 저장). -->
-<script>
-    (function () {
-        function efLoadFooter() {
-            ['org', 'address', 'copyright'].forEach(function (f) {
-                var v = localStorage.getItem('ef_footer_' + f);
-                if (!v) return;
-                var view = document.querySelector('[data-ef="footer.' + f + '"]');
-                if (view) view.textContent = v;
-            });
+        function loadField(key, fallback) {
+            var el = document.getElementById('fld_' + key);
+            if (!el) return;
+            var stored = localStorage.getItem('ef_' + key);
+            el.value = stored !== null ? stored : (fallback || '');
         }
-        efLoadFooter();
-    })();
-</script>
+
+        function updateFooterPreview() {
+            document.getElementById('prevOrg').textContent = document.getElementById('fld_footer_org').value || FOOTER_DEFAULTS.footer_org;
+            document.getElementById('prevCopyright').textContent = document.getElementById('fld_footer_copyright').value || FOOTER_DEFAULTS.footer_copyright;
+            document.getElementById('prevAddress').textContent = document.getElementById('fld_footer_address').value || FOOTER_DEFAULTS.footer_address;
+        }
+
+        function showFooterAdminToast(msg) {
+            var t = document.getElementById('footerAdminToast');
+            t.textContent = msg;
+            t.classList.remove('hidden');
+            clearTimeout(window._footerToastTimer);
+            window._footerToastTimer = setTimeout(function () { t.classList.add('hidden'); }, 2000);
+        }
+
+        function saveFooterSection() {
+            ['footer_org', 'footer_address', 'footer_copyright'].forEach(function (key) {
+                var el = document.getElementById('fld_' + key);
+                localStorage.setItem('ef_' + key, el.value.trim());
+            });
+            updateFooterPreview();
+            showFooterAdminToast('사이트 푸터 정보가 저장되었습니다.');
+        }
+
+        function resetFooterSection() {
+            Object.keys(FOOTER_DEFAULTS).forEach(function (key) {
+                localStorage.removeItem('ef_' + key);
+                document.getElementById('fld_' + key).value = FOOTER_DEFAULTS[key];
+            });
+            updateFooterPreview();
+            showFooterAdminToast('기본값으로 초기화되었습니다.');
+        }
+
+        function saveContactSection() {
+            CONTACT_FIELDS.forEach(function (key) {
+                var el = document.getElementById('fld_' + key);
+                localStorage.setItem('ef_' + key, el.value.trim());
+            });
+            showFooterAdminToast('문의처 정보가 저장되었습니다.');
+        }
+
+        function resetContactSection() {
+            CONTACT_FIELDS.forEach(function (key) {
+                localStorage.removeItem('ef_' + key);
+                document.getElementById('fld_' + key).value = '';
+            });
+            showFooterAdminToast('문의처 정보가 초기화되었습니다.');
+        }
+
+        function saveDpoSection() {
+            DPO_FIELDS.forEach(function (key) {
+                var el = document.getElementById('fld_' + key);
+                localStorage.setItem('ef_' + key, el.value.trim());
+            });
+            showFooterAdminToast('책임자 정보가 저장되었습니다.');
+        }
+
+        function resetDpoSection() {
+            DPO_FIELDS.forEach(function (key) {
+                localStorage.removeItem('ef_' + key);
+                document.getElementById('fld_' + key).value = '';
+            });
+            showFooterAdminToast('책임자 정보가 초기화되었습니다.');
+        }
+
+        (function init() {
+            loadField('footer_org', FOOTER_DEFAULTS.footer_org);
+            loadField('footer_address', FOOTER_DEFAULTS.footer_address);
+            loadField('footer_copyright', FOOTER_DEFAULTS.footer_copyright);
+            CONTACT_FIELDS.forEach(function (key) { loadField(key, ''); });
+            DPO_FIELDS.forEach(function (key) { loadField(key, ''); });
+            updateFooterPreview();
+
+            document.querySelectorAll('[data-ef="footer.org"]').forEach(function (el) {
+                var v = localStorage.getItem('ef_footer_org');
+                if (v) el.textContent = v;
+            });
+            document.querySelectorAll('[data-ef="footer.copyright"]').forEach(function (el) {
+                var v = localStorage.getItem('ef_footer_copyright');
+                if (v) el.textContent = v;
+            });
+        })();
+    </script>
 </body>
 </html>
