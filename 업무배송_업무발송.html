@@ -387,40 +387,11 @@
 <!-- 담당 업무 카테고리 -->
 <div class="flex flex-col gap-sm">
 <label class="text-[16px] font-bold text-ink flex items-center gap-xs">
-<span class="material-symbols-outlined text-primary text-[20px]">category</span> 
-                                관련 업무 분야 선택
+<span class="material-symbols-outlined text-primary text-[20px]">category</span>
+                                관련 업무 분야 선택 <span class="font-normal text-[13px] text-ink/50">(초등 기준)</span>
                             </label>
 <p class="text-[13px] text-ink/60 mb-1">이 업무를 담당(구독)하고 있는 교직원의 우편함과 달력으로 자료가 자동 발송됩니다.</p>
-<div class="flex flex-wrap gap-sm">
-<label class="border border-gray-200 rounded-xl px-md py-sm flex items-center gap-2 cursor-pointer hover:border-primary transition-colors has-[:checked]:bg-primary/5 has-[:checked]:border-primary">
-<input class="accent-primary w-4 h-4" name="taskCategory" type="checkbox" value="kinder"/>
-<span class="text-[15px] font-semibold text-ink whitespace-nowrap">유치원 업무</span>
-</label>
-<label class="border border-gray-200 rounded-xl px-md py-sm flex items-center gap-2 cursor-pointer hover:border-primary transition-colors has-[:checked]:bg-primary/5 has-[:checked]:border-primary">
-<input class="accent-primary w-4 h-4" name="taskCategory" type="checkbox" value="elem"/>
-<span class="text-[15px] font-semibold text-ink whitespace-nowrap">초등 업무</span>
-</label>
-<label class="border border-gray-200 rounded-xl px-md py-sm flex items-center gap-2 cursor-pointer hover:border-primary transition-colors has-[:checked]:bg-primary/5 has-[:checked]:border-primary">
-<input class="accent-primary w-4 h-4" name="taskCategory" type="checkbox" value="mid"/>
-<span class="text-[15px] font-semibold text-ink whitespace-nowrap">중등 업무</span>
-</label>
-<label class="border border-gray-200 rounded-xl px-md py-sm flex items-center gap-2 cursor-pointer hover:border-primary transition-colors has-[:checked]:bg-primary/5 has-[:checked]:border-primary">
-<input class="accent-primary w-4 h-4" name="taskCategory" type="checkbox" value="hr"/>
-<span class="text-[15px] font-semibold text-ink whitespace-nowrap">인사·관리 업무</span>
-</label>
-<label class="border border-gray-200 rounded-xl px-md py-sm flex items-center gap-2 cursor-pointer hover:border-primary transition-colors has-[:checked]:bg-primary/5 has-[:checked]:border-primary">
-<input class="accent-primary w-4 h-4" name="taskCategory" type="checkbox" value="counsel"/>
-<span class="text-[15px] font-semibold text-ink whitespace-nowrap">사서·상담·특수 업무</span>
-</label>
-<label class="border border-gray-200 rounded-xl px-md py-sm flex items-center gap-2 cursor-pointer hover:border-primary transition-colors has-[:checked]:bg-primary/5 has-[:checked]:border-primary">
-<input class="accent-primary w-4 h-4" name="taskCategory" type="checkbox" value="health"/>
-<span class="text-[15px] font-semibold text-ink whitespace-nowrap">보건·영양 업무</span>
-</label>
-<label class="border border-gray-200 rounded-xl px-md py-sm flex items-center gap-2 cursor-pointer hover:border-primary transition-colors has-[:checked]:bg-primary/5 has-[:checked]:border-primary">
-<input class="accent-primary w-4 h-4" name="taskCategory" type="checkbox" value="admin"/>
-<span class="text-[15px] font-semibold text-ink whitespace-nowrap">행정실 업무</span>
-</label>
-</div>
+<div class="flex flex-wrap gap-xs" id="taskCategoryList"></div>
 </div>
 <!-- 제목 -->
 <div class="flex flex-col gap-sm">
@@ -510,6 +481,36 @@
         업무 우편이 성공적으로 등록(배송)되었습니다.
     </div>
 <script>
+        // 초등 기준 업무 분야 태그 (30종)
+        const TASK_CATEGORY_TAGS = [
+            '교무', '학적', '연구', '학력', '학생부',
+            '인성', '진로', '민주', '생활', '생명',
+            '자치', '복지', '늘봄', '다문화', '체육',
+            '안전', '체험', '정보', '특수', '과학',
+            '영재', '환경', '문화예술', '학부모', '보건',
+            '영양', '상담', '독서', '국제', '영어'
+        ];
+        (function renderTaskCategoryList() {
+            const wrap = document.getElementById('taskCategoryList');
+            TASK_CATEGORY_TAGS.forEach(tag => {
+                const label = document.createElement('label');
+                label.className = 'border border-gray-200 rounded-full px-sm py-xxs flex items-center gap-xxs cursor-pointer hover:border-primary transition-colors has-[:checked]:bg-primary/5 has-[:checked]:border-primary has-[:checked]:text-primary';
+
+                const input = document.createElement('input');
+                input.className = 'accent-primary w-[14px] h-[14px]';
+                input.type = 'checkbox';
+                input.name = 'taskCategory';
+                input.value = tag;
+
+                const span = document.createElement('span');
+                span.className = 'text-[13px] font-semibold text-ink whitespace-nowrap';
+                span.textContent = tag;
+
+                label.append(input, span);
+                wrap.appendChild(label);
+            });
+        })();
+
         function showToast() {
             const toast = document.getElementById('toast');
             toast.classList.remove('translate-y-20', 'opacity-0');

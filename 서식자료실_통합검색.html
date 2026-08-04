@@ -424,6 +424,10 @@
 </label>
 </div>
 </div>
+<div class="bg-canvas rounded-2xl border border-hairline p-md">
+<h3 class="font-title-sm text-title-sm text-ink mb-sm">업무 분야 태그 <span class="font-normal text-caption text-muted">(초등 기준)</span></h3>
+<div class="flex flex-wrap gap-xxs" id="tagFilterList"></div>
+</div>
 </aside>
 <!-- Right Content (Results) -->
 <div class="flex-1">
@@ -540,6 +544,30 @@
 </div>
 </footer>
 <script>
+    // 초등 기준 업무 분야 태그 (30종) — 업무배송_업무발송.html의 관련 업무 분야와 동일
+    const TAG_FILTER_LIST = [
+        '교무', '학적', '연구', '학력', '학생부',
+        '인성', '진로', '민주', '생활', '생명',
+        '자치', '복지', '늘봄', '다문화', '체육',
+        '안전', '체험', '정보', '특수', '과학',
+        '영재', '환경', '문화예술', '학부모', '보건',
+        '영양', '상담', '독서', '국제', '영어'
+    ];
+    (function renderTagFilterList() {
+        const wrap = document.getElementById('tagFilterList');
+        TAG_FILTER_LIST.forEach(tag => {
+            const btn = document.createElement('button');
+            btn.type = 'button';
+            btn.className = 'px-sm py-[3px] rounded-full border border-hairline text-caption text-body hover:border-primary hover:text-primary transition-colors aria-pressed:bg-primary aria-pressed:text-on-primary aria-pressed:border-primary';
+            btn.setAttribute('aria-pressed', 'false');
+            btn.textContent = tag;
+            btn.addEventListener('click', () => {
+                btn.setAttribute('aria-pressed', btn.getAttribute('aria-pressed') === 'true' ? 'false' : 'true');
+            });
+            wrap.appendChild(btn);
+        });
+    })();
+
     function openDocPreview() {
         const modal = document.getElementById('doc-preview-modal');
         modal.classList.remove('hidden');
