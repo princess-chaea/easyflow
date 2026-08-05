@@ -336,44 +336,55 @@
 </div>
 </nav>
 <main class="pt-[64px]">
-<!-- Hero Section -->
-<section class="relative bg-surface-dark py-section overflow-hidden">
-<div class="max-w-[1600px] mx-auto px-lg grid md:grid-cols-2 items-center gap-xl relative z-10">
-<div class="space-y-md entrance-fade visible" style="transition-delay: 0ms;">
-<div class="flex items-center gap-sm">
+<!-- Main Dashboard: 완전히 자유로운 사용자 맞춤형 위젯 홈 (제목/배너/검색까지 전부 위젯) -->
+<section class="max-w-[1600px] mx-auto px-lg py-xl">
+<div class="flex items-center justify-end gap-xs mb-lg">
+<button class="hidden px-base py-xs rounded-full border border-primary text-primary text-sm font-bold hover:bg-primary/5 transition-colors items-center gap-xxs" id="btnAddWidget" onclick="openWidgetPicker()">
+<span class="material-symbols-outlined text-[18px]">add</span>위젯 추가
+</button>
+<button class="px-base py-xs rounded-full bg-primary text-white text-sm font-bold hover:bg-primary-active transition-colors flex items-center gap-xxs" id="btnEditMode" onclick="toggleEditMode()">
+<span class="material-symbols-outlined text-[18px]" id="editModeIcon">dashboard_customize</span><span id="editModeLabel">화면 편집</span>
+</button>
+</div>
+
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-lg" id="widgetGrid"></div>
+
+<!-- 위젯 콘텐츠 템플릿: JS가 저장된 배치(widgetLayout)에 따라 그리드에 복제해서 넣는다 -->
+<template id="tpl-heroIntro">
+<div class="bg-surface-dark rounded-2xl p-xl text-white h-full flex flex-col justify-center gap-md">
+<div class="flex items-center gap-sm flex-wrap">
 <span class="inline-block py-xxs px-sm bg-primary-container text-on-primary-container rounded-full text-caption-strong font-bold">GBE AI Cockpit v2.0</span>
 <span class="flex items-center gap-xs text-success text-caption animate-pulse-soft">
 <span class="w-2 h-2 rounded-full bg-success"></span>
-        시스템 실시간 가동 중
-    </span>
+                    시스템 실시간 가동 중
+                </span>
 </div>
-<h1 class="text-white font-display-xl text-display-xl tracking-tight leading-tight">이지플로우:<br/>업무 배송과 인생 도서관의 통합 플랫폼</h1>
-<p class="text-surface-variant font-body-md text-body-md max-w-lg">인공지능 기술로 교직원의 행정 업무를 혁신하고, 인생 도서관을 통해 성장의 기회를 제공하는 경북 교육의 스마트 파트너입니다.</p>
+<h1 class="text-white font-display-md text-display-md tracking-tight leading-tight">이지플로우:<br/>업무 배송과 인생 도서관의 통합 플랫폼</h1>
+<p class="text-surface-variant font-body-md text-body-md">인공지능 기술로 교직원의 행정 업무를 혁신하고, 인생 도서관을 통해 성장의 기회를 제공하는 경북 교육의 스마트 파트너입니다.</p>
 <div class="flex gap-base pt-base">
-<button class="bg-primary text-white px-xl py-sm rounded-full font-button hover:bg-primary-active transition-all flex items-center gap-xs relative overflow-hidden shimmer-effect" onclick="enterEditModeFromHero()">
-                        화면 구성하기 <span class="material-symbols-outlined" data-icon="dashboard_customize">dashboard_customize</span>
-</button>
-<button class="bg-surface-dark-elevated text-white border border-outline px-xl py-sm rounded-full font-button hover:bg-white/10 transition-all" onclick="window.location.href='안내센터_시스템 안내.html'">메뉴얼 보기</button>
+<a class="bg-surface-dark-elevated text-white border border-outline px-xl py-sm rounded-full font-button hover:bg-white/10 transition-all inline-block" href="안내센터_시스템 안내.html">메뉴얼 보기</a>
 </div>
-<!-- Integrated Search Bar from main2 -->
-<div class="relative w-full max-w-2xl mt-xl">
-    <div class="bg-surface rounded-2xl p-2 flex items-center shadow-2xl border border-white/20">
-        <span class="material-symbols-outlined text-primary mx-4 text-[28px]">search</span>
-        <input class="flex-1 bg-transparent border-none focus:ring-0 text-title-md py-4 text-on-surface placeholder:text-outline/60" placeholder="업무 질문이나 서식을 검색하세요" type="text">
-        <button class="bg-primary text-white px-8 py-4 rounded-xl font-bold hover:bg-primary-active transition-all">검색</button>
-    </div>
-    <!-- Popular Tags -->
-    <div class="flex flex-wrap gap-sm mt-md">
-        <a class="px-4 py-1.5 bg-white/10 text-white rounded-full text-body-sm border border-white/20 hover:bg-white/20 transition-colors" href="#">#2026 복무지침</a>
-        <a class="px-4 py-1.5 bg-white/10 text-white rounded-full text-body-sm border border-white/20 hover:bg-white/20 transition-colors" href="#">#수행평가 서식</a>
-        <a class="px-4 py-1.5 bg-white/10 text-white rounded-full text-body-sm border border-white/20 hover:bg-white/20 transition-colors" href="#">#계획서 양식</a>
-        <a class="px-4 py-1.5 bg-white/10 text-white rounded-full text-body-sm border border-white/20 hover:bg-white/20 transition-colors" href="#">#NEIS 활용법</a>
-    </div>
 </div>
+</template>
 
+<template id="tpl-heroSearch">
+<div class="bg-surface-dark rounded-2xl p-xl h-full flex flex-col justify-center gap-md">
+<div class="bg-surface rounded-2xl p-2 flex items-center shadow-2xl border border-white/20">
+<span class="material-symbols-outlined text-primary mx-4 text-[28px]">search</span>
+<input class="flex-1 min-w-0 bg-transparent border-none focus:ring-0 text-title-md py-4 text-on-surface placeholder:text-outline/60" placeholder="업무 질문이나 서식을 검색하세요" type="text"/>
+<button class="bg-primary text-white px-8 py-4 rounded-xl font-bold hover:bg-primary-active transition-all shrink-0" type="button">검색</button>
 </div>
-<div class="relative hidden md:block entrance-fade visible" style="transition-delay: 0ms;">
-<div class="glass-card p-xl rounded-xl space-y-md border-primary/20 relative z-20 animate-float" style="animation-duration: 8s;">
+<div class="flex flex-wrap gap-sm">
+<a class="px-4 py-1.5 bg-white/10 text-white rounded-full text-body-sm border border-white/20 hover:bg-white/20 transition-colors" href="#">#2026 복무지침</a>
+<a class="px-4 py-1.5 bg-white/10 text-white rounded-full text-body-sm border border-white/20 hover:bg-white/20 transition-colors" href="#">#수행평가 서식</a>
+<a class="px-4 py-1.5 bg-white/10 text-white rounded-full text-body-sm border border-white/20 hover:bg-white/20 transition-colors" href="#">#계획서 양식</a>
+<a class="px-4 py-1.5 bg-white/10 text-white rounded-full text-body-sm border border-white/20 hover:bg-white/20 transition-colors" href="#">#NEIS 활용법</a>
+</div>
+</div>
+</template>
+
+<template id="tpl-liveStatus">
+<div class="bg-surface-dark rounded-2xl p-lg text-white h-full flex flex-col justify-center gap-md">
 <div class="flex justify-between items-center">
 <span class="text-white font-title-sm">실시간 업무 처리 현황</span>
 <span class="text-secondary-container font-number-display">87% 완료</span>
@@ -392,36 +403,8 @@
 </div>
 </div>
 </div>
-<!-- Decorative AI Graphic elements -->
-<div class="absolute -top-12 -right-12 w-64 h-64 bg-primary/20 blur-[100px] rounded-full animate-pulse-soft"></div>
-<div class="absolute -bottom-8 -left-8 w-48 h-48 bg-secondary-container/10 blur-[80px] rounded-full animate-pulse-soft" style="animation-delay: 1s;"></div>
-</div>
-</div>
-<!-- Background Image -->
-<div class="absolute top-0 right-0 w-1/2 h-full opacity-30 pointer-events-none">
-<img class="w-full h-full object-cover" data-alt="A sophisticated abstract 3D visualization of data streams and neural networks in deep blue and gold." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDRskiqPKpwHwvnkb4-JGlN71N4k_rvKrkgNU41XtIL3JMdv4BJAXoRYR6Esm8lAXfJADZwEh7B0AiNIssPMkS3UUkC00k7H-fXrEIiaC2GjFm-CstIjdJxh4JW85i-2KCSVMxHcnhHVkdfZfPqBEOnKlLPyse1MAPkyA-BV0Lhl8VLvoQdN3firzG8cVdDxpGTOFTlqWuZnE7hUVXENHjofKg5dh8GwJ7DZUKBh4q8dBnL_UeyKBGryLQamoG7cmDbzc-_jBEeTSWP"/>
-</div>
-</section>
-<!-- Main Dashboard: 사용자 맞춤형 위젯 홈 -->
-<section class="max-w-[1600px] mx-auto px-lg py-xl">
-<div class="flex flex-wrap items-end justify-between gap-base mb-lg">
-<div>
-<h2 class="font-title-lg text-title-lg">내 홈 화면</h2>
-<p class="text-body-sm text-on-surface-variant mt-xxs">위젯을 추가하거나 순서·크기를 바꿔 나만의 대시보드로 구성해보세요.</p>
-</div>
-<div class="flex items-center gap-xs">
-<button class="hidden px-base py-xs rounded-full border border-primary text-primary text-sm font-bold hover:bg-primary/5 transition-colors items-center gap-xxs" id="btnAddWidget" onclick="openWidgetPicker()">
-<span class="material-symbols-outlined text-[18px]">add</span>위젯 추가
-</button>
-<button class="px-base py-xs rounded-full bg-primary text-white text-sm font-bold hover:bg-primary-active transition-colors flex items-center gap-xxs" id="btnEditMode" onclick="toggleEditMode()">
-<span class="material-symbols-outlined text-[18px]" id="editModeIcon">dashboard_customize</span><span id="editModeLabel">화면 편집</span>
-</button>
-</div>
-</div>
+</template>
 
-<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-lg" id="widgetGrid"></div>
-
-<!-- 위젯 콘텐츠 템플릿: JS가 저장된 배치(widgetLayout)에 따라 그리드에 복제해서 넣는다 -->
 <template id="tpl-calendar">
 <div class="bg-canvas p-xl rounded-xl border border-hairline shadow-sm hover-lift h-full">
 <div class="flex justify-between items-center mb-xl">
@@ -710,6 +693,9 @@
     // 배치 상태는 localStorage(계정별)에 저장된다 - 서버 연동 전 프로토타입 단계.
     // ------------------------------------------------------------------
     const WIDGET_CATALOG = {
+        heroIntro: { title: '메인 배너', icon: 'auto_awesome' },
+        heroSearch: { title: '통합 검색', icon: 'search' },
+        liveStatus: { title: '실시간 업무 처리 현황', icon: 'monitoring' },
         calendar: { title: '이번 주 업무 배송 일정', icon: 'local_shipping' },
         library: { title: '인생 도서관', icon: 'auto_stories' },
         hwp: { title: "한글 파일 '뚝딱'", icon: 'auto_fix_high' },
@@ -718,8 +704,10 @@
         notices: { title: '최근 공지사항', icon: 'campaign' }
     };
     const DEFAULT_LAYOUT = [
-        { id: 'calendar', size: 2 }, { id: 'library', size: 1 }, { id: 'hwp', size: 1 },
-        { id: 'formArchive', size: 2 }, { id: 'checklist', size: 1 }, { id: 'notices', size: 1 }
+        { id: 'heroIntro', size: 2 }, { id: 'heroSearch', size: 2 },
+        { id: 'liveStatus', size: 1 }, { id: 'calendar', size: 2 }, { id: 'library', size: 1 },
+        { id: 'hwp', size: 1 }, { id: 'formArchive', size: 2 }, { id: 'checklist', size: 1 },
+        { id: 'notices', size: 1 }
     ];
     const SIZE_CYCLE = [1, 2, 4];
     const SIZE_LABEL = { 1: '작게', 2: '넓게', 4: '전체너비' };
@@ -894,11 +882,6 @@
         addBtn.classList.toggle('hidden', !editMode);
         addBtn.classList.toggle('flex', editMode);
         renderGrid();
-    }
-
-    function enterEditModeFromHero() {
-        if (!editMode) toggleEditMode();
-        document.getElementById('widgetGrid').scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
 
     function openWidgetPicker() {
