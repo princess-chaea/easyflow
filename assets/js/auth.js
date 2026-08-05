@@ -191,7 +191,7 @@ const ROLE_GATED_LINKS = [
         //  취소를 눌러도 addEventListener가 항상 실행되어 currentUser가 지워지는 버그가 있었음)
         const logoutLinks = document.querySelectorAll('a[href="공통_로그인.html"]');
         logoutLinks.forEach(link => {
-            if (link.innerText.includes('로그아웃')) {
+            if (link.textContent.includes('로그아웃')) {
                 link.removeAttribute('onclick');
                 link.addEventListener('click', (e) => {
                     e.preventDefault();
