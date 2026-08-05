@@ -520,6 +520,20 @@
             }, 3000);
         }
 
+        // 처리 종료일(taskEndDate) 기준으로 우편함에 보여줄 마감 배지를 계산한다.
+        function computeDueBadge(endDateStr) {
+            if (!endDateStr) return { label: '기한 미지정', tone: 'muted' };
+            const end = new Date(endDateStr + 'T00:00:00');
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            const diffDays = Math.round((end - today) / 86400000);
+            if (diffDays < 0) return { label: '기한 경과', tone: 'danger' };
+            if (diffDays === 0) return { label: '오늘 마감', tone: 'danger' };
+            if (diffDays <= 3) return { label: '마감 D-' + diffDays, tone: 'danger' };
+            if (diffDays <= 10) return { label: '마감 D-' + diffDays, tone: 'warning' };
+            return { label: '마감 D-' + diffDays, tone: 'muted' };
+        }
+
         function submitMailForm(e) {
             e.preventDefault();
 
@@ -534,11 +548,21 @@
             // 2. Get Form Values
             const title = document.getElementById('mailTitleInput').value.trim();
             const desc = document.getElementById('mailDescInput').value.trim();
+
+            // 첨부파일: 여러 개를 선택해도 첫 번째 파일명만 저장되던 버그 수정 - 전체 파일명을 저장
             const fileInput = document.getElementById('sendFileInput');
-            let fileName = '';
-            if (fileInput.files && fileInput.files.length > 0) {
-                fileName = fileInput.files[0].name;
-            }
+            const fileNames = fileInput.files ? Array.from(fileInput.files).map(f => f.name) : [];
+            const fileDisplay = fileNames.join(', ');
+
+            // 링크 첨부: 칩으로만 보여주고 제출 시 읽지 않아 유실되던 버그 수정
+            const links = Array.from(document.querySelectorAll('#sendLinkChips a')).map(a => a.href);
+
+            // 업무 처리 시기 / 발송 시기: 폼에 입력해도 제출 로직이 참조하지 않아 무시되던 버그 수정
+            const taskStart = document.getElementById('taskStartDate').value;
+            const taskEnd = document.getElementById('taskEndDate').value;
+            const dispatchTiming = document.getElementById('sendTimingSelect').value;
+            const dispatchCustomAt = document.getElementById('sendCustomDate').value;
+            const dueBadge = computeDueBadge(taskEnd);
 
             // 3. Load Existing Mail Data
             let mailData = JSON.parse(localStorage.getItem('ef_mail_data'));
@@ -546,9 +570,11 @@
 
             // 4. Create New Mail Entry for each category
             const today = new Date().toLocaleDateString('ko-KR', { year: 'numeric', month: '2-digit', day: '2-digit' }).replace(/\. /g, '.').replace(/\.$/, '');
-            
-            const currentUser = JSON.parse(localStorage.getItem('currentUser')) || {};
-            const senderDept = currentUser.dept || '해당부서';
+
+            // currentUser는 로그인 시 이메일 문자열로 저장되므로(auth.js) JSON.parse하면 안 됨 -
+            // 예전 코드는 이 부분에서 항상 예외가 나서 발송이 조용히 실패했음
+            const currentUserEmail = localStorage.getItem('currentUser') || '';
+            const senderDept = localStorage.getItem('org_' + currentUserEmail) || '해당부서';
 
             categories.forEach(cat => {
                 const newMail = {
@@ -558,9 +584,14 @@
                     date: today,
                     title: title,
                     desc: desc,
-                    file: fileName,
-                    due: '진행중',
-                    dueTone: 'warning',
+                    file: fileDisplay,
+                    links: links,
+                    taskStart: taskStart,
+                    taskEnd: taskEnd,
+                    dispatchTiming: dispatchTiming,
+                    dispatchCustomAt: dispatchCustomAt,
+                    due: dueBadge.label,
+                    dueTone: dueBadge.tone,
                     read: false
                 };
                 // Prepend to show at top
@@ -618,7 +649,10 @@
             const input = document.getElementById('sendLinkInput');
             const url = input.value.trim();
             if (!url) return;
-            try { new URL(url); } catch {
+            try {
+                const parsed = new URL(url);
+                if (parsed.protocol !== 'http:' && parsed.protocol !== 'https:') throw new Error('unsupported protocol');
+            } catch {
                 EF_MODAL.alert('올바른 링크 형식을 입력해주세요. (예: https://...)');
                 return;
             }

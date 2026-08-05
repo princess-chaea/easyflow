@@ -417,7 +417,7 @@
 <!-- Template Grid (Bento Style Layout) -->
 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
 <!-- Card 1 (Selected) -->
-<div class="group relative bg-white border-2 border-secondary rounded-2xl p-6 shadow-md transition-all hover:shadow-lg cursor-pointer" onclick="location.href='서식 자료실_학교정보확인.html'">
+<div class="group relative bg-white border-2 border-secondary rounded-2xl p-6 shadow-md transition-all hover:shadow-lg cursor-pointer" onclick="selectTemplate('tpl-1', '학교운영위원회 회의록', '교무학사')">
 <div class="absolute top-4 right-4 bg-secondary text-on-secondary rounded-full p-1 flex items-center justify-center">
 <span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">check</span>
 </div>
@@ -446,7 +446,7 @@
 </div>
 </div>
 <!-- Card 2 -->
-<div class="group bg-white border border-hairline rounded-2xl p-6 transition-all hover:border-secondary hover:shadow-md cursor-pointer" onclick="location.href='서식 자료실_학교정보확인.html'">
+<div class="group bg-white border border-hairline rounded-2xl p-6 transition-all hover:border-secondary hover:shadow-md cursor-pointer" onclick="selectTemplate('tpl-2', '현장체험학습 안전계획서', '학교지원')">
 <div class="flex items-start gap-4 mb-4">
 <div class="w-12 h-12 bg-surface-container-low rounded-2xl flex items-center justify-center text-hwp-blue">
 <span class="material-symbols-outlined text-3xl">description</span>
@@ -472,7 +472,7 @@
 </div>
 </div>
 <!-- Card 3 -->
-<div class="group bg-white border border-hairline rounded-2xl p-6 transition-all hover:border-secondary hover:shadow-md cursor-pointer" onclick="location.href='서식 자료실_학교정보확인.html'">
+<div class="group bg-white border border-hairline rounded-2xl p-6 transition-all hover:border-secondary hover:shadow-md cursor-pointer" onclick="selectTemplate('tpl-3', '교직원 연수 결과 보고서', '교원인사')">
 <div class="flex items-start gap-4 mb-4">
 <div class="w-12 h-12 bg-surface-container-low rounded-2xl flex items-center justify-center text-hwp-blue">
 <span class="material-symbols-outlined text-3xl">description</span>
@@ -498,7 +498,7 @@
 </div>
 </div>
 <!-- Card 4 -->
-<div class="group bg-white border border-hairline rounded-2xl p-6 transition-all hover:border-secondary hover:shadow-md cursor-pointer" onclick="location.href='서식 자료실_학교정보확인.html'">
+<div class="group bg-white border border-hairline rounded-2xl p-6 transition-all hover:border-secondary hover:shadow-md cursor-pointer" onclick="selectTemplate('tpl-4', '가정통신문 기본 서식', '기본 서식')">
 <div class="flex items-start gap-4 mb-4">
 <div class="w-12 h-12 bg-surface-container-low rounded-2xl flex items-center justify-center text-hwp-blue">
 <span class="material-symbols-outlined text-3xl">description</span>
@@ -524,7 +524,7 @@
 </div>
 </div>
 <!-- Card 5 -->
-<div class="group bg-white border border-hairline rounded-2xl p-6 transition-all hover:border-secondary hover:shadow-md cursor-pointer" onclick="location.href='서식 자료실_학교정보확인.html'">
+<div class="group bg-white border border-hairline rounded-2xl p-6 transition-all hover:border-secondary hover:shadow-md cursor-pointer" onclick="selectTemplate('tpl-5', '학교행사 운영 계획서', '교무학사')">
 <div class="flex items-start gap-4 mb-4">
 <div class="w-12 h-12 bg-surface-container-low rounded-2xl flex items-center justify-center text-hwp-blue">
 <span class="material-symbols-outlined text-3xl">description</span>
@@ -550,7 +550,7 @@
 </div>
 </div>
 <!-- Card 6 -->
-<div class="group bg-white border border-hairline rounded-2xl p-6 transition-all hover:border-secondary hover:shadow-md cursor-pointer" onclick="location.href='서식 자료실_학교정보확인.html'">
+<div class="group bg-white border border-hairline rounded-2xl p-6 transition-all hover:border-secondary hover:shadow-md cursor-pointer" onclick="selectTemplate('tpl-6', '물품 구입 품의서', '재정복지')">
 <div class="flex items-start gap-4 mb-4">
 <div class="w-12 h-12 bg-surface-container-low rounded-2xl flex items-center justify-center text-hwp-blue">
 <span class="material-symbols-outlined text-3xl">description</span>
@@ -607,6 +607,18 @@
 </footer>
 <!-- Micro-interaction Script -->
 <script>
+        // 카드 6개가 전부 같은 다음 단계로만 이동하고 어떤 서식을 골랐는지 다음 단계에
+        // 전달되지 않던 문제 수정 - sessionStorage로 마법사 상태를 이어준다.
+        function selectTemplate(id, title, category) {
+            let state = {};
+            try { state = JSON.parse(sessionStorage.getItem('ef_form_wizard')) || {}; } catch (e) { state = {}; }
+            state.templateId = id;
+            state.templateTitle = title;
+            state.templateCategory = category;
+            sessionStorage.setItem('ef_form_wizard', JSON.stringify(state));
+            location.href = '서식 자료실_학교정보확인.html';
+        }
+
         // Simple logic for card selection visual feedback
         document.querySelectorAll('.group.cursor-pointer').forEach(card => {
             card.addEventListener('click', () => {

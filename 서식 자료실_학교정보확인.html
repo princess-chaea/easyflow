@@ -400,6 +400,7 @@
 </div>
 <h1 class="text-[28px] font-bold text-ink mb-xs">AI 자동 완성 내용 확인</h1>
 <p class="text-[15px] text-ink/70">AI가 기존 RAG 데이터와 달력을 바탕으로 문서 초안을 작성했습니다. 내용을 검토하고 수정하세요.</p>
+<span class="hidden mt-sm inline-flex items-center gap-xs px-sm py-1 rounded-full bg-primary/10 text-primary text-[12px] font-bold" id="wizardTemplateBadge"><span class="material-symbols-outlined text-[14px]">description</span><span id="wizardTemplateBadgeText"></span></span>
 </div>
 </div>
 <!-- Split View Editor -->
@@ -417,11 +418,11 @@
 <div class="space-y-4">
 <div class="relative">
 <label class="block text-xs font-bold text-ink mb-1">기관명 (학교명) <span class="text-secondary ml-1" title="AI 자동 입력">✨</span></label>
-<input class="w-full border border-secondary/50 focus:border-secondary rounded-lg p-2 bg-secondary/5 font-medium text-ink transition-colors" oninput="updatePreview('schoolName', this.value)" type="text" value="옥계초등학교"/>
+<input class="w-full border border-secondary/50 focus:border-secondary rounded-lg p-2 bg-secondary/5 font-medium text-ink transition-colors" id="wizSchoolName" oninput="updatePreview('schoolName', this.value)" type="text" value="옥계초등학교"/>
 </div>
 <div class="relative">
 <label class="block text-xs font-bold text-ink mb-1">기관장명 (교장) <span class="text-secondary ml-1" title="AI 자동 입력">✨</span></label>
-<input class="w-full border border-secondary/50 focus:border-secondary rounded-lg p-2 bg-secondary/5 font-medium text-ink transition-colors" oninput="updatePreview('principalName', this.value)" type="text" value="홍길동"/>
+<input class="w-full border border-secondary/50 focus:border-secondary rounded-lg p-2 bg-secondary/5 font-medium text-ink transition-colors" id="wizPrincipalName" oninput="updatePreview('principalName', this.value)" type="text" value="홍길동"/>
 </div>
 </div>
 </div>
@@ -431,16 +432,16 @@
 <div class="space-y-4">
 <div class="relative">
 <label class="block text-xs font-bold text-ink mb-1">회의 일시 <span class="text-secondary ml-1" title="스마트 달력에서 연동됨">✨</span></label>
-<input class="w-full border border-secondary/50 focus:border-secondary rounded-lg p-2 bg-secondary/5 font-medium text-ink transition-colors" oninput="updatePreview('meetingDate', this.value)" type="text" value="2026. 5. 14. (목) 15:00"/>
+<input class="w-full border border-secondary/50 focus:border-secondary rounded-lg p-2 bg-secondary/5 font-medium text-ink transition-colors" id="wizMeetingDate" oninput="updatePreview('meetingDate', this.value)" type="text" value="2026. 5. 14. (목) 15:00"/>
 <p class="text-[10px] text-muted mt-1">스마트 공문 달력의 [학교운영위원회] 일정에서 가져왔습니다.</p>
 </div>
 <div class="relative">
 <label class="block text-xs font-bold text-ink mb-1">회의 장소</label>
-<input class="w-full border border-hairline focus:border-primary rounded-lg p-2 bg-surface-soft font-medium text-ink transition-colors" oninput="updatePreview('meetingPlace', this.value)" type="text" value="본교 2층 학운위 회의실"/>
+<input class="w-full border border-hairline focus:border-primary rounded-lg p-2 bg-surface-soft font-medium text-ink transition-colors" id="wizMeetingPlace" oninput="updatePreview('meetingPlace', this.value)" type="text" value="본교 2층 학운위 회의실"/>
 </div>
 <div class="relative">
 <label class="block text-xs font-bold text-ink mb-1">주요 안건 요약</label>
-<textarea class="w-full border border-hairline focus:border-primary rounded-lg p-2 bg-surface-soft font-medium text-ink transition-colors resize-none h-24" oninput="updatePreview('meetingAgenda', this.value)">1. 2026학년도 1학기 방과후학교 운영 계획(안)
+<textarea class="w-full border border-hairline focus:border-primary rounded-lg p-2 bg-surface-soft font-medium text-ink transition-colors resize-none h-24" id="wizMeetingAgenda" oninput="updatePreview('meetingAgenda', this.value)">1. 2026학년도 1학기 방과후학교 운영 계획(안)
 2. 학교급식 소위원회 구성(안)
 3. 기타 안건</textarea>
 </div>
@@ -500,7 +501,7 @@
 <button class="px-6 py-3 border border-hairline rounded-lg font-bold text-on-surface-variant hover:bg-surface-soft transition-colors" onclick="location.href='서식 자료실_한글파일서식선택.html'">이전 단계로</button>
 <div class="flex items-center gap-4">
 <span class="text-xs text-muted hidden md:inline">모든 정보가 올바른지 확인하셨나요?</span>
-<button class="px-8 py-3 bg-primary text-white rounded-lg font-bold hover:bg-primary-active transition-colors shadow-md hover-lift flex items-center gap-2" onclick="location.href='서식 자료실_한글파일생성완료.html'">
+<button class="px-8 py-3 bg-primary text-white rounded-lg font-bold hover:bg-primary-active transition-colors shadow-md hover-lift flex items-center gap-2" onclick="saveWizardStateAndContinue()">
 <span class="material-symbols-outlined">magic_button</span> 문서 생성 완료하기
         </button>
 </div>
@@ -515,13 +516,44 @@
             el.classList.add('bg-secondary-fixed');
             setTimeout(() => el.classList.remove('bg-secondary-fixed'), 500);
         }
-        
+
         // Mirror extra fields if necessary
         if(id === 'schoolName') {
             const el2 = document.getElementById('preview-schoolName2');
             if(el2) el2.innerText = value;
         }
     }
+
+    // 마법사 단계 간 상태 연결: STEP1에서 고른 서식명을 보여주고, 이전에 이 화면에서
+    // 입력했던 값이 있으면(예: 완료 화면에서 "학교 정보 다시 수정"으로 돌아온 경우) 복원한다.
+    (function () {
+        let wizardState = {};
+        try { wizardState = JSON.parse(sessionStorage.getItem('ef_form_wizard')) || {}; } catch (e) { wizardState = {}; }
+
+        if (wizardState.templateTitle) {
+            document.getElementById('wizardTemplateBadgeText').textContent = '선택한 서식: ' + wizardState.templateTitle;
+            document.getElementById('wizardTemplateBadge').classList.remove('hidden');
+        }
+
+        const fieldIds = { schoolName: 'wizSchoolName', principalName: 'wizPrincipalName', meetingDate: 'wizMeetingDate', meetingPlace: 'wizMeetingPlace', meetingAgenda: 'wizMeetingAgenda' };
+        Object.keys(fieldIds).forEach(function (key) {
+            if (wizardState[key] === undefined) return;
+            const input = document.getElementById(fieldIds[key]);
+            if (input) {
+                input.value = wizardState[key];
+                updatePreview(key, wizardState[key]);
+            }
+        });
+
+        window.saveWizardStateAndContinue = function () {
+            Object.keys(fieldIds).forEach(function (key) {
+                const input = document.getElementById(fieldIds[key]);
+                if (input) wizardState[key] = input.value;
+            });
+            sessionStorage.setItem('ef_form_wizard', JSON.stringify(wizardState));
+            location.href = '서식 자료실_한글파일생성완료.html';
+        };
+    })();
 </script>
 </div>
 </div>

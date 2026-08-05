@@ -215,7 +215,16 @@
     };
 
     closeBtn.addEventListener('click', closeModal);
-    saveBtn.addEventListener('click', closeModal);
+    // 소속(org)/직위(rank) 입력값이 저장되지 않던 버그 수정: 기존에는 이 버튼이 모달을
+    // 닫기만 하고 값을 저장하지 않아, 새로고침하면 입력한 소속/직위가 사라졌음.
+    saveBtn.addEventListener('click', () => {
+        const orgInput = document.getElementById('pmOrgInput');
+        const rankInput = document.getElementById('pmRankInput');
+        localStorage.setItem('org_' + currentUser, orgInput.value.trim());
+        localStorage.setItem('rank_' + currentUser, rankInput.value.trim());
+        showToast('프로필이 저장되었습니다.');
+        closeModal();
+    });
     overlay.addEventListener('click', function(e) {
         if (e.target === overlay) closeModal();
     });

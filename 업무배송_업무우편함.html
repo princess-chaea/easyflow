@@ -427,6 +427,7 @@
 <span class="inline-flex items-center gap-1 px-sm py-1.5 rounded-lg bg-surface-soft text-[13px] text-ink/70"><span class="material-symbols-outlined text-[16px]">attach_file</span><span id="mdFile">—</span></span>
 <span class="inline-flex items-center gap-1 px-sm py-1.5 rounded-lg bg-danger/10 text-danger text-[13px] font-bold"><span class="material-symbols-outlined text-[16px]">event</span><span id="mdDue">—</span></span>
 </div>
+<div class="hidden flex-wrap items-center gap-xs" id="mdLinksWrap"></div>
 </div>
 <div class="flex items-center justify-between gap-sm p-lg border-t border-hairline bg-surface-soft/50">
 <button class="flex items-center gap-xxs px-md py-sm rounded-full text-[14px] font-bold transition-colors hover:bg-white" id="mdBookmarkBtn">
@@ -464,6 +465,10 @@
             '도서관': 'bg-secondary-container/60 text-on-secondary-container',
         };
         const DUE_BADGE = { danger: 'bg-danger/10 text-danger', warning: 'bg-warning/10 text-warning', muted: 'bg-surface-strong text-ink/60' };
+
+        // 업무발송.html에서 담당자가 직접 입력하는 값(title/desc/file/dept)이 이스케이프 없이
+        // innerHTML에 삽입되고 있었음(XSS) - 텍스트/속성값 양쪽에 안전하게 쓰도록 이스케이프.
+        function esc(s) { return String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c])); }
 
         // 업무 배송 담당자가 각 업무 분야 구독자에게 보낸 우편함 데이터 (LocalStorage 연동)
         let MAIL_DATA = JSON.parse(localStorage.getItem('ef_mail_data'));
@@ -578,19 +583,20 @@
             listEl.innerHTML = visible.map(m => {
                 const deptBadge = DEPT_BADGE[m.dept] || 'bg-surface-strong text-ink/70';
                 const titleClass = m.read ? 'text-[16px] font-medium text-ink/80 truncate' : 'text-[16px] font-bold text-ink truncate';
-                return '<div class="mail-item flex items-start gap-md p-lg hover:bg-surface-soft/60 transition-colors cursor-pointer" data-read="' + (m.read ? 'read' : 'unread') + '" data-mail-id="' + m.id + '" data-dept="' + m.dept + '" data-date="' + m.date + '" data-title="' + m.title + '" data-desc="' + m.desc + '" data-file="' + m.file + '" data-due="' + m.due + '">'
+                const linksData = encodeURIComponent(JSON.stringify(m.links || []));
+                return '<div class="mail-item flex items-start gap-md p-lg hover:bg-surface-soft/60 transition-colors cursor-pointer" data-read="' + (m.read ? 'read' : 'unread') + '" data-mail-id="' + esc(m.id) + '" data-dept="' + esc(m.dept) + '" data-date="' + esc(m.date) + '" data-title="' + esc(m.title) + '" data-desc="' + esc(m.desc) + '" data-file="' + esc(m.file) + '" data-due="' + esc(m.due) + '" data-links="' + linksData + '">'
                     + '<span class="mt-1 w-2 h-2 rounded-full shrink-0 ' + (m.read ? 'bg-transparent' : 'bg-primary') + '" title="' + (m.read ? '' : '안 읽음') + '"></span>'
                     + '<div class="flex-1 min-w-0">'
                     + '<div class="flex flex-wrap items-center gap-xs mb-1">'
-                    + '<span class="px-xs py-0.5 rounded-md text-[12px] font-bold ' + deptBadge + '">' + m.dept + '</span>'
-                    + '<span class="px-xs py-0.5 rounded-md text-[12px] font-bold bg-surface-soft text-ink/60">#' + m.category + '</span>'
-                    + '<span class="text-[13px] text-ink/50">' + m.date + ' 발송</span>'
+                    + '<span class="px-xs py-0.5 rounded-md text-[12px] font-bold ' + deptBadge + '">' + esc(m.dept) + '</span>'
+                    + '<span class="px-xs py-0.5 rounded-md text-[12px] font-bold bg-surface-soft text-ink/60">#' + esc(m.category) + '</span>'
+                    + '<span class="text-[13px] text-ink/50">' + esc(m.date) + ' 발송</span>'
                     + '</div>'
-                    + '<p class="' + titleClass + '">' + m.title + '</p>'
-                    + '<p class="text-[13px] text-ink/60 mt-0.5 truncate">' + m.desc + '</p>'
+                    + '<p class="' + titleClass + '">' + esc(m.title) + '</p>'
+                    + '<p class="text-[13px] text-ink/60 mt-0.5 truncate">' + esc(m.desc) + '</p>'
                     + '<div class="flex flex-wrap items-center gap-sm mt-sm">'
-                    + '<span class="inline-flex items-center gap-1 px-sm py-1 rounded-lg bg-surface-soft text-[12px] text-ink/70"><span class="material-symbols-outlined text-[14px]">attach_file</span>' + m.file + '</span>'
-                    + '<span class="inline-flex items-center gap-1 px-sm py-1 rounded-lg ' + DUE_BADGE[m.dueTone] + ' text-[12px] font-bold"><span class="material-symbols-outlined text-[14px]">event</span>' + m.due + '</span>'
+                    + '<span class="inline-flex items-center gap-1 px-sm py-1 rounded-lg bg-surface-soft text-[12px] text-ink/70"><span class="material-symbols-outlined text-[14px]">attach_file</span>' + esc(m.file) + '</span>'
+                    + '<span class="inline-flex items-center gap-1 px-sm py-1 rounded-lg ' + DUE_BADGE[m.dueTone] + ' text-[12px] font-bold"><span class="material-symbols-outlined text-[14px]">event</span>' + esc(m.due) + '</span>'
                     + '</div>'
                     + '</div>'
                     + '<div class="flex items-center gap-xxs shrink-0">'
@@ -662,6 +668,30 @@
             document.getElementById('mdDesc').textContent = item.dataset.desc;
             document.getElementById('mdFile').textContent = item.dataset.file;
             document.getElementById('mdDue').textContent = item.dataset.due;
+
+            const linksWrap = document.getElementById('mdLinksWrap');
+            linksWrap.innerHTML = '';
+            let links = [];
+            try { links = JSON.parse(decodeURIComponent(item.dataset.links || '[]')); } catch (e) { links = []; }
+            // http/https만 실제 링크로 렌더링 - 그 외 스킴(javascript: 등)은 클릭해도 실행되지 않도록 무시
+            links = links.filter(u => { try { return ['http:', 'https:'].includes(new URL(u).protocol); } catch (e) { return false; } });
+            if (links.length) {
+                linksWrap.classList.remove('hidden');
+                linksWrap.classList.add('flex');
+                links.forEach(url => {
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.target = '_blank';
+                    a.rel = 'noopener noreferrer';
+                    a.className = 'inline-flex items-center gap-1 px-sm py-1.5 rounded-lg bg-primary/5 text-primary text-[13px] max-w-[240px] truncate hover:underline';
+                    a.textContent = url;
+                    linksWrap.appendChild(a);
+                });
+            } else {
+                linksWrap.classList.add('hidden');
+                linksWrap.classList.remove('flex');
+            }
+
             syncModalBookmark();
             mailDetailModal.classList.remove('hidden');
             mailDetailModal.classList.add('flex');

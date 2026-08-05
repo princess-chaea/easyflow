@@ -417,7 +417,7 @@
 <span class="material-symbols-outlined text-4xl text-on-primary-container mt-2">description</span>
 </div>
 <div class="flex-1">
-<h3 class="font-title-lg text-title-lg text-on-surface mb-2 break-all">2026_옥계초등학교_학교운영위원회_회의록.hwp</h3>
+<h3 class="font-title-lg text-title-lg text-on-surface mb-2 break-all" data-wizard-filename>2026_옥계초등학교_학교운영위원회_회의록.hwp</h3>
 <div class="flex gap-4 text-on-surface-variant text-sm mb-4">
 <span class="flex items-center gap-1"><span class="material-symbols-outlined text-sm">auto_stories</span> 2 Page</span>
 <span class="flex items-center gap-1"><span class="material-symbols-outlined text-sm">database</span> 124KB</span>
@@ -531,6 +531,20 @@
 </div>
 </footer>
 <script>
+        // 마법사 단계 간 상태 연결: STEP1/STEP2에서 고른 서식명·학교명으로 실제 파일명을 구성.
+        // 상태가 없으면(직접 이 페이지로 들어온 경우) 기존 예시 파일명을 그대로 둔다.
+        (function () {
+            let wizardState = {};
+            try { wizardState = JSON.parse(sessionStorage.getItem('ef_form_wizard')) || {}; } catch (e) { wizardState = {}; }
+            if (wizardState.schoolName && wizardState.templateTitle) {
+                const year = new Date().getFullYear();
+                const fileName = year + '_' + wizardState.schoolName + '_' + wizardState.templateTitle.replace(/\s+/g, '_') + '.hwp';
+                document.querySelectorAll('[data-wizard-filename]').forEach(function (el) {
+                    el.textContent = fileName;
+                });
+            }
+        })();
+
         // Simple micro-interaction for the primary download button
         const downloadBtn = document.querySelector('button.bg-secondary');
         if (downloadBtn) {
