@@ -350,7 +350,7 @@
 <h1 class="text-white font-display-xl text-display-xl tracking-tight leading-tight">이지플로우:<br/>업무 배송과 인생 도서관의 통합 플랫폼</h1>
 <p class="text-surface-variant font-body-md text-body-md max-w-lg">인공지능 기술로 교직원의 행정 업무를 혁신하고, 인생 도서관을 통해 성장의 기회를 제공하는 경북 교육의 스마트 파트너입니다.</p>
 <div class="flex gap-base pt-base">
-<button class="bg-primary text-white px-xl py-sm rounded-full font-button hover:bg-primary-active transition-all flex items-center gap-xs relative overflow-hidden shimmer-effect" onclick="EF_MODAL.alert('개인 맞춤형 화면 구성 기능은 준비 중입니다.')">
+<button class="bg-primary text-white px-xl py-sm rounded-full font-button hover:bg-primary-active transition-all flex items-center gap-xs relative overflow-hidden shimmer-effect" onclick="enterEditModeFromHero()">
                         화면 구성하기 <span class="material-symbols-outlined" data-icon="dashboard_customize">dashboard_customize</span>
 </button>
 <button class="bg-surface-dark-elevated text-white border border-outline px-xl py-sm rounded-full font-button hover:bg-white/10 transition-all" onclick="window.location.href='안내센터_시스템 안내.html'">메뉴얼 보기</button>
@@ -402,39 +402,54 @@
 <img class="w-full h-full object-cover" data-alt="A sophisticated abstract 3D visualization of data streams and neural networks in deep blue and gold." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDRskiqPKpwHwvnkb4-JGlN71N4k_rvKrkgNU41XtIL3JMdv4BJAXoRYR6Esm8lAXfJADZwEh7B0AiNIssPMkS3UUkC00k7H-fXrEIiaC2GjFm-CstIjdJxh4JW85i-2KCSVMxHcnhHVkdfZfPqBEOnKlLPyse1MAPkyA-BV0Lhl8VLvoQdN3firzG8cVdDxpGTOFTlqWuZnE7hUVXENHjofKg5dh8GwJ7DZUKBh4q8dBnL_UeyKBGryLQamoG7cmDbzc-_jBEeTSWP"/>
 </div>
 </section>
-<!-- Main Dashboard -->
+<!-- Main Dashboard: 사용자 맞춤형 위젯 홈 -->
 <section class="max-w-[1600px] mx-auto px-lg py-xl">
-<div class="grid grid-cols-1 lg:grid-cols-12 gap-lg">
-<!-- 업무배송 달력 -->
-<div class="lg:col-span-8 bg-canvas p-xl rounded-xl border border-hairline shadow-sm hover-lift entrance-fade visible" data-entrance-order="1" style="transition-delay: 100ms;">
+<div class="flex flex-wrap items-end justify-between gap-base mb-lg">
+<div>
+<h2 class="font-title-lg text-title-lg">내 홈 화면</h2>
+<p class="text-body-sm text-on-surface-variant mt-xxs">위젯을 추가하거나 순서·크기를 바꿔 나만의 대시보드로 구성해보세요.</p>
+</div>
+<div class="flex items-center gap-xs">
+<button class="hidden px-base py-xs rounded-full border border-primary text-primary text-sm font-bold hover:bg-primary/5 transition-colors items-center gap-xxs" id="btnAddWidget" onclick="openWidgetPicker()">
+<span class="material-symbols-outlined text-[18px]">add</span>위젯 추가
+</button>
+<button class="px-base py-xs rounded-full bg-primary text-white text-sm font-bold hover:bg-primary-active transition-colors flex items-center gap-xxs" id="btnEditMode" onclick="toggleEditMode()">
+<span class="material-symbols-outlined text-[18px]" id="editModeIcon">dashboard_customize</span><span id="editModeLabel">화면 편집</span>
+</button>
+</div>
+</div>
+
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-lg" id="widgetGrid"></div>
+
+<!-- 위젯 콘텐츠 템플릿: JS가 저장된 배치(widgetLayout)에 따라 그리드에 복제해서 넣는다 -->
+<template id="tpl-calendar">
+<div class="bg-canvas p-xl rounded-xl border border-hairline shadow-sm hover-lift h-full">
 <div class="flex justify-between items-center mb-xl">
 <div class="flex items-center gap-base">
-<span class="material-symbols-outlined text-primary" data-icon="local_shipping">local_shipping</span>
+<span class="material-symbols-outlined text-primary">local_shipping</span>
 <h2 class="font-title-lg text-title-lg">이번 주 업무 배송 일정</h2>
 </div>
 <div class="flex gap-xs">
-<button class="p-xs rounded-full hover:bg-surface-strong transition-colors"><span class="material-symbols-outlined" data-icon="chevron_left">chevron_left</span></button>
-<span class="font-body-strong px-base self-center">2024년 5월 3주</span>
-<button class="p-xs rounded-full hover:bg-surface-strong transition-colors"><span class="material-symbols-outlined" data-icon="chevron_right">chevron_right</span></button>
+<button class="p-xs rounded-full hover:bg-surface-strong transition-colors"><span class="material-symbols-outlined">chevron_left</span></button>
+<span class="font-body-strong px-base self-center">2026년 8월 1주</span>
+<button class="p-xs rounded-full hover:bg-surface-strong transition-colors"><span class="material-symbols-outlined">chevron_right</span></button>
 </div>
 </div>
 <div class="grid grid-cols-5 gap-base">
-<!-- Monday -->
 <div class="space-y-base group">
 <div class="text-center pb-base border-b border-hairline group-hover:border-primary transition-colors">
 <span class="text-caption text-on-surface-variant block">월</span>
-<span class="font-title-md">20</span>
+<span class="font-title-md">3</span>
 </div>
 <div class="bg-primary/5 p-sm rounded-xl border-l-4 border-primary hover:bg-primary/10 transition-colors cursor-pointer">
 <span class="text-caption-strong text-primary block">행정실</span>
 <p class="text-body-sm line-clamp-2">급여 작업 마감</p>
 </div>
 </div>
-<!-- Tuesday -->
 <div class="space-y-base group">
 <div class="text-center pb-base border-b border-hairline group-hover:border-primary transition-colors">
 <span class="text-caption text-on-surface-variant block">화</span>
-<span class="font-title-md">21</span>
+<span class="font-title-md">4</span>
 </div>
 <div class="bg-success/5 p-sm rounded-xl border-l-4 border-success hover:bg-success/10 transition-colors cursor-pointer">
 <span class="text-caption-strong text-success block">교무실</span>
@@ -445,32 +460,29 @@
 <p class="text-body-sm line-clamp-2">연수 보고서 제출</p>
 </div>
 </div>
-<!-- Wednesday -->
 <div class="space-y-base group">
 <div class="text-center pb-base border-b border-hairline text-primary">
 <span class="text-caption block">수</span>
-<span class="font-title-md">22</span>
+<span class="font-title-md">5</span>
 </div>
 <div class="bg-surface-container p-sm rounded-xl border border-hairline opacity-60">
 <span class="text-caption-strong block">일정 없음</span>
 </div>
 </div>
-<!-- Thursday -->
 <div class="space-y-base group">
 <div class="text-center pb-base border-b border-hairline group-hover:border-primary transition-colors">
 <span class="text-caption text-on-surface-variant block">목</span>
-<span class="font-title-md">23</span>
+<span class="font-title-md">6</span>
 </div>
 <div class="bg-primary/5 p-sm rounded-xl border-l-4 border-primary hover:bg-primary/10 transition-colors cursor-pointer">
 <span class="text-caption-strong text-primary block">행정실</span>
 <p class="text-body-sm line-clamp-2">지출결의서 정리</p>
 </div>
 </div>
-<!-- Friday -->
 <div class="space-y-base group">
 <div class="text-center pb-base border-b border-hairline group-hover:border-primary transition-colors">
 <span class="text-caption text-on-surface-variant block">금</span>
-<span class="font-title-md">24</span>
+<span class="font-title-md">7</span>
 </div>
 <div class="bg-danger/5 p-sm rounded-xl border-l-4 border-danger hover:bg-danger/10 transition-colors cursor-pointer">
 <span class="text-caption-strong text-danger block">마감</span>
@@ -479,53 +491,59 @@
 </div>
 </div>
 </div>
-<!-- 인생 도서관 (AI 챗봇 & 상담) -->
-<div class="lg:col-span-4 bg-primary text-white p-xl rounded-xl flex flex-col justify-between hover-lift entrance-fade visible" data-entrance-order="2" style="transition-delay: 200ms;">
+</template>
+
+<template id="tpl-library">
+<a href="AI업무어시스턴트_챗봇.html" class="block bg-primary text-white p-xl rounded-xl flex flex-col justify-between hover-lift h-full">
 <div>
 <div class="flex items-center gap-base mb-lg">
-<span class="material-symbols-outlined text-secondary-container animate-bounce" data-icon="auto_stories" style="animation-duration: 3s;">auto_stories</span>
+<span class="material-symbols-outlined text-secondary-container animate-bounce" style="animation-duration: 3s;">auto_stories</span>
 <h2 class="font-title-lg">인생 도서관</h2>
 </div>
 <p class="font-body-md text-primary-fixed leading-relaxed">AI 어시스턴트와 전문 멘토가 함께하는 경북 교육의 통합 지식 허브입니다. 고민 상담부터 전문 지식까지 물어보세요.</p>
 </div>
-<div class="space-y-base mt-xl">
-<button class="w-full bg-white/10 hover:bg-white/20 py-base px-lg rounded-xl text-left flex justify-between items-center transition-all group shadow-sm">
-<span class="">멘토링 상담 예약</span>
-<span class="material-symbols-outlined group-hover:translate-x-1 transition-transform" data-icon="arrow_forward">arrow_forward</span>
-</button>
+<div class="space-y-base mt-xl" onclick="event.preventDefault()">
+<a href="인생도서관_마이페이지.html" class="w-full bg-white/10 hover:bg-white/20 py-base px-lg rounded-xl text-left flex justify-between items-center transition-all group shadow-sm">
+<span>멘토링 상담 예약</span>
+<span class="material-symbols-outlined group-hover:translate-x-1 transition-transform">arrow_forward</span>
+</a>
 <div class="flex items-center gap-base bg-white rounded-full p-xs pl-base shadow-lg overflow-hidden ring-0 focus-within:ring-2 ring-secondary-container transition-all">
-<input class="flex-grow bg-transparent border-none text-on-surface focus:ring-0 text-body-sm" placeholder="AI 사서에게 질문하기" type="text"/>
-<button class="bg-primary p-xs rounded-full text-white hover:bg-primary-active transition-colors"><span class="material-symbols-outlined" data-icon="send">send</span></button>
+<input class="flex-grow bg-transparent border-none text-on-surface focus:ring-0 text-body-sm" placeholder="AI 사서에게 질문하기" type="text" onclick="event.stopPropagation()"/>
+<a href="AI업무어시스턴트_챗봇.html" class="bg-primary p-xs rounded-full text-white hover:bg-primary-active transition-colors shrink-0"><span class="material-symbols-outlined">send</span></a>
 </div>
 </div>
-</div>
-<!-- 한글 파일 뚝딱 -->
-<div class="lg:col-span-5 bg-canvas p-xl rounded-xl border border-hairline shadow-sm relative overflow-hidden hover-lift entrance-fade visible" data-entrance-order="3" style="transition-delay: 300ms;">
+</a>
+</template>
+
+<template id="tpl-hwp">
+<div class="bg-canvas p-xl rounded-xl border border-hairline shadow-sm relative overflow-hidden hover-lift h-full">
 <div class="flex items-center gap-base mb-lg">
-<span class="material-symbols-outlined text-primary" data-icon="auto_fix_high">auto_fix_high</span>
+<span class="material-symbols-outlined text-primary">auto_fix_high</span>
 <h2 class="font-title-lg">한글 파일 '뚝딱'</h2>
 </div>
 <p class="text-body-sm text-on-surface-variant mb-xl">공문 서식을 우리 학교 정보에 맞춰 자동으로 변환해 드립니다.</p>
-<div class="border-2 border-dashed border-outline-variant rounded-xl p-xl text-center bg-surface-soft hover:bg-surface-strong hover:border-primary transition-all cursor-pointer mb-base group">
-<span class="material-symbols-outlined text-primary text-display-sm group-hover:scale-110 transition-transform" data-icon="upload_file">upload_file</span>
+<a href="서식 자료실_한글파일서식선택.html" class="block border-2 border-dashed border-outline-variant rounded-xl p-xl text-center bg-surface-soft hover:bg-surface-strong hover:border-primary transition-all cursor-pointer mb-base group">
+<span class="material-symbols-outlined text-primary text-display-sm group-hover:scale-110 transition-transform">upload_file</span>
 <p class="font-body-strong mt-sm">HWP/HWPX 파일을 드래그하여 업로드</p>
 <p class="text-caption text-muted mt-xxs">우리 학교 버전으로 자동 변환됩니다.</p>
-</div>
+</a>
 <div class="space-y-base">
 <div class="flex justify-between items-center p-sm bg-surface-container rounded-xl hover:bg-surface-container-high transition-colors">
 <div class="flex items-center gap-base">
-<span class="material-symbols-outlined text-success" data-icon="check_circle">check_circle</span>
+<span class="material-symbols-outlined text-success">check_circle</span>
 <span class="text-body-sm">교원 연수 결과 보고서.hwp</span>
 </div>
-<button class="text-primary text-caption-strong hover:underline">다운로드</button>
+<button type="button" class="text-primary text-caption-strong hover:underline">다운로드</button>
 </div>
 </div>
 </div>
-<!-- 서식 자료실 -->
-<div class="lg:col-span-7 bg-canvas p-xl rounded-xl border border-hairline shadow-sm hover-lift entrance-fade visible" data-entrance-order="4" style="transition-delay: 400ms;">
+</template>
+
+<template id="tpl-formArchive">
+<div class="bg-canvas p-xl rounded-xl border border-hairline shadow-sm hover-lift h-full">
 <div class="flex justify-between items-center mb-xl">
 <div class="flex items-center gap-base">
-<span class="material-symbols-outlined text-primary" data-icon="folder_shared">folder_shared</span>
+<span class="material-symbols-outlined text-primary">folder_shared</span>
 <h2 class="font-title-lg">서식 자료실</h2>
 </div>
 <div class="flex gap-xs">
@@ -544,48 +562,79 @@
 </tr>
 </thead>
 <tbody class="divide-y divide-hairline">
-<tr class="hover:bg-surface-soft transition-colors group cursor-pointer entrance-fade visible" data-entrance-order="5" style="transition-delay: 500ms;">
-<td class="px-base py-md text-body-sm font-medium group-hover:text-primary transition-colors">2024년도 하계 교원 연수 운영 계획(안)</td>
+<tr class="hover:bg-surface-soft transition-colors group cursor-pointer">
+<td class="px-base py-md text-body-sm font-medium group-hover:text-primary transition-colors">2026년도 하계 교원 연수 운영 계획(안)</td>
 <td class="px-base py-md"><span class="px-xs py-xxs bg-primary/10 text-primary text-[11px] rounded font-bold">공통서식</span></td>
-<td class="px-base py-md text-right text-caption text-muted font-number-display">2024.05.15</td>
+<td class="px-base py-md text-right text-caption text-muted font-number-display">2026.07.15</td>
 </tr>
-<tr class="hover:bg-surface-soft transition-colors group cursor-pointer entrance-fade visible" data-entrance-order="6" style="transition-delay: 600ms;">
+<tr class="hover:bg-surface-soft transition-colors group cursor-pointer">
 <td class="px-base py-md text-body-sm font-medium group-hover:text-primary transition-colors">초등학교 1인 1스마트기기 관리 지침</td>
 <td class="px-base py-md"><span class="px-xs py-xxs bg-success/10 text-success text-[11px] rounded font-bold">정보화</span></td>
-<td class="px-base py-md text-right text-caption text-muted font-number-display">2024.05.14</td>
+<td class="px-base py-md text-right text-caption text-muted font-number-display">2026.07.14</td>
 </tr>
-<tr class="hover:bg-surface-soft transition-colors group cursor-pointer entrance-fade visible" data-entrance-order="7" style="transition-delay: 700ms;">
+<tr class="hover:bg-surface-soft transition-colors group cursor-pointer">
 <td class="px-base py-md text-body-sm font-medium group-hover:text-primary transition-colors">학교 급식 만족도 조사 설문지 서식</td>
 <td class="px-base py-md"><span class="px-xs py-xxs bg-warning/10 text-warning text-[11px] rounded font-bold">급식/보건</span></td>
-<td class="px-base py-md text-right text-caption text-muted font-number-display">2024.05.12</td>
+<td class="px-base py-md text-right text-caption text-muted font-number-display">2026.07.12</td>
 </tr>
 </tbody>
 </table>
 </div>
 </div>
+</template>
+
+<template id="tpl-checklist">
+<a href="인생도서관_업무체크리스트.html" class="block bg-canvas p-xl rounded-xl border border-hairline shadow-sm hover-lift h-full">
+<div class="flex items-center gap-base mb-lg">
+<span class="material-symbols-outlined text-primary">checklist</span>
+<h2 class="font-title-lg">업무 체크리스트 진행률</h2>
 </div>
+<div data-w="empty" class="hidden">
+<p class="text-body-sm text-on-surface-variant">아직 점검을 시작하지 않았어요.</p>
+<p class="text-caption text-primary font-bold mt-xs">체크리스트 보러 가기 →</p>
+</div>
+<div data-w="stats">
+<div class="flex items-end justify-between mb-xs">
+<span class="text-3xl font-bold text-ink"><span data-w="pct">0%</span></span>
+<span class="text-caption text-muted"><span data-w="done">0</span> / <span data-w="total">0</span> 문항</span>
+</div>
+<div class="h-2 bg-surface-strong rounded-full overflow-hidden">
+<div class="h-full bg-primary transition-all duration-500" data-w="bar" style="width: 0%"></div>
+</div>
+</div>
+</a>
+</template>
+
+<template id="tpl-notices">
+<a href="안내센터_공지사항.html" class="block bg-canvas p-xl rounded-xl border border-hairline shadow-sm hover-lift h-full">
+<div class="flex items-center gap-base mb-lg">
+<span class="material-symbols-outlined text-primary">campaign</span>
+<h2 class="font-title-lg">최근 공지사항</h2>
+</div>
+<div class="space-y-xs" data-w="customList">
+<div class="flex items-center gap-xs py-xs text-sm hover:text-primary transition-colors">
+<span class="shrink-0 px-xs py-0.5 bg-primary-container text-white text-[10px] rounded-full font-bold">Update</span>
+<span class="truncate">2024년 상반기 행정 시스템 고도화 업데이트 안내</span>
+</div>
+<div class="flex items-center gap-xs py-xs text-sm hover:text-primary transition-colors">
+<span class="shrink-0 px-xs py-0.5 bg-surface-container text-on-surface-variant text-[10px] rounded-full font-bold">일반</span>
+<span class="truncate">교육용 AI 보조 도구 사용 가이드라인 배포</span>
+</div>
+</div>
+</a>
+</template>
 </section>
-<!-- Targeted Service Banner -->
-<section class="max-w-[1600px] mx-auto px-lg pb-section entrance-fade visible" data-entrance-order="8" style="transition-delay: 800ms;">
-<div class="ai-gradient p-xxl rounded-xl text-white flex flex-col md:flex-row items-center justify-between gap-xl relative overflow-hidden group shadow-xl hover:shadow-2xl transition-all duration-500">
-<div class="relative z-10 max-w-2xl">
-<span class="inline-block py-xxs px-sm bg-secondary-container text-on-secondary-container rounded-full text-caption-strong font-bold mb-base shadow-sm">Featured Service</span>
-<h2 class="font-display-md text-display-md mb-md">교직원용 업무 콕핏 프리미엄</h2>
-<p class="font-body-md text-primary-fixed/80">맞춤형 행정 비서 서비스로 우리 학교만의 특화된 업무 흐름을 설계하세요. 데이터 기반의 의사결정과 자동화된 서류 처리가 가능해집니다.</p>
-<button class="mt-xl bg-white text-primary px-xxl py-sm rounded-full font-button hover:bg-secondary-fixed hover:scale-105 active:scale-95 transition-all shadow-lg">자세히 알아보기</button>
+
+<!-- 위젯 추가 모달 -->
+<div class="hidden fixed inset-0 z-[100] flex items-center justify-center bg-ink/50 backdrop-blur-sm p-4" id="widgetPickerModal">
+<div class="bg-white rounded-2xl shadow-2xl w-full max-w-lg overflow-hidden">
+<div class="px-lg py-base border-b border-hairline flex justify-between items-center">
+<h3 class="font-bold text-ink text-lg">위젯 추가</h3>
+<button type="button" class="p-xs hover:bg-surface-strong rounded-full transition-colors" onclick="closeWidgetPicker()"><span class="material-symbols-outlined">close</span></button>
 </div>
-<div class="relative z-10">
-<div class="w-48 h-48 rounded-full border-2 border-white/20 flex items-center justify-center animate-pulse-soft">
-<span class="material-symbols-outlined text-[80px] text-secondary-container" data-icon="radar">radar</span>
+<div class="p-lg grid grid-cols-2 gap-sm max-h-[60vh] overflow-y-auto" id="widgetPickerList"></div>
 </div>
 </div>
-<!-- Abstract background shapes -->
-<div class="absolute top-0 left-0 w-full h-full opacity-10">
-<div class="absolute -top-1/2 -left-1/4 w-[600px] h-[600px] bg-white rounded-full blur-[150px] group-hover:scale-110 transition-transform duration-1000"></div>
-<div class="absolute -bottom-1/2 -right-1/4 w-[600px] h-[600px] bg-secondary-container rounded-full blur-[150px] group-hover:scale-110 transition-transform duration-1000"></div>
-</div>
-</div>
-</section>
 </main>
     <!-- Footer -->
 <footer class="w-full mt-section px-lg max-w-[1600px] mx-auto flex flex-col gap-base pb-xl border-t border-hairline pt-xl opacity-60 hover:opacity-100 transition-opacity">
@@ -653,6 +702,238 @@
             el.style.transitionDelay = `${order * 100}ms`;
         });
     });
+</script>
+<script>
+    // ------------------------------------------------------------------
+    // 홈 화면 위젯 커스터마이징: 선택한 위젯을 그리드에 배치하고, 편집 모드에서
+    // 드래그로 순서 변경 / 버튼으로 크기 순환(작게→넓게→전체너비) / 제거할 수 있다.
+    // 배치 상태는 localStorage(계정별)에 저장된다 - 서버 연동 전 프로토타입 단계.
+    // ------------------------------------------------------------------
+    const WIDGET_CATALOG = {
+        calendar: { title: '이번 주 업무 배송 일정', icon: 'local_shipping' },
+        library: { title: '인생 도서관', icon: 'auto_stories' },
+        hwp: { title: "한글 파일 '뚝딱'", icon: 'auto_fix_high' },
+        formArchive: { title: '서식 자료실', icon: 'folder_shared' },
+        checklist: { title: '업무 체크리스트 진행률', icon: 'checklist' },
+        notices: { title: '최근 공지사항', icon: 'campaign' }
+    };
+    const DEFAULT_LAYOUT = [
+        { id: 'calendar', size: 2 }, { id: 'library', size: 1 }, { id: 'hwp', size: 1 },
+        { id: 'formArchive', size: 2 }, { id: 'checklist', size: 1 }, { id: 'notices', size: 1 }
+    ];
+    const SIZE_CYCLE = [1, 2, 4];
+    const SIZE_LABEL = { 1: '작게', 2: '넓게', 4: '전체너비' };
+
+    function sizeClass(size) {
+        if (size === 4) return 'col-span-1 sm:col-span-2 lg:col-span-4';
+        if (size === 2) return 'col-span-1 sm:col-span-2';
+        return 'col-span-1';
+    }
+
+    let widgetLayout = [];
+    let editMode = false;
+    let dragSrcIndex = null;
+
+    function widgetStorageKey() {
+        return 'ef_home_widgets_' + (localStorage.getItem('currentUser') || 'guest');
+    }
+    function loadLayout() {
+        try {
+            const saved = JSON.parse(localStorage.getItem(widgetStorageKey()));
+            if (Array.isArray(saved) && saved.length) return saved.filter(w => WIDGET_CATALOG[w.id]);
+        } catch (e) { /* 저장된 배치가 없거나 손상된 경우 기본 배치 사용 */ }
+        return DEFAULT_LAYOUT.slice();
+    }
+    function saveLayout() {
+        localStorage.setItem(widgetStorageKey(), JSON.stringify(widgetLayout));
+    }
+
+    function escWidgetHtml(s) {
+        const d = document.createElement('div');
+        d.textContent = s;
+        return d.innerHTML;
+    }
+
+    // 업무 체크리스트(인생도서관_업무체크리스트.html)가 저장한 실제 진행률을 그대로 읽어와 보여준다.
+    function getChecklistSummary() {
+        const user = localStorage.getItem('currentUser') || 'guest';
+        const org = localStorage.getItem('org_' + user) || '기본기관';
+        const raw = localStorage.getItem('ef_checklist_progress_' + org);
+        if (!raw) return null;
+        try {
+            const data = JSON.parse(raw);
+            let total = 0, done = 0;
+            ['first', 'second'].forEach(period => {
+                if (!data[period]) return;
+                ['academic', 'finance'].forEach(sect => {
+                    if (!data[period][sect]) return;
+                    Object.keys(data[period][sect]).forEach(catId => {
+                        Object.keys(data[period][sect][catId]).forEach(itemNo => {
+                            total++;
+                            if (data[period][sect][catId][itemNo].result) done++;
+                        });
+                    });
+                });
+            });
+            return total > 0 ? { total, done } : null;
+        } catch (e) { return null; }
+    }
+
+    function renderWidgetContent(id) {
+        const tpl = document.getElementById('tpl-' + id);
+        const frag = tpl.content.cloneNode(true);
+
+        if (id === 'checklist') {
+            const summary = getChecklistSummary();
+            const statsEl = frag.querySelector('[data-w="stats"]');
+            const emptyEl = frag.querySelector('[data-w="empty"]');
+            if (!summary) {
+                if (statsEl) statsEl.classList.add('hidden');
+                if (emptyEl) emptyEl.classList.remove('hidden');
+            } else {
+                const pct = Math.round(summary.done / summary.total * 100);
+                frag.querySelector('[data-w="done"]').textContent = summary.done;
+                frag.querySelector('[data-w="total"]').textContent = summary.total;
+                frag.querySelector('[data-w="pct"]').textContent = pct + '%';
+                frag.querySelector('[data-w="bar"]').style.width = pct + '%';
+            }
+        }
+
+        if (id === 'notices') {
+            const listEl = frag.querySelector('[data-w="customList"]');
+            let custom = [];
+            try { custom = JSON.parse(localStorage.getItem('ef_notices')) || []; } catch (e) { /* no-op */ }
+            custom.slice(-2).reverse().forEach(n => {
+                const a = document.createElement('div');
+                a.className = 'flex items-center gap-xs py-xs text-sm hover:text-primary transition-colors';
+                a.innerHTML = '<span class="shrink-0 px-xs py-0.5 bg-primary-container text-white text-[10px] rounded-full font-bold">New</span><span class="truncate">' + escWidgetHtml(n.title) + '</span>';
+                listEl.prepend(a);
+            });
+        }
+
+        return frag;
+    }
+
+    function renderGrid() {
+        const grid = document.getElementById('widgetGrid');
+        grid.innerHTML = '';
+
+        widgetLayout.forEach((w, idx) => {
+            if (!WIDGET_CATALOG[w.id]) return;
+            const tile = document.createElement('div');
+            tile.className = 'relative ' + sizeClass(w.size);
+            tile.appendChild(renderWidgetContent(w.id));
+
+            if (editMode) {
+                tile.draggable = true;
+                // 위젯 본문이 <a>/<img>인 경우 브라우저가 "링크 드래그"를 자체 우선시켜
+                // 타일 순서 변경 드래그를 가로챌 수 있어 명시적으로 막는다.
+                const contentRoot = tile.querySelector(':scope > *');
+                contentRoot.classList.add('outline', 'outline-2', 'outline-dashed', 'outline-primary/40');
+                contentRoot.querySelectorAll('a, img').forEach(el => { el.draggable = false; });
+                // 편집 모드에서는 위젯 클릭 시 페이지 이동 대신 배치 편집에 집중하도록 링크 이동을 막는다.
+                tile.addEventListener('click', (e) => { if (editMode) e.preventDefault(); }, true);
+
+                const bar = document.createElement('div');
+                bar.className = 'absolute -top-3 right-2 z-10 flex items-center gap-0.5 bg-ink text-white rounded-full shadow-lg p-1';
+                bar.innerHTML =
+                    '<span class="w-7 h-7 flex items-center justify-center cursor-grab" title="드래그해서 순서 변경"><span class="material-symbols-outlined text-[16px]">drag_indicator</span></span>' +
+                    '<button type="button" class="w-7 h-7 flex items-center justify-center rounded-full hover:bg-white/20" title="크기 변경 (현재: ' + SIZE_LABEL[w.size] + ')"><span class="material-symbols-outlined text-[16px]">aspect_ratio</span></button>' +
+                    '<button type="button" class="w-7 h-7 flex items-center justify-center rounded-full hover:bg-danger" title="위젯 제거"><span class="material-symbols-outlined text-[16px]">close</span></button>';
+                const [, resizeBtn, removeBtn] = bar.children;
+                resizeBtn.onclick = (e) => { e.preventDefault(); cycleSize(idx); };
+                removeBtn.onclick = (e) => { e.preventDefault(); removeWidget(idx); };
+                tile.appendChild(bar);
+
+                tile.addEventListener('dragstart', () => { dragSrcIndex = idx; tile.classList.add('opacity-40'); });
+                tile.addEventListener('dragend', () => { tile.classList.remove('opacity-40'); });
+                tile.addEventListener('dragover', (e) => { e.preventDefault(); tile.classList.add('ring-2', 'ring-primary', 'rounded-xl'); });
+                tile.addEventListener('dragleave', () => { tile.classList.remove('ring-2', 'ring-primary', 'rounded-xl'); });
+                tile.addEventListener('drop', (e) => {
+                    e.preventDefault();
+                    tile.classList.remove('ring-2', 'ring-primary', 'rounded-xl');
+                    if (dragSrcIndex === null || dragSrcIndex === idx) return;
+                    const moved = widgetLayout.splice(dragSrcIndex, 1)[0];
+                    widgetLayout.splice(idx, 0, moved);
+                    dragSrcIndex = null;
+                    saveLayout();
+                    renderGrid();
+                });
+            }
+
+            grid.appendChild(tile);
+        });
+
+        if (editMode) {
+            const addTile = document.createElement('button');
+            addTile.type = 'button';
+            addTile.className = 'col-span-1 min-h-[160px] border-2 border-dashed border-outline-variant rounded-xl flex flex-col items-center justify-center gap-xs text-muted hover:text-primary hover:border-primary hover:bg-primary/5 transition-colors';
+            addTile.innerHTML = '<span class="material-symbols-outlined text-3xl">add_circle</span><span class="text-sm font-bold">위젯 추가</span>';
+            addTile.onclick = openWidgetPicker;
+            grid.appendChild(addTile);
+        }
+    }
+
+    function cycleSize(idx) {
+        const cur = widgetLayout[idx].size;
+        widgetLayout[idx].size = SIZE_CYCLE[(SIZE_CYCLE.indexOf(cur) + 1) % SIZE_CYCLE.length];
+        saveLayout();
+        renderGrid();
+    }
+    function removeWidget(idx) {
+        widgetLayout.splice(idx, 1);
+        saveLayout();
+        renderGrid();
+    }
+
+    function toggleEditMode() {
+        editMode = !editMode;
+        document.getElementById('editModeLabel').textContent = editMode ? '편집 완료' : '화면 편집';
+        document.getElementById('editModeIcon').textContent = editMode ? 'check' : 'dashboard_customize';
+        const addBtn = document.getElementById('btnAddWidget');
+        addBtn.classList.toggle('hidden', !editMode);
+        addBtn.classList.toggle('flex', editMode);
+        renderGrid();
+    }
+
+    function enterEditModeFromHero() {
+        if (!editMode) toggleEditMode();
+        document.getElementById('widgetGrid').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    function openWidgetPicker() {
+        const list = document.getElementById('widgetPickerList');
+        list.innerHTML = '';
+        const activeIds = widgetLayout.map(w => w.id);
+        const remaining = Object.keys(WIDGET_CATALOG).filter(id => !activeIds.includes(id));
+
+        if (remaining.length === 0) {
+            list.innerHTML = '<p class="col-span-2 text-sm text-muted text-center py-lg">추가할 수 있는 위젯이 없습니다. 이미 모두 추가되어 있어요.</p>';
+        } else {
+            remaining.forEach(id => {
+                const meta = WIDGET_CATALOG[id];
+                const btn = document.createElement('button');
+                btn.type = 'button';
+                btn.className = 'flex flex-col items-start gap-xs p-base rounded-xl border border-hairline hover:border-primary hover:bg-primary/5 transition-colors text-left';
+                btn.innerHTML = '<span class="material-symbols-outlined text-primary">' + meta.icon + '</span><span class="text-sm font-bold text-ink">' + meta.title + '</span>';
+                btn.onclick = () => addWidget(id);
+                list.appendChild(btn);
+            });
+        }
+        document.getElementById('widgetPickerModal').classList.remove('hidden');
+    }
+    function closeWidgetPicker() {
+        document.getElementById('widgetPickerModal').classList.add('hidden');
+    }
+    function addWidget(id) {
+        widgetLayout.push({ id: id, size: 1 });
+        saveLayout();
+        renderGrid();
+        openWidgetPicker();
+    }
+
+    widgetLayout = loadLayout();
+    renderGrid();
 </script>
 <!-- TODO: 실제 서버 연동 시 이 값들은 localStorage가 아니라 서버(DB)에서 불러오도록 교체해야 함.
      푸터 정보는 서버관리자_푸터관리.html 에서만 수정할 수 있음(브라우저별 임시 저장). -->
