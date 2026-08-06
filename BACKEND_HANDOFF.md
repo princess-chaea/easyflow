@@ -27,7 +27,9 @@ localStorage를 읽고 쓰며 상태가 바뀌는, 진짜 동작하는 흐름**�
 | 역할 추가 신청 → 승인 | 공통_회원가입.html, profile-modal.js, 서버관리자_역할관리.html | `roleRequests`(배열), `grantedRoles_<email>` |
 | 1:1 문의 등록/답변 | 안내센터_1대1문의관리.html, assets/js/inquiries.js | `ef_inquiries` |
 | 멘토링 신청/답변 | 인생도서관_마이페이지.html, 인생도서관_멘토상담함.html, assets/js/mentoring.js | `ef_mentoring` |
-| 화상 상담 예약(슬롯 설정/예약/취소) | 인생도서관_마이페이지.html, 인생도서관_멘토상담함.html, assets/js/mentoring.js | `ef_mentor_slots`, `ef_appointments` |
+| 화상 상담 예약(슬롯 설정/예약/취소, 요일 반복) | 인생도서관_마이페이지.html, 인생도서관_멘토상담함.html, assets/js/mentoring.js | `ef_mentor_slots`, `ef_appointments` |
+| 멘토-업무분야 배정(다중 멘토 라우팅) | 서버관리자_멘토배정관리.html, assets/js/mentoring.js | `ef_mentor_roster` |
+| 상담 일지 작성 + 월별 출력 | 인생도서관_멘토상담함.html, assets/js/mentoring.js | `ef_consult_logs` |
 | 업무 체크리스트 점검 | 인생도서관_업무체크리스트.html | `ef_checklist_progress_<org>` |
 | 공지사항 작성(서버관리자) | 안내센터_공지사항.html | `ef_notices` |
 | 홈 위젯 배치 | index.html | `ef_home_widgets_<email>` |
@@ -249,12 +251,24 @@ localStorage 키 분석을 기반으로 도출한 최소 테이블 목록입니�
 localStorage 데이터를 단 한 줄도 읽지 않고, KPI/차트/최근신청 목록이 전부 하드코딩입니다. 실제로는
 `GET /api/mentoring/stats` 같은 집계 API가 필요합니다.
 
-### 3.5 멘토링에 "담당 멘토 배정" 개념 자체가 없음
+### 3.5 멘토링에 "담당 멘토 배정" 개념 자체가 없음 ✅ 2026-08-06 수정 완료 (다중 멘토 + 카테고리 라우팅)
 `ef_mentoring` 데이터 모델과 `인생도서관_멘토상담함.html`의 조회 로직 모두 특정 멘토에게 상담을 배정하는
-개념이 없습니다 — 로그인한 멘토가 누구든 전체 상담함을 봅니다. ✅ 2026-08-06에 추가된 화상 상담 예약
-기능(`EF_APPOINTMENT`)도 같은 전제 위에 만들어서 슬롯이 멘토별이 아니라 전역 공유입니다. 실서비스라면
-`mentoring_requests`/`mentor_slots`에 `assigned_mentor_id`(또는 카테고리 기반 자동 라우팅 규칙)를
-추가하는 설계 결정이 필요합니다.
+개념이 없었습니다 — 로그인한 멘토가 누구든 전체 상담함을 봤습니다(2026-08-06 화상 상담 예약 기능도 같은
+전제 위에 만들어져 슬롯이 전역 공유였음). 다음과 같이 다중 멘토 모델로 재설계했습니다:
+- `EF_MENTOR_ROSTER`(신규, `ef_mentor_roster`) — 멘토 계정(email)별로 담당 업무분야(30개 태그 중
+  1개 이상)를 배정. 관리는 신규 페이지 `서버관리자_멘토배정관리.html`에서.
+- `공통_로그인.html`의 더미 계정에 멘토 2명(`test6@gbe.kr` 박서연 장학사, `test7@gbe.kr` 김도윤
+  주무관) 추가 — 기존 `test3@gbe.kr`(이민수 수석교사)와 합쳐 총 3명, 각자 다른 카테고리 그룹 담당.
+- `EF_MENTORING`(상담 요청)에 `mentorEmail`/`mentorName` 필드 추가 — 마이페이지에서 멘티가 업무분야를
+  고르면 `EF_MENTOR_ROSTER.mentorsForCategory()`로 담당 멘토를 찾아 그 멘토에게 라우팅(담당 멘토가
+  없으면 신청 자체를 막고 안내). `인생도서관_멘토상담함.html`은 이제 `EF_MENTORING.byMentorEmail(로그인
+  계정)`으로 필터링해서 자기 담당 요청만 봄 — 실제로 test3/test6/test7 세 계정으로 각각 로그인해서
+  서로의 요청이 안 보이는 것을 Playwright로 확인.
+- `EF_APPOINTMENT`(화상 상담 슬롯/예약)에도 `mentorEmail`을 추가해 슬롯이 멘토별로 분리됨
+  (`slots(mentorEmail)`/`openSlots(mentorEmail)` 등).
+실서비스 전환 시 이 구조를 그대로 `mentoring_requests.assigned_mentor_id`/`mentor_slots.mentor_id`
+컬럼으로 옮기면 됩니다. **남은 한계**: 한 카테고리에 멘토가 여럿이면 항상 배열의 첫 번째로만 라우팅(간단한
+로드밸런싱/선택 UI는 없음), 계정은 여전히 로그인 페이지의 고정 더미 6+2명뿐(3.x/1.1 참고).
 
 ---
 
@@ -318,10 +332,16 @@ UI는 카테고리 선택 → 채팅 → AI 응답 흐름을 갖췄지만, **AI 
 토스트는 제거하고 실제 표시로 교체했습니다. ✅ `submitMentorRequest()`가 로그인 사용자와 무관하게
 이름/학교를 하드코딩하던 버그도 2026-08-06에 수정(이제 이메일 아이디 부분과 `org_이메일` 값에서
 파생 — profile-modal.js와 동일한 규칙). ✅ 같은 날 상담 목록 테이블(`renderMyRequests`)이 제목/내용을
-`innerHTML`에 그대로 이어붙이던 저장형 XSS도 `escapeHtml()`로 수정(1.7과 같은 버그 패턴).
+`innerHTML`에 그대로 이어붙이던 저장형 XSS도 `escapeHtml()`로 수정(1.7과 같은 버그 패턴). ✅ 같은 날
+후속 요청으로 (1) 업무분야 선택 시 3.5의 `EF_MENTOR_ROSTER`로 담당 멘토를 찾아 표시하고 그 멘토의
+슬롯만 보여주도록 변경, (2) 상담이 "쪽지 1건-답변 1건"이 아니라 계속 이어지는 대화 스레드
+(`EF_MENTORING.messages[]`)가 되도록 재구성 — 이전엔 마이페이지에 멘토 답변을 보거나 답장할 방법이
+전혀 없었는데, 신규 `#mpThreadModal`(대화 보기)에서 메시지 주고받기 + 파일 첨부(파일명만, 실제 업로드
+없음 — AI챗봇 파일첨부 UI와 같은 수준)가 가능해짐.
 
 **인생도서관_멘토상담함.html**
-멘토 전용 상담 응답함. "월별 상담일지 출력" 모달은 인쇄 레이아웃만 있고 실제 월별 집계 로직 없음.
+멘토 전용 상담 응답함. ✅ "월별 상담일지 출력" 모달은 인쇄 레이아웃만 있고 실제 월별 집계 로직이
+없었으나 2026-08-06에 `EF_CONSULT_LOG` 연동으로 해결됨(하단 설명 참고).
 "상담 가능 시간 설정"(새 모달), 우측 "예약된 상담"/"최근 답변 완료" 카드, 상담 요청 답변 모달 안의
 화상 상담 예약 섹션은 ✅ 2026-08-06에 `EF_APPOINTMENT`/`EF_MENTORING` 실데이터 기반으로 재구현됨(위
 마이페이지 항목 참고). ✅ 같은 날 예약 시 Zoom/Teams/기타 화상회의 플랫폼을 고르고 입장 링크(있으면
@@ -331,8 +351,14 @@ UI는 카테고리 선택 → 채팅 → AI 응답 흐름을 갖췄지만, **AI 
 않음)하고 DOM `.href` 프로퍼티로만 설정, 회의번호/비밀번호는 `textContent`로만 표시해서 멘토가 입력한
 값이 HTML로 해석되지 않게 함. ✅ 상담 요청 테이블/최근 답변 완료 목록도 같은 날 `escapeHtml()`로 XSS
 수정(1.7과 같은 버그 패턴, `renderMentorInbox`/`renderRecentAnswered`). 여전히 진짜 화상회의 서버
-연동(계정 생성, 실시간 참여자 수 등)은 없고 순수 프론트 시뮬레이션이며, 멘토 1인 모델이라 슬롯도 전역
-공유(3.5 참고).
+연동(계정 생성, 실시간 참여자 수 등)은 없고 순수 프론트 시뮬레이션. ✅ 같은 날 3.5에서 멘토 1인
+모델(슬롯 전역 공유)을 다중 멘토 + 카테고리 라우팅으로 교체 — 로그인한 멘토는
+`EF_MENTORING.byMentorEmail()`로 자기 담당 요청만 보고, 슬롯도 `EF_APPOINTMENT.slots(멘토이메일)`로
+분리됨. ✅ 같은 날 "상담 가능 시간 설정" 모달에 요일 반복 등록(`addRecurringSlots` — 요일+시간을
+고르면 앞으로 N주치 날짜를 한 번에 생성) 추가, 답변 모달이 대화 스레드로 바뀌면서 "완료 처리"/"다시
+열기" 토글과 "상담 일지" 작성 폼(`EF_CONSULT_LOG`, 신규)이 추가됨 — 상담 일지는 "월별 상담일지
+출력" 인쇄 모달과 실제로 연동되어(로그인 멘토 + 선택한 달 기준으로 필터링) 더 이상 하드코딩된 3줄이
+아님(작성자 이름도 `EF_MENTOR_ROSTER`에서 가져옴).
 
 **인생도서관_장학사 및 업무담당자 통합 대시보드.html** *(이번 세션에 접근권을 장학사 전용으로 수정)*
 전체가 정적 KPI/차트(총 상담 128건, 처리완료율 92% 등)입니다. 실제 `ef_mentoring`/`ef_inquiries`
@@ -370,10 +396,12 @@ ID/응답시각 미기록 — `answered_by`, `answered_at` 컬럼 추가 필요.
 (`ef_footer_*`, `ef_contact_*`, `ef_dpo_*` — 서버관리자_푸터관리.html에서만 편집 가능, **브라우저별로만
 저장되어 다른 사용자/기기에는 반영 안 됨**). `site_settings` 테이블로 이전 시 전 사용자에게 일관되게 반영.
 
-### 4.6 관리자 (서버관리자 7 + 학교관리자 4)
+### 4.6 관리자 (서버관리자 8 + 학교관리자 4)
 
 **실제 데이터 연동이 있는 것**: 서버관리자_푸터관리.html(완전 동작), 서버관리자_역할관리.html(동작하나
-1.2/1.3의 스키마 정리 필요), 서버관리자_회원관리.html(1.1/1.4의 버그로 사실상 미동작).
+1.2/1.3의 스키마 정리 필요), 서버관리자_회원관리.html(1.1/1.4의 버그로 사실상 미동작),
+서버관리자_멘토배정관리.html *(2026-08-06 신규)*(완전 동작 — `EF_MENTOR_ROSTER`로 멘토 계정별 담당
+업무분야를 배정하고, 마이페이지/멘토상담함이 실제로 이 데이터로 라우팅함. 3.5 참고).
 
 **나머지 8개는 전부 정적 목업**: 서버관리자_대시보드(인프라 현황), RAG데이터관리(문서 업로드는 진행률바만
 가짜로 재생), 리소스 모니터링(CPU/메모리 등 `Math.random()`으로 3초마다 흔들리는 가짜 실시간),
@@ -442,7 +470,7 @@ RAG데이터갱신(업로드 UI조차 없는 완전 빈 페이지), 데이터 �
 | `org_<email>`, `rank_<email>` | 문자열 | profile-modal.js(단, 저장 로직 누락 — 1.9) |
 | `avatar_<email>` | base64 dataURL | profile-modal.js |
 | `ef_inquiries` | 배열 | assets/js/inquiries.js |
-| `ef_mentoring` | 배열 | assets/js/mentoring.js |
+| `ef_mentoring` | 배열 `[{id, email, mentorEmail, mentorName, category, title, status, messages[]}]` | assets/js/mentoring.js (✅ 2026-08-06 "쪽지 1건-답변 1건"→대화 스레드로 재구성, `content`/`answer` 필드는 `messages[]`로 대체됨) |
 | `ef_checklist_progress_<org>` | 중첩 객체(period→sector→category→item) | 인생도서관_업무체크리스트.html |
 | `ef_notices` | 배열 | 안내센터_공지사항.html, _상세.html |
 | `ef_home_widgets_<email>` | 배열 `[{id, size}]` | index.html |
@@ -451,8 +479,10 @@ RAG데이터갱신(업로드 UI조차 없는 완전 빈 페이지), 데이터 �
 | `ef_mailCalendarBookmarks_<user>` | 배열 | 업무배송_업무우편함.html |
 | `ef_events`, `ef_done`, `ef_settings`, `ef_school`, `ef_depts`, `ef_ai_cache`, `ef_sideopen` | 각각 다름 | 업무배송_스마트공문달력.html |
 | `ef_saved_resources` | 배열 | 인생도서관_마이페이지.html |
-| `ef_mentor_slots` | 배열 `[{id, date, time, booked}]` | assets/js/mentoring.js (`EF_APPOINTMENT`, ✅ 2026-08-06 신규) |
-| `ef_appointments` | 배열 `[{id, slotId, requestId, menteeEmail, ...}]` | assets/js/mentoring.js (`EF_APPOINTMENT`, ✅ 2026-08-06 신규, `ef_upcoming_appointments`를 대체) |
+| `ef_mentor_slots` | 배열 `[{id, mentorEmail, date, time, booked}]` | assets/js/mentoring.js (`EF_APPOINTMENT`, ✅ 2026-08-06 신규, 멘토별 분리) |
+| `ef_appointments` | 배열 `[{id, slotId, requestId, mentorEmail, menteeEmail, platform, joinLink, meetingId, meetingPassword, ...}]` | assets/js/mentoring.js (`EF_APPOINTMENT`, ✅ 2026-08-06 신규, `ef_upcoming_appointments`를 대체) |
+| `ef_mentor_roster` | 배열 `[{email, name, categories[]}]` | assets/js/mentoring.js (`EF_MENTOR_ROSTER`, ✅ 2026-08-06 신규), 서버관리자_멘토배정관리.html에서 편집 |
+| `ef_consult_logs` | 배열 `[{id, mentorEmail, requestId, category, date, summary, action, status}]` | assets/js/mentoring.js (`EF_CONSULT_LOG`, ✅ 2026-08-06 신규) |
 | `ef_footer_org`, `ef_footer_address`, `ef_footer_copyright` | 문자열 | 전 페이지 푸터, 서버관리자_푸터관리.html에서 편집 |
 | `ef_contact_dept`, `ef_contact_phone`, `ef_contact_email` | 문자열 | 개인정보처리방침 등, 서버관리자_푸터관리.html에서 편집 |
 | `ef_dpo_name`, `ef_dpo_title`, `ef_dpo_phone` | 문자열 | 개인정보처리방침, 서버관리자_푸터관리.html에서 편집 |

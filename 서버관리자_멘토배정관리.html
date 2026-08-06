@@ -1,10 +1,10 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 
 <html lang="ko">
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>역할 관리 - 이지플로우</title>
+<title>멘토 배정 관리 - 이지플로우</title>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <link rel="preload" as="font" type="font/ttf" href="./font/Hakgyoansim_PosterB.ttf" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
@@ -42,95 +42,6 @@
         body {
             font-family: 'KerisBaeum', sans-serif;
             -webkit-font-smoothing: antialiased;
-        }
-        .glass-card {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-        .ai-gradient {
-            background: linear-gradient(135deg, #003893 0%, #12419b 100%);
-        }
-        .ripple {
-            position: absolute;
-            background: rgba(255, 255, 255, 0.3);
-            border-radius: 50%;
-            transform: scale(0);
-            animation: ripple-animation 0.6s linear;
-            pointer-events: none;
-        }
-        @keyframes ripple-animation {
-            to { transform: scale(4); opacity: 0; }
-        }
-
-        /* Micro-interactions & Animations */
-        @keyframes pulse-soft {
-            0%, 100% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.7; transform: scale(0.95); }
-        }
-        .animate-pulse-soft { animation: pulse-soft 2s infinite ease-in-out; }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-10px); }
-        }
-        .animate-float { animation: float 6s infinite ease-in-out; }
-
-        @keyframes shimmer {
-            0% { transform: translateX(-100%); }
-            100% { transform: translateX(100%); }
-        }
-        .shimmer-effect::after {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-            transform: translateX(-100%);
-            animation: shimmer 3s infinite;
-        }
-
-        .hover-lift {
-            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.4s ease;
-        }
-        .hover-lift:hover {
-            transform: translateY(-8px) scale(1.01);
-            box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
-        }
-
-        .nav-link-underline {
-            position: relative;
-        }
-        .nav-link-underline::after {
-            content: '';
-            position: absolute;
-            bottom: -4px;
-            left: 0;
-            width: 0;
-            height: 2px;
-            background-color: currentColor;
-            transition: width 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-        .nav-link-underline:hover::after {
-            width: 100%;
-        }
-
-        .entrance-fade {
-            opacity: 0;
-            transform: translateY(20px);
-            transition: opacity 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275), transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-        .entrance-fade.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        @media (prefers-reduced-motion: reduce) {
-            * {
-                animation-duration: 0.01ms !important;
-                animation-iteration-count: 1 !important;
-                transition-duration: 0.01ms !important;
-                scroll-behavior: auto !important;
-            }
         }
     </style>
 <script id="tailwind-config">
@@ -249,12 +160,13 @@
         }
       </script>
     <script src="assets/js/auth.js"></script>
+    <script src="assets/js/mentoring.js"></script>
 </head>
 <body class="bg-surface-soft text-on-surface">
 <nav class="fixed top-0 w-full z-50 h-[64px] bg-canvas">
 <div class="max-w-[1600px] w-full mx-auto h-full flex justify-between items-center px-lg">
 <div class="flex items-center gap-[60px]">
-<span class="font-display-sm text-display-sm font-semibold text-primary tracking-tight entrance-fade visible" style="transition-delay: 0ms;"><h1 class="font-display-sm text-display-sm font-semibold text-primary-container" style="--tw-border-spacing-y: 0; --tw-translate-x: 0; --tw-translate-y: 0; --tw-rotate: 0; --tw-skew-x: 0; --tw-skew-y: 0; --tw-scale-x: 1; --tw-scale-y: 1; --tw-pan-x: ; --tw-pan-y: ; --tw-pinch-zoom: ; --tw-scroll-snap-strictness: proximity; --tw-gradient-from-position: ; --tw-gradient-via-position: ; --tw-gradient-to-position: ; --tw-ordinal: ; --tw-slashed-zero: ; --tw-numeric-figure: ; --tw-numeric-spacing: ; --tw-numeric-fraction: ; --tw-ring-inset: ; --tw-ring-offset-width: 0px; --tw-ring-offset-color: #fff; --tw-ring-color: rgb(59 130 246 / 0.5); --tw-ring-offset-shadow: 0 0 #0000; --tw-ring-shadow: 0 0 #0000; --tw-shadow: 0 0 #0000; --tw-shadow-colored: 0 0 #0000; --tw-blur: ; --tw-brightness: ; --tw-contrast: ; --tw-grayscale: ; --tw-hue-rotate: ; --tw-invert: ; --tw-saturate: ; --tw-sepia: ; --tw-drop-shadow: ; --tw-backdrop-blur: ; --tw-backdrop-brightness: ; --tw-backdrop-contrast: ; --tw-backdrop-grayscale: ; --tw-backdrop-hue-rotate: ; --tw-backdrop-invert: ; --tw-backdrop-opacity: ; --tw-backdrop-saturate: ; --tw-backdrop-sepia: ; --tw-contain-size: ; --tw-contain-layout: ; --tw-contain-paint: ; --tw-contain-style: ; font-size: 26px; --tw-text-opacity: 1; color: rgb(0, 56, 147); letter-spacing: normal; white-space: nowrap; line-height: 1.4;">이지플로우 (EasyFlow)</h1></span>
+<span class="font-display-sm text-display-sm font-semibold text-primary tracking-tight"><h1 class="font-display-sm text-display-sm font-semibold text-primary-container" style="font-size: 26px; color: rgb(0, 56, 147); letter-spacing: normal; white-space: nowrap; line-height: 1.4;">이지플로우 (EasyFlow)</h1></span>
 
 <div class="hidden md:flex gap-[80px] group/mega h-[64px] items-center relative">
 <div class="absolute top-[64px] left-1/2 -translate-x-1/2 w-[100vw] bg-white shadow-md border-b border-hairline opacity-0 invisible group-hover/mega:opacity-100 group-hover/mega:visible transition-all duration-200 z-40 h-[290px]"></div>
@@ -354,7 +266,7 @@
 <a class="font-nav-link block px-sm py-sm rounded-lg transition-colors text-[16px] text-on-surface-variant hover:bg-surface hover:text-ink" href="서버관리자_회원관리.html">회원 관리</a>
 </li>
 <li>
-<a class="font-nav-link block px-sm py-sm rounded-lg transition-colors text-[16px] bg-primary text-white font-bold" href="서버관리자_역할관리.html">역할 관리</a>
+<a class="font-nav-link block px-sm py-sm rounded-lg transition-colors text-[16px] text-on-surface-variant hover:bg-surface hover:text-ink" href="서버관리자_역할관리.html">역할 관리</a>
 </li>
 <li>
 <a class="font-nav-link block px-sm py-sm rounded-lg transition-colors text-[16px] text-on-surface-variant hover:bg-surface hover:text-ink" href="서버관리자_RAG데이터관리.html">RAG 데이터 관리</a>
@@ -363,7 +275,7 @@
 <a class="font-nav-link block px-sm py-sm rounded-lg transition-colors text-[16px] text-on-surface-variant hover:bg-surface hover:text-ink" href="서버관리자_푸터관리.html">푸터 관리</a>
 </li>
 <li>
-<a class="font-nav-link block px-sm py-sm rounded-lg transition-colors text-[16px] text-on-surface-variant hover:bg-surface hover:text-ink" href="서버관리자_멘토배정관리.html">멘토 배정 관리</a>
+<a class="font-nav-link block px-sm py-sm rounded-lg transition-colors text-[16px] bg-primary text-white font-bold" href="서버관리자_멘토배정관리.html">멘토 배정 관리</a>
 </li>
 </ul>
 </aside>
@@ -373,217 +285,84 @@
 <!-- Header Section -->
 <section class="mt-xl mb-lg flex flex-col md:flex-row md:items-end justify-between gap-base">
 <div>
-<h1 class="text-[28px] font-bold text-ink mb-xs">역할 관리</h1>
-<p class="text-[15px] text-ink/70">사용자들이 신청한 권한(역할)을 일괄 승인하거나 반려할 수 있습니다.</p>
+<h1 class="text-[28px] font-bold text-ink mb-xs">멘토 배정 관리</h1>
+<p class="text-[15px] text-ink/70">인생 도서관 멘토별로 담당할 업무 분야(사업)를 배정합니다. 배정된 분야로 상담 신청이 자동으로 라우팅됩니다.</p>
 </div>
 <div class="flex gap-sm">
 <div class="bg-surface-container-low px-base py-sm rounded-lg flex items-center gap-sm">
-<span class="font-caption text-caption text-muted">전체 사용자</span>
-<span class="font-title-md text-title-md text-primary font-number-display">1,248</span>
+<span class="font-caption text-caption text-muted">배정된 멘토</span>
+<span class="font-title-md text-title-md text-primary font-number-display" id="rosterStatMentors">0</span>
 </div>
 <div class="bg-primary-container px-base py-sm rounded-lg flex items-center gap-sm">
-<span class="font-caption text-caption text-primary-fixed">관리자 수</span>
-<span class="font-title-md text-title-md text-on-primary-container font-number-display">12</span>
+<span class="font-caption text-caption text-primary-fixed">미배정 분야</span>
+<span class="font-title-md text-title-md text-on-primary-container font-number-display" id="rosterStatUnassigned">0</span>
 </div>
 </div>
 </section>
 
-<!-- Role Management Controls -->
 <div class="flex items-center justify-between mb-4 mt-8">
     <div class="flex gap-2">
-        <button id="bulkApproveBtn" class="px-4 py-2 bg-green-600 text-white font-bold rounded-lg text-[14px] shadow-sm hover:bg-green-700 transition-colors">일괄 승인</button>
-        <button id="bulkRejectBtn" class="px-4 py-2 bg-red-600 text-white font-bold rounded-lg text-[14px] shadow-sm hover:bg-red-700 transition-colors">일괄 반려</button>
+        <button id="addMentorBtn" class="px-4 py-2 bg-primary text-white font-bold rounded-lg text-[14px] shadow-sm hover:bg-primary-active transition-colors flex items-center gap-1">
+            <span class="material-symbols-outlined text-[18px]">person_add</span> 멘토 배정 추가
+        </button>
     </div>
 </div>
 
-<!-- Table -->
-<div class="border border-gray-200 rounded-2xl overflow-hidden bg-white shadow-sm mb-12">
+<!-- Roster Table -->
+<div class="border border-gray-200 rounded-2xl overflow-hidden bg-white shadow-sm mb-8">
     <table class="w-full text-left border-collapse">
         <thead>
             <tr class="bg-surface-soft border-b border-gray-200">
-                <th class="p-4 text-[14px] font-bold text-ink/70 w-[50px] text-center">
-                    <input type="checkbox" id="selectAllCheckbox" class="w-4 h-4 cursor-pointer accent-primary">
-                </th>
-                <th class="p-4 text-[14px] font-bold text-ink/70 text-center">아이디 (이메일)</th>
-                <th class="p-4 text-[14px] font-bold text-ink/70 text-center">신청 권한</th>
-                <th class="p-4 text-[14px] font-bold text-ink/70 text-center">상태</th>
-                <th class="p-4 text-[14px] font-bold text-ink/70 text-center">작업</th>
+                <th class="p-4 text-[14px] font-bold text-ink/70">멘토</th>
+                <th class="p-4 text-[14px] font-bold text-ink/70">담당 업무 분야</th>
+                <th class="p-4 text-[14px] font-bold text-ink/70 text-center w-[140px]">작업</th>
             </tr>
         </thead>
-        <tbody id="roleTableBody" class="divide-y divide-gray-100">
+        <tbody id="rosterTableBody" class="divide-y divide-gray-100">
             <!-- JS injected rows -->
         </tbody>
     </table>
 </div>
 
-<script>
-    document.addEventListener('DOMContentLoaded', () => {
-        let pendingRequests = JSON.parse(localStorage.getItem('roleRequests')) || [];
-        const tbody = document.getElementById('roleTableBody');
-        const selectAll = document.getElementById('selectAllCheckbox');
-        const bulkApproveBtn = document.getElementById('bulkApproveBtn');
-        const bulkRejectBtn = document.getElementById('bulkRejectBtn');
-        
-        const renderTable = () => {
-            tbody.innerHTML = '';
-            if(pendingRequests.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="5" class="p-8 text-center text-ink/50 text-[14px]">현재 대기 중인 권한 요청이 없습니다.</td></tr>';
-                return;
-            }
-            
-            pendingRequests.forEach((req, idx) => {
-                const tr = document.createElement('tr');
-                tr.className = 'hover:bg-gray-50 transition-colors';
-                tr.innerHTML = `
-                    <td class="p-4 text-center">
-                        <input type="checkbox" class="row-checkbox w-4 h-4 cursor-pointer accent-primary" data-index="${idx}">
-                    </td>
-                    <td class="p-4 text-[15px] font-bold text-ink text-center">${req.email}</td>
-                    <td class="p-4 text-[14px] text-ink/70 text-center"><span class="bg-blue-100 text-blue-700 px-3 py-1 rounded-full font-bold">${req.requestedRole}</span></td>
-                    <td class="p-4 text-center"><span class="text-orange-600 font-bold text-[13px] bg-orange-100 px-2 py-1 rounded-md">대기 중</span></td>
-                    <td class="p-4 flex gap-2 justify-center">
-                        <button class="px-3 py-1.5 bg-green-500 text-white font-bold rounded-lg text-[13px] hover:bg-green-600 transition-colors btn-approve" data-index="${idx}">승인</button>
-                        <button class="px-3 py-1.5 bg-red-500 text-white font-bold rounded-lg text-[13px] hover:bg-red-600 transition-colors btn-reject" data-index="${idx}">반려</button>
-                    </td>
-                `;
-                tbody.appendChild(tr);
-            });
-        };
-        
-        renderTable();
-        
-        const showToast = (message) => {
-            const toast = document.createElement('div');
-            toast.className = 'fixed bottom-10 left-1/2 transform -translate-x-1/2 px-6 py-3 rounded-xl shadow-lg bg-blue-600 text-white font-bold text-[15px] z-[10000] transition-all duration-300';
-            toast.style.opacity = '0';
-            toast.style.transform = 'translate(-50%, 20px)';
-            toast.innerText = message;
-            document.body.appendChild(toast);
-            requestAnimationFrame(() => { toast.style.opacity = '1'; toast.style.transform = 'translate(-50%, 0)'; });
-            setTimeout(() => { toast.style.opacity = '0'; toast.style.transform = 'translate(-50%, -20px)'; setTimeout(() => toast.remove(), 300); }, 3000);
-        };
-        
-        const approveRole = (index) => {
-            const req = pendingRequests[index];
-            let userGrantedRoles = JSON.parse(localStorage.getItem(`grantedRoles_${req.email}`)) || [];
-            if (userGrantedRoles.length === 0) {
-                let r = '교직원'; // Changed from 일반 교원 to 교사 based on user request
-                if (req.email === 'test@gbe.kr') r = '서버 관리자';
-                else if (req.email === 'test1@gbe.kr') r = '학교 관리자';
-                else if (req.email === 'test2@gbe.kr') r = '업무배송 담당자';
-                else if (req.email === 'test3@gbe.kr') r = '멘토';
-                else if (req.email === 'test4@gbe.kr') r = '장학사';
-                userGrantedRoles.push(r);
-            }
-            if (!userGrantedRoles.includes(req.requestedRole)) {
-                userGrantedRoles.push(req.requestedRole);
-                localStorage.setItem(`grantedRoles_${req.email}`, JSON.stringify(userGrantedRoles));
-            }
-        };
-        
-        tbody.addEventListener('click', (e) => {
-            if(e.target.classList.contains('btn-approve')) {
-                const idx = e.target.getAttribute('data-index');
-                approveRole(idx);
-                pendingRequests.splice(idx, 1);
-                localStorage.setItem('roleRequests', JSON.stringify(pendingRequests));
-                renderTable();
-                showToast('승인되었습니다.');
-            } else if(e.target.classList.contains('btn-reject')) {
-                const idx = e.target.getAttribute('data-index');
-                pendingRequests.splice(idx, 1);
-                localStorage.setItem('roleRequests', JSON.stringify(pendingRequests));
-                renderTable();
-                showToast('반려되었습니다.');
-            }
-        });
-        
-        selectAll.addEventListener('change', (e) => {
-            document.querySelectorAll('.row-checkbox').forEach(cb => cb.checked = e.target.checked);
-        });
-        
-        const getSelectedIndices = () => {
-            return Array.from(document.querySelectorAll('.row-checkbox:checked')).map(cb => parseInt(cb.getAttribute('data-index'))).sort((a,b)=>b-a);
-        };
-        
-        bulkApproveBtn.addEventListener('click', () => {
-            const indices = getSelectedIndices();
-            if(indices.length === 0) return showToast('선택된 항목이 없습니다.');
-            indices.forEach(idx => approveRole(idx));
-            indices.forEach(idx => pendingRequests.splice(idx, 1));
-            localStorage.setItem('roleRequests', JSON.stringify(pendingRequests));
-            selectAll.checked = false;
-            renderTable();
-            showToast(`${indices.length}건이 일괄 승인되었습니다.`);
-        });
-        
-        bulkRejectBtn.addEventListener('click', () => {
-            const indices = getSelectedIndices();
-            if(indices.length === 0) return showToast('선택된 항목이 없습니다.');
-            indices.forEach(idx => pendingRequests.splice(idx, 1));
-            localStorage.setItem('roleRequests', JSON.stringify(pendingRequests));
-            selectAll.checked = false;
-            renderTable();
-            showToast(`${indices.length}건이 일괄 반려되었습니다.`);
-        });
-    });
-</script>
+<!-- Unassigned categories notice -->
+<div class="border border-warning/30 bg-warning/5 rounded-2xl p-lg mb-12" id="unassignedBox">
+    <h3 class="font-title-sm text-title-sm text-ink mb-xs flex items-center gap-1"><span class="material-symbols-outlined text-warning">warning</span> 담당 멘토가 없는 업무 분야</h3>
+    <p class="text-[13px] text-ink/60 mb-sm">아래 분야로 상담이 신청되면 배정된 멘토가 없어 신청이 접수되지 않습니다.</p>
+    <div class="flex flex-wrap gap-xs" id="unassignedTagList"></div>
+</div>
+
+</div>
+</div>
 </main>
-<!-- Role Management Modal -->
-<div class="hidden fixed inset-0 z-[100] flex items-center justify-center p-base" id="role-modal">
-<div class="modal-overlay absolute inset-0" onclick="closeModal()"></div>
-<div class="bg-canvas w-full max-w-md rounded-2xl shadow-xl z-10 overflow-hidden transform transition-all scale-95 opacity-0 duration-200" id="modal-content">
-<div class="px-lg py-base border-b border-hairline flex justify-between items-center bg-surface-soft">
-<h3 class="font-title-md text-title-md text-primary">권한 설정 관리</h3>
-<button class="text-muted hover:text-on-surface" onclick="closeModal()">
-<span class="material-symbols-outlined">close</span>
-</button>
+
+<!-- 멘토 배정 추가/수정 모달 -->
+<div class="hidden opacity-0 fixed inset-0 z-[100] flex items-center justify-center bg-ink/50 backdrop-blur-sm transition-opacity duration-300" id="mentorRosterModal">
+<div class="bg-white w-full max-w-lg mx-sm rounded-2xl overflow-hidden shadow-2xl max-h-[85vh] flex flex-col">
+<div class="px-lg py-base border-b border-hairline flex justify-between items-center">
+<h3 class="text-title-sm font-bold text-ink flex items-center gap-xs" id="rosterModalTitle"><span class="material-symbols-outlined text-primary">person_add</span>멘토 배정 추가</h3>
+<button class="p-xs hover:bg-surface-strong rounded-full transition-colors text-on-surface-variant" onclick="closeMentorRosterModal()"><span class="material-symbols-outlined">close</span></button>
 </div>
-<div class="p-lg">
-<div class="flex items-center gap-base mb-xl">
-<div class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center text-primary text-xl font-bold" id="modal-user-initial">김</div>
+<div class="p-lg overflow-y-auto flex flex-col gap-md">
 <div>
-<div class="font-title-md text-title-md" id="modal-user-name">김철수</div>
-<div class="font-caption text-caption text-muted" id="modal-user-current-role">현재 권한: 서버 관리자
-                        </div>
+<label class="block text-[13px] font-bold text-ink mb-xs" for="rosterEmailInput">멘토 계정(이메일) <span class="text-error">*</span></label>
+<input class="w-full border border-gray-300 rounded-xl px-md py-sm text-[14px] focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors" id="rosterEmailInput" placeholder="example@gbe.kr" type="email">
+</div>
+<div>
+<label class="block text-[13px] font-bold text-ink mb-xs" for="rosterNameInput">이름 및 직함</label>
+<input class="w-full border border-gray-300 rounded-xl px-md py-sm text-[14px] focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors" id="rosterNameInput" placeholder="예) 이민수 수석교사" type="text">
+</div>
+<div>
+<label class="block text-[13px] font-bold text-ink mb-xs">담당 업무 분야 <span class="text-error">*</span> <span class="font-normal text-[12px] text-ink/50">(초등 기준, 1개 이상 선택)</span></label>
+<div class="flex flex-wrap gap-xxs" id="rosterCategoryList"></div>
 </div>
 </div>
-<div class="space-y-base">
-<label class="block">
-<span class="font-caption-strong text-caption-strong text-muted block mb-xs">변경할 권한 선택</span>
-<div class="space-y-sm">
-<label class="flex items-center p-base border border-hairline rounded-lg cursor-pointer hover:border-primary/50 transition-colors bg-surface-soft/50">
-<input class="w-4 h-4 text-primary focus:ring-primary" name="role" type="radio" value="admin"/>
-<div class="ml-base">
-<div class="font-body-strong text-body-strong text-on-surface">서버 관리자</div>
-<div class="font-caption text-caption text-muted">시스템 전반의 모든 기능 제어 권한</div>
-</div>
-</label>
-<label class="flex items-center p-base border border-hairline rounded-lg cursor-pointer hover:border-primary/50 transition-colors">
-<input class="w-4 h-4 text-primary focus:ring-primary" name="role" type="radio" value="school"/>
-<div class="ml-base">
-<div class="font-body-strong text-body-strong text-on-surface">학교 관리자</div>
-<div class="font-caption text-caption text-muted">소속 학교의 교사 및 데이터 관리 권한</div>
-</div>
-</label>
-<label class="flex items-center p-base border border-hairline rounded-lg cursor-pointer hover:border-primary/50 transition-colors">
-<input class="w-4 h-4 text-primary focus:ring-primary" name="role" type="radio" value="teacher"/>
-<div class="ml-base">
-<div class="font-body-strong text-body-strong text-on-surface">교사</div>
-<div class="font-caption text-caption text-muted">표준 서비스 및 AI 비서 기능 활용 권한</div>
-</div>
-</label>
-</div>
-</label>
-</div>
-<div class="mt-xl pt-lg border-t border-hairline flex gap-base">
-<button class="flex-1 px-base py-sm border border-outline-variant rounded-full font-button text-on-surface hover:bg-surface-soft transition-colors" onclick="closeModal()">취소</button>
-<button class="flex-1 px-base py-sm bg-primary text-white rounded-full font-button hover:bg-primary-active transition-colors shadow-sm">변경
-                        사항 저장</button>
+<div class="px-lg py-base bg-surface-soft flex justify-end gap-sm">
+<button class="px-lg py-sm rounded-full font-bold text-[14px] bg-primary text-white hover:bg-primary-active transition-colors" onclick="saveMentorRoster()">저장</button>
+<button class="px-lg py-sm rounded-full font-bold text-[14px] text-ink/70 hover:bg-surface-strong transition-colors" onclick="closeMentorRosterModal()">취소</button>
 </div>
 </div>
 </div>
-</div>
+
     <!-- Footer -->
 <footer class="w-full mt-section px-lg max-w-[1600px] mx-auto flex flex-col gap-base pb-xl border-t border-hairline pt-xl opacity-60 hover:opacity-100 transition-opacity">
 <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-base">
@@ -601,41 +380,134 @@
 </div>
 </footer>
 <script>
-        function openModal(name, role) {
-            const modal = document.getElementById('role-modal');
-            const content = document.getElementById('modal-content');
+    // 초등 기준 업무 분야 태그 (30종) — 업무배송_업무발송.html/인생도서관_마이페이지.html과 동일
+    const TASK_CATEGORY_TAGS = [
+        '교무', '학적', '연구', '학력', '학생부',
+        '인성', '진로', '민주', '생활', '생명',
+        '자치', '복지', '늘봄', '다문화', '체육',
+        '안전', '체험', '정보', '특수', '과학',
+        '영재', '환경', '문화예술', '학부모', '보건',
+        '영양', '상담', '독서', '국제', '영어'
+    ];
+    let rosterSelectedCategories = [];
+    let rosterEditingEmail = null; // null이면 신규 추가, 값이 있으면 그 이메일의 배정을 수정
 
-            document.getElementById('modal-user-name').innerText = name;
-            document.getElementById('modal-user-initial').innerText = name.charAt(0);
-            document.getElementById('modal-user-current-role').innerText = `현재 권한: ${role}`;
+    function escapeHtml(str) {
+        const div = document.createElement('div');
+        div.textContent = str == null ? '' : str;
+        return div.innerHTML;
+    }
 
-            modal.classList.remove('hidden');
-            setTimeout(() => {
-                content.classList.remove('scale-95', 'opacity-0');
-                content.classList.add('scale-100', 'opacity-100');
-            }, 10);
-        }
-
-        function closeModal() {
-            const modal = document.getElementById('role-modal');
-            const content = document.getElementById('modal-content');
-
-            content.classList.add('scale-95', 'opacity-0');
-            content.classList.remove('scale-100', 'opacity-100');
-
-            setTimeout(() => {
-                modal.classList.add('hidden');
-            }, 200);
-        }
-
-        // Apply staggering animations to table rows on load
-        document.addEventListener('DOMContentLoaded', () => {
-            const rows = document.querySelectorAll('.stagger-in');
-            rows.forEach((row, index) => {
-                row.style.animationDelay = `${index * 0.05}s`;
+    (function renderCategoryPicker() {
+        const wrap = document.getElementById('rosterCategoryList');
+        TASK_CATEGORY_TAGS.forEach(tag => {
+            const btn = document.createElement('button');
+            btn.type = 'button';
+            btn.className = 'roster-cat-btn px-sm py-[3px] rounded-full border border-hairline text-caption text-body hover:border-primary hover:text-primary transition-colors';
+            btn.textContent = tag;
+            btn.addEventListener('click', () => {
+                const idx = rosterSelectedCategories.indexOf(tag);
+                if (idx === -1) rosterSelectedCategories.push(tag);
+                else rosterSelectedCategories.splice(idx, 1);
+                btn.classList.toggle('bg-primary', rosterSelectedCategories.includes(tag));
+                btn.classList.toggle('text-white', rosterSelectedCategories.includes(tag));
+                btn.classList.toggle('border-primary', rosterSelectedCategories.includes(tag));
             });
+            wrap.appendChild(btn);
         });
-    </script>
+    })();
+
+    function renderRosterTable() {
+        const roster = EF_MENTOR_ROSTER.all();
+        document.getElementById('rosterStatMentors').textContent = roster.length;
+
+        const tbody = document.getElementById('rosterTableBody');
+        if (!roster.length) {
+            tbody.innerHTML = '<tr><td colspan="3" class="p-8 text-center text-ink/50 text-[14px]">배정된 멘토가 없습니다.</td></tr>';
+        } else {
+            tbody.innerHTML = roster.map((m, idx) => {
+                const tags = m.categories.map(c => '<span class="px-sm py-[2px] rounded-full text-[12px] font-bold bg-primary-fixed text-on-primary-fixed-variant">' + escapeHtml(c) + '</span>').join(' ');
+                return '<tr class="hover:bg-gray-50 transition-colors">'
+                    + '<td class="p-4"><div class="flex flex-col"><span class="font-bold text-[15px] text-ink">' + escapeHtml(m.name) + '</span><span class="text-[13px] text-ink/50">' + escapeHtml(m.email) + '</span></div></td>'
+                    + '<td class="p-4"><div class="flex flex-wrap gap-1">' + (tags || '<span class="text-[13px] text-ink/40">없음</span>') + '</div></td>'
+                    + '<td class="p-4"><div class="flex gap-2 justify-center">'
+                    // 이메일 값을 onclick 문자열에 직접 이어붙이면 안(admin이 입력한 값에 "나 '가 있으면
+                    // 속성/문자열을 탈출할 수 있음) — 대신 숫자 인덱스만 넘기고 실제 이메일은 배열에서 조회.
+                    + '<button class="px-3 py-1.5 bg-surface-strong text-ink font-bold rounded-lg text-[13px] hover:bg-surface-variant transition-colors" onclick="openMentorRosterModalAt(' + idx + ')">수정</button>'
+                    + '<button class="px-3 py-1.5 bg-red-500 text-white font-bold rounded-lg text-[13px] hover:bg-red-600 transition-colors" onclick="deleteMentorRosterAt(' + idx + ')">삭제</button>'
+                    + '</div></td>'
+                    + '</tr>';
+            }).join('');
+        }
+
+        const assignedTags = new Set();
+        roster.forEach(m => m.categories.forEach(c => assignedTags.add(c)));
+        const unassigned = TASK_CATEGORY_TAGS.filter(t => !assignedTags.has(t));
+        document.getElementById('rosterStatUnassigned').textContent = unassigned.length;
+        const unassignedBox = document.getElementById('unassignedBox');
+        const unassignedList = document.getElementById('unassignedTagList');
+        if (!unassigned.length) {
+            unassignedBox.classList.add('hidden');
+        } else {
+            unassignedBox.classList.remove('hidden');
+            unassignedList.innerHTML = unassigned.map(t => '<span class="px-sm py-[3px] rounded-full text-[12px] font-bold bg-warning/10 text-warning border border-warning/30">' + escapeHtml(t) + '</span>').join('');
+        }
+    }
+
+    function openMentorRosterModal(email) {
+        rosterEditingEmail = email || null;
+        const existing = email ? EF_MENTOR_ROSTER.byEmail(email) : null;
+        document.getElementById('rosterModalTitle').textContent = existing ? '멘토 배정 수정' : '멘토 배정 추가';
+        document.getElementById('rosterEmailInput').value = existing ? existing.email : '';
+        document.getElementById('rosterEmailInput').disabled = !!existing; // 이메일은 식별자라 수정 시 변경 불가
+        document.getElementById('rosterNameInput').value = existing ? existing.name : '';
+        rosterSelectedCategories = existing ? existing.categories.slice() : [];
+        document.querySelectorAll('.roster-cat-btn').forEach(b => {
+            const active = rosterSelectedCategories.includes(b.textContent);
+            b.classList.toggle('bg-primary', active);
+            b.classList.toggle('text-white', active);
+            b.classList.toggle('border-primary', active);
+        });
+        const modal = document.getElementById('mentorRosterModal');
+        modal.classList.remove('hidden');
+        setTimeout(() => modal.classList.remove('opacity-0'), 10);
+    }
+    function closeMentorRosterModal() {
+        const modal = document.getElementById('mentorRosterModal');
+        modal.classList.add('opacity-0');
+        setTimeout(() => modal.classList.add('hidden'), 300);
+        document.getElementById('rosterEmailInput').disabled = false;
+    }
+    function saveMentorRoster() {
+        const email = document.getElementById('rosterEmailInput').value.trim();
+        const name = document.getElementById('rosterNameInput').value.trim();
+        if (!email || !rosterSelectedCategories.length) {
+            EF_MODAL.alert('멘토 계정(이메일)과 담당 업무 분야를 최소 1개 이상 선택해주세요.');
+            return;
+        }
+        EF_MENTOR_ROSTER.setAssignment(email, name, rosterSelectedCategories.slice());
+        renderRosterTable();
+        closeMentorRosterModal();
+    }
+    window.deleteMentorRoster = function (email) {
+        EF_MODAL.confirm('이 멘토의 배정을 삭제하시겠습니까? 이미 배정된 상담 요청은 그대로 유지됩니다.', { confirmLabel: '삭제', danger: true }).then(ok => {
+            if (!ok) return;
+            EF_MENTOR_ROSTER.remove(email);
+            renderRosterTable();
+        });
+    };
+    window.openMentorRosterModalAt = function (idx) {
+        const m = EF_MENTOR_ROSTER.all()[idx];
+        openMentorRosterModal(m ? m.email : null);
+    };
+    window.deleteMentorRosterAt = function (idx) {
+        const m = EF_MENTOR_ROSTER.all()[idx];
+        if (m) deleteMentorRoster(m.email);
+    };
+
+    document.getElementById('addMentorBtn').addEventListener('click', () => openMentorRosterModal(null));
+    renderRosterTable();
+</script>
 <!-- TODO: 실제 서버 연동 시 이 값들은 localStorage가 아니라 서버(DB)에서 불러오도록 교체해야 함.
      푸터 정보는 서버관리자_푸터관리.html 에서만 수정할 수 있음(브라우저별 임시 저장). -->
 <script>

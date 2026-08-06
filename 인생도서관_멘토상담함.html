@@ -310,7 +310,7 @@
                     <h1 class="text-[28px] font-bold text-ink">멘토 상담함</h1>
                     <span class="px-sm py-xxs bg-primary-fixed text-on-primary-fixed text-[12px] font-bold rounded-full">멘토</span>
                 </div>
-                <p class="text-[15px] text-ink/70">이민수 수석교사 · 학교 현장 선생님들이 보내온 상담 요청을 확인하고 답변하세요.</p>
+                <p class="text-[15px] text-ink/70"><span id="mtMentorName">담당 멘토</span> · 학교 현장 선생님들이 보내온 상담 요청을 확인하고 답변하세요.</p>
             </div>
             <div class="flex items-center gap-xs">
                 <button onclick="openSlotModal()"
@@ -335,12 +335,12 @@
             </div>
             <div class="bg-white p-lg rounded-xxl border border-hairline flex flex-col gap-sm bento-card shadow-sm">
                 <div class="flex items-center justify-between">
-                    <span class="font-caption-strong text-caption-strong text-muted uppercase tracking-wider">답변
-                        대기</span>
+                    <span class="font-caption-strong text-caption-strong text-muted uppercase tracking-wider">진행
+                        중</span>
                     <span class="material-symbols-outlined text-primary" data-icon="pending">pending</span>
                 </div>
                 <div class="flex items-baseline gap-xs">
-                    <span class="font-number-display text-display-md text-primary" id="mtStatPending">0</span>
+                    <span class="font-number-display text-display-md text-primary" id="mtStatOngoing">0</span>
                     <span class="font-body-sm text-body-sm text-muted">건</span>
                 </div>
             </div>
@@ -401,7 +401,7 @@
                 <!-- Recently Answered -->
                 <section class="bg-white p-xl rounded-xxl border border-hairline shadow-sm">
                     <div class="flex items-center justify-between mb-lg">
-                        <h2 class="font-title-md text-title-md text-on-surface">최근 답변 완료</h2>
+                        <h2 class="font-title-md text-title-md text-on-surface">최근 완료된 상담</h2>
                         <button class="p-xxs hover:bg-surface-soft rounded-full">
                             <span class="material-symbols-outlined text-muted" data-icon="more_vert">more_vert</span>
                         </button>
@@ -427,22 +427,29 @@
                 <button class="shrink-0 p-xs hover:bg-surface-strong rounded-full transition-colors text-on-surface-variant" onclick="closeMentorAnswerModal()"><span class="material-symbols-outlined">close</span></button>
             </div>
             <div class="p-lg overflow-y-auto flex flex-col gap-md">
-                <p class="text-body-sm text-on-surface leading-relaxed whitespace-pre-line" id="maContent">—</p>
-                <div class="hidden p-base bg-primary/5 border border-primary/20 rounded-xl" id="maAnswerBox">
-                    <p class="text-caption-strong text-primary mb-xxs">등록된 답변</p>
-                    <p class="text-body-sm text-on-surface whitespace-pre-line" id="maAnswerText"></p>
-                </div>
+                <div class="flex flex-col gap-sm max-h-[280px] overflow-y-auto pr-xxs" id="maMessageList"></div>
+
                 <div class="flex flex-col gap-xs">
                     <label class="text-[13px] font-bold text-ink">화상 상담 예약</label>
                     <div id="maApptBox"></div>
                 </div>
+
                 <div class="flex flex-col gap-xs">
-                    <label class="text-[13px] font-bold text-ink" for="maAnswerInput">답변 작성</label>
-                    <textarea class="w-full border border-gray-300 rounded-xl px-md py-sm text-[14px] focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors resize-none" id="maAnswerInput" placeholder="신청 교사에게 전달할 답변을 입력하세요." rows="4"></textarea>
+                    <label class="text-[13px] font-bold text-ink">상담 일지 <span class="font-normal text-[12px] text-ink/50">(복잡한 상담을 마친 뒤 남겨두면 월별 출력에 반영됩니다)</span></label>
+                    <div id="maLogBox"></div>
+                </div>
+
+                <div class="flex flex-col gap-xs border-t border-hairline pt-md">
+                    <div class="flex gap-xs items-end">
+                        <textarea class="flex-1 border border-gray-300 rounded-xl px-md py-sm text-[14px] focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors resize-none" id="maMessageInput" placeholder="신청 교사에게 답장을 입력하세요." rows="2"></textarea>
+                        <input class="hidden" id="maFileInput" type="file">
+                        <button class="h-[42px] w-[42px] rounded-full border border-hairline text-muted hover:text-primary hover:border-primary transition-colors flex items-center justify-center shrink-0" id="maFileBtn" title="파일 첨부" type="button"><span class="material-symbols-outlined">attach_file</span></button>
+                        <button class="h-[42px] px-base rounded-xl bg-primary text-white font-bold text-[14px] hover:bg-primary-active transition-colors shrink-0" id="maSendBtn" type="button">전송</button>
+                    </div>
                 </div>
             </div>
-            <div class="px-lg py-base bg-surface-soft flex justify-end gap-sm">
-                <button class="px-lg py-sm rounded-full font-bold text-[14px] bg-primary text-white hover:bg-primary-active transition-colors" id="maSubmitBtn" onclick="submitMentorAnswer()">답변 등록</button>
+            <div class="px-lg py-base bg-surface-soft flex justify-between items-center gap-sm">
+                <button class="px-lg py-sm rounded-full font-bold text-[14px] border border-hairline text-ink hover:bg-surface-strong transition-colors" id="maCompleteBtn" type="button">상담 완료 처리</button>
                 <button class="px-lg py-sm rounded-full font-bold text-[14px] text-ink/70 hover:bg-surface-strong transition-colors" onclick="closeMentorAnswerModal()">닫기</button>
             </div>
         </div>
@@ -456,17 +463,11 @@
                 <button class="p-xs hover:bg-surface-strong rounded-full transition-colors text-on-surface-variant" onclick="closeSlotModal()"><span class="material-symbols-outlined">close</span></button>
             </div>
             <div class="p-lg overflow-y-auto flex flex-col gap-md">
-                <div class="flex gap-xs items-end">
-                    <div class="flex-1">
-                        <label class="block text-[12px] font-bold text-ink mb-xxs" for="slotDate">날짜</label>
-                        <input class="w-full border border-gray-300 rounded-xl px-md py-sm text-[14px] focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors" id="slotDate" type="date">
-                    </div>
-                    <div class="flex-1">
-                        <label class="block text-[12px] font-bold text-ink mb-xxs" for="slotTime">시간</label>
-                        <input class="w-full border border-gray-300 rounded-xl px-md py-sm text-[14px] focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors" id="slotTime" type="time">
-                    </div>
-                    <button class="h-[42px] px-base rounded-xl bg-primary text-white font-bold text-[14px] hover:bg-primary-active transition-colors shrink-0" onclick="addSlot()">추가</button>
+                <div class="flex gap-xs" id="slotModeToggle">
+                    <button class="slot-mode-btn flex-1 py-xs rounded-lg border text-caption-strong transition-colors" data-mode="once" type="button">특정 날짜</button>
+                    <button class="slot-mode-btn flex-1 py-xs rounded-lg border text-caption-strong transition-colors" data-mode="recurring" type="button">매주 반복</button>
                 </div>
+                <div id="slotModeFields"></div>
                 <div class="flex flex-col gap-xs" id="slotListContainer"></div>
             </div>
             <div class="px-lg py-base bg-surface-soft flex justify-end">
@@ -493,6 +494,9 @@
 </footer>
     <script src="assets/js/mentoring.js"></script>
     <script>
+        const currentUser = localStorage.getItem('currentUser');
+        const mentorProfile = EF_MENTOR_ROSTER.byEmail(currentUser);
+        const mentorDisplayName = mentorProfile ? mentorProfile.name : currentUser.split('@')[0];
         let maActiveId = null;
 
         // 사용자가 입력한 문자열(이름/학교/제목 등)을 innerHTML로 그릴 때 태그로 해석되지 않도록 이스케이프.
@@ -511,54 +515,78 @@
         }
 
         function renderMentorInbox() {
-            const list = EF_MENTORING.all().slice().reverse();
+            const list = EF_MENTORING.byMentorEmail(currentUser).slice().reverse();
             document.getElementById('mtStatNew').textContent = list.filter(q => q.status === '신규').length;
-            document.getElementById('mtStatPending').textContent = list.filter(q => q.status === '답변대기').length;
-            document.getElementById('mtStatDone').textContent = list.filter(q => q.status === '답변완료').length;
+            document.getElementById('mtStatOngoing').textContent = list.filter(q => q.status === '진행중').length;
+            document.getElementById('mtStatDone').textContent = list.filter(q => q.status === '완료').length;
 
             const tbody = document.getElementById('mentorInboxTbody');
             if (!list.length) {
-                tbody.innerHTML = '<tr><td colspan="6" class="py-xl text-center text-muted text-body-sm">접수된 상담 요청이 없습니다.</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="6" class="py-xl text-center text-muted text-body-sm">배정된 상담 요청이 없습니다.</td></tr>';
                 return;
             }
             tbody.innerHTML = list.map(q => {
-                const answered = q.status === '답변완료';
-                const statusClass = answered ? 'bg-success/10 text-success' : (q.status === '신규' ? 'bg-error-container text-error' : 'bg-primary-fixed text-on-primary-fixed-variant');
-                const btnLabel = answered ? '상담 내역 보기' : (q.status === '신규' ? '답변하기' : '이어서 답변');
-                const btnClass = answered ? 'bg-surface-strong text-ink border border-hairline hover:bg-surface-variant' : (q.status === '신규' ? 'bg-primary text-white hover:bg-primary-active' : 'bg-surface-strong text-ink border border-hairline hover:bg-surface-variant');
+                const done = q.status === '완료';
+                const statusClass = done ? 'bg-success/10 text-success' : (q.status === '신규' ? 'bg-error-container text-error' : 'bg-primary-fixed text-on-primary-fixed-variant');
+                const btnLabel = done ? '상담 내역 보기' : (q.status === '신규' ? '답변하기' : '대화 이어가기');
+                const btnClass = done ? 'bg-surface-strong text-ink border border-hairline hover:bg-surface-variant' : (q.status === '신규' ? 'bg-primary text-white hover:bg-primary-active' : 'bg-surface-strong text-ink border border-hairline hover:bg-surface-variant');
                 return '<tr class="hover:bg-surface-soft transition-colors">'
                     + '<td class="py-lg"><div class="flex flex-col"><span class="font-body-strong text-body-strong">' + escapeHtml(q.name) + '</span><span class="font-caption text-caption text-muted">' + escapeHtml(q.school) + '</span></div></td>'
                     + '<td class="py-lg font-body-sm text-on-surface-variant">' + escapeHtml(q.title) + '</td>'
                     + '<td class="py-lg font-body-sm text-on-surface-variant">' + escapeHtml(q.category) + '</td>'
-                    + '<td class="py-lg font-number-display text-body-sm">' + escapeHtml(q.date) + '</td>'
+                    + '<td class="py-lg font-number-display text-body-sm">' + escapeHtml(EF_MENTORING.createdAt(q)) + '</td>'
                     + '<td class="py-lg"><span class="px-sm py-xxs ' + statusClass + ' text-caption-strong rounded-full">' + q.status + '</span></td>'
                     + '<td class="py-lg"><button class="px-base h-[36px] rounded-full font-button text-body-sm transition-all ' + btnClass + '" onclick="openMentorAnswerModal(' + q.id + ')">' + btnLabel + '</button></td>'
                     + '</tr>';
             }).join('');
         }
 
+        // --- 대화 스레드 (쪽지 1건-1답변이 아니라 메시지가 쌓이는 채팅형 기록) ---
+        function renderMaMessages(thread) {
+            const list = document.getElementById('maMessageList');
+            list.innerHTML = '';
+            thread.messages.forEach(m => {
+                const row = document.createElement('div');
+                row.className = 'flex ' + (m.from === 'mentor' ? 'justify-end' : 'justify-start');
+                const bubble = document.createElement('div');
+                bubble.className = 'max-w-[80%] rounded-xl px-base py-sm text-[14px] whitespace-pre-line '
+                    + (m.from === 'mentor' ? 'bg-primary text-white' : 'bg-surface-soft text-ink border border-hairline');
+                if (m.type === 'file') {
+                    const chip = document.createElement('div');
+                    chip.className = 'flex items-center gap-xxs';
+                    const icon = document.createElement('span');
+                    icon.className = 'material-symbols-outlined text-[18px]';
+                    icon.textContent = 'description';
+                    chip.appendChild(icon);
+                    chip.appendChild(document.createTextNode(m.fileName));
+                    bubble.appendChild(chip);
+                } else {
+                    const textNode = document.createElement('span');
+                    textNode.textContent = m.text;
+                    bubble.appendChild(textNode);
+                }
+                const time = document.createElement('p');
+                time.className = 'text-[11px] mt-xxs ' + (m.from === 'mentor' ? 'text-white/70' : 'text-muted');
+                time.textContent = m.at;
+                bubble.appendChild(time);
+                row.appendChild(bubble);
+                list.appendChild(row);
+            });
+            list.scrollTop = list.scrollHeight;
+        }
+
         function openMentorAnswerModal(id) {
-            const q = EF_MENTORING.all().find(x => x.id === id);
+            const q = EF_MENTORING.get(id);
             if (!q) return;
             maActiveId = id;
             document.getElementById('maCategory').textContent = q.category;
-            document.getElementById('maMeta').textContent = q.name + ' · ' + q.school + ' · ' + q.date;
+            document.getElementById('maMeta').textContent = q.name + ' · ' + q.school + ' · ' + EF_MENTORING.createdAt(q);
             document.getElementById('maTitle').textContent = q.title;
-            document.getElementById('maContent').textContent = q.content;
+            renderMaMessages(q);
             renderMaApptBox(q);
-
-            const answerBox = document.getElementById('maAnswerBox');
-            const answerInput = document.getElementById('maAnswerInput');
-            if (q.answer) {
-                answerBox.classList.remove('hidden');
-                document.getElementById('maAnswerText').textContent = q.answer;
-                answerInput.value = q.answer;
-                document.getElementById('maSubmitBtn').textContent = '답변 수정';
-            } else {
-                answerBox.classList.add('hidden');
-                answerInput.value = '';
-                document.getElementById('maSubmitBtn').textContent = '답변 등록';
-            }
+            renderMaLogBox(q);
+            document.getElementById('maMessageInput').value = '';
+            document.getElementById('maCompleteBtn').textContent = q.status === '완료' ? '다시 열기' : '상담 완료 처리';
 
             const modal = document.getElementById('mentorAnswerModal');
             modal.classList.remove('hidden');
@@ -570,16 +598,115 @@
             setTimeout(() => modal.classList.add('hidden'), 300);
             maActiveId = null;
         }
-        function submitMentorAnswer() {
-            const text = document.getElementById('maAnswerInput').value.trim();
-            if (!text) {
-                EF_MODAL.alert('답변 내용을 입력해주세요.');
-                return;
-            }
-            EF_MENTORING.respond(maActiveId, text);
+        function sendMentorMessage() {
+            const input = document.getElementById('maMessageInput');
+            const text = input.value.trim();
+            if (!text) return;
+            EF_MENTORING.addMessage(maActiveId, 'mentor', text);
+            input.value = '';
+            const q = EF_MENTORING.get(maActiveId);
+            renderMaMessages(q);
+            document.getElementById('maCompleteBtn').textContent = q.status === '완료' ? '다시 열기' : '상담 완료 처리';
             renderMentorInbox();
             renderRecentAnswered();
-            closeMentorAnswerModal();
+        }
+        function toggleMaComplete() {
+            const q = EF_MENTORING.get(maActiveId);
+            if (!q) return;
+            if (q.status === '완료') EF_MENTORING.reopen(maActiveId);
+            else EF_MENTORING.markComplete(maActiveId);
+            const updated = EF_MENTORING.get(maActiveId);
+            document.getElementById('maCompleteBtn').textContent = updated.status === '완료' ? '다시 열기' : '상담 완료 처리';
+            renderMentorInbox();
+            renderRecentAnswered();
+        }
+
+        // --- 상담 일지 (복잡한 상담을 마친 뒤 남기는 요약/조치사항 — 월별 출력에 반영됨) ---
+        function renderMaLogBox(q) {
+            const box = document.getElementById('maLogBox');
+            box.innerHTML = '';
+            const existing = EF_CONSULT_LOG.byRequestId(q.id);
+            if (existing) {
+                const row = document.createElement('div');
+                row.className = 'p-base bg-surface-soft border border-hairline rounded-xl flex items-start justify-between gap-md';
+                const info = document.createElement('div');
+                info.className = 'min-w-0';
+                const p1 = document.createElement('p');
+                p1.className = 'text-body-sm font-bold text-ink';
+                p1.textContent = existing.date + ' · ' + existing.status;
+                const p2 = document.createElement('p');
+                p2.className = 'text-caption text-muted mt-xxs';
+                p2.textContent = existing.summary;
+                info.appendChild(p1);
+                info.appendChild(p2);
+                const editBtn = document.createElement('button');
+                editBtn.type = 'button';
+                editBtn.className = 'px-base h-[32px] rounded-full text-caption-strong bg-white border border-hairline hover:bg-surface-strong transition-colors shrink-0';
+                editBtn.textContent = '수정';
+                editBtn.addEventListener('click', () => renderMaLogForm(q, existing));
+                row.appendChild(info);
+                row.appendChild(editBtn);
+                box.appendChild(row);
+            } else {
+                renderMaLogForm(q, null);
+            }
+        }
+        function renderMaLogForm(q, existing) {
+            const box = document.getElementById('maLogBox');
+            box.innerHTML = '';
+            const wrap = document.createElement('div');
+            wrap.className = 'flex flex-col gap-xs p-base bg-surface-soft border border-hairline rounded-xl';
+
+            const dateInput = document.createElement('input');
+            dateInput.type = 'date';
+            dateInput.className = 'w-full border border-gray-300 rounded-xl px-md py-sm text-[14px] focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors';
+            dateInput.value = existing ? existing.date : new Date().toISOString().slice(0, 10);
+
+            const summaryInput = document.createElement('textarea');
+            summaryInput.rows = 2;
+            summaryInput.placeholder = '상담 요약';
+            summaryInput.className = 'w-full border border-gray-300 rounded-xl px-md py-sm text-[14px] resize-none focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors';
+            summaryInput.value = existing ? existing.summary : q.title;
+
+            const actionInput = document.createElement('textarea');
+            actionInput.rows = 2;
+            actionInput.placeholder = '조치사항';
+            actionInput.className = 'w-full border border-gray-300 rounded-xl px-md py-sm text-[14px] resize-none focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors';
+            actionInput.value = existing ? existing.action : '';
+
+            const statusSelect = document.createElement('select');
+            statusSelect.className = 'w-full border border-gray-300 rounded-xl px-md py-sm text-[14px] focus:outline-none focus:border-primary';
+            ['완료', '대기'].forEach(s => {
+                const opt = document.createElement('option');
+                opt.value = s;
+                opt.textContent = s;
+                if (existing && existing.status === s) opt.selected = true;
+                statusSelect.appendChild(opt);
+            });
+
+            const saveBtn = document.createElement('button');
+            saveBtn.type = 'button';
+            saveBtn.className = 'h-[38px] rounded-xl bg-primary text-white font-bold text-[13px] hover:bg-primary-active transition-colors';
+            saveBtn.textContent = existing ? '일지 수정' : '일지 저장';
+            saveBtn.addEventListener('click', () => {
+                if (!summaryInput.value.trim()) {
+                    EF_MODAL.alert('상담 요약을 입력해주세요.');
+                    return;
+                }
+                EF_CONSULT_LOG.upsert({
+                    id: existing ? existing.id : undefined,
+                    mentorEmail: currentUser, requestId: q.id, menteeName: q.name, category: q.category,
+                    date: dateInput.value, summary: summaryInput.value.trim(), action: actionInput.value.trim(), status: statusSelect.value,
+                });
+                renderMaLogBox(q);
+            });
+
+            wrap.appendChild(dateInput);
+            wrap.appendChild(summaryInput);
+            wrap.appendChild(actionInput);
+            wrap.appendChild(statusSelect);
+            wrap.appendChild(saveBtn);
+            box.appendChild(wrap);
         }
 
         // --- 화상 상담 플랫폼(Zoom/Teams/기타) 입력 폼 — 링크는 element.href로만 설정하고
@@ -706,7 +833,7 @@
                 box.appendChild(buildExistingApptCard(existing));
                 return;
             }
-            const open = EF_APPOINTMENT.openSlots();
+            const open = EF_APPOINTMENT.openSlots(currentUser);
             if (!open.length) {
                 const p = document.createElement('p');
                 p.className = 'text-caption text-muted';
@@ -737,7 +864,7 @@
                 initialPlatform: 'zoom',
                 submitLabel: '예약 확정',
                 onSubmit: function (info) {
-                    EF_APPOINTMENT.book(Object.assign({ slotId: Number(select.value), requestId: q.id, menteeEmail: q.email, menteeName: q.name, menteeSchool: q.school }, info));
+                    EF_APPOINTMENT.book(Object.assign({ slotId: Number(select.value), requestId: q.id, menteeEmail: q.email, menteeName: q.name, menteeSchool: q.school, mentorName: mentorDisplayName }, info));
                     renderMaApptBox(q);
                     renderMentorAppointment();
                     EF_MODAL.alert('화상 상담이 예약되었습니다.');
@@ -802,7 +929,7 @@
         // --- 예약된 상담 카드 (사이드바) ---
         function renderMentorAppointment() {
             const container = document.getElementById('mentorAppointmentContainer');
-            const upcoming = EF_APPOINTMENT.upcomingAll();
+            const upcoming = EF_APPOINTMENT.upcomingByMentor(currentUser);
             document.getElementById('mtStatUpcoming').textContent = upcoming.length;
             container.innerHTML = '';
             const app = upcoming[0];
@@ -843,25 +970,157 @@
             });
         }
 
-        // --- 최근 답변 완료 (사이드바) ---
+        // --- 최근 완료된 상담 (사이드바) ---
         function renderRecentAnswered() {
             const container = document.getElementById('recentAnsweredContainer');
-            const answered = EF_MENTORING.all().filter(q => q.status === '답변완료').sort((a, b) => b.date.localeCompare(a.date)).slice(0, 3);
+            const answered = EF_MENTORING.byMentorEmail(currentUser)
+                .filter(q => q.status === '완료')
+                .sort((a, b) => EF_MENTORING.lastActivityAt(b).localeCompare(EF_MENTORING.lastActivityAt(a)))
+                .slice(0, 3);
             if (!answered.length) {
-                container.innerHTML = '<p class="text-center text-muted py-md text-[13px]">답변 완료한 상담이 없습니다.</p>';
+                container.innerHTML = '<p class="text-center text-muted py-md text-[13px]">완료된 상담이 없습니다.</p>';
                 return;
             }
             container.innerHTML = answered.map(q => '<div class="flex items-center gap-md p-base bg-surface-soft rounded-xl border border-hairline">'
                 + '<div class="w-10 h-10 bg-success/10 text-success rounded-lg flex items-center justify-center"><span class="material-symbols-outlined" data-icon="task_alt">task_alt</span></div>'
-                + '<div class="flex-1 overflow-hidden"><p class="font-body-sm text-body-sm font-medium truncate text-on-surface">' + escapeHtml(q.name) + ' 교사 · ' + escapeHtml(q.title) + '</p><p class="font-caption text-caption text-muted">' + escapeHtml(q.date) + ' 답변 완료</p></div>'
+                + '<div class="flex-1 overflow-hidden"><p class="font-body-sm text-body-sm font-medium truncate text-on-surface">' + escapeHtml(q.name) + ' 교사 · ' + escapeHtml(q.title) + '</p><p class="font-caption text-caption text-muted">' + escapeHtml(EF_MENTORING.lastActivityAt(q)) + ' 완료됨</p></div>'
                 + '</div>').join('');
         }
 
-        // --- 상담 가능 시간 설정 모달 ---
+        // --- 상담 가능 시간 설정 모달 (특정 날짜 1회성 / 매주 반복) ---
+        let slotMode = 'once';
+        function renderSlotModeButtons() {
+            document.querySelectorAll('.slot-mode-btn').forEach(btn => {
+                const active = btn.dataset.mode === slotMode;
+                btn.className = 'slot-mode-btn flex-1 py-xs rounded-lg border text-caption-strong transition-colors '
+                    + (active ? 'bg-primary text-white border-primary' : 'border-hairline text-body hover:border-primary');
+            });
+        }
+        function renderSlotModeFields() {
+            const wrap = document.getElementById('slotModeFields');
+            wrap.innerHTML = '';
+            const row = document.createElement('div');
+            row.className = 'flex gap-xs items-end';
+
+            if (slotMode === 'once') {
+                const dateWrap = document.createElement('div');
+                dateWrap.className = 'flex-1';
+                const dateLabel = document.createElement('label');
+                dateLabel.className = 'block text-[12px] font-bold text-ink mb-xxs';
+                dateLabel.textContent = '날짜';
+                const dateInput = document.createElement('input');
+                dateInput.type = 'date';
+                dateInput.className = 'w-full border border-gray-300 rounded-xl px-md py-sm text-[14px] focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors';
+                dateWrap.appendChild(dateLabel);
+                dateWrap.appendChild(dateInput);
+
+                const timeWrap = document.createElement('div');
+                timeWrap.className = 'flex-1';
+                const timeLabel = document.createElement('label');
+                timeLabel.className = 'block text-[12px] font-bold text-ink mb-xxs';
+                timeLabel.textContent = '시간';
+                const timeInput = document.createElement('input');
+                timeInput.type = 'time';
+                timeInput.className = 'w-full border border-gray-300 rounded-xl px-md py-sm text-[14px] focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors';
+                timeWrap.appendChild(timeLabel);
+                timeWrap.appendChild(timeInput);
+
+                const addBtn = document.createElement('button');
+                addBtn.type = 'button';
+                addBtn.className = 'h-[42px] px-base rounded-xl bg-primary text-white font-bold text-[14px] hover:bg-primary-active transition-colors shrink-0';
+                addBtn.textContent = '추가';
+                addBtn.addEventListener('click', () => {
+                    if (!dateInput.value || !timeInput.value) {
+                        EF_MODAL.alert('날짜와 시간을 모두 입력해주세요.');
+                        return;
+                    }
+                    EF_APPOINTMENT.addSlot(currentUser, dateInput.value, timeInput.value);
+                    dateInput.value = '';
+                    timeInput.value = '';
+                    renderSlotList();
+                });
+
+                row.appendChild(dateWrap);
+                row.appendChild(timeWrap);
+                row.appendChild(addBtn);
+            } else {
+                const wdWrap = document.createElement('div');
+                wdWrap.className = 'flex-1';
+                const wdLabel = document.createElement('label');
+                wdLabel.className = 'block text-[12px] font-bold text-ink mb-xxs';
+                wdLabel.textContent = '요일';
+                const wdSelect = document.createElement('select');
+                wdSelect.className = 'w-full border border-gray-300 rounded-xl px-md py-sm text-[14px] focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors';
+                EF_APPOINTMENT.weekdayNames().forEach((name, idx) => {
+                    const opt = document.createElement('option');
+                    opt.value = String(idx);
+                    opt.textContent = name + '요일';
+                    if (idx === 2) opt.selected = true; // 화요일 기본값
+                    wdSelect.appendChild(opt);
+                });
+                wdWrap.appendChild(wdLabel);
+                wdWrap.appendChild(wdSelect);
+
+                const timeWrap = document.createElement('div');
+                timeWrap.className = 'flex-1';
+                const timeLabel = document.createElement('label');
+                timeLabel.className = 'block text-[12px] font-bold text-ink mb-xxs';
+                timeLabel.textContent = '시간';
+                const timeInput = document.createElement('input');
+                timeInput.type = 'time';
+                timeInput.className = 'w-full border border-gray-300 rounded-xl px-md py-sm text-[14px] focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors';
+                timeWrap.appendChild(timeLabel);
+                timeWrap.appendChild(timeInput);
+
+                const weeksWrap = document.createElement('div');
+                weeksWrap.className = 'w-[90px]';
+                const weeksLabel = document.createElement('label');
+                weeksLabel.className = 'block text-[12px] font-bold text-ink mb-xxs';
+                weeksLabel.textContent = '몇 주간';
+                const weeksInput = document.createElement('input');
+                weeksInput.type = 'number';
+                weeksInput.min = '1';
+                weeksInput.max = '26';
+                weeksInput.value = '8';
+                weeksInput.className = 'w-full border border-gray-300 rounded-xl px-md py-sm text-[14px] focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors';
+                weeksWrap.appendChild(weeksLabel);
+                weeksWrap.appendChild(weeksInput);
+
+                const addBtn = document.createElement('button');
+                addBtn.type = 'button';
+                addBtn.className = 'h-[42px] px-base rounded-xl bg-primary text-white font-bold text-[14px] hover:bg-primary-active transition-colors shrink-0';
+                addBtn.textContent = '추가';
+                addBtn.addEventListener('click', () => {
+                    if (!timeInput.value) {
+                        EF_MODAL.alert('시간을 입력해주세요.');
+                        return;
+                    }
+                    const weekday = Number(wdSelect.value);
+                    const weeks = Math.max(1, Number(weeksInput.value) || 8);
+                    const created = EF_APPOINTMENT.addRecurringSlots(currentUser, weekday, timeInput.value, weeks);
+                    renderSlotList();
+                    EF_MODAL.alert(created.length + '개의 시간이 추가되었습니다.' + (created.length < weeks ? ' (이미 있던 날짜는 건너뛰었습니다)' : ''));
+                });
+
+                row.appendChild(wdWrap);
+                row.appendChild(timeWrap);
+                row.appendChild(weeksWrap);
+                row.appendChild(addBtn);
+            }
+            wrap.appendChild(row);
+        }
+        document.querySelectorAll('.slot-mode-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                slotMode = btn.dataset.mode;
+                renderSlotModeButtons();
+                renderSlotModeFields();
+            });
+        });
         function openSlotModal() {
+            slotMode = 'once';
+            renderSlotModeButtons();
+            renderSlotModeFields();
             renderSlotList();
-            document.getElementById('slotDate').value = '';
-            document.getElementById('slotTime').value = '';
             const modal = document.getElementById('slotModal');
             modal.classList.remove('hidden');
             setTimeout(() => modal.classList.remove('opacity-0'), 10);
@@ -873,7 +1132,7 @@
         }
         function renderSlotList() {
             const container = document.getElementById('slotListContainer');
-            const slots = EF_APPOINTMENT.slots();
+            const slots = EF_APPOINTMENT.slots(currentUser);
             if (!slots.length) {
                 container.innerHTML = '<p class="text-center text-muted py-md text-[13px]">등록된 시간이 없습니다.</p>';
                 return;
@@ -885,18 +1144,6 @@
                 + '<button class="p-xs text-muted hover:text-danger transition-colors disabled:opacity-30 disabled:hover:text-muted" onclick="removeSlotClick(' + s.id + ')"' + (s.booked ? ' disabled title="예약된 시간은 삭제할 수 없습니다"' : '') + '><span class="material-symbols-outlined text-[18px]">delete</span></button>'
                 + '</div>').join('');
         }
-        function addSlot() {
-            const date = document.getElementById('slotDate').value;
-            const time = document.getElementById('slotTime').value;
-            if (!date || !time) {
-                EF_MODAL.alert('날짜와 시간을 모두 입력해주세요.');
-                return;
-            }
-            EF_APPOINTMENT.addSlot(date, time);
-            document.getElementById('slotDate').value = '';
-            document.getElementById('slotTime').value = '';
-            renderSlotList();
-        }
         function removeSlotClick(id) {
             if (!EF_APPOINTMENT.removeSlot(id)) {
                 EF_MODAL.alert('예약이 걸린 시간은 삭제할 수 없습니다. 먼저 예약을 취소해주세요.');
@@ -904,6 +1151,20 @@
             }
             renderSlotList();
         }
+
+        document.getElementById('mtMentorName').textContent = mentorDisplayName;
+        document.getElementById('maCompleteBtn').addEventListener('click', toggleMaComplete);
+        document.getElementById('maSendBtn').addEventListener('click', sendMentorMessage);
+        document.getElementById('maFileBtn').addEventListener('click', () => document.getElementById('maFileInput').click());
+        document.getElementById('maFileInput').addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+            EF_MENTORING.addFileMessage(maActiveId, 'mentor', file.name);
+            e.target.value = '';
+            renderMaMessages(EF_MENTORING.get(maActiveId));
+            renderMentorInbox();
+            renderRecentAnswered();
+        });
 
         renderMentorInbox();
         renderMentorAppointment();
@@ -937,10 +1198,57 @@
     })();
 </script>
 <script>
+  function populateLogMonthSelect() {
+      const select = document.getElementById('logMonthSelect');
+      if (select.dataset.populated) return;
+      select.dataset.populated = '1';
+      const now = new Date();
+      for (let i = 0; i < 12; i++) {
+          const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
+          const ym = d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0');
+          const opt = document.createElement('option');
+          opt.value = ym;
+          opt.textContent = d.getFullYear() + '년 ' + (d.getMonth() + 1) + '월';
+          select.appendChild(opt);
+      }
+      select.addEventListener('change', renderMonthlyLog);
+  }
+  function renderMonthlyLog() {
+      const select = document.getElementById('logMonthSelect');
+      const ym = select.value;
+      const y = ym.slice(0, 4);
+      const m = Number(ym.slice(5, 7));
+      document.getElementById('logSubTitle').textContent = y + '년 ' + m + '월 상담 내역';
+      document.getElementById('logMainTitle').textContent = y + '학년도 ' + m + '월 인생도서관 상담 일지';
+      document.getElementById('logAuthor').textContent = mentorDisplayName;
+      const today = new Date();
+      document.getElementById('logSubmitDate').textContent = today.getFullYear() + '.' + String(today.getMonth() + 1).padStart(2, '0') + '.' + String(today.getDate()).padStart(2, '0');
+
+      const logs = EF_CONSULT_LOG.byMentorAndMonth(currentUser, ym);
+      const tbody = document.getElementById('logTableBody');
+      if (!logs.length) {
+          tbody.innerHTML = '<tr><td colspan="4" class="border border-hairline p-4 text-center text-muted">이번 달 작성된 상담 일지가 없습니다.</td></tr>';
+          return;
+      }
+      tbody.innerHTML = logs.map(l => {
+          const mmdd = l.date.slice(5).replace('-', '.');
+          const statusClass = l.status === '완료' ? 'text-success' : 'text-muted';
+          return '<tr>'
+              + '<td class="border border-hairline p-2 text-center">' + escapeHtml(mmdd) + '</td>'
+              + '<td class="border border-hairline p-2 text-center"><span class="bg-primary/10 text-primary px-2 py-0.5 rounded text-xs font-bold">' + escapeHtml(l.category) + '</span></td>'
+              + '<td class="border border-hairline p-2">' + escapeHtml(l.summary) + '</td>'
+              + '<td class="border border-hairline p-2 text-center"><span class="' + statusClass + ' font-bold">' + escapeHtml(l.status) + '</span></td>'
+              + '</tr>';
+      }).join('');
+  }
   function openLogModal() {
+      populateLogMonthSelect();
+      const now = new Date();
+      document.getElementById('logMonthSelect').value = now.getFullYear() + '-' + String(now.getMonth() + 1).padStart(2, '0');
+      renderMonthlyLog();
       document.getElementById('logModal').classList.remove('hidden');
   }
-  
+
   function closeLogModal() {
       document.getElementById('logModal').classList.add('hidden');
   }
@@ -955,23 +1263,19 @@
 <div class="p-6 flex-1 overflow-y-auto bg-canvas">
 <div class="flex justify-between items-end mb-4 no-print">
 <div>
-<h4 class="font-bold text-ink">2026년 5월 상담 내역</h4>
+<h4 class="font-bold text-ink" id="logSubTitle">상담 내역</h4>
 <p class="text-sm text-muted">교육청 홈페이지 탑재 및 장학사 제출용 보고서 양식입니다.</p>
 </div>
 <div class="flex gap-2">
-<select class="border border-hairline rounded-md text-sm p-1.5 bg-surface-soft">
-<option>2026년 5월</option>
-<option>2026년 4월</option>
-<option>2026년 3월</option>
-</select>
+<select class="border border-hairline rounded-md text-sm p-1.5 bg-surface-soft" id="logMonthSelect"></select>
 </div>
 </div>
 <!-- Printable Table Area -->
 <div class="bg-white border border-hairline p-8 shadow-sm" id="printArea">
-<h2 class="text-center font-title-lg text-ink mb-6">2026학년도 5월 인생도서관 상담 일지</h2>
+<h2 class="text-center font-title-lg text-ink mb-6" id="logMainTitle">인생도서관 상담 일지</h2>
 <div class="flex justify-end text-sm mb-2 text-ink">
-<span class="mr-4"><strong>작성자:</strong> 김교사 멘토</span>
-<span><strong>제출일:</strong> 2026.05.31</span>
+<span class="mr-4"><strong>작성자:</strong> <span id="logAuthor">—</span></span>
+<span><strong>제출일:</strong> <span id="logSubmitDate">—</span></span>
 </div>
 <table class="w-full border-collapse border border-hairline text-sm text-left">
 <thead class="bg-surface-strong text-ink">
@@ -982,26 +1286,7 @@
 <th class="border border-hairline p-2 text-center w-20">상태</th>
 </tr>
 </thead>
-<tbody>
-<tr>
-<td class="border border-hairline p-2 text-center">05.02</td>
-<td class="border border-hairline p-2 text-center"><span class="bg-primary/10 text-primary px-2 py-0.5 rounded text-xs font-bold">교무/학사</span></td>
-<td class="border border-hairline p-2">교원 복무 규정 중 특별휴가(경조사) 관련 지침 질의 및 필요 서류 문의</td>
-<td class="border border-hairline p-2 text-center"><span class="text-success font-bold">완료</span></td>
-</tr>
-<tr>
-<td class="border border-hairline p-2 text-center">05.10</td>
-<td class="border border-hairline p-2 text-center"><span class="bg-warning/10 text-warning px-2 py-0.5 rounded text-xs font-bold">생활/안전</span></td>
-<td class="border border-hairline p-2">학교 폭력 사안 접수 시 초기 대응 절차 및 전담기구 구성 요건 문의</td>
-<td class="border border-hairline p-2 text-center"><span class="text-success font-bold">완료</span></td>
-</tr>
-<tr>
-<td class="border border-hairline p-2 text-center">05.21</td>
-<td class="border border-hairline p-2 text-center"><span class="bg-success/10 text-success px-2 py-0.5 rounded text-xs font-bold">행정/예산</span></td>
-<td class="border border-hairline p-2">현장체험학습 예산 집행 품의 작성 시 유의사항 및 여비 정산 규정</td>
-<td class="border border-hairline p-2 text-center"><span class="text-muted font-bold">대기</span></td>
-</tr>
-</tbody>
+<tbody id="logTableBody"></tbody>
 </table>
 </div>
 </div>
