@@ -192,14 +192,18 @@ const EF_APPOINTMENT = (function () {
         },
         // 요일 반복 등록 — weekday(0=일요일~6=토요일) + time('HH:MM')로 앞으로 weeksAhead주치의
         // 실제 예약 가능한 날짜 슬롯을 한 번에 생성한다(이미 있는 날짜는 중복 생성하지 않음).
-        addRecurringSlots(mentorEmail, weekday, time, weeksAhead) {
+        // 요일 반복 등록 — weekday(0=일요일~6=토요일) + time('HH:MM')로 [startDate, endDate](둘 다
+        // 'YYYY-MM-DD', 종료일 포함) 구간 안의 해당 요일 날짜에만 슬롯을 한 번에 생성한다(이미 있는
+        // 날짜는 중복 생성하지 않음). 생성 후에도 updateSlot()으로 개별 날짜를 얼마든지 고쳐 쓸 수 있다
+        // (출장/수업 등으로 특정 날만 시간이 다르거나 상담이 불가능한 경우를 위해).
+        addRecurringSlotsRange(mentorEmail, weekday, time, startDate, endDate) {
             const list = loadSlots();
             let nextId = list.reduce((max, s) => Math.max(max, s.id), 0);
             const created = [];
-            const d = new Date();
-            d.setHours(0, 0, 0, 0);
+            const end = new Date(endDate + 'T00:00:00');
+            const d = new Date(startDate + 'T00:00:00');
             d.setDate(d.getDate() + ((weekday - d.getDay() + 7) % 7));
-            for (let i = 0; i < weeksAhead; i++) {
+            while (d <= end) {
                 const dateStr = d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate());
                 const exists = list.some(s => s.mentorEmail === mentorEmail && s.date === dateStr && s.time === time);
                 if (!exists) {
@@ -212,6 +216,16 @@ const EF_APPOINTMENT = (function () {
             }
             saveSlots(list);
             return created;
+        },
+        // 이미 만들어둔 슬롯 하나의 날짜/시간만 고쳐 쓴다(예약이 걸린 슬롯은 예약과 어긋나므로 수정 불가).
+        updateSlot(id, date, time) {
+            const list = loadSlots();
+            const slot = list.find(s => s.id === id);
+            if (!slot || slot.booked) return false;
+            slot.date = date;
+            slot.time = time;
+            saveSlots(list);
+            return true;
         },
         removeSlot(id) {
             const list = loadSlots();
