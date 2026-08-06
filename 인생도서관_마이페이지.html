@@ -493,6 +493,12 @@
                     <label class="block text-[13px] font-bold text-ink mb-xs" for="mrContent">상세 내용 <span class="text-error">*</span></label>
                     <textarea class="w-full border border-gray-300 rounded-xl px-md py-sm text-[14px] focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors resize-none" id="mrContent" placeholder="선택한 업무 분야의 멘토가 확인할 수 있도록 상황을 구체적으로 적어주세요." rows="4"></textarea>
                 </div>
+                <div>
+                    <label class="block text-[13px] font-bold text-ink mb-xs">화상 상담 예약 <span class="font-normal text-[12px] text-ink/50">(선택, 멘토가 열어둔 시간 중에서 고를 수 있습니다)</span></label>
+                    <select class="w-full border border-gray-300 rounded-xl px-md py-sm text-[14px] focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors" id="mrSlotSelect">
+                        <option value="">예약하지 않음</option>
+                    </select>
+                </div>
             </div>
             <div class="px-lg py-base bg-surface-soft flex justify-end gap-sm">
                 <button class="px-lg py-sm rounded-full font-bold text-[14px] bg-primary text-white hover:bg-primary-active transition-colors" onclick="submitMentorRequest()">신청하기</button>
@@ -514,6 +520,54 @@
         ];
         const currentUser = localStorage.getItem('currentUser');
         let mrSelectedCategory = null;
+
+        // 사용자가 입력한 문자열(제목/내용 등)을 innerHTML로 그릴 때 태그로 해석되지 않도록 이스케이프.
+        function escapeHtml(str) {
+            const div = document.createElement('div');
+            div.textContent = str == null ? '' : str;
+            return div.innerHTML;
+        }
+        // http/https가 아닌 스킴(javascript: 등)은 클릭 가능한 링크로 만들지 않기 위한 검사.
+        function isSafeHttpUrl(url) {
+            if (!url) return false;
+            try {
+                const u = new URL(url, window.location.href);
+                return u.protocol === 'http:' || u.protocol === 'https:';
+            } catch (e) { return false; }
+        }
+        // 예약된 화상회의 정보를 안전하게 보여준다 — 링크는 href 프로퍼티로만(그리고 http/https만
+        // 허용), 회의번호/비밀번호는 textContent로만 넣는다(멘토가 직접 입력한 값이므로 HTML
+        // 문자열에 그대로 이어붙이면 안 됨).
+        function buildMeetingInfoDisplay(appt, joinLabel) {
+            const wrap = document.createElement('div');
+            wrap.className = 'flex items-center gap-sm flex-wrap';
+            if (isSafeHttpUrl(appt.joinLink)) {
+                const a = document.createElement('a');
+                a.href = appt.joinLink;
+                a.target = '_blank';
+                a.rel = 'noopener';
+                a.className = 'inline-flex items-center gap-xxs px-base py-xs bg-white text-primary rounded-full font-button text-[14px] hover:bg-primary-fixed transition-all';
+                const icon = document.createElement('span');
+                icon.className = 'material-symbols-outlined text-[16px]';
+                icon.textContent = 'videocam';
+                a.appendChild(icon);
+                a.appendChild(document.createTextNode(joinLabel || '입장 링크로 접속'));
+                wrap.appendChild(a);
+            }
+            if (appt.meetingId) {
+                const span = document.createElement('span');
+                span.className = 'text-caption text-white/80';
+                span.textContent = '회의 번호 ' + appt.meetingId + (appt.meetingPassword ? ' · 암호 ' + appt.meetingPassword : '');
+                wrap.appendChild(span);
+            }
+            if (!appt.joinLink && !appt.meetingId) {
+                const span = document.createElement('span');
+                span.className = 'text-caption text-white/80';
+                span.textContent = '멘토가 화상회의 정보를 등록하면 여기에 표시됩니다.';
+                wrap.appendChild(span);
+            }
+            return wrap;
+        }
 
         (function renderCategoryPicker() {
             const wrap = document.getElementById('mrCategoryList');
@@ -549,9 +603,9 @@
             tbody.innerHTML = mine.map(q => {
                 const statusClass = q.status === '답변완료' ? 'bg-success/10 text-success' : (q.status === '신규' ? 'bg-error-container text-error' : 'bg-primary-fixed text-on-primary-fixed-variant');
                 return '<tr class="hover:bg-surface-soft transition-colors">'
-                    + '<td class="py-lg"><div class="flex flex-col"><span class="font-body-strong text-body-strong">' + q.title + '</span><span class="font-caption text-caption text-muted">' + q.content + '</span></div></td>'
-                    + '<td class="py-lg font-number-display text-body-sm">' + q.date + '</td>'
-                    + '<td class="py-lg font-body-sm text-on-surface-variant">' + q.category + '</td>'
+                    + '<td class="py-lg"><div class="flex flex-col"><span class="font-body-strong text-body-strong">' + escapeHtml(q.title) + '</span><span class="font-caption text-caption text-muted">' + escapeHtml(q.content) + '</span></div></td>'
+                    + '<td class="py-lg font-number-display text-body-sm">' + escapeHtml(q.date) + '</td>'
+                    + '<td class="py-lg font-body-sm text-on-surface-variant">' + escapeHtml(q.category) + '</td>'
                     + '<td class="py-lg"><span class="px-sm py-xxs ' + statusClass + ' text-caption-strong rounded-full">' + q.status + '</span></td>'
                     + '</tr>';
             }).join('');
@@ -562,6 +616,10 @@
             document.getElementById('mrContent').value = '';
             mrSelectedCategory = null;
             document.querySelectorAll('.mr-cat-btn').forEach(b => { b.classList.remove('bg-primary', 'text-white', 'border-primary'); });
+            const slotSelect = document.getElementById('mrSlotSelect');
+            const openSlots = EF_APPOINTMENT.openSlots();
+            slotSelect.innerHTML = '<option value="">예약하지 않음</option>'
+                + openSlots.map(s => '<option value="' + s.id + '">' + s.date + ' ' + s.time + '</option>').join('');
             const modal = document.getElementById('mentorRequestModal');
             modal.classList.remove('hidden');
             setTimeout(() => modal.classList.remove('opacity-0'), 10);
@@ -578,7 +636,15 @@
                 EF_MODAL.alert('업무 분야, 제목, 상세 내용을 모두 입력해주세요.');
                 return;
             }
-            EF_MENTORING.add({ email: currentUser, name: '박지민', school: '○○초등학교', category: mrSelectedCategory, title, content });
+            // 로그인 계정에서 파생 — profile-modal.js와 같은 규칙(이메일 아이디 부분 = 이름, org_이메일 키 = 소속)을 따른다.
+            const menteeName = currentUser.split('@')[0];
+            const menteeSchool = localStorage.getItem('org_' + currentUser) || '(소속 미입력)';
+            const entry = EF_MENTORING.add({ email: currentUser, name: menteeName, school: menteeSchool, category: mrSelectedCategory, title, content });
+            const slotId = Number(document.getElementById('mrSlotSelect').value);
+            if (slotId) {
+                EF_APPOINTMENT.book({ slotId, requestId: entry.id, menteeEmail: currentUser, menteeName, menteeSchool });
+                renderUpcomingAppointment();
+            }
             renderMyRequests();
             EF_MODAL.alert('멘토 상담 신청이 접수되었습니다. 담당 멘토가 확인 후 답변을 드립니다.').then(closeMentorRequestModal);
         }
@@ -664,19 +730,13 @@
             mpToast(file.name + ' 자료를 추가했습니다', 'check_circle');
         };
 
-        // --- 예약된 상담 로직 ---
+        // --- 예약된 상담 로직 (멘토 상담함과 EF_APPOINTMENT 공유) ---
         function renderUpcomingAppointment() {
             const container = document.getElementById('upcomingAppointmentContainer');
             if (!container) return;
-            let appointments = JSON.parse(localStorage.getItem('ef_upcoming_appointments'));
-            if (!appointments) {
-                appointments = [
-                    { id: 'app-1', role: '멘토', name: '김도윤 수석교사', date: '2026-06-15 15:00', type: '화상 상담 (Zoom)', dDay: 'D-2' }
-                ];
-                localStorage.setItem('ef_upcoming_appointments', JSON.stringify(appointments));
-            }
+            const app = EF_APPOINTMENT.upcomingByEmail(currentUser)[0];
 
-            if (appointments.length === 0) {
+            if (!app) {
                 container.innerHTML = `
                     <div class="flex items-center justify-between mb-lg">
                         <h2 class="font-title-md text-title-md">예약된 상담</h2>
@@ -685,55 +745,59 @@
                         <p class="text-white/80">예약된 상담이 없습니다.</p>
                     </div>
                 `;
-            } else {
-                const app = appointments[0]; // 제일 빠른거 하나만
-                container.innerHTML = `
-                    <div class="flex items-center justify-between mb-lg">
-                        <h2 class="font-title-md text-title-md">예약된 상담</h2>
-                        <span class="px-sm py-xxs bg-white/20 backdrop-blur-md rounded-full text-caption-strong">${app.dDay}</span>
-                    </div>
-                    <div class="flex flex-col gap-base">
-                        <div class="flex items-start gap-md">
-                            <span class="material-symbols-outlined text-primary-fixed" data-icon="person">person</span>
-                            <div>
-                                <p class="font-caption text-caption text-primary-fixed">${app.role}</p>
-                                <p class="font-body-strong text-body-strong">${app.name}</p>
-                            </div>
-                        </div>
-                        <div class="flex items-start gap-md">
-                            <span class="material-symbols-outlined text-primary-fixed" data-icon="schedule">schedule</span>
-                            <div>
-                                <p class="font-caption text-caption text-primary-fixed">일시</p>
-                                <p class="font-body-strong text-body-strong">${app.date}</p>
-                            </div>
-                        </div>
-                        <div class="flex items-start gap-md">
-                            <span class="material-symbols-outlined text-primary-fixed" data-icon="videocam">videocam</span>
-                            <div>
-                                <p class="font-caption text-caption text-primary-fixed">상담 방식</p>
-                                <p class="font-body-strong text-body-strong">${app.type}</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="flex gap-sm mt-xl">
-                        <button class="flex-1 py-base border border-white/30 text-white font-button rounded-full hover:bg-white/10 transition-all text-[14px]" onclick="cancelAppointment('${app.id}')">
-                            예약 취소
-                        </button>
-                        <button class="flex-1 py-base bg-white text-primary font-button rounded-full hover:bg-primary-fixed transition-all text-[14px]" onclick="mpToast('회의실 링크를 열고 있습니다...', 'video_camera_front')">
-                            회의실 입장
-                        </button>
-                    </div>
-                `;
+                return;
             }
+            const dDayNum = Math.round((new Date(app.date + 'T00:00:00') - new Date(new Date().toDateString())) / 86400000);
+            const dDay = dDayNum <= 0 ? '오늘' : ('D-' + dDayNum);
+            container.innerHTML = `
+                <div class="flex items-center justify-between mb-lg">
+                    <h2 class="font-title-md text-title-md">예약된 상담</h2>
+                    <span class="px-sm py-xxs bg-white/20 backdrop-blur-md rounded-full text-caption-strong">${dDay}</span>
+                </div>
+                <div class="flex flex-col gap-base">
+                    <div class="flex items-start gap-md">
+                        <span class="material-symbols-outlined text-primary-fixed" data-icon="person">person</span>
+                        <div>
+                            <p class="font-caption text-caption text-primary-fixed">멘토</p>
+                            <p class="font-body-strong text-body-strong" id="apptMentorName"></p>
+                        </div>
+                    </div>
+                    <div class="flex items-start gap-md">
+                        <span class="material-symbols-outlined text-primary-fixed" data-icon="schedule">schedule</span>
+                        <div>
+                            <p class="font-caption text-caption text-primary-fixed">일시</p>
+                            <p class="font-body-strong text-body-strong" id="apptWhen"></p>
+                        </div>
+                    </div>
+                    <div class="flex items-start gap-md">
+                        <span class="material-symbols-outlined text-primary-fixed" data-icon="videocam">videocam</span>
+                        <div>
+                            <p class="font-caption text-caption text-primary-fixed">상담 방식</p>
+                            <p class="font-body-strong text-body-strong" id="apptPlatform"></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-base" id="apptInfoSlot"></div>
+                <div class="flex gap-sm mt-xl">
+                    <button class="w-full py-base border border-white/30 text-white font-button rounded-full hover:bg-white/10 transition-all text-[14px]" id="apptCancelBtn">
+                        예약 취소
+                    </button>
+                </div>
+            `;
+            document.getElementById('apptMentorName').textContent = app.mentorName;
+            document.getElementById('apptWhen').textContent = app.date + ' ' + app.time;
+            document.getElementById('apptPlatform').textContent = EF_APPOINTMENT.platformLabel(app.platform);
+            document.getElementById('apptInfoSlot').appendChild(buildMeetingInfoDisplay(app));
+            document.getElementById('apptCancelBtn').addEventListener('click', () => cancelAppointment(app.id));
         }
 
         window.cancelAppointment = function(id) {
-            if (!confirm('예약을 취소하시겠습니까?')) return;
-            let appointments = JSON.parse(localStorage.getItem('ef_upcoming_appointments')) || [];
-            appointments = appointments.filter(a => a.id !== id);
-            localStorage.setItem('ef_upcoming_appointments', JSON.stringify(appointments));
-            renderUpcomingAppointment();
-            mpToast('예약이 취소되었습니다.', 'check_circle');
+            EF_MODAL.confirm('예약을 취소하시겠습니까?', { confirmLabel: '예약 취소', danger: true }).then(ok => {
+                if (!ok) return;
+                EF_APPOINTMENT.cancel(id);
+                renderUpcomingAppointment();
+                mpToast('예약이 취소되었습니다.', 'check_circle');
+            });
         };
 
         renderSavedResources();

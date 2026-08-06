@@ -313,7 +313,7 @@
                 <p class="text-[15px] text-ink/70">이민수 수석교사 · 학교 현장 선생님들이 보내온 상담 요청을 확인하고 답변하세요.</p>
             </div>
             <div class="flex items-center gap-xs">
-                <button
+                <button onclick="openSlotModal()"
                     class="px-md py-xs h-[36px] bg-primary text-white rounded-full text-[14px] font-bold flex items-center gap-xs hover:bg-primary-active transition-all">
                     <span class="material-symbols-outlined text-[18px]" data-icon="calendar_month">calendar_month</span>
                     상담 가능 시간 설정
@@ -352,7 +352,7 @@
                         data-icon="calendar_today">calendar_today</span>
                 </div>
                 <div class="flex items-baseline gap-xs">
-                    <span class="font-number-display text-display-md text-secondary">1</span>
+                    <span class="font-number-display text-display-md text-secondary" id="mtStatUpcoming">0</span>
                     <span class="font-body-sm text-body-sm text-muted">건</span>
                 </div>
             </div>
@@ -396,44 +396,7 @@
             <div class="flex flex-col gap-xl">
                 <!-- Upcoming Appointment -->
                 <section class="bg-primary text-white p-xl rounded-xxl shadow-lg relative overflow-hidden bento-card">
-
-                    <div class="relative z-10">
-                        <div class="flex items-center justify-between mb-lg">
-                            <h2 class="font-title-md text-title-md">예약된 상담</h2>
-                            <span
-                                class="px-sm py-xxs bg-white/20 backdrop-blur-md rounded-full text-caption-strong">D-2</span>
-                        </div>
-                        <div class="flex flex-col gap-base">
-                            <div class="flex items-start gap-md">
-                                <span class="material-symbols-outlined text-primary-fixed"
-                                    data-icon="person">person</span>
-                                <div>
-                                    <p class="font-caption text-caption text-primary-fixed">신청 교사</p>
-                                    <p class="font-body-strong text-body-strong">최미래 (구미고등학교)</p>
-                                </div>
-                            </div>
-                            <div class="flex items-start gap-md">
-                                <span class="material-symbols-outlined text-primary-fixed"
-                                    data-icon="schedule">schedule</span>
-                                <div>
-                                    <p class="font-caption text-caption text-primary-fixed">일시</p>
-                                    <p class="font-body-strong text-body-strong">2026-08-05 15:00</p>
-                                </div>
-                            </div>
-                            <div class="flex items-start gap-md">
-                                <span class="material-symbols-outlined text-primary-fixed"
-                                    data-icon="videocam">videocam</span>
-                                <div>
-                                    <p class="font-caption text-caption text-primary-fixed">상담 방식</p>
-                                    <p class="font-body-strong text-body-strong">화상 상담 (Zoom)</p>
-                                </div>
-                            </div>
-                        </div>
-                        <button
-                            class="w-full mt-xl py-base bg-white text-primary font-button rounded-full hover:bg-primary-fixed transition-all">
-                            회의실 입장하기
-                        </button>
-                    </div>
+                    <div class="relative z-10" id="mentorAppointmentContainer"></div>
                 </section>
                 <!-- Recently Answered -->
                 <section class="bg-white p-xl rounded-xxl border border-hairline shadow-sm">
@@ -443,38 +406,7 @@
                             <span class="material-symbols-outlined text-muted" data-icon="more_vert">more_vert</span>
                         </button>
                     </div>
-                    <div class="flex flex-col gap-sm">
-                        <div class="flex items-center gap-md p-base bg-surface-soft rounded-xl border border-hairline">
-                            <div
-                                class="w-10 h-10 bg-success/10 text-success rounded-lg flex items-center justify-center">
-                                <span class="material-symbols-outlined" data-icon="task_alt">task_alt</span>
-                            </div>
-                            <div class="flex-1 overflow-hidden">
-                                <p class="font-body-sm text-body-sm font-medium truncate text-on-surface">박지영 장학사 · 멘토링 배정 협의</p>
-                                <p class="font-caption text-caption text-muted">2026.07.24 답변 완료</p>
-                            </div>
-                        </div>
-                        <div class="flex items-center gap-md p-base bg-surface-soft rounded-xl border border-hairline">
-                            <div
-                                class="w-10 h-10 bg-success/10 text-success rounded-lg flex items-center justify-center">
-                                <span class="material-symbols-outlined" data-icon="task_alt">task_alt</span>
-                            </div>
-                            <div class="flex-1 overflow-hidden">
-                                <p class="font-body-sm text-body-sm font-medium truncate text-on-surface">정성실 교사 · 학교폭력 대응 매뉴얼 안내</p>
-                                <p class="font-caption text-caption text-muted">2026.07.22 답변 완료</p>
-                            </div>
-                        </div>
-                        <div class="flex items-center gap-md p-base bg-surface-soft rounded-xl border border-hairline">
-                            <div
-                                class="w-10 h-10 bg-success/10 text-success rounded-lg flex items-center justify-center">
-                                <span class="material-symbols-outlined" data-icon="task_alt">task_alt</span>
-                            </div>
-                            <div class="flex-1 overflow-hidden">
-                                <p class="font-body-sm text-body-sm font-medium truncate text-on-surface">이교육 교사 · NEIS 학적 변동 처리 안내</p>
-                                <p class="font-caption text-caption text-muted">2026.07.18 답변 완료</p>
-                            </div>
-                        </div>
-                    </div>
+                    <div class="flex flex-col gap-sm" id="recentAnsweredContainer"></div>
                 </section>
             </div>
         </div>
@@ -501,6 +433,10 @@
                     <p class="text-body-sm text-on-surface whitespace-pre-line" id="maAnswerText"></p>
                 </div>
                 <div class="flex flex-col gap-xs">
+                    <label class="text-[13px] font-bold text-ink">화상 상담 예약</label>
+                    <div id="maApptBox"></div>
+                </div>
+                <div class="flex flex-col gap-xs">
                     <label class="text-[13px] font-bold text-ink" for="maAnswerInput">답변 작성</label>
                     <textarea class="w-full border border-gray-300 rounded-xl px-md py-sm text-[14px] focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors resize-none" id="maAnswerInput" placeholder="신청 교사에게 전달할 답변을 입력하세요." rows="4"></textarea>
                 </div>
@@ -508,6 +444,33 @@
             <div class="px-lg py-base bg-surface-soft flex justify-end gap-sm">
                 <button class="px-lg py-sm rounded-full font-bold text-[14px] bg-primary text-white hover:bg-primary-active transition-colors" id="maSubmitBtn" onclick="submitMentorAnswer()">답변 등록</button>
                 <button class="px-lg py-sm rounded-full font-bold text-[14px] text-ink/70 hover:bg-surface-strong transition-colors" onclick="closeMentorAnswerModal()">닫기</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 상담 가능 시간 설정 모달 -->
+    <div class="hidden opacity-0 fixed inset-0 z-[100] flex items-center justify-center bg-ink/50 backdrop-blur-sm transition-opacity duration-300" id="slotModal">
+        <div class="bg-white w-full max-w-md mx-sm rounded-2xl overflow-hidden shadow-2xl max-h-[85vh] flex flex-col">
+            <div class="px-lg py-base border-b border-hairline flex justify-between items-center">
+                <h3 class="text-title-sm font-bold text-ink flex items-center gap-xs"><span class="material-symbols-outlined text-primary">calendar_month</span>상담 가능 시간 설정</h3>
+                <button class="p-xs hover:bg-surface-strong rounded-full transition-colors text-on-surface-variant" onclick="closeSlotModal()"><span class="material-symbols-outlined">close</span></button>
+            </div>
+            <div class="p-lg overflow-y-auto flex flex-col gap-md">
+                <div class="flex gap-xs items-end">
+                    <div class="flex-1">
+                        <label class="block text-[12px] font-bold text-ink mb-xxs" for="slotDate">날짜</label>
+                        <input class="w-full border border-gray-300 rounded-xl px-md py-sm text-[14px] focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors" id="slotDate" type="date">
+                    </div>
+                    <div class="flex-1">
+                        <label class="block text-[12px] font-bold text-ink mb-xxs" for="slotTime">시간</label>
+                        <input class="w-full border border-gray-300 rounded-xl px-md py-sm text-[14px] focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors" id="slotTime" type="time">
+                    </div>
+                    <button class="h-[42px] px-base rounded-xl bg-primary text-white font-bold text-[14px] hover:bg-primary-active transition-colors shrink-0" onclick="addSlot()">추가</button>
+                </div>
+                <div class="flex flex-col gap-xs" id="slotListContainer"></div>
+            </div>
+            <div class="px-lg py-base bg-surface-soft flex justify-end">
+                <button class="px-lg py-sm rounded-full font-bold text-[14px] text-ink/70 hover:bg-surface-strong transition-colors" onclick="closeSlotModal()">닫기</button>
             </div>
         </div>
     </div>
@@ -532,6 +495,21 @@
     <script>
         let maActiveId = null;
 
+        // 사용자가 입력한 문자열(이름/학교/제목 등)을 innerHTML로 그릴 때 태그로 해석되지 않도록 이스케이프.
+        function escapeHtml(str) {
+            const div = document.createElement('div');
+            div.textContent = str == null ? '' : str;
+            return div.innerHTML;
+        }
+        // http/https가 아닌 스킴(javascript: 등)은 클릭 가능한 링크로 만들지 않기 위한 검사.
+        function isSafeHttpUrl(url) {
+            if (!url) return false;
+            try {
+                const u = new URL(url, window.location.href);
+                return u.protocol === 'http:' || u.protocol === 'https:';
+            } catch (e) { return false; }
+        }
+
         function renderMentorInbox() {
             const list = EF_MENTORING.all().slice().reverse();
             document.getElementById('mtStatNew').textContent = list.filter(q => q.status === '신규').length;
@@ -549,10 +527,10 @@
                 const btnLabel = answered ? '상담 내역 보기' : (q.status === '신규' ? '답변하기' : '이어서 답변');
                 const btnClass = answered ? 'bg-surface-strong text-ink border border-hairline hover:bg-surface-variant' : (q.status === '신규' ? 'bg-primary text-white hover:bg-primary-active' : 'bg-surface-strong text-ink border border-hairline hover:bg-surface-variant');
                 return '<tr class="hover:bg-surface-soft transition-colors">'
-                    + '<td class="py-lg"><div class="flex flex-col"><span class="font-body-strong text-body-strong">' + q.name + '</span><span class="font-caption text-caption text-muted">' + q.school + '</span></div></td>'
-                    + '<td class="py-lg font-body-sm text-on-surface-variant">' + q.title + '</td>'
-                    + '<td class="py-lg font-body-sm text-on-surface-variant">' + q.category + '</td>'
-                    + '<td class="py-lg font-number-display text-body-sm">' + q.date + '</td>'
+                    + '<td class="py-lg"><div class="flex flex-col"><span class="font-body-strong text-body-strong">' + escapeHtml(q.name) + '</span><span class="font-caption text-caption text-muted">' + escapeHtml(q.school) + '</span></div></td>'
+                    + '<td class="py-lg font-body-sm text-on-surface-variant">' + escapeHtml(q.title) + '</td>'
+                    + '<td class="py-lg font-body-sm text-on-surface-variant">' + escapeHtml(q.category) + '</td>'
+                    + '<td class="py-lg font-number-display text-body-sm">' + escapeHtml(q.date) + '</td>'
                     + '<td class="py-lg"><span class="px-sm py-xxs ' + statusClass + ' text-caption-strong rounded-full">' + q.status + '</span></td>'
                     + '<td class="py-lg"><button class="px-base h-[36px] rounded-full font-button text-body-sm transition-all ' + btnClass + '" onclick="openMentorAnswerModal(' + q.id + ')">' + btnLabel + '</button></td>'
                     + '</tr>';
@@ -567,6 +545,7 @@
             document.getElementById('maMeta').textContent = q.name + ' · ' + q.school + ' · ' + q.date;
             document.getElementById('maTitle').textContent = q.title;
             document.getElementById('maContent').textContent = q.content;
+            renderMaApptBox(q);
 
             const answerBox = document.getElementById('maAnswerBox');
             const answerInput = document.getElementById('maAnswerInput');
@@ -599,10 +578,336 @@
             }
             EF_MENTORING.respond(maActiveId, text);
             renderMentorInbox();
+            renderRecentAnswered();
             closeMentorAnswerModal();
         }
 
+        // --- 화상 상담 플랫폼(Zoom/Teams/기타) 입력 폼 — 링크는 element.href로만 설정하고
+        // 회의번호/비밀번호는 textContent로만 표시해서, 사용자가 입력한 값이 HTML로 해석되지 않게 한다. ---
+        function buildMeetingForm(opts) {
+            const wrap = document.createElement('div');
+            wrap.className = 'flex flex-col gap-xs';
+
+            let platform = opts.initialPlatform || 'zoom';
+            const PLATFORMS = [
+                { key: 'zoom', label: 'Zoom', icon: 'videocam', activeClass: 'bg-[#2D8CFF] text-white border-[#2D8CFF]' },
+                { key: 'teams', label: 'Teams', icon: 'videocam', activeClass: 'bg-[#5059C9] text-white border-[#5059C9]' },
+                { key: 'other', label: '기타', icon: 'link', activeClass: 'bg-ink text-white border-ink' },
+            ];
+
+            const toggleRow = document.createElement('div');
+            toggleRow.className = 'flex gap-xs';
+            const btnByKey = {};
+            PLATFORMS.forEach(p => {
+                const btn = document.createElement('button');
+                btn.type = 'button';
+                const icon = document.createElement('span');
+                icon.className = 'material-symbols-outlined text-[16px]';
+                icon.textContent = p.icon;
+                btn.appendChild(icon);
+                btn.appendChild(document.createTextNode(p.label));
+                btn.addEventListener('click', () => { platform = p.key; refreshToggle(); refreshFields(); });
+                btnByKey[p.key] = { btn, activeClass: p.activeClass };
+                toggleRow.appendChild(btn);
+            });
+            function refreshToggle() {
+                PLATFORMS.forEach(p => {
+                    const { btn, activeClass } = btnByKey[p.key];
+                    btn.className = 'flex-1 flex items-center justify-center gap-xxs px-sm py-xs rounded-lg border text-caption-strong transition-colors '
+                        + (p.key === platform ? activeClass : 'border-hairline text-body hover:border-primary');
+                });
+            }
+
+            const fieldsWrap = document.createElement('div');
+            fieldsWrap.className = 'flex flex-col gap-xs';
+            let linkInput = null, idInput = null, pwInput = null;
+            function refreshFields() {
+                fieldsWrap.innerHTML = '';
+                linkInput = document.createElement('input');
+                linkInput.type = 'url';
+                linkInput.className = 'w-full border border-gray-300 rounded-xl px-md py-sm text-[14px] focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors';
+                linkInput.placeholder = platform === 'other' ? '화상회의 접속 링크 (Google Meet, Webex 등)' : '입장 링크 (있으면 비밀번호가 필요 없습니다)';
+                fieldsWrap.appendChild(linkInput);
+                if (platform === 'other') {
+                    idInput = null; pwInput = null;
+                } else {
+                    const row = document.createElement('div');
+                    row.className = 'flex gap-xs';
+                    idInput = document.createElement('input');
+                    idInput.type = 'text';
+                    idInput.className = 'flex-1 border border-gray-300 rounded-xl px-md py-sm text-[14px] focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors';
+                    idInput.placeholder = '회의 번호';
+                    pwInput = document.createElement('input');
+                    pwInput.type = 'text';
+                    pwInput.className = 'flex-1 border border-gray-300 rounded-xl px-md py-sm text-[14px] focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors';
+                    pwInput.placeholder = '비밀번호';
+                    row.appendChild(idInput);
+                    row.appendChild(pwInput);
+                    fieldsWrap.appendChild(row);
+                }
+            }
+            refreshToggle();
+            refreshFields();
+
+            const submitBtn = document.createElement('button');
+            submitBtn.type = 'button';
+            submitBtn.className = 'w-full h-[42px] rounded-xl bg-primary text-white font-bold text-[14px] hover:bg-primary-active transition-colors';
+            submitBtn.textContent = opts.submitLabel;
+            submitBtn.addEventListener('click', () => {
+                const joinLink = linkInput.value.trim();
+                const meetingId = idInput ? idInput.value.trim() : '';
+                const meetingPassword = pwInput ? pwInput.value.trim() : '';
+                if (!joinLink && !meetingId) {
+                    EF_MODAL.alert('입장 링크 또는 회의 번호 중 하나는 입력해주세요.');
+                    return;
+                }
+                opts.onSubmit({ platform, joinLink, meetingId, meetingPassword });
+            });
+
+            wrap.appendChild(toggleRow);
+            wrap.appendChild(fieldsWrap);
+            wrap.appendChild(submitBtn);
+            return wrap;
+        }
+        // 예약된 화상회의 정보를 안전하게 보여준다 — 링크는 href 프로퍼티로만 설정(그리고 http/https만
+        // 허용)하고, 회의번호/비밀번호는 textContent로만 넣는다(둘 다 사용자가 직접 입력한 값이라 HTML
+        // 문자열에 그대로 이어붙이면 안 됨).
+        function buildMeetingInfoDisplay(appt, joinLabel) {
+            const wrap = document.createElement('div');
+            wrap.className = 'flex items-center gap-sm flex-wrap';
+            if (isSafeHttpUrl(appt.joinLink)) {
+                const a = document.createElement('a');
+                a.href = appt.joinLink;
+                a.target = '_blank';
+                a.rel = 'noopener';
+                a.className = 'inline-flex items-center gap-xxs px-base h-[32px] rounded-full text-caption-strong bg-primary text-white hover:bg-primary-active transition-colors';
+                const icon = document.createElement('span');
+                icon.className = 'material-symbols-outlined text-[16px]';
+                icon.textContent = 'videocam';
+                a.appendChild(icon);
+                a.appendChild(document.createTextNode(joinLabel || '입장 링크로 접속'));
+                wrap.appendChild(a);
+            }
+            if (appt.meetingId) {
+                const span = document.createElement('span');
+                span.className = 'text-caption text-ink/70';
+                span.textContent = '회의 번호 ' + appt.meetingId + (appt.meetingPassword ? ' · 암호 ' + appt.meetingPassword : '');
+                wrap.appendChild(span);
+            }
+            return wrap;
+        }
+
+        // --- 화상 상담 예약 (상담 요청에 연결) ---
+        function renderMaApptBox(q) {
+            const box = document.getElementById('maApptBox');
+            box.innerHTML = '';
+            const existing = EF_APPOINTMENT.byRequestId(q.id);
+            if (existing) {
+                box.appendChild(buildExistingApptCard(existing));
+                return;
+            }
+            const open = EF_APPOINTMENT.openSlots();
+            if (!open.length) {
+                const p = document.createElement('p');
+                p.className = 'text-caption text-muted';
+                p.appendChild(document.createTextNode('설정된 가용 시간이 없습니다. '));
+                const btn = document.createElement('button');
+                btn.type = 'button';
+                btn.className = 'text-primary underline';
+                btn.textContent = '상담 가능 시간 설정하기';
+                btn.addEventListener('click', () => { closeMentorAnswerModal(); openSlotModal(); });
+                p.appendChild(btn);
+                box.appendChild(p);
+                return;
+            }
+
+            const wrap = document.createElement('div');
+            wrap.className = 'flex flex-col gap-sm';
+            const select = document.createElement('select');
+            select.id = 'maSlotSelect';
+            select.className = 'w-full border border-gray-300 rounded-xl px-md py-sm text-[14px] focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors';
+            open.forEach(s => {
+                const opt = document.createElement('option');
+                opt.value = String(s.id);
+                opt.textContent = s.date + ' ' + s.time;
+                select.appendChild(opt);
+            });
+            wrap.appendChild(select);
+            wrap.appendChild(buildMeetingForm({
+                initialPlatform: 'zoom',
+                submitLabel: '예약 확정',
+                onSubmit: function (info) {
+                    EF_APPOINTMENT.book(Object.assign({ slotId: Number(select.value), requestId: q.id, menteeEmail: q.email, menteeName: q.name, menteeSchool: q.school }, info));
+                    renderMaApptBox(q);
+                    renderMentorAppointment();
+                    EF_MODAL.alert('화상 상담이 예약되었습니다.');
+                }
+            }));
+            box.appendChild(wrap);
+        }
+        function buildExistingApptCard(existing) {
+            const card = document.createElement('div');
+            card.className = 'p-base bg-primary/5 border border-primary/20 rounded-xl flex flex-col gap-sm';
+
+            const top = document.createElement('div');
+            top.className = 'flex items-center justify-between gap-md';
+            const info = document.createElement('div');
+            const line1 = document.createElement('p');
+            line1.className = 'text-body-sm font-bold text-ink';
+            line1.textContent = existing.date + ' ' + existing.time + ' · ' + EF_APPOINTMENT.platformLabel(existing.platform);
+            const line2 = document.createElement('p');
+            line2.className = 'text-caption text-muted';
+            line2.textContent = '예약 확정됨';
+            info.appendChild(line1);
+            info.appendChild(line2);
+            const cancelBtn = document.createElement('button');
+            cancelBtn.className = 'px-base h-[32px] rounded-full text-caption-strong bg-white border border-hairline hover:bg-surface-strong transition-colors shrink-0';
+            cancelBtn.textContent = '예약 취소';
+            cancelBtn.addEventListener('click', () => cancelMaAppointment(existing.id));
+            top.appendChild(info);
+            top.appendChild(cancelBtn);
+            card.appendChild(top);
+
+            if (existing.joinLink || existing.meetingId) {
+                card.appendChild(buildMeetingInfoDisplay(existing));
+            } else {
+                const note = document.createElement('p');
+                note.className = 'text-caption text-muted';
+                note.textContent = '신청 교사가 먼저 예약했습니다. 화상회의 정보를 입력해주세요.';
+                card.appendChild(note);
+                card.appendChild(buildMeetingForm({
+                    initialPlatform: existing.platform || 'zoom',
+                    submitLabel: '화상회의 정보 저장',
+                    onSubmit: function (info) {
+                        EF_APPOINTMENT.setMeetingInfo(existing.id, info);
+                        const q = EF_MENTORING.all().find(x => x.id === maActiveId);
+                        if (q) renderMaApptBox(q);
+                        renderMentorAppointment();
+                        EF_MODAL.alert('화상회의 정보가 저장되었습니다.');
+                    }
+                }));
+            }
+            return card;
+        }
+        function cancelMaAppointment(apptId) {
+            EF_MODAL.confirm('예약을 취소하시겠습니까?', { confirmLabel: '예약 취소', danger: true }).then(ok => {
+                if (!ok) return;
+                EF_APPOINTMENT.cancel(apptId);
+                const q = EF_MENTORING.all().find(x => x.id === maActiveId);
+                if (q) renderMaApptBox(q);
+                renderMentorAppointment();
+            });
+        }
+
+        // --- 예약된 상담 카드 (사이드바) ---
+        function renderMentorAppointment() {
+            const container = document.getElementById('mentorAppointmentContainer');
+            const upcoming = EF_APPOINTMENT.upcomingAll();
+            document.getElementById('mtStatUpcoming').textContent = upcoming.length;
+            container.innerHTML = '';
+            const app = upcoming[0];
+            if (!app) {
+                container.innerHTML = '<div class="flex items-center justify-between mb-lg"><h2 class="font-title-md text-title-md">예약된 상담</h2></div>'
+                    + '<div class="py-xl text-center"><p class="text-white/80">예약된 상담이 없습니다.</p></div>';
+                return;
+            }
+            const dDay = Math.round((new Date(app.date + 'T00:00:00') - new Date(new Date().toDateString())) / 86400000);
+            const dDayLabel = dDay <= 0 ? '오늘' : ('D-' + dDay);
+            const shell = document.createElement('div');
+            shell.innerHTML = '<div class="flex items-center justify-between mb-lg">'
+                + '<h2 class="font-title-md text-title-md">예약된 상담</h2>'
+                + '<span class="px-sm py-xxs bg-white/20 backdrop-blur-md rounded-full text-caption-strong">' + dDayLabel + '</span>'
+                + '</div>'
+                + '<div class="flex flex-col gap-base">'
+                + '<div class="flex items-start gap-md"><span class="material-symbols-outlined text-primary-fixed" data-icon="person">person</span><div><p class="font-caption text-caption text-primary-fixed">신청 교사</p><p class="font-body-strong text-body-strong" id="mentorApptMentee"></p></div></div>'
+                + '<div class="flex items-start gap-md"><span class="material-symbols-outlined text-primary-fixed" data-icon="schedule">schedule</span><div><p class="font-caption text-caption text-primary-fixed">일시</p><p class="font-body-strong text-body-strong" id="mentorApptWhen"></p></div></div>'
+                + '<div class="flex items-start gap-md"><span class="material-symbols-outlined text-primary-fixed" data-icon="videocam">videocam</span><div><p class="font-caption text-caption text-primary-fixed">상담 방식</p><p class="font-body-strong text-body-strong" id="mentorApptPlatform"></p></div></div>'
+                + '</div>'
+                + '<div class="mt-base" id="mentorApptInfoSlot"></div>'
+                + '<div class="flex gap-sm mt-xl">'
+                + '<button class="flex-1 py-base border border-white/30 text-white font-button rounded-full hover:bg-white/10 transition-all text-[14px]" id="mentorApptCancelBtn">예약 취소</button>'
+                + '</div>';
+            container.appendChild(shell);
+            document.getElementById('mentorApptMentee').textContent = app.menteeName + ' (' + app.menteeSchool + ')';
+            document.getElementById('mentorApptWhen').textContent = app.date + ' ' + app.time;
+            document.getElementById('mentorApptPlatform').textContent = EF_APPOINTMENT.platformLabel(app.platform);
+            document.getElementById('mentorApptInfoSlot').appendChild(buildMeetingInfoDisplay(app, '회의실 입장하기'));
+            document.getElementById('mentorApptCancelBtn').addEventListener('click', () => cancelMentorAppointment(app.id));
+        }
+        function cancelMentorAppointment(id) {
+            EF_MODAL.confirm('예약을 취소하시겠습니까?', { confirmLabel: '예약 취소', danger: true }).then(ok => {
+                if (!ok) return;
+                EF_APPOINTMENT.cancel(id);
+                renderMentorAppointment();
+                renderMentorInbox();
+            });
+        }
+
+        // --- 최근 답변 완료 (사이드바) ---
+        function renderRecentAnswered() {
+            const container = document.getElementById('recentAnsweredContainer');
+            const answered = EF_MENTORING.all().filter(q => q.status === '답변완료').sort((a, b) => b.date.localeCompare(a.date)).slice(0, 3);
+            if (!answered.length) {
+                container.innerHTML = '<p class="text-center text-muted py-md text-[13px]">답변 완료한 상담이 없습니다.</p>';
+                return;
+            }
+            container.innerHTML = answered.map(q => '<div class="flex items-center gap-md p-base bg-surface-soft rounded-xl border border-hairline">'
+                + '<div class="w-10 h-10 bg-success/10 text-success rounded-lg flex items-center justify-center"><span class="material-symbols-outlined" data-icon="task_alt">task_alt</span></div>'
+                + '<div class="flex-1 overflow-hidden"><p class="font-body-sm text-body-sm font-medium truncate text-on-surface">' + escapeHtml(q.name) + ' 교사 · ' + escapeHtml(q.title) + '</p><p class="font-caption text-caption text-muted">' + escapeHtml(q.date) + ' 답변 완료</p></div>'
+                + '</div>').join('');
+        }
+
+        // --- 상담 가능 시간 설정 모달 ---
+        function openSlotModal() {
+            renderSlotList();
+            document.getElementById('slotDate').value = '';
+            document.getElementById('slotTime').value = '';
+            const modal = document.getElementById('slotModal');
+            modal.classList.remove('hidden');
+            setTimeout(() => modal.classList.remove('opacity-0'), 10);
+        }
+        function closeSlotModal() {
+            const modal = document.getElementById('slotModal');
+            modal.classList.add('opacity-0');
+            setTimeout(() => modal.classList.add('hidden'), 300);
+        }
+        function renderSlotList() {
+            const container = document.getElementById('slotListContainer');
+            const slots = EF_APPOINTMENT.slots();
+            if (!slots.length) {
+                container.innerHTML = '<p class="text-center text-muted py-md text-[13px]">등록된 시간이 없습니다.</p>';
+                return;
+            }
+            container.innerHTML = slots.map(s => '<div class="flex items-center justify-between p-base bg-surface-soft rounded-xl border border-hairline">'
+                + '<div class="flex items-center gap-sm"><span class="material-symbols-outlined text-muted text-[18px]">schedule</span><span class="text-body-sm">' + s.date + ' ' + s.time + '</span>'
+                + (s.booked ? '<span class="px-xs py-[1px] rounded text-[11px] font-bold bg-primary-fixed text-on-primary-fixed-variant">예약됨</span>' : '')
+                + '</div>'
+                + '<button class="p-xs text-muted hover:text-danger transition-colors disabled:opacity-30 disabled:hover:text-muted" onclick="removeSlotClick(' + s.id + ')"' + (s.booked ? ' disabled title="예약된 시간은 삭제할 수 없습니다"' : '') + '><span class="material-symbols-outlined text-[18px]">delete</span></button>'
+                + '</div>').join('');
+        }
+        function addSlot() {
+            const date = document.getElementById('slotDate').value;
+            const time = document.getElementById('slotTime').value;
+            if (!date || !time) {
+                EF_MODAL.alert('날짜와 시간을 모두 입력해주세요.');
+                return;
+            }
+            EF_APPOINTMENT.addSlot(date, time);
+            document.getElementById('slotDate').value = '';
+            document.getElementById('slotTime').value = '';
+            renderSlotList();
+        }
+        function removeSlotClick(id) {
+            if (!EF_APPOINTMENT.removeSlot(id)) {
+                EF_MODAL.alert('예약이 걸린 시간은 삭제할 수 없습니다. 먼저 예약을 취소해주세요.');
+                return;
+            }
+            renderSlotList();
+        }
+
         renderMentorInbox();
+        renderMentorAppointment();
+        renderRecentAnswered();
 
         // Micro-interactions and effects
         document.querySelectorAll('.bento-card').forEach(card => {
