@@ -423,7 +423,15 @@
         const selectAll = document.getElementById('selectAllCheckbox');
         const bulkApproveBtn = document.getElementById('bulkApproveBtn');
         const bulkRejectBtn = document.getElementById('bulkRejectBtn');
-        
+
+        // req.email/requestedRole은 회원가입 폼에서 사용자가 직접 입력한 값이라
+        // innerHTML에 그대로 넣으면 저장형 XSS가 될 수 있음 - 반드시 이스케이프.
+        const escapeHtml = (str) => {
+            const div = document.createElement('div');
+            div.textContent = str == null ? '' : str;
+            return div.innerHTML;
+        };
+
         const renderTable = () => {
             tbody.innerHTML = '';
             if(pendingRequests.length === 0) {
@@ -438,8 +446,8 @@
                     <td class="p-4 text-center">
                         <input type="checkbox" class="row-checkbox w-4 h-4 cursor-pointer accent-primary" data-index="${idx}">
                     </td>
-                    <td class="p-4 text-[15px] font-bold text-ink text-center">${req.email}</td>
-                    <td class="p-4 text-[14px] text-ink/70 text-center"><span class="bg-blue-100 text-blue-700 px-3 py-1 rounded-full font-bold">${req.requestedRole}</span></td>
+                    <td class="p-4 text-[15px] font-bold text-ink text-center">${escapeHtml(req.email)}</td>
+                    <td class="p-4 text-[14px] text-ink/70 text-center"><span class="bg-blue-100 text-blue-700 px-3 py-1 rounded-full font-bold">${escapeHtml(req.requestedRole)}</span></td>
                     <td class="p-4 text-center"><span class="text-orange-600 font-bold text-[13px] bg-orange-100 px-2 py-1 rounded-md">대기 중</span></td>
                     <td class="p-4 flex gap-2 justify-center">
                         <button class="px-3 py-1.5 bg-green-500 text-white font-bold rounded-lg text-[13px] hover:bg-green-600 transition-colors btn-approve" data-index="${idx}">승인</button>
@@ -484,17 +492,27 @@
         tbody.addEventListener('click', (e) => {
             if(e.target.classList.contains('btn-approve')) {
                 const idx = e.target.getAttribute('data-index');
-                approveRole(idx);
-                pendingRequests.splice(idx, 1);
-                localStorage.setItem('roleRequests', JSON.stringify(pendingRequests));
-                renderTable();
-                showToast('승인되었습니다.');
+                const req = pendingRequests[idx];
+                if (!req) return;
+                EF_MODAL.confirm(`${req.email} 님의 '${req.requestedRole}' 권한 신청을 승인하시겠습니까?`, { confirmLabel: '승인' }).then(ok => {
+                    if (!ok) return;
+                    approveRole(idx);
+                    pendingRequests.splice(idx, 1);
+                    localStorage.setItem('roleRequests', JSON.stringify(pendingRequests));
+                    renderTable();
+                    showToast('승인되었습니다.');
+                });
             } else if(e.target.classList.contains('btn-reject')) {
                 const idx = e.target.getAttribute('data-index');
-                pendingRequests.splice(idx, 1);
-                localStorage.setItem('roleRequests', JSON.stringify(pendingRequests));
-                renderTable();
-                showToast('반려되었습니다.');
+                const req = pendingRequests[idx];
+                if (!req) return;
+                EF_MODAL.confirm(`${req.email} 님의 '${req.requestedRole}' 권한 신청을 반려하시겠습니까?`, { confirmLabel: '반려', danger: true }).then(ok => {
+                    if (!ok) return;
+                    pendingRequests.splice(idx, 1);
+                    localStorage.setItem('roleRequests', JSON.stringify(pendingRequests));
+                    renderTable();
+                    showToast('반려되었습니다.');
+                });
             }
         });
         
@@ -509,25 +527,33 @@
         bulkApproveBtn.addEventListener('click', () => {
             const indices = getSelectedIndices();
             if(indices.length === 0) return showToast('선택된 항목이 없습니다.');
-            indices.forEach(idx => approveRole(idx));
-            indices.forEach(idx => pendingRequests.splice(idx, 1));
-            localStorage.setItem('roleRequests', JSON.stringify(pendingRequests));
-            selectAll.checked = false;
-            renderTable();
-            showToast(`${indices.length}건이 일괄 승인되었습니다.`);
+            EF_MODAL.confirm(`선택한 ${indices.length}건을 일괄 승인하시겠습니까?`, { confirmLabel: '승인' }).then(ok => {
+                if (!ok) return;
+                indices.forEach(idx => approveRole(idx));
+                indices.forEach(idx => pendingRequests.splice(idx, 1));
+                localStorage.setItem('roleRequests', JSON.stringify(pendingRequests));
+                selectAll.checked = false;
+                renderTable();
+                showToast(`${indices.length}건이 일괄 승인되었습니다.`);
+            });
         });
-        
+
         bulkRejectBtn.addEventListener('click', () => {
             const indices = getSelectedIndices();
             if(indices.length === 0) return showToast('선택된 항목이 없습니다.');
-            indices.forEach(idx => pendingRequests.splice(idx, 1));
-            localStorage.setItem('roleRequests', JSON.stringify(pendingRequests));
-            selectAll.checked = false;
-            renderTable();
-            showToast(`${indices.length}건이 일괄 반려되었습니다.`);
+            EF_MODAL.confirm(`선택한 ${indices.length}건을 일괄 반려하시겠습니까?`, { confirmLabel: '반려', danger: true }).then(ok => {
+                if (!ok) return;
+                indices.forEach(idx => pendingRequests.splice(idx, 1));
+                localStorage.setItem('roleRequests', JSON.stringify(pendingRequests));
+                selectAll.checked = false;
+                renderTable();
+                showToast(`${indices.length}건이 일괄 반려되었습니다.`);
+            });
         });
     });
 </script>
+</div>
+</div>
 </main>
 <!-- Role Management Modal -->
 <div class="hidden fixed inset-0 z-[100] flex items-center justify-center p-base" id="role-modal">

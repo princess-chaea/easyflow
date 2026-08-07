@@ -392,21 +392,23 @@
 <div class="flex flex-col md:flex-row gap-base">
 <div class="flex-grow relative">
 <span class="material-symbols-outlined absolute left-base top-1/2 -translate-y-1/2 text-muted">search</span>
-<input class="w-full pl-[48px] pr-base py-sm bg-surface-soft border border-hairline rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all font-body-md" placeholder="이름, 기관명, 또는 사번으로 검색하세요" type="text"/>
+<input class="w-full pl-[48px] pr-base py-sm bg-surface-soft border border-hairline rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all font-body-md" id="memberSearchInput" placeholder="이름, 기관명, 또는 사번으로 검색하세요" type="text"/>
 </div>
 <div class="flex gap-base">
-<select class="px-base py-sm bg-surface-soft border border-hairline rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all font-body-sm appearance-none min-w-[140px]">
+<select class="px-base py-sm bg-surface-soft border border-hairline rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all font-body-sm appearance-none min-w-[140px]" id="memberRoleFilter">
 <option>전체 역할</option>
 <option>서버 관리자</option>
 <option>학교 관리자</option>
 <option>교직원</option>
+<option>장학사</option>
+<option>멘토</option>
 </select>
-<select class="px-base py-sm bg-surface-soft border border-hairline rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all font-body-sm appearance-none min-w-[140px]">
+<select class="px-base py-sm bg-surface-soft border border-hairline rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all font-body-sm appearance-none min-w-[140px]" id="memberStatusFilter">
 <option>전체 상태</option>
 <option>활성</option>
 <option>비활성</option>
 </select>
-<button class="bg-primary text-white font-button px-xl py-sm rounded-full hover:bg-primary-active transition-all active:scale-95 shadow-sm">
+<button class="bg-primary text-white font-button px-xl py-sm rounded-full hover:bg-primary-active transition-all active:scale-95 shadow-sm" id="memberSearchBtn" type="button">
                         검색 적용
                     </button>
 </div>
@@ -436,14 +438,14 @@
 <!-- Pagination -->
 <div class="px-lg py-base border-t border-hairline flex items-center justify-between bg-surface-soft">
 <p class="font-caption text-caption text-muted">1-10 / 1,248 사용자</p>
-<div class="flex gap-xxs">
-<button class="w-8 h-8 flex items-center justify-center rounded bg-canvas border border-hairline text-muted hover:text-primary transition-colors">
+<div class="flex gap-xxs" id="memberPagination">
+<button class="w-8 h-8 flex items-center justify-center rounded bg-canvas border border-hairline text-muted hover:text-primary transition-colors" onclick="EF_MODAL.alert('이전 페이지가 없습니다.')" type="button">
 <span class="material-symbols-outlined text-[18px]">chevron_left</span>
 </button>
-<button class="w-8 h-8 flex items-center justify-center rounded bg-primary text-white font-number-display text-caption">1</button>
-<button class="w-8 h-8 flex items-center justify-center rounded bg-canvas border border-hairline text-on-surface-variant hover:text-primary transition-colors font-number-display text-caption">2</button>
-<button class="w-8 h-8 flex items-center justify-center rounded bg-canvas border border-hairline text-on-surface-variant hover:text-primary transition-colors font-number-display text-caption">3</button>
-<button class="w-8 h-8 flex items-center justify-center rounded bg-canvas border border-hairline text-muted hover:text-primary transition-colors">
+<button class="w-8 h-8 flex items-center justify-center rounded bg-primary text-white font-number-display text-caption" type="button">1</button>
+<button class="w-8 h-8 flex items-center justify-center rounded bg-canvas border border-hairline text-on-surface-variant hover:text-primary transition-colors font-number-display text-caption" onclick="EF_MODAL.alert('현재 예시 데이터만 표시 중이라 2페이지가 없습니다. 실제 회원 DB 연동 후 제공될 기능입니다.')" type="button">2</button>
+<button class="w-8 h-8 flex items-center justify-center rounded bg-canvas border border-hairline text-on-surface-variant hover:text-primary transition-colors font-number-display text-caption" onclick="EF_MODAL.alert('현재 예시 데이터만 표시 중이라 3페이지가 없습니다. 실제 회원 DB 연동 후 제공될 기능입니다.')" type="button">3</button>
+<button class="w-8 h-8 flex items-center justify-center rounded bg-canvas border border-hairline text-muted hover:text-primary transition-colors" onclick="EF_MODAL.alert('현재 예시 데이터만 표시 중이라 다음 페이지가 없습니다. 실제 회원 DB 연동 후 제공될 기능입니다.')" type="button">
 <span class="material-symbols-outlined text-[18px]">chevron_right</span>
 </button>
 </div>
@@ -454,6 +456,40 @@
 <!-- TODO: 실제 서버 연동 시 이 값들은 localStorage가 아니라 서버(DB)에서 불러오도록 교체해야 함.
      푸터 정보는 서버관리자_푸터관리.html 에서만 수정할 수 있음(브라우저별 임시 저장). -->
 <script src="assets/js/member-management.js"></script>
+<!-- 검색/필터 바가 완전히 미연동 상태였음(가짜 mockUsers 회원 목록 자체는 백엔드 필요 영역이라 그대로
+     두되, 화면에 이미 렌더링된 행을 걸러내는 검색/필터는 순수 프론트에서 가능해 실제로 동작하게 함).
+     member-management.js는 승인/거절 시 내부적으로 다시 renderTable()을 호출하므로, MutationObserver로
+     테이블이 다시 그려질 때마다 현재 필터를 재적용한다(공유 스크립트를 직접 수정하지 않기 위함). -->
+<script>
+    (function () {
+        const searchInput = document.getElementById('memberSearchInput');
+        const roleFilter = document.getElementById('memberRoleFilter');
+        const statusFilter = document.getElementById('memberStatusFilter');
+        const searchBtn = document.getElementById('memberSearchBtn');
+        const tableBody = document.getElementById('memberTableBody');
+        if (!searchInput || !tableBody) return;
+
+        function applyMemberFilter() {
+            const q = searchInput.value.trim().toLowerCase();
+            const role = roleFilter.value;
+            const status = statusFilter.value;
+            Array.from(tableBody.querySelectorAll('tr')).forEach(function (tr) {
+                const text = (tr.textContent || '');
+                const matchesQuery = !q || text.toLowerCase().includes(q);
+                const matchesRole = role === '전체 역할' || text.includes(role);
+                const matchesStatus = status === '전체 상태' || text.includes(status);
+                tr.style.display = (matchesQuery && matchesRole && matchesStatus) ? '' : 'none';
+            });
+        }
+
+        searchInput.addEventListener('input', applyMemberFilter);
+        roleFilter.addEventListener('change', applyMemberFilter);
+        statusFilter.addEventListener('change', applyMemberFilter);
+        searchBtn.addEventListener('click', applyMemberFilter);
+
+        new MutationObserver(applyMemberFilter).observe(tableBody, { childList: true });
+    })();
+</script>
 <script>
     (function () {
         function efLoadFooter() {

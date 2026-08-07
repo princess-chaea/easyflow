@@ -487,6 +487,7 @@
         function renderCustomNotices() {
             const list = loadCustomNotices();
             document.querySelectorAll('.custom-notice').forEach(el => el.remove());
+            const isAdmin = EF_ROLE.is('서버관리자');
             list.slice().reverse().forEach(n => {
                 const a = document.createElement('a');
                 a.className = 'custom-notice flex flex-col sm:flex-row sm:items-center justify-between gap-sm p-lg hover:bg-surface-container-high transition-colors';
@@ -495,10 +496,25 @@
                     + '<span class="shrink-0 inline-flex items-center px-sm py-1 bg-primary-container text-on-primary rounded-full text-label-sm font-label-sm uppercase tracking-wider">New</span>'
                     + '<span class="font-title-sm text-on-surface truncate">' + escNoticeHtml(n.title) + '</span>'
                     + '</div>'
-                    + '<div class="shrink-0 flex items-center gap-md text-on-surface-variant font-body-sm"><span>' + n.date + '</span></div>';
+                    + '<div class="shrink-0 flex items-center gap-md text-on-surface-variant font-body-sm"><span>' + n.date + '</span>'
+                    + (isAdmin ? '<button type="button" class="delete-custom-notice p-xxs rounded-full hover:bg-danger/10 text-danger transition-colors" data-key="' + escNoticeHtml(n.key) + '" aria-label="공지 삭제" title="삭제"><span class="material-symbols-outlined text-[18px]">delete</span></button>' : '')
+                    + '</div>';
                 document.getElementById('noticeList').prepend(a);
             });
         }
+        // 서버관리자가 등록한 공지만 삭제 가능(빌트인 4건은 정적 데이터라 대상 아님).
+        document.getElementById('noticeList').addEventListener('click', function (e) {
+            const delBtn = e.target.closest('.delete-custom-notice');
+            if (!delBtn) return;
+            e.preventDefault();
+            e.stopPropagation();
+            const key = delBtn.getAttribute('data-key');
+            EF_MODAL.confirm('이 공지사항을 삭제하시겠습니까?', { confirmLabel: '삭제', danger: true }).then(function (ok) {
+                if (!ok) return;
+                saveCustomNotices(loadCustomNotices().filter(function (n) { return n.key !== key; }));
+                renderCustomNotices();
+            });
+        });
         function openWriteNoticeModal() {
             document.getElementById('wnTitle').value = '';
             document.getElementById('wnBody').value = '';
@@ -521,7 +537,7 @@
             const list = loadCustomNotices();
             const now = new Date();
             const pad = n => String(n).padStart(2, '0');
-            list.push({ key: 'custom-' + now.getTime(), title, content, date: now.getFullYear() + '.' + pad(now.getMonth() + 1) + '.' + pad(now.getDate()) });
+            list.push({ key: 'custom-' + now.getTime(), title, content, date: now.getFullYear() + '. ' + pad(now.getMonth() + 1) + '. ' + pad(now.getDate()) });
             saveCustomNotices(list);
             renderCustomNotices();
             EF_MODAL.alert('공지사항이 등록되었습니다.').then(closeWriteNoticeModal);
