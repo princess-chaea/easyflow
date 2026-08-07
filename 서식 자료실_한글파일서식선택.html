@@ -422,11 +422,8 @@
 </div>
 <!-- Template Grid (Bento Style Layout) -->
 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="templateGrid">
-<!-- Card 1 (Selected) -->
-<div class="group relative bg-white border-2 border-secondary rounded-2xl p-6 shadow-md transition-all hover:shadow-lg cursor-pointer" data-category="교무학사" onclick="selectTemplate('tpl-1', '학교운영위원회 회의록', '교무학사')">
-<div class="absolute top-4 right-4 bg-secondary text-on-secondary rounded-full p-1 flex items-center justify-center">
-<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">check</span>
-</div>
+<!-- Card 1 -->
+<div class="group relative bg-white border border-hairline rounded-2xl p-6 transition-all hover:border-secondary hover:shadow-md cursor-pointer" data-category="교무학사" onclick="handleCardClick(this, 'tpl-1', '학교운영위원회 회의록', '교무학사')">
 <div class="flex items-start gap-4 mb-4">
 <div class="w-12 h-12 bg-surface-container-low rounded-2xl flex items-center justify-center text-hwp-blue">
 <span class="material-symbols-outlined text-3xl">description</span>
@@ -452,7 +449,7 @@
 </div>
 </div>
 <!-- Card 2 -->
-<div class="group bg-white border border-hairline rounded-2xl p-6 transition-all hover:border-secondary hover:shadow-md cursor-pointer" data-category="학교지원" onclick="selectTemplate('tpl-2', '현장체험학습 안전계획서', '학교지원')">
+<div class="group relative bg-white border border-hairline rounded-2xl p-6 transition-all hover:border-secondary hover:shadow-md cursor-pointer" data-category="학교지원" onclick="handleCardClick(this, 'tpl-2', '현장체험학습 안전계획서', '학교지원')">
 <div class="flex items-start gap-4 mb-4">
 <div class="w-12 h-12 bg-surface-container-low rounded-2xl flex items-center justify-center text-hwp-blue">
 <span class="material-symbols-outlined text-3xl">description</span>
@@ -478,7 +475,7 @@
 </div>
 </div>
 <!-- Card 3 -->
-<div class="group bg-white border border-hairline rounded-2xl p-6 transition-all hover:border-secondary hover:shadow-md cursor-pointer" data-category="교원인사" onclick="selectTemplate('tpl-3', '교직원 연수 결과 보고서', '교원인사')">
+<div class="group relative bg-white border border-hairline rounded-2xl p-6 transition-all hover:border-secondary hover:shadow-md cursor-pointer" data-category="교원인사" onclick="handleCardClick(this, 'tpl-3', '교직원 연수 결과 보고서', '교원인사')">
 <div class="flex items-start gap-4 mb-4">
 <div class="w-12 h-12 bg-surface-container-low rounded-2xl flex items-center justify-center text-hwp-blue">
 <span class="material-symbols-outlined text-3xl">description</span>
@@ -504,7 +501,7 @@
 </div>
 </div>
 <!-- Card 4 -->
-<div class="group bg-white border border-hairline rounded-2xl p-6 transition-all hover:border-secondary hover:shadow-md cursor-pointer" data-category="기본 서식" onclick="selectTemplate('tpl-4', '가정통신문 기본 서식', '기본 서식')">
+<div class="group relative bg-white border border-hairline rounded-2xl p-6 transition-all hover:border-secondary hover:shadow-md cursor-pointer" data-category="기본 서식" onclick="handleCardClick(this, 'tpl-4', '가정통신문 기본 서식', '기본 서식')">
 <div class="flex items-start gap-4 mb-4">
 <div class="w-12 h-12 bg-surface-container-low rounded-2xl flex items-center justify-center text-hwp-blue">
 <span class="material-symbols-outlined text-3xl">description</span>
@@ -530,7 +527,7 @@
 </div>
 </div>
 <!-- Card 5 -->
-<div class="group bg-white border border-hairline rounded-2xl p-6 transition-all hover:border-secondary hover:shadow-md cursor-pointer" data-category="교무학사" onclick="selectTemplate('tpl-5', '학교행사 운영 계획서', '교무학사')">
+<div class="group relative bg-white border border-hairline rounded-2xl p-6 transition-all hover:border-secondary hover:shadow-md cursor-pointer" data-category="교무학사" onclick="handleCardClick(this, 'tpl-5', '학교행사 운영 계획서', '교무학사')">
 <div class="flex items-start gap-4 mb-4">
 <div class="w-12 h-12 bg-surface-container-low rounded-2xl flex items-center justify-center text-hwp-blue">
 <span class="material-symbols-outlined text-3xl">description</span>
@@ -556,7 +553,7 @@
 </div>
 </div>
 <!-- Card 6 -->
-<div class="group bg-white border border-hairline rounded-2xl p-6 transition-all hover:border-secondary hover:shadow-md cursor-pointer" data-category="재정복지" onclick="selectTemplate('tpl-6', '물품 구입 품의서', '재정복지')">
+<div class="group relative bg-white border border-hairline rounded-2xl p-6 transition-all hover:border-secondary hover:shadow-md cursor-pointer" data-category="재정복지" onclick="handleCardClick(this, 'tpl-6', '물품 구입 품의서', '재정복지')">
 <div class="flex items-start gap-4 mb-4">
 <div class="w-12 h-12 bg-surface-container-low rounded-2xl flex items-center justify-center text-hwp-blue">
 <span class="material-symbols-outlined text-3xl">description</span>
@@ -602,6 +599,13 @@
 </div>
 </div>
 </section>
+<!-- Sticky Action Bar: 서식을 클릭하면 선택 표시만 되고, 실제 다음 단계 이동은 이 버튼을 눌러야 진행된다 -->
+<div class="mt-8 bg-surface-card p-4 rounded-2xl border border-hairline shadow-sm flex justify-between items-center sticky bottom-4 z-40 backdrop-blur-md bg-white/90" id="templateActionBar">
+<span class="text-body-sm text-on-surface-variant" id="templateActionBarLabel">서식을 선택하면 다음 단계로 진행할 수 있습니다.</span>
+<button class="px-8 py-3 bg-primary text-white rounded-lg font-bold hover:bg-primary-active transition-colors shadow-md flex items-center gap-2 disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-primary" id="templateProceedBtn" disabled onclick="proceedWithSelectedTemplate()">
+다음 단계로 <span class="material-symbols-outlined">arrow_forward</span>
+</button>
+</div>
 </div></div></main>
 <!-- 서식 미리보기 모달 (실제 파일 미리보기는 불가하여 서식명/설명만 표시) -->
 <div class="hidden opacity-0 fixed inset-0 z-[100] flex items-center justify-center bg-ink/50 backdrop-blur-sm transition-opacity duration-300 p-sm" id="templatePreviewModal">
@@ -636,8 +640,7 @@
 </footer>
 <!-- Micro-interaction Script -->
 <script>
-        // 카드 6개가 전부 같은 다음 단계로만 이동하고 어떤 서식을 골랐는지 다음 단계에
-        // 전달되지 않던 문제 수정 - sessionStorage로 마법사 상태를 이어준다.
+        // sessionStorage로 마법사 상태를 이어준다 - 실제 다음 단계 이동은 이 함수 호출 시점에 일어난다.
         function selectTemplate(id, title, category) {
             let state = {};
             try { state = JSON.parse(sessionStorage.getItem('ef_form_wizard')) || {}; } catch (e) { state = {}; }
@@ -646,6 +649,35 @@
             state.templateCategory = category;
             sessionStorage.setItem('ef_form_wizard', JSON.stringify(state));
             location.href = '서식 자료실_학교정보확인.html';
+        }
+
+        // 카드 클릭은 "선택" 표시만 하고 바로 이동하지 않는다 - 하단 액션바의
+        // "다음 단계로" 버튼을 눌러야 실제로 다음 단계로 진행된다(비교/미리보기 여지를 남기기 위함).
+        let selectedTemplate = null;
+        function handleCardClick(cardEl, id, title, category) {
+            document.querySelectorAll('#templateGrid > div[data-category]').forEach(function (c) {
+                c.classList.remove('border-2', 'border-secondary', 'shadow-md');
+                c.classList.add('border', 'border-hairline');
+                const badge = c.querySelector('.tpl-selected-badge');
+                if (badge) badge.remove();
+            });
+
+            cardEl.classList.remove('border', 'border-hairline');
+            cardEl.classList.add('border-2', 'border-secondary', 'shadow-md');
+            const badge = document.createElement('div');
+            badge.className = 'tpl-selected-badge absolute top-4 right-4 bg-secondary text-on-secondary rounded-full p-1 flex items-center justify-center';
+            badge.innerHTML = '<span class="material-symbols-outlined text-sm" style="font-variation-settings: \'FILL\' 1;">check</span>';
+            cardEl.appendChild(badge);
+
+            selectedTemplate = { id: id, title: title, category: category };
+            const label = document.getElementById('templateActionBarLabel');
+            const btn = document.getElementById('templateProceedBtn');
+            if (label) label.textContent = '선택한 서식: ' + title;
+            if (btn) btn.disabled = false;
+        }
+        function proceedWithSelectedTemplate() {
+            if (!selectedTemplate) return;
+            selectTemplate(selectedTemplate.id, selectedTemplate.title, selectedTemplate.category);
         }
 
         // "추천 서식" / "HWP·HWPX 파일 업로드" 탭 전환
@@ -666,6 +698,9 @@
             });
             uploadPanel.classList.toggle('hidden', !isUpload);
             if (!isUpload) filterTemplatesByCategory(document.querySelector('.category-chip[aria-pressed="true"]') ? document.querySelector('.category-chip[aria-pressed="true"]').dataset.category : '전체', document.querySelector('.category-chip[aria-pressed="true"]'));
+            // 업로드 탭에는 자체 "다음 단계로" 버튼이 있으므로 추천 서식용 하단 액션바는 숨긴다.
+            const actionBar = document.getElementById('templateActionBar');
+            if (actionBar) actionBar.classList.toggle('hidden', isUpload);
         }
 
         // 카테고리 칩 클릭 시 실제로 카드 목록을 필터링
@@ -724,35 +759,6 @@
             if (!fileNameEl.textContent) return;
             selectTemplate('tpl-upload-' + Date.now(), fileNameEl.textContent.replace(/\.(hwp|hwpx)$/i, ''), '사용자 업로드');
         }
-
-        // Simple logic for card selection visual feedback
-        document.querySelectorAll('.group.cursor-pointer').forEach(card => {
-            card.addEventListener('click', () => {
-                // Clear existing selections (simulated)
-                document.querySelectorAll('.group.cursor-pointer').forEach(c => {
-                    c.classList.remove('border-secondary', 'border-2', 'shadow-md');
-                    c.classList.add('border-hairline', 'border');
-                    const check = c.querySelector('.absolute.top-4.right-4');
-                    if (check) check.remove();
-                });
-
-                // Set active
-                card.classList.remove('border-hairline', 'border');
-                card.classList.add('border-secondary', 'border-2', 'shadow-md');
-                
-                // Add checkmark if not present
-                if (!card.querySelector('.absolute.top-4.right-4')) {
-                    const checkDiv = document.createElement('div');
-                    checkDiv.className = 'absolute top-4 right-4 bg-secondary text-on-secondary rounded-full p-1 flex items-center justify-center';
-                    checkDiv.innerHTML = '<span class="material-symbols-outlined text-sm" style="font-variation-settings: \'FILL\' 1;">check</span>';
-                    card.appendChild(checkDiv);
-                }
-
-                // Update bottom bar text
-                const title = card.querySelector('h3').innerText;
-                document.querySelector('.hidden.lg\\:flex .font-bold.text-primary').innerText = title;
-            });
-        });
     </script>
 <!-- TODO: 실제 서버 연동 시 이 값들은 localStorage가 아니라 서버(DB)에서 불러오도록 교체해야 함.
      푸터 정보는 서버관리자_푸터관리.html 에서만 수정할 수 있음(브라우저별 임시 저장). -->
