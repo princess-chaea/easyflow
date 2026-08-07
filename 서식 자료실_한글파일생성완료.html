@@ -463,16 +463,16 @@
 <h4 class="font-title-lg text-title-lg text-primary">최종 파일 다운로드</h4>
 </div>
 <div class="space-y-3">
-<button class="w-full py-4 bg-secondary text-on-secondary rounded-2xl font-bold flex items-center justify-center gap-3 hover:opacity-90 active:scale-95 transition-all shadow-md">
+<button class="w-full py-4 bg-secondary text-on-secondary rounded-2xl font-bold flex items-center justify-center gap-3 hover:opacity-90 active:scale-95 transition-all shadow-md" id="btnDownloadHwp">
 <span class="material-symbols-outlined text-2xl">download</span>
 <span class="text-lg">최종 HWP 다운로드</span>
 </button>
 <div class="grid grid-cols-2 gap-3">
-<button class="py-3 border border-secondary text-secondary rounded-2xl font-bold flex items-center justify-center gap-2 hover:bg-secondary/5 transition-colors">
+<button class="py-3 border border-secondary text-secondary rounded-2xl font-bold flex items-center justify-center gap-2 hover:bg-secondary/5 transition-colors" id="btnDownloadHwpx">
 <span class="material-symbols-outlined text-xl">description</span>
                                         HWPX
                                     </button>
-<button class="py-3 border border-outline text-on-surface-variant rounded-2xl font-bold flex items-center justify-center gap-2 hover:bg-surface-variant transition-colors">
+<button class="py-3 border border-outline text-on-surface-variant rounded-2xl font-bold flex items-center justify-center gap-2 hover:bg-surface-variant transition-colors" id="btnPreviewPdf">
 <span class="material-symbols-outlined text-xl">picture_as_pdf</span>
                                         PDF 미리보기
                                     </button>
@@ -533,39 +533,99 @@
 <script>
         // 마법사 단계 간 상태 연결: STEP1/STEP2에서 고른 서식명·학교명으로 실제 파일명을 구성.
         // 상태가 없으면(직접 이 페이지로 들어온 경우) 기존 예시 파일명을 그대로 둔다.
-        (function () {
-            let wizardState = {};
-            try { wizardState = JSON.parse(sessionStorage.getItem('ef_form_wizard')) || {}; } catch (e) { wizardState = {}; }
-            if (wizardState.schoolName && wizardState.templateTitle) {
-                const year = new Date().getFullYear();
-                const fileName = year + '_' + wizardState.schoolName + '_' + wizardState.templateTitle.replace(/\s+/g, '_') + '.hwp';
-                document.querySelectorAll('[data-wizard-filename]').forEach(function (el) {
-                    el.textContent = fileName;
-                });
-            }
-        })();
+        let wizardState = {};
+        try { wizardState = JSON.parse(sessionStorage.getItem('ef_form_wizard')) || {}; } catch (e) { wizardState = {}; }
+        let wizardFileBase = '2026_옥계초등학교_학교운영위원회_회의록';
+        if (wizardState.schoolName && wizardState.templateTitle) {
+            const year = new Date().getFullYear();
+            wizardFileBase = year + '_' + wizardState.schoolName + '_' + wizardState.templateTitle.replace(/\s+/g, '_');
+            document.querySelectorAll('[data-wizard-filename]').forEach(function (el) {
+                el.textContent = wizardFileBase + '.hwp';
+            });
+        }
 
-        // Simple micro-interaction for the primary download button
-        const downloadBtn = document.querySelector('button.bg-secondary');
-        if (downloadBtn) {
-            downloadBtn.addEventListener('click', () => {
-                const originalContent = downloadBtn.innerHTML;
-                downloadBtn.innerHTML = `
-                    <span class="material-symbols-outlined animate-spin text-2xl">sync</span>
-                    <span class="text-lg">파일 준비 중...</span>
-                `;
-                downloadBtn.classList.add('opacity-80');
-                
+        function escapeHtml(str) {
+            return String(str == null ? '' : str).replace(/[&<>"']/g, function (c) {
+                return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+            });
+        }
+
+        // 실제 HWP/HWPX 바이너리는 생성할 수 없으므로, STEP1/STEP2에서 모은 값을 채운
+        // 열람 가능한 HTML 문서를 실제로 다운로드되는 산출물로 대신 만든다.
+        function buildWizardDocumentHtml() {
+            const schoolName = wizardState.schoolName || '옥계초등학교';
+            const principalName = wizardState.principalName || '홍길동';
+            const meetingDate = wizardState.meetingDate || '2026. 5. 14. (목) 15:00';
+            const meetingPlace = wizardState.meetingPlace || '본교 2층 학운위 회의실';
+            const meetingAgenda = wizardState.meetingAgenda || '1. 2026학년도 1학기 방과후학교 운영 계획(안)\n2. 학교급식 소위원회 구성(안)\n3. 기타 안건';
+            const title = (wizardState.templateTitle || '학교운영위원회 임시회 회의록') + ' 회의록';
+
+            return '<!doctype html><html lang="ko"><head><meta charset="utf-8"><title>' + escapeHtml(wizardFileBase) + '</title>' +
+                '<style>body{font-family:"Malgun Gothic",sans-serif;max-width:800px;margin:40px auto;color:#111}' +
+                'h1{text-align:center;letter-spacing:4px;margin-bottom:48px}' +
+                'table{width:100%;border-collapse:collapse;margin-bottom:32px}' +
+                'td{border:1px solid #111;padding:10px}' +
+                '.label{background:#f5f5f5;font-weight:bold;text-align:center;width:110px}' +
+                'h3{margin-top:32px}ul{line-height:1.9}' +
+                '.agenda{border:1px solid #111;padding:16px;min-height:120px;white-space:pre-wrap;background:#fafafa}' +
+                'footer{margin-top:64px;text-align:center;font-size:12px;color:#888}</style></head><body>' +
+                '<h1>' + escapeHtml(wizardState.templateTitle || '학교운영위원회 임시회 회의록') + '</h1>' +
+                '<table><tr><td class="label">기 관 명</td><td>' + escapeHtml(schoolName) + '</td>' +
+                '<td class="label">기 관 장</td><td>' + escapeHtml(principalName) + '</td></tr></table>' +
+                '<h3>1. 회의 개요</h3><ul><li>일 시 : ' + escapeHtml(meetingDate) + '</li><li>장 소 : ' + escapeHtml(meetingPlace) + '</li></ul>' +
+                '<h3>2. 주요 안건</h3><div class="agenda">' + escapeHtml(meetingAgenda) + '</div>' +
+                '<p style="margin-top:64px;text-align:center">위와 같이 회의 결과를 보고합니다.</p>' +
+                '<p style="text-align:center;font-weight:bold">' + escapeHtml(schoolName) + ' 운영위원회위원장 (인)</p>' +
+                '<footer>EasyFlow 서식 자동 완성으로 생성된 문서입니다. (프로토타입 - 실제 HWP 포맷이 아닌 열람용 HTML 문서)</footer>' +
+                '</body></html>';
+        }
+
+        function downloadWizardDocument(fileName) {
+            const html = buildWizardDocumentHtml();
+            const blob = new Blob([html], { type: 'text/html;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = fileName;
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+            setTimeout(function () { URL.revokeObjectURL(url); }, 1000);
+        }
+
+        function wireDownloadButton(btn, fileName, doneLabel) {
+            if (!btn) return;
+            btn.addEventListener('click', () => {
+                const originalContent = btn.innerHTML;
+                btn.innerHTML = '<span class="material-symbols-outlined animate-spin text-2xl">sync</span><span class="text-lg">파일 준비 중...</span>';
+                btn.classList.add('opacity-80');
+                btn.disabled = true;
+
                 setTimeout(() => {
-                    downloadBtn.innerHTML = `
-                        <span class="material-symbols-outlined text-2xl">check</span>
-                        <span class="text-lg">다운로드 시작</span>
-                    `;
+                    downloadWizardDocument(fileName);
+                    btn.innerHTML = '<span class="material-symbols-outlined text-2xl">check</span><span class="text-lg">' + doneLabel + '</span>';
                     setTimeout(() => {
-                        downloadBtn.innerHTML = originalContent;
-                        downloadBtn.classList.remove('opacity-80');
+                        btn.innerHTML = originalContent;
+                        btn.classList.remove('opacity-80');
+                        btn.disabled = false;
                     }, 2000);
-                }, 1500);
+                }, 900);
+            });
+        }
+
+        wireDownloadButton(document.getElementById('btnDownloadHwp'), wizardFileBase + '.html', '다운로드 시작');
+        wireDownloadButton(document.getElementById('btnDownloadHwpx'), wizardFileBase + '.html', '완료');
+
+        // PDF 미리보기: 실제 PDF 변환은 불가하므로 새 창에 인쇄 가능한 문서를 열어
+        // 브라우저의 '인쇄 > PDF로 저장'으로 이어질 수 있게 한다.
+        const previewPdfBtn = document.getElementById('btnPreviewPdf');
+        if (previewPdfBtn) {
+            previewPdfBtn.addEventListener('click', () => {
+                const win = window.open('', '_blank');
+                if (!win) { EF_MODAL.alert('팝업이 차단되어 미리보기를 열 수 없습니다. 팝업 차단을 해제해주세요.'); return; }
+                win.document.open();
+                win.document.write(buildWizardDocumentHtml());
+                win.document.close();
             });
         }
     </script>

@@ -412,6 +412,7 @@
 <div class="col-span-10 lg:col-span-4 space-y-xl">
 <!-- Dropzone Section -->
 <section class="relative bg-canvas border-2 border-dashed border-outline-variant rounded-2xl p-xl flex flex-col items-center justify-center text-center hover:border-primary transition-colors group cursor-pointer animate-fade-in-up stagger-1 overflow-hidden min-h-[280px]" id="dropzone">
+<input accept=".png,.jpg,.jpeg,.pdf" class="hidden" id="ocrFileInput" type="file"/>
 <!-- Idle State -->
 <div class="flex flex-col items-center" id="state-idle">
 <div class="w-16 h-16 bg-surface-container-low rounded-full flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-all duration-300 mb-lg">
@@ -435,10 +436,11 @@
 <div class="space-y-xl animate-fade-in-up stagger-2" id="summary-container">
 <!-- Success State (Default displayed for demo) -->
 <section class="bg-canvas border border-hairline rounded-2xl hover-float p-lg" id="state-success">
-<div class="flex items-center gap-xs mb-lg">
+<div class="flex items-center gap-xs mb-xs">
 <span class="text-xl">✨</span>
 <h3 class="font-title-md text-title-md text-primary">AI 공문 핵심 요약</h3>
 </div>
+<p class="hidden font-body-sm text-muted mb-lg flex items-center gap-xxs" id="ocrAnalyzedFileLabel"><span class="material-symbols-outlined text-[14px]">attach_file</span><span id="ocrAnalyzedFileName"></span></p>
 <div class="bg-primary/5 rounded-lg p-lg border border-primary/10">
 <ul class="space-y-md">
 <li class="flex gap-md">
@@ -466,7 +468,7 @@
 </li>
 </ul>
 </div>
-<button class="w-full mt-lg py-sm text-primary font-body-strong border border-primary rounded-full hover:bg-primary/5 transition-colors">
+<button class="w-full mt-lg py-sm text-primary font-body-strong border border-primary rounded-full hover:bg-primary/5 transition-colors" onclick="openOcrDetailModal()">
                                 상세 요약 보기
                             </button>
 </section>
@@ -501,11 +503,11 @@
 <span class="material-symbols-outlined text-primary">folder_open</span>
 <h3 class="font-title-md text-title-md text-ink">관련 추천 서식</h3>
 </div>
-<div class="flex flex-wrap gap-xs">
-<button class="px-md py-xs bg-primary text-white rounded-full font-label-sm text-label-sm">#전체</button>
-<button class="px-md py-xs bg-surface-container-low text-secondary hover:bg-surface-container-high rounded-full font-label-sm text-label-sm transition-colors">#기안서</button>
-<button class="px-md py-xs bg-surface-container-low text-secondary hover:bg-surface-container-high rounded-full font-label-sm text-label-sm transition-colors">#계획서</button>
-<button class="px-md py-xs bg-surface-container-low text-secondary hover:bg-surface-container-high rounded-full font-label-sm text-label-sm transition-colors">#보고서</button>
+<div class="flex flex-wrap gap-xs" id="ocrDoctypeFilter">
+<button class="doctype-chip px-md py-xs bg-primary text-white rounded-full font-label-sm text-label-sm" data-doctype="전체" onclick="filterOcrForms('전체', this)">#전체</button>
+<button class="doctype-chip px-md py-xs bg-surface-container-low text-secondary hover:bg-surface-container-high rounded-full font-label-sm text-label-sm transition-colors" data-doctype="기안서" onclick="filterOcrForms('기안서', this)">#기안서</button>
+<button class="doctype-chip px-md py-xs bg-surface-container-low text-secondary hover:bg-surface-container-high rounded-full font-label-sm text-label-sm transition-colors" data-doctype="계획서" onclick="filterOcrForms('계획서', this)">#계획서</button>
+<button class="doctype-chip px-md py-xs bg-surface-container-low text-secondary hover:bg-surface-container-high rounded-full font-label-sm text-label-sm transition-colors" data-doctype="보고서" onclick="filterOcrForms('보고서', this)">#보고서</button>
 </div>
 </div>
 </div>
@@ -513,9 +515,9 @@
 <div class="flex items-center gap-md">
 <div class="relative flex-1">
 <span class="material-symbols-outlined absolute left-md top-1/2 -translate-y-1/2 text-secondary">search</span>
-<input class="w-full h-[44px] px-[44px] py-sm bg-[#f2f4f6] rounded-full font-body-md text-ink placeholder:text-muted border-none focus:ring-2 focus:ring-primary/20 transition-all" placeholder="추천 서식 내 검색..." type="text"/>
+<input class="w-full h-[44px] px-[44px] py-sm bg-[#f2f4f6] rounded-full font-body-md text-ink placeholder:text-muted border-none focus:ring-2 focus:ring-primary/20 transition-all" id="ocrFormSearchInput" oninput="renderOcrFormTable()" placeholder="추천 서식 내 검색..." type="text"/>
 </div>
-<div class="relative shrink-0"><select class="appearance-none h-[44px] pl-md pr-xl bg-[#f2f4f6] rounded-full font-body-md text-ink border-none focus:ring-2 focus:ring-primary/20 transition-all cursor-pointer" id="list-size-selector" onchange="updateListSize(this.value)" style="background-image: url(&quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23868b94'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E&quot;); background-repeat: no-repeat; background-position: right 12px center; background-size: 16px;">
+<div class="relative shrink-0"><select class="appearance-none h-[44px] pl-md pr-xl bg-[#f2f4f6] rounded-full font-body-md text-ink border-none focus:ring-2 focus:ring-primary/20 transition-all cursor-pointer" id="list-size-selector" onchange="renderOcrFormTable()" style="background-image: url(&quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23868b94'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E&quot;); background-repeat: no-repeat; background-position: right 12px center; background-size: 16px;">
 <option value="3">3개씩 보기</option>
 <option value="5">5개씩 보기</option>
 <option value="7">7개씩 보기</option>
@@ -535,7 +537,7 @@
 </tr>
 </thead>
 <tbody class="divide-y divide-hairline">
-<tr class="group hover:bg-surface-container-lowest transition-colors cursor-pointer" onclick="ocrFormToast('2024년 하계 연수 운영 기안서', 'visibility')">
+<tr class="group hover:bg-surface-container-lowest transition-colors cursor-pointer" data-doctype="기안서" data-title="2024년 하계 연수 운영 기안서" onclick="ocrFormToast('2024년 하계 연수 운영 기안서', 'visibility')">
 <td class="px-lg py-md">
 <div class="flex items-center gap-md">
 <span class="material-symbols-outlined text-primary/60 group-hover:text-primary">description</span>
@@ -557,7 +559,7 @@
 </button>
 </td>
 </tr>
-<tr class="group hover:bg-surface-container-lowest transition-colors cursor-pointer" onclick="ocrFormToast('학교 스마트기기 보급 관리 계획', 'visibility')">
+<tr class="group hover:bg-surface-container-lowest transition-colors cursor-pointer" data-doctype="계획서" data-title="학교 스마트기기 보급 관리 계획" onclick="ocrFormToast('학교 스마트기기 보급 관리 계획', 'visibility')">
 <td class="px-lg py-md">
 <div class="flex items-center gap-md">
 <span class="material-symbols-outlined text-primary/60 group-hover:text-primary">laptop_mac</span>
@@ -579,7 +581,7 @@
 </button>
 </td>
 </tr>
-<tr class="group hover:bg-surface-container-lowest transition-colors cursor-pointer" onclick="ocrFormToast('교육시설 환경 위생 점검 보고서', 'visibility')">
+<tr class="group hover:bg-surface-container-lowest transition-colors cursor-pointer" data-doctype="보고서" data-title="교육시설 환경 위생 점검 보고서" onclick="ocrFormToast('교육시설 환경 위생 점검 보고서', 'visibility')">
 <td class="px-lg py-md">
 <div class="flex items-center gap-md">
 <span class="material-symbols-outlined text-primary/60 group-hover:text-primary">health_and_safety</span>
@@ -605,26 +607,27 @@
 </table>
 </div>
 <div class="flex items-center justify-center gap-xs py-lg border-t border-hairline bg-white">
-<button class="w-10 h-10 flex items-center justify-center rounded-full text-secondary hover:bg-surface-container transition-colors">
+<button class="w-10 h-10 flex items-center justify-center rounded-full text-secondary hover:bg-surface-container transition-colors" onclick="goToOcrFormPage(1)">
 <span class="material-symbols-outlined">chevron_left</span>
 </button>
-<button class="w-10 h-10 flex items-center justify-center rounded-full bg-primary text-white font-label-sm text-label-sm">
+<button class="ocr-page-btn w-10 h-10 flex items-center justify-center rounded-full bg-primary text-white font-label-sm text-label-sm" data-page="1" onclick="goToOcrFormPage(1)">
                                 1
                             </button>
-<button class="w-10 h-10 flex items-center justify-center rounded-full text-secondary hover:bg-surface-container transition-colors font-label-sm text-label-sm">
+<button class="ocr-page-btn w-10 h-10 flex items-center justify-center rounded-full text-secondary hover:bg-surface-container transition-colors font-label-sm text-label-sm" data-page="2" onclick="goToOcrFormPage(2)">
                                 2
                             </button>
-<button class="w-10 h-10 flex items-center justify-center rounded-full text-secondary hover:bg-surface-container transition-colors font-label-sm text-label-sm">
+<button class="ocr-page-btn w-10 h-10 flex items-center justify-center rounded-full text-secondary hover:bg-surface-container transition-colors font-label-sm text-label-sm" data-page="3" onclick="goToOcrFormPage(3)">
                                 3
                             </button>
 <span class="px-xs text-muted">...</span>
-<button class="w-10 h-10 flex items-center justify-center rounded-full text-secondary hover:bg-surface-container transition-colors font-label-sm text-label-sm">
+<button class="ocr-page-btn w-10 h-10 flex items-center justify-center rounded-full text-secondary hover:bg-surface-container transition-colors font-label-sm text-label-sm" data-page="8" onclick="goToOcrFormPage(8)">
                                 8
                             </button>
-<button class="w-10 h-10 flex items-center justify-center rounded-full text-secondary hover:bg-surface-container transition-colors">
+<button class="w-10 h-10 flex items-center justify-center rounded-full text-secondary hover:bg-surface-container transition-colors" onclick="goToOcrFormPage(2)">
 <span class="material-symbols-outlined">chevron_right</span>
 </button>
 </div>
+<p class="hidden text-center text-body-sm text-muted py-lg border-t border-hairline bg-white" id="ocrPageEmptyNotice">등록된 추천 서식은 1페이지 분량뿐입니다. 더 이상 결과가 없습니다.</p>
 <!-- AI Cockpit Footer -->
 <div class="bg-ink text-white p-lg flex items-center justify-between">
 <div class="flex items-center gap-lg">
@@ -667,13 +670,14 @@
 </div>
 </div>
 </div></div></main>
-<!-- Floating Action Button -->
-<button class="fixed bottom-lg right-lg w-14 h-14 bg-primary text-white rounded-full shadow-lg flex items-center justify-center hover:scale-110 active:scale-90 transition-all z-50">
+<!-- Floating Action Button: 업로드 영역으로 스크롤 이동 -->
+<button class="fixed bottom-lg right-lg w-14 h-14 bg-primary text-white rounded-full shadow-lg flex items-center justify-center hover:scale-110 active:scale-90 transition-all z-50" onclick="focusOcrDropzone()">
 <span class="material-symbols-outlined text-3xl">auto_awesome</span>
 </button>
 <script>
         const dropzone = document.getElementById('dropzone');
         const validationError = document.getElementById('dropzone-validation-error');
+        const ocrFileInput = document.getElementById('ocrFileInput');
 
         const summaryStates = {
             success: document.getElementById('state-success'),
@@ -682,6 +686,7 @@
         };
 
         const retryBtn = document.getElementById('retry-btn');
+        let lastUploadedFileName = null;
 
         function setState(state) {
             Object.keys(summaryStates).forEach(key => {
@@ -690,6 +695,34 @@
             if (summaryStates[state]) {
                 summaryStates[state].classList.remove('hidden');
             }
+        }
+
+        // 실제 OCR/LLM 분석은 불가하므로 고정 요약 결과를 보여주되, 업로드한 파일명만큼은
+        // 실제로 화면에 반영해 "무엇을 분석했는지"가 입력과 무관하지 않도록 한다.
+        function startAnalysis(fileName) {
+            if (fileName) lastUploadedFileName = fileName;
+            setState('loading');
+            setTimeout(() => {
+                setState('success');
+                const label = document.getElementById('ocrAnalyzedFileLabel');
+                const nameEl = document.getElementById('ocrAnalyzedFileName');
+                if (lastUploadedFileName) {
+                    nameEl.textContent = lastUploadedFileName;
+                    label.classList.remove('hidden');
+                } else {
+                    label.classList.add('hidden');
+                }
+            }, 2000);
+        }
+
+        function handleOcrFile(file) {
+            const validTypes = ['image/png', 'image/jpeg', 'application/pdf'];
+            if (!validTypes.includes(file.type)) {
+                validationError.classList.remove('hidden');
+                setTimeout(() => validationError.classList.add('hidden'), 3000);
+                return;
+            }
+            startAnalysis(file.name);
         }
 
         // Dropzone logic
@@ -706,28 +739,109 @@
         dropzone.addEventListener('drop', (e) => {
             e.preventDefault();
             dropzone.classList.remove('border-primary', 'bg-primary/5');
-
             const files = e.dataTransfer.files;
-            if (files.length > 0) {
-                const file = files[0];
-                const validTypes = ['image/png', 'image/jpeg', 'application/pdf'];
-
-                if (!validTypes.includes(file.type)) {
-                    validationError.classList.remove('hidden');
-                    setTimeout(() => validationError.classList.add('hidden'), 3000);
-                    return;
-                }
-
-                // Start loading simulation
-                if (typeof startAnalysis === 'function') startAnalysis();
-                else {
-                    setState('loading');
-                    setTimeout(() => setState('success'), 2000);
-                }
-            }
+            if (files.length > 0) handleOcrFile(files[0]);
         });
+
+        // 클릭으로도 파일을 선택할 수 있게 한다(기존엔 드래그로만 가능했음)
+        dropzone.addEventListener('click', () => ocrFileInput.click());
+        ocrFileInput.addEventListener('change', () => {
+            if (ocrFileInput.files.length > 0) handleOcrFile(ocrFileInput.files[0]);
+        });
+
+        // 재시도 버튼: 분석 실패 상태에서 다시 로딩 → 성공으로
+        if (retryBtn) {
+            retryBtn.addEventListener('click', () => startAnalysis(lastUploadedFileName));
+        }
+
+        // FAB: 업로드 영역으로 스크롤 이동 + 강조
+        function focusOcrDropzone() {
+            dropzone.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            dropzone.classList.add('border-primary');
+            setTimeout(() => dropzone.classList.remove('border-primary'), 1200);
+        }
+
+        // 상세 요약 모달
+        function openOcrDetailModal() {
+            const label = document.getElementById('ocrDetailFileLabel');
+            label.textContent = lastUploadedFileName ? ('업로드한 파일: ' + lastUploadedFileName) : '업로드한 파일이 없습니다. 기본 예시 공문 기준 요약입니다.';
+            const modal = document.getElementById('ocrDetailModal');
+            modal.classList.remove('hidden');
+            setTimeout(() => modal.classList.remove('opacity-0'), 10);
+        }
+        function closeOcrDetailModal() {
+            const modal = document.getElementById('ocrDetailModal');
+            modal.classList.add('opacity-0');
+            setTimeout(() => modal.classList.add('hidden'), 300);
+        }
+
+        // 관련 추천 서식 표: #전체/#기안서/#계획서/#보고서 필터 + 검색어 + "N개씩 보기"를 함께 반영
+        function filterOcrForms(doctype, btn) {
+            document.querySelectorAll('.doctype-chip').forEach(chip => {
+                const active = chip === btn;
+                chip.classList.toggle('bg-primary', active);
+                chip.classList.toggle('text-white', active);
+                chip.classList.toggle('bg-surface-container-low', !active);
+                chip.classList.toggle('text-secondary', !active);
+            });
+            renderOcrFormTable();
+        }
+
+        function renderOcrFormTable() {
+            const activeChip = document.querySelector('.doctype-chip.bg-primary');
+            const doctype = activeChip ? activeChip.dataset.doctype : '전체';
+            const search = (document.getElementById('ocrFormSearchInput').value || '').trim().toLowerCase();
+            const size = parseInt(document.getElementById('list-size-selector').value, 10);
+
+            let shown = 0;
+            document.querySelectorAll('tbody.divide-y tr').forEach(row => {
+                const matchesDoctype = doctype === '전체' || row.dataset.doctype === doctype;
+                const matchesSearch = !search || (row.dataset.title || '').toLowerCase().includes(search);
+                const show = matchesDoctype && matchesSearch && shown < size;
+                if (matchesDoctype && matchesSearch) shown++;
+                row.classList.toggle('hidden', !show);
+            });
+        }
+        renderOcrFormTable();
+
+        // 하단 페이지네이션: 실제로는 서식 3건뿐이라 1페이지 외에는 정직하게 "결과 없음"을 보여준다
+        function goToOcrFormPage(page) {
+            document.querySelectorAll('.ocr-page-btn').forEach(btn => {
+                const active = parseInt(btn.dataset.page, 10) === page;
+                btn.classList.toggle('bg-primary', active);
+                btn.classList.toggle('text-white', active);
+                btn.classList.toggle('text-secondary', !active);
+            });
+            const table = document.querySelector('.overflow-x-auto.flex-1');
+            const emptyNotice = document.getElementById('ocrPageEmptyNotice');
+            if (page === 1) {
+                table.classList.remove('hidden');
+                emptyNotice.classList.add('hidden');
+            } else {
+                table.classList.add('hidden');
+                emptyNotice.classList.remove('hidden');
+            }
+        }
     </script>
-<script class="">function updateListSize(size) { const rows = document.querySelectorAll('tbody.divide-y tr'); rows.forEach((row, index) => { if (index < parseInt(size)) { row.classList.remove('hidden'); } else { row.classList.add('hidden'); } }); } // Initialize with default value updateListSize(document.getElementById('list-size-selector').value);</script>
+<!-- 상세 요약 모달: 실제 원문 재현은 불가하므로 카드에 이미 표시된 요약 항목을 확대해서 보여준다 -->
+<div class="hidden opacity-0 fixed inset-0 z-[100] flex items-center justify-center bg-ink/50 backdrop-blur-sm transition-opacity duration-300 p-sm" id="ocrDetailModal">
+<div class="bg-white w-full max-w-lg rounded-2xl overflow-hidden shadow-2xl">
+<div class="px-lg py-base border-b border-hairline flex justify-between items-center">
+<h3 class="text-title-sm font-bold text-ink flex items-center gap-xs"><span class="text-xl">✨</span> AI 공문 상세 요약</h3>
+<button class="p-xs hover:bg-surface-strong rounded-full transition-colors text-on-surface-variant" onclick="closeOcrDetailModal()"><span class="material-symbols-outlined">close</span></button>
+</div>
+<div class="px-lg py-base text-caption text-muted border-b border-hairline" id="ocrDetailFileLabel">업로드한 파일이 없습니다. 기본 예시 공문 기준 요약입니다.</div>
+<div class="p-lg text-body-sm text-on-surface leading-relaxed space-y-md">
+<p><strong class="text-primary">문서 종류:</strong> 교원 연수 안내 공문</p>
+<p><strong class="text-primary">핵심 요지:</strong> 2024학년도 하계 교원 자율 연수 일정 및 운영 지침을 안내하고, 학교 스마트기기 전수 점검 대장 작성과 마감 기한(2024년 6월 30일 18:00)을 공지합니다.</p>
+<p><strong class="text-primary">권장 후속 조치:</strong> 이지플로우 연수 신청 시스템 접속 방법을 교직원에게 공유하고, 기기 파손 시 유지보수 신청 절차를 사전에 안내하세요.</p>
+<p class="text-caption text-muted">※ 실제 OCR/LLM 분석 없이 프론트엔드에서 제공하는 예시 요약입니다.</p>
+</div>
+<div class="px-lg py-base bg-surface-soft flex justify-end gap-sm">
+<button class="px-lg py-sm rounded-full font-bold text-on-surface-variant hover:bg-surface-strong transition-colors" onclick="closeOcrDetailModal()">닫기</button>
+</div>
+</div>
+</div>
 <div class="hidden fixed bottom-lg left-1/2 -translate-x-1/2 z-[70] px-md py-sm rounded-pill bg-surface-dark text-white text-body-sm shadow-2xl flex items-center gap-xs" id="ocrToastEl"></div>
 <script>
     let ocrToastTimer;

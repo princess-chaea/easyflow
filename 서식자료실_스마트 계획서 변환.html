@@ -432,7 +432,8 @@
 <div class="upload-icon">📄</div>
 <div class="upload-text">전년도 계획서 (HWP) 파일을 이곳에 드래그 하세요</div>
 <div class="upload-subtext">또는 버튼을 클릭하여 내 PC에서 파일을 선택해주세요.</div>
-<button class="btn-upload" onclick="simulateUpload()">파일 선택하기</button>
+<input accept=".hwp,.hwpx" class="hidden" id="planFileInput" type="file"/>
+<button class="btn-upload" onclick="document.getElementById('planFileInput').click()">파일 선택하기</button>
 </div>
 <!-- 진척도(프로그레스 바) -->
 <div class="progress-section" id="progress-section">
@@ -525,7 +526,7 @@
 <div class="result-download-card" id="result-card">
 <h4>✨ 문서 갱신 및 변환이 완료되었습니다!</h4>
 <p>올해 연도 정보가 반영된 새로운 계획서 파일이 준비되었습니다. 아래 버튼을 눌러 다운로드하세요.</p>
-<button class="btn-download-file" onclick="EF_MODAL.alert('변환된 파일(HWP) 다운로드가 시작됩니다.')">📥 변환된 파일 다운로드 (.hwp)</button>
+<button class="btn-download-file" onclick="downloadConvertedPlan()">📥 변환된 파일 다운로드 (.hwp)</button>
 </div>
 </div></div></main>
     <!-- Footer -->
@@ -670,11 +671,17 @@
             renderCalendar(currentYear, currentMonth);
         });
 
-        function simulateUpload() {
+        // 실제 HWP 파싱은 불가하므로 내용은 예시 값을 유지하되, 사용자가 실제로 업로드한
+        // 파일명만큼은 화면에 그대로 반영해 "무엇을 업로드했는지"와 결과가 무관하지 않게 한다.
+        function simulateUpload(file) {
+            const uploadedName = file ? file.name : '2025학년도 AI 디지털 활용 선도학교 연수 계획서.hwp';
+            const baseName = uploadedName.replace(/\.(hwp|hwpx)$/i, '');
+            const suggestedTitle = /2025/.test(baseName) ? baseName.replace('2025', '2026') : baseName + ' (2026년도)';
+
             progressSection.style.display = 'block';
             progressBar.style.width = '0%';
             progressPercent.innerText = '0%';
-            
+
             let width = 0;
             const interval = setInterval(() => {
                 width += 2;
@@ -693,23 +700,29 @@
                     clearInterval(interval);
                     progressMsg.innerText = "문서 분석 및 데이터 갱신 완료!";
                     progressSubmsg.innerText = "원본 문서 정보가 성공적으로 인식되었습니다.";
-                    
+
                     setTimeout(() => {
-                        docTitle.innerHTML = '<span class="result-text">2025학년도 AI 디지털 활용 선도학교 연수 계획서.hwp</span>';
+                        docTitle.innerHTML = '<span class="result-text">' + escapeHtml(uploadedName) + '</span>';
                         docDate.innerHTML = '<span class="result-text">2025. 7. 5.(토)</span>';
                         docContent.innerHTML = '<span class="result-text">에듀테크 활용 수업 역량 강화 연수</span>';
                         docTitle.classList.remove('placeholder-text');
                         docDate.classList.remove('placeholder-text');
                         docContent.classList.remove('placeholder-text');
-                        
-                        newTitleInput.value = "2026학년도 AI 디지털 활용 선도학교 연수 계획서";
+
+                        newTitleInput.value = suggestedTitle;
                         newDateInput.value = "2026. 7. 5.(일)";
                         newContentInput.value = "AI 디지털 교과서(AIDT) 실습 및 적용";
-                        
-                        updateLivePreview(); 
+
+                        updateLivePreview();
                     }, 300);
                 }
             }, 30);
+        }
+
+        function escapeHtml(str) {
+            return String(str == null ? '' : str).replace(/[&<>"']/g, function (c) {
+                return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+            });
         }
 
         dropZone.addEventListener('dragover', (e) => {
@@ -725,7 +738,13 @@
         dropZone.addEventListener('drop', (e) => {
             e.preventDefault();
             dropZone.classList.remove('dragover');
-            simulateUpload();
+            const file = e.dataTransfer.files && e.dataTransfer.files[0];
+            simulateUpload(file);
+        });
+
+        const planFileInput = document.getElementById('planFileInput');
+        planFileInput.addEventListener('change', () => {
+            if (planFileInput.files.length > 0) simulateUpload(planFileInput.files[0]);
         });
 
         btnConvert.addEventListener('click', () => {
@@ -739,6 +758,39 @@
                 resultCard.scrollIntoView({ behavior: 'smooth' });
             }, 1000);
         });
+
+        // 실제 HWP 바이너리는 생성할 수 없으므로, 화면에 반영된 실시간 미리보기 내용을
+        // 그대로 담은 열람 가능한 HTML 문서를 실제로 다운로드되는 산출물로 대신 만든다.
+        function downloadConvertedPlan() {
+            const titleVal = previewDocTitle.innerText;
+            const dateVal = previewDocDate.innerText;
+            const contentVal = previewDocContent.innerText;
+            const html = '<!doctype html><html lang="ko"><head><meta charset="utf-8"><title>' + escapeHtml(titleVal) + '</title>' +
+                '<style>body{font-family:"Malgun Gothic",sans-serif;max-width:800px;margin:40px auto;color:#111;line-height:1.9}' +
+                'h1{text-align:center;margin-bottom:32px}.field{margin-left:15px}' +
+                'footer{margin-top:64px;text-align:center;font-size:12px;color:#888}</style></head><body>' +
+                '<h1>' + escapeHtml(titleVal) + '</h1>' +
+                '<p>1. 관련: 초중등교육법 제23조 및 2026학년도 교원 연수 운영 지침</p>' +
+                '<p>2. 교원의 디지털 기반 수업 역량 강화를 위해 아래와 같이 연수를 추진하고자 합니다.</p>' +
+                '<div class="field">가. 연수명: ' + escapeHtml(titleVal) + '</div>' +
+                '<div class="field">나. 일시: ' + escapeHtml(dateVal) + '</div>' +
+                '<div class="field">다. 주요 내용: ' + escapeHtml(contentVal) + '</div>' +
+                '<div class="field">라. 대상: 전 교직원</div>' +
+                '<p style="margin-top:15px">붙임  2026학년도 연수 세부 계획서 1부.  끝.</p>' +
+                '<footer>EasyFlow 스마트 계획서 변환으로 생성된 문서입니다. (프로토타입 - 실제 HWP 포맷이 아닌 열람용 HTML 문서)</footer>' +
+                '</body></html>';
+
+            const blob = new Blob([html], { type: 'text/html;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = (newTitleInput.value.trim() || titleVal || '변환된_계획서') + '.html';
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+            setTimeout(() => URL.revokeObjectURL(url), 1000);
+            EF_MODAL.alert('변환된 파일 다운로드가 시작되었습니다. (프로토타입 특성상 실제 HWP가 아닌 HTML 문서로 제공됩니다.)');
+        }
 
         updateLivePreview();
     </script>

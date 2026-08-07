@@ -403,21 +403,27 @@
 <!-- Tabs & Filters -->
 <div class="flex flex-col md:flex-row gap-4 mb-stack-lg items-center justify-between">
 <div class="flex bg-surface-container p-1 rounded-2xl">
-<button class="px-6 py-2 bg-white shadow-sm rounded-lg font-bold text-sm text-primary">추천 서식</button>
-<button class="px-6 py-2 hover:bg-surface-variant rounded-lg font-medium text-sm text-on-surface-variant transition-all">HWP/HWPX 파일 업로드</button>
+<button class="px-6 py-2 bg-white shadow-sm rounded-lg font-bold text-sm text-primary" id="tabRecommended" onclick="switchTemplateTab('recommended')">추천 서식</button>
+<button class="px-6 py-2 hover:bg-surface-variant rounded-lg font-medium text-sm text-on-surface-variant transition-all" id="tabUpload" onclick="switchTemplateTab('upload')">HWP/HWPX 파일 업로드</button>
 </div>
-<div class="flex items-center gap-2 overflow-x-auto pb-2 md:pb-0 w-full md:w-auto">
-<button class="shrink-0 px-4 py-1.5 rounded-full border border-hairline bg-white text-xs font-bold hover:border-secondary transition-all">전체</button>
-<button class="shrink-0 px-4 py-1.5 rounded-full border border-hairline bg-white text-xs text-on-surface-variant hover:border-secondary transition-all">교무학사</button>
-<button class="shrink-0 px-4 py-1.5 rounded-full border border-hairline bg-white text-xs text-on-surface-variant hover:border-secondary transition-all">학교지원</button>
-<button class="shrink-0 px-4 py-1.5 rounded-full border border-hairline bg-white text-xs text-on-surface-variant hover:border-secondary transition-all">교원인사</button>
-<button class="shrink-0 px-4 py-1.5 rounded-full border border-hairline bg-white text-xs text-on-surface-variant hover:border-secondary transition-all">재정복지</button>
+<div class="flex items-center gap-2 overflow-x-auto pb-2 md:pb-0 w-full md:w-auto" id="categoryChipList">
+<button class="category-chip shrink-0 px-4 py-1.5 rounded-full border border-hairline bg-white text-xs font-bold hover:border-secondary transition-all" data-category="전체" onclick="filterTemplatesByCategory('전체', this)">전체</button>
+<button class="category-chip shrink-0 px-4 py-1.5 rounded-full border border-hairline bg-white text-xs text-on-surface-variant hover:border-secondary transition-all" data-category="교무학사" onclick="filterTemplatesByCategory('교무학사', this)">교무학사</button>
+<button class="category-chip shrink-0 px-4 py-1.5 rounded-full border border-hairline bg-white text-xs text-on-surface-variant hover:border-secondary transition-all" data-category="학교지원" onclick="filterTemplatesByCategory('학교지원', this)">학교지원</button>
+<button class="category-chip shrink-0 px-4 py-1.5 rounded-full border border-hairline bg-white text-xs text-on-surface-variant hover:border-secondary transition-all" data-category="교원인사" onclick="filterTemplatesByCategory('교원인사', this)">교원인사</button>
+<button class="category-chip shrink-0 px-4 py-1.5 rounded-full border border-hairline bg-white text-xs text-on-surface-variant hover:border-secondary transition-all" data-category="재정복지" onclick="filterTemplatesByCategory('재정복지', this)">재정복지</button>
+<button class="category-chip shrink-0 px-4 py-1.5 rounded-full border border-hairline bg-white text-xs text-on-surface-variant hover:border-secondary transition-all" data-category="기본 서식" onclick="filterTemplatesByCategory('기본 서식', this)">기본 서식</button>
 </div>
+</div>
+<!-- 카드 목록이 하나도 필터에 걸리지 않을 때 -->
+<div class="hidden text-center py-16 text-on-surface-variant" id="templateEmptyState">
+<span class="material-symbols-outlined text-4xl text-outline-variant mb-2 block">search_off</span>
+해당 분류의 서식이 없습니다.
 </div>
 <!-- Template Grid (Bento Style Layout) -->
-<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="templateGrid">
 <!-- Card 1 (Selected) -->
-<div class="group relative bg-white border-2 border-secondary rounded-2xl p-6 shadow-md transition-all hover:shadow-lg cursor-pointer" onclick="selectTemplate('tpl-1', '학교운영위원회 회의록', '교무학사')">
+<div class="group relative bg-white border-2 border-secondary rounded-2xl p-6 shadow-md transition-all hover:shadow-lg cursor-pointer" data-category="교무학사" onclick="selectTemplate('tpl-1', '학교운영위원회 회의록', '교무학사')">
 <div class="absolute top-4 right-4 bg-secondary text-on-secondary rounded-full p-1 flex items-center justify-center">
 <span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">check</span>
 </div>
@@ -440,13 +446,13 @@
 <span class="material-symbols-outlined text-sm">pages</span> 3 Pages
                                 </div>
 </div>
-<button class="text-secondary font-bold text-sm flex items-center gap-1 hover:underline">
+<button class="text-secondary font-bold text-sm flex items-center gap-1 hover:underline" onclick="event.stopPropagation(); openTemplatePreview(this)">
                                 미리보기 <span class="material-symbols-outlined text-sm">open_in_new</span>
 </button>
 </div>
 </div>
 <!-- Card 2 -->
-<div class="group bg-white border border-hairline rounded-2xl p-6 transition-all hover:border-secondary hover:shadow-md cursor-pointer" onclick="selectTemplate('tpl-2', '현장체험학습 안전계획서', '학교지원')">
+<div class="group bg-white border border-hairline rounded-2xl p-6 transition-all hover:border-secondary hover:shadow-md cursor-pointer" data-category="학교지원" onclick="selectTemplate('tpl-2', '현장체험학습 안전계획서', '학교지원')">
 <div class="flex items-start gap-4 mb-4">
 <div class="w-12 h-12 bg-surface-container-low rounded-2xl flex items-center justify-center text-hwp-blue">
 <span class="material-symbols-outlined text-3xl">description</span>
@@ -466,13 +472,13 @@
 <span class="material-symbols-outlined text-sm">pages</span> 5 Pages
                                 </div>
 </div>
-<button class="text-on-surface-variant font-bold text-sm flex items-center gap-1 hover:text-secondary">
+<button class="text-on-surface-variant font-bold text-sm flex items-center gap-1 hover:text-secondary" onclick="event.stopPropagation(); openTemplatePreview(this)">
                                 미리보기 <span class="material-symbols-outlined text-sm">open_in_new</span>
 </button>
 </div>
 </div>
 <!-- Card 3 -->
-<div class="group bg-white border border-hairline rounded-2xl p-6 transition-all hover:border-secondary hover:shadow-md cursor-pointer" onclick="selectTemplate('tpl-3', '교직원 연수 결과 보고서', '교원인사')">
+<div class="group bg-white border border-hairline rounded-2xl p-6 transition-all hover:border-secondary hover:shadow-md cursor-pointer" data-category="교원인사" onclick="selectTemplate('tpl-3', '교직원 연수 결과 보고서', '교원인사')">
 <div class="flex items-start gap-4 mb-4">
 <div class="w-12 h-12 bg-surface-container-low rounded-2xl flex items-center justify-center text-hwp-blue">
 <span class="material-symbols-outlined text-3xl">description</span>
@@ -492,13 +498,13 @@
 <span class="material-symbols-outlined text-sm">pages</span> 2 Pages
                                 </div>
 </div>
-<button class="text-on-surface-variant font-bold text-sm flex items-center gap-1 hover:text-secondary">
+<button class="text-on-surface-variant font-bold text-sm flex items-center gap-1 hover:text-secondary" onclick="event.stopPropagation(); openTemplatePreview(this)">
                                 미리보기 <span class="material-symbols-outlined text-sm">open_in_new</span>
 </button>
 </div>
 </div>
 <!-- Card 4 -->
-<div class="group bg-white border border-hairline rounded-2xl p-6 transition-all hover:border-secondary hover:shadow-md cursor-pointer" onclick="selectTemplate('tpl-4', '가정통신문 기본 서식', '기본 서식')">
+<div class="group bg-white border border-hairline rounded-2xl p-6 transition-all hover:border-secondary hover:shadow-md cursor-pointer" data-category="기본 서식" onclick="selectTemplate('tpl-4', '가정통신문 기본 서식', '기본 서식')">
 <div class="flex items-start gap-4 mb-4">
 <div class="w-12 h-12 bg-surface-container-low rounded-2xl flex items-center justify-center text-hwp-blue">
 <span class="material-symbols-outlined text-3xl">description</span>
@@ -518,13 +524,13 @@
 <span class="material-symbols-outlined text-sm">pages</span> 1 Page
                                 </div>
 </div>
-<button class="text-on-surface-variant font-bold text-sm flex items-center gap-1 hover:text-secondary">
+<button class="text-on-surface-variant font-bold text-sm flex items-center gap-1 hover:text-secondary" onclick="event.stopPropagation(); openTemplatePreview(this)">
                                 미리보기 <span class="material-symbols-outlined text-sm">open_in_new</span>
 </button>
 </div>
 </div>
 <!-- Card 5 -->
-<div class="group bg-white border border-hairline rounded-2xl p-6 transition-all hover:border-secondary hover:shadow-md cursor-pointer" onclick="selectTemplate('tpl-5', '학교행사 운영 계획서', '교무학사')">
+<div class="group bg-white border border-hairline rounded-2xl p-6 transition-all hover:border-secondary hover:shadow-md cursor-pointer" data-category="교무학사" onclick="selectTemplate('tpl-5', '학교행사 운영 계획서', '교무학사')">
 <div class="flex items-start gap-4 mb-4">
 <div class="w-12 h-12 bg-surface-container-low rounded-2xl flex items-center justify-center text-hwp-blue">
 <span class="material-symbols-outlined text-3xl">description</span>
@@ -544,13 +550,13 @@
 <span class="material-symbols-outlined text-sm">pages</span> 8 Pages
                                 </div>
 </div>
-<button class="text-on-surface-variant font-bold text-sm flex items-center gap-1 hover:text-secondary">
+<button class="text-on-surface-variant font-bold text-sm flex items-center gap-1 hover:text-secondary" onclick="event.stopPropagation(); openTemplatePreview(this)">
                                 미리보기 <span class="material-symbols-outlined text-sm">open_in_new</span>
 </button>
 </div>
 </div>
 <!-- Card 6 -->
-<div class="group bg-white border border-hairline rounded-2xl p-6 transition-all hover:border-secondary hover:shadow-md cursor-pointer" onclick="selectTemplate('tpl-6', '물품 구입 품의서', '재정복지')">
+<div class="group bg-white border border-hairline rounded-2xl p-6 transition-all hover:border-secondary hover:shadow-md cursor-pointer" data-category="재정복지" onclick="selectTemplate('tpl-6', '물품 구입 품의서', '재정복지')">
 <div class="flex items-start gap-4 mb-4">
 <div class="w-12 h-12 bg-surface-container-low rounded-2xl flex items-center justify-center text-hwp-blue">
 <span class="material-symbols-outlined text-3xl">description</span>
@@ -570,24 +576,47 @@
 <span class="material-symbols-outlined text-sm">pages</span> 1 Page
                                 </div>
 </div>
-<button class="text-on-surface-variant font-bold text-sm flex items-center gap-1 hover:text-secondary">
+<button class="text-on-surface-variant font-bold text-sm flex items-center gap-1 hover:text-secondary" onclick="event.stopPropagation(); openTemplatePreview(this)">
                                 미리보기 <span class="material-symbols-outlined text-sm">open_in_new</span>
 </button>
 </div>
 </div>
 </div>
 <!-- Empty state hint / upload area -->
-<div class="mt-stack-lg p-12 border-2 border-dashed border-hairline rounded-2xl text-center">
+<div class="hidden mt-stack-lg p-12 border-2 border-dashed border-hairline rounded-2xl text-center" id="uploadPanel">
 <span class="material-symbols-outlined text-5xl text-outline-variant mb-4">cloud_upload</span>
 <h4 class="font-title-md text-title-md text-on-surface-variant mb-2">보유하신 HWP 서식이 있으신가요?</h4>
 <p class="text-body-sm text-outline mb-6">파일을 이곳에 끌어다 놓거나 클릭하여 업로드하면 AI가 구조를 분석합니다.</p>
-<button class="px-8 py-2.5 border border-primary text-primary font-bold rounded-2xl hover:bg-primary hover:text-white transition-all">파일 찾기</button>
+<input accept=".hwp,.hwpx" class="hidden" id="tplFileInput" onchange="handleTemplateFileSelect(this.files)" type="file"/>
+<button class="px-8 py-2.5 border border-primary text-primary font-bold rounded-2xl hover:bg-primary hover:text-white transition-all" onclick="document.getElementById('tplFileInput').click()">파일 찾기</button>
+<div class="hidden mt-6 max-w-md mx-auto bg-surface-soft border border-hairline rounded-xl p-4 flex items-center gap-3 text-left" id="uploadedFileInfo">
+<span class="material-symbols-outlined text-primary">description</span>
+<div class="flex-1 min-w-0">
+<p class="text-body-sm font-bold text-ink truncate" id="uploadedFileName"></p>
+<p class="text-caption text-muted">업로드한 서식은 실제로 분석/저장되지 않는 프로토타입 화면입니다.</p>
+</div>
+<button class="text-secondary font-bold text-sm hover:underline shrink-0" onclick="continueWithUploadedFile()">다음 단계로</button>
+</div>
 </div>
 </div>
 </div>
 </div>
 </section>
 </div></div></main>
+<!-- 서식 미리보기 모달 (실제 파일 미리보기는 불가하여 서식명/설명만 표시) -->
+<div class="hidden opacity-0 fixed inset-0 z-[100] flex items-center justify-center bg-ink/50 backdrop-blur-sm transition-opacity duration-300 p-sm" id="templatePreviewModal">
+<div class="bg-white w-full max-w-md rounded-2xl overflow-hidden shadow-2xl">
+<div class="px-lg py-base border-b border-hairline flex justify-between items-center">
+<h3 class="text-title-sm font-bold text-ink" id="templatePreviewTitle">서식 미리보기</h3>
+<button class="p-xs hover:bg-surface-strong rounded-full transition-colors text-on-surface-variant" onclick="closeTemplatePreview()"><span class="material-symbols-outlined">close</span></button>
+</div>
+<div class="px-lg py-base text-caption text-muted border-b border-hairline flex items-center gap-xs" id="templatePreviewMeta"></div>
+<div class="p-lg text-body-sm text-on-surface leading-relaxed" id="templatePreviewDesc"></div>
+<div class="px-lg py-base bg-surface-soft flex justify-end gap-sm">
+<button class="px-lg py-sm rounded-full font-bold text-on-surface-variant hover:bg-surface-strong transition-colors" onclick="closeTemplatePreview()">닫기</button>
+</div>
+</div>
+</div>
 <!-- Bottom Navigation Shell (Fixed Bar) -->
     <!-- Footer -->
 <footer class="w-full mt-section px-lg max-w-[1600px] mx-auto flex flex-col gap-base pb-xl border-t border-hairline pt-xl opacity-60 hover:opacity-100 transition-opacity">
@@ -617,6 +646,83 @@
             state.templateCategory = category;
             sessionStorage.setItem('ef_form_wizard', JSON.stringify(state));
             location.href = '서식 자료실_학교정보확인.html';
+        }
+
+        // "추천 서식" / "HWP·HWPX 파일 업로드" 탭 전환
+        function switchTemplateTab(tab) {
+            const btnRecommended = document.getElementById('tabRecommended');
+            const btnUpload = document.getElementById('tabUpload');
+            const recommendedElems = [document.getElementById('categoryChipList'), document.getElementById('templateGrid'), document.getElementById('templateEmptyState')];
+            const uploadPanel = document.getElementById('uploadPanel');
+
+            const isUpload = tab === 'upload';
+            btnRecommended.className = 'px-6 py-2 rounded-lg font-bold text-sm transition-all ' + (isUpload ? 'hover:bg-surface-variant font-medium text-on-surface-variant' : 'bg-white shadow-sm text-primary');
+            btnUpload.className = 'px-6 py-2 rounded-lg text-sm transition-all ' + (isUpload ? 'bg-white shadow-sm font-bold text-primary' : 'hover:bg-surface-variant font-medium text-on-surface-variant');
+
+            recommendedElems.forEach(function (el) {
+                if (!el) return;
+                if (isUpload) el.classList.add('hidden');
+                else if (el.id !== 'templateEmptyState') el.classList.remove('hidden');
+            });
+            uploadPanel.classList.toggle('hidden', !isUpload);
+            if (!isUpload) filterTemplatesByCategory(document.querySelector('.category-chip[aria-pressed="true"]') ? document.querySelector('.category-chip[aria-pressed="true"]').dataset.category : '전체', document.querySelector('.category-chip[aria-pressed="true"]'));
+        }
+
+        // 카테고리 칩 클릭 시 실제로 카드 목록을 필터링
+        function filterTemplatesByCategory(category, btn) {
+            document.querySelectorAll('.category-chip').forEach(function (chip) {
+                const active = chip === btn || (!btn && chip.dataset.category === category);
+                chip.setAttribute('aria-pressed', active ? 'true' : 'false');
+                chip.classList.toggle('bg-primary', active);
+                chip.classList.toggle('text-white', active);
+                chip.classList.toggle('font-bold', active);
+                chip.classList.toggle('border-primary', active);
+                chip.classList.toggle('bg-white', !active);
+                chip.classList.toggle('text-on-surface-variant', !active);
+            });
+
+            let visibleCount = 0;
+            document.querySelectorAll('#templateGrid > div[data-category]').forEach(function (card) {
+                const show = category === '전체' || card.dataset.category === category;
+                card.classList.toggle('hidden', !show);
+                if (show) visibleCount++;
+            });
+            document.getElementById('templateEmptyState').classList.toggle('hidden', visibleCount > 0);
+        }
+
+        // 미리보기: 실제 파일 렌더링은 불가하므로 카드에 이미 표시된 서식명/설명/메타 정보를 모달로 보여준다.
+        function openTemplatePreview(btn) {
+            const card = btn.closest('[data-category]');
+            if (!card) return;
+            const title = card.querySelector('h3') ? card.querySelector('h3').textContent.trim() : '';
+            const desc = card.querySelector('p') ? card.querySelector('p').textContent.trim() : '';
+            const meta = Array.from(card.querySelectorAll('.flex.items-center.gap-3 > div, .flex.items-center.gap-1')).map(function (el) { return el.textContent.trim(); }).filter(Boolean).join(' · ');
+
+            document.getElementById('templatePreviewTitle').textContent = title;
+            document.getElementById('templatePreviewMeta').textContent = card.dataset.category + (meta ? ' · ' + meta : '');
+            document.getElementById('templatePreviewDesc').textContent = desc;
+
+            const modal = document.getElementById('templatePreviewModal');
+            modal.classList.remove('hidden');
+            setTimeout(function () { modal.classList.remove('opacity-0'); }, 10);
+        }
+        function closeTemplatePreview() {
+            const modal = document.getElementById('templatePreviewModal');
+            modal.classList.add('opacity-0');
+            setTimeout(function () { modal.classList.add('hidden'); }, 300);
+        }
+
+        // 업로드: 실제 서식 분석/저장은 불가하므로 선택한 파일명만 확인시켜 준다.
+        function handleTemplateFileSelect(files) {
+            if (!files || !files.length) return;
+            const file = files[0];
+            document.getElementById('uploadedFileName').textContent = file.name;
+            document.getElementById('uploadedFileInfo').classList.remove('hidden');
+        }
+        function continueWithUploadedFile() {
+            const fileNameEl = document.getElementById('uploadedFileName');
+            if (!fileNameEl.textContent) return;
+            selectTemplate('tpl-upload-' + Date.now(), fileNameEl.textContent.replace(/\.(hwp|hwpx)$/i, ''), '사용자 업로드');
         }
 
         // Simple logic for card selection visual feedback

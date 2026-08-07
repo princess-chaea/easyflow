@@ -367,8 +367,8 @@
 <div class="absolute inset-y-0 left-md flex items-center pointer-events-none">
 <span class="material-symbols-outlined text-muted text-[24px] group-focus-within:text-primary transition-colors">search</span>
 </div>
-<input class="w-full h-14 pl-[52px] pr-xl rounded-full border-2 border-hairline bg-canvas text-body-lg shadow-sm focus:border-primary focus:ring-0 focus:shadow-md transition-all placeholder:text-muted/60" placeholder="공문서, 기안문, 양식 이름이나 키워드를 검색해보세요." type="text"/>
-<button class="absolute inset-y-0 right-sm my-auto h-10 px-md rounded-full bg-primary text-on-primary font-bold hover:bg-primary-active transition-colors flex items-center gap-xxs">
+<input class="w-full h-14 pl-[52px] pr-xl rounded-full border-2 border-hairline bg-canvas text-body-lg shadow-sm focus:border-primary focus:ring-0 focus:shadow-md transition-all placeholder:text-muted/60" id="searchKeywordInput" onkeydown="if(event.key==='Enter'){event.preventDefault(); runSearch();}" placeholder="공문서, 기안문, 양식 이름이나 키워드를 검색해보세요." type="text"/>
+<button class="absolute inset-y-0 right-sm my-auto h-10 px-md rounded-full bg-primary text-on-primary font-bold hover:bg-primary-active transition-colors flex items-center gap-xxs" onclick="runSearch()">
 <span class="material-symbols-outlined text-[18px] ms-fill">auto_awesome</span>
                     AI 찾기
                 </button>
@@ -376,10 +376,10 @@
 <!-- Quick Tags -->
 <div class="flex items-center gap-sm mt-md flex-wrap justify-center">
 <span class="text-caption text-muted mr-xs">추천 검색어:</span>
-<button class="px-sm py-[4px] rounded-full border border-hairline bg-surface hover:bg-surface-strong text-caption text-body transition-colors">#학교운영위원회</button>
-<button class="px-sm py-[4px] rounded-full border border-hairline bg-surface hover:bg-surface-strong text-caption text-body transition-colors">#방과후학교 강사계약</button>
-<button class="px-sm py-[4px] rounded-full border border-hairline bg-surface hover:bg-surface-strong text-caption text-body transition-colors">#현장체험학습</button>
-<button class="px-sm py-[4px] rounded-full border border-hairline bg-surface hover:bg-surface-strong text-caption text-body transition-colors">#품의서</button>
+<button class="px-sm py-[4px] rounded-full border border-hairline bg-surface hover:bg-surface-strong text-caption text-body transition-colors" onclick="runQuickSearch('학교운영위원회')">#학교운영위원회</button>
+<button class="px-sm py-[4px] rounded-full border border-hairline bg-surface hover:bg-surface-strong text-caption text-body transition-colors" onclick="runQuickSearch('방과후학교 강사계약')">#방과후학교 강사계약</button>
+<button class="px-sm py-[4px] rounded-full border border-hairline bg-surface hover:bg-surface-strong text-caption text-body transition-colors" onclick="runQuickSearch('현장체험학습')">#현장체험학습</button>
+<button class="px-sm py-[4px] rounded-full border border-hairline bg-surface hover:bg-surface-strong text-caption text-body transition-colors" onclick="runQuickSearch('품의서')">#품의서</button>
 </div>
 </div>
 <!-- Content Layout -->
@@ -388,38 +388,38 @@
 <aside class="w-full lg:w-64 shrink-0 space-y-md">
 <div class="bg-canvas rounded-2xl border border-hairline p-md">
 <h3 class="font-title-sm text-title-sm text-ink mb-sm">문서 종류</h3>
-<div class="space-y-xs">
+<div class="space-y-xs" id="docTypeFilter">
 <label class="flex items-center gap-xs cursor-pointer group">
-<input checked="" class="text-primary focus:ring-primary w-4 h-4 border-hairline" name="docType" type="radio"/>
+<input checked="" class="text-primary focus:ring-primary w-4 h-4 border-hairline" name="docType" onchange="applySearchFilters()" type="radio" value="전체"/>
 <span class="text-body-sm text-body group-hover:text-ink transition-colors">전체보기</span>
 </label>
 <label class="flex items-center gap-xs cursor-pointer group">
-<input class="text-primary focus:ring-primary w-4 h-4 border-hairline" name="docType" type="radio"/>
+<input class="text-primary focus:ring-primary w-4 h-4 border-hairline" name="docType" onchange="applySearchFilters()" type="radio" value="공문서"/>
 <span class="text-body-sm text-body group-hover:text-ink transition-colors">공문서 (교육청 하달)</span>
 </label>
 <label class="flex items-center gap-xs cursor-pointer group">
-<input class="text-primary focus:ring-primary w-4 h-4 border-hairline" name="docType" type="radio"/>
+<input class="text-primary focus:ring-primary w-4 h-4 border-hairline" name="docType" onchange="applySearchFilters()" type="radio" value="기안문"/>
 <span class="text-body-sm text-body group-hover:text-ink transition-colors">기안문 (학교 내부)</span>
 </label>
 <label class="flex items-center gap-xs cursor-pointer group">
-<input class="text-primary focus:ring-primary w-4 h-4 border-hairline" name="docType" type="radio"/>
+<input class="text-primary focus:ring-primary w-4 h-4 border-hairline" name="docType" onchange="applySearchFilters()" type="radio" value="서식"/>
 <span class="text-body-sm text-body group-hover:text-ink transition-colors">서식 / 양식 (빈칸)</span>
 </label>
 </div>
 </div>
 <div class="bg-canvas rounded-2xl border border-hairline p-md">
 <h3 class="font-title-sm text-title-sm text-ink mb-sm">부서 필터</h3>
-<div class="space-y-xs">
+<div class="space-y-xs" id="deptFilter">
 <label class="flex items-center gap-xs cursor-pointer group">
-<input class="text-primary focus:ring-primary w-4 h-4 rounded-sm border-hairline" type="checkbox"/>
+<input class="text-primary focus:ring-primary w-4 h-4 rounded-sm border-hairline" onchange="applySearchFilters()" type="checkbox" value="교무실"/>
 <span class="text-body-sm text-body group-hover:text-ink transition-colors">교무실</span>
 </label>
 <label class="flex items-center gap-xs cursor-pointer group">
-<input class="text-primary focus:ring-primary w-4 h-4 rounded-sm border-hairline" type="checkbox"/>
+<input class="text-primary focus:ring-primary w-4 h-4 rounded-sm border-hairline" onchange="applySearchFilters()" type="checkbox" value="행정실"/>
 <span class="text-body-sm text-body group-hover:text-ink transition-colors">행정실</span>
 </label>
 <label class="flex items-center gap-xs cursor-pointer group">
-<input class="text-primary focus:ring-primary w-4 h-4 rounded-sm border-hairline" type="checkbox"/>
+<input class="text-primary focus:ring-primary w-4 h-4 rounded-sm border-hairline" onchange="applySearchFilters()" type="checkbox" value="연구실"/>
 <span class="text-body-sm text-body group-hover:text-ink transition-colors">연구실</span>
 </label>
 </div>
@@ -432,14 +432,18 @@
 <!-- Right Content (Results) -->
 <div class="flex-1">
 <div class="flex items-center justify-between mb-sm">
-<p class="text-body-sm text-muted">총 <strong class="text-ink font-bold">12</strong>건의 검색 결과</p>
+<p class="text-body-sm text-muted">총 <strong class="text-ink font-bold" id="searchResultCount">3</strong>건의 검색 결과</p>
 <div class="flex items-center gap-xs">
-<button class="text-caption text-body hover:text-ink flex items-center gap-xxs"><span class="material-symbols-outlined text-[16px]">sort</span> 최신순</button>
+<button class="text-caption text-body hover:text-ink flex items-center gap-xxs" id="sortToggleBtn" onclick="cycleSortOrder()"><span class="material-symbols-outlined text-[16px]">sort</span> <span id="sortToggleLabel">최신순</span></button>
 </div>
 </div>
-<div class="space-y-sm">
+<div class="hidden text-center py-xl text-muted" id="searchNoResults">
+<span class="material-symbols-outlined text-4xl text-outline-variant mb-2 block">search_off</span>
+검색 조건에 맞는 결과가 없습니다.
+</div>
+<div class="space-y-sm" id="searchResultsList">
 <!-- Result Card 1 -->
-<a class="block bg-canvas border border-hairline rounded-2xl p-md hover:border-primary/50 hover:shadow-soft transition-all group" href="서식 자료실_한글파일서식선택.html">
+<a class="block bg-canvas border border-hairline rounded-2xl p-md hover:border-primary/50 hover:shadow-soft transition-all group" data-date="2026-03-02" data-desc="방과후학교 외부강사 채용 및 계약 시 사용하는 교육청 표준 계약서 양식입니다. 학교 정보 자동 치환 기능을 지원합니다." data-dept="교무실" data-doctype="서식" data-tags="늘봄" data-title="2026학년도 1학기 방과후학교 외부강사 계약서 (표준양식)" data-views="1248" href="서식 자료실_한글파일서식선택.html">
 <div class="flex items-start justify-between gap-md">
 <div>
 <div class="flex items-center gap-xxs mb-xxs">
@@ -459,7 +463,7 @@
 </div>
 </a>
 <!-- Result Card 2 -->
-<a class="block bg-canvas border border-hairline rounded-2xl p-md hover:border-primary/50 hover:shadow-soft transition-all group" href="서식자료실_공문OCR요약.html">
+<a class="block bg-canvas border border-hairline rounded-2xl p-md hover:border-primary/50 hover:shadow-soft transition-all group" data-date="2026-02-15" data-desc="올해 새롭게 개정된 현장체험학습(수학여행, 수련활동 등) 운영 지침 및 관련 안전점검표, 학부모 동의서 양식 모음입니다." data-dept="창의인재과" data-doctype="공문서" data-tags="체험 안전" data-title="2026학년도 현장체험학습 운영 매뉴얼 안내 및 서식 배포" data-views="892" href="서식자료실_공문OCR요약.html">
 <div class="flex items-start justify-between gap-md">
 <div>
 <div class="flex items-center gap-xxs mb-xxs">
@@ -479,7 +483,7 @@
 </div>
 </a>
 <!-- Result Card 3 -->
-<a class="block bg-canvas border border-hairline rounded-2xl p-md hover:border-primary/50 hover:shadow-soft transition-all group" href="#" onclick="event.preventDefault(); openDocPreview()">
+<a class="block bg-canvas border border-hairline rounded-2xl p-md hover:border-primary/50 hover:shadow-soft transition-all group" data-date="2025-08-20" data-desc="2026년도 학교회계 추경 예산 편성을 위한 각 부서별 요구액 취합 및 학교운영위원회 심의 상정 기안문 원문입니다." data-dept="행정실" data-doctype="기안문" data-tags="복지" data-title="학교회계 제1회 추가경정예산(안) 편성 품의 및 심의 요청" data-views="345" href="#" onclick="event.preventDefault(); openDocPreview()">
 <div class="flex items-start justify-between gap-md">
 <div>
 <div class="flex items-center gap-xxs mb-xxs">
@@ -496,14 +500,15 @@
 </div>
 </a>
 </div>
-<!-- Pagination -->
+<!-- Pagination: 실제로는 결과가 한 페이지 분량뿐이라 다른 페이지는 정직하게 "결과 없음"으로 안내 -->
 <div class="flex items-center justify-center gap-xs mt-lg">
-<button class="w-8 h-8 grid place-items-center rounded-md border border-hairline text-muted hover:text-ink hover:bg-surface"><span class="material-symbols-outlined text-[16px]">chevron_left</span></button>
-<button class="w-8 h-8 grid place-items-center rounded-md bg-primary text-on-primary font-bold">1</button>
-<button class="w-8 h-8 grid place-items-center rounded-md border border-hairline text-body hover:text-ink hover:bg-surface">2</button>
-<button class="w-8 h-8 grid place-items-center rounded-md border border-hairline text-body hover:text-ink hover:bg-surface">3</button>
-<button class="w-8 h-8 grid place-items-center rounded-md border border-hairline text-muted hover:text-ink hover:bg-surface"><span class="material-symbols-outlined text-[16px]">chevron_right</span></button>
+<button class="w-8 h-8 grid place-items-center rounded-md border border-hairline text-muted hover:text-ink hover:bg-surface" onclick="goToSearchPage(1)"><span class="material-symbols-outlined text-[16px]">chevron_left</span></button>
+<button class="search-page-btn w-8 h-8 grid place-items-center rounded-md bg-primary text-on-primary font-bold" data-page="1" onclick="goToSearchPage(1)">1</button>
+<button class="search-page-btn w-8 h-8 grid place-items-center rounded-md border border-hairline text-body hover:text-ink hover:bg-surface" data-page="2" onclick="goToSearchPage(2)">2</button>
+<button class="search-page-btn w-8 h-8 grid place-items-center rounded-md border border-hairline text-body hover:text-ink hover:bg-surface" data-page="3" onclick="goToSearchPage(3)">3</button>
+<button class="w-8 h-8 grid place-items-center rounded-md border border-hairline text-muted hover:text-ink hover:bg-surface" onclick="goToSearchPage(2)"><span class="material-symbols-outlined text-[16px]">chevron_right</span></button>
 </div>
+<p class="hidden text-center text-body-sm text-muted mt-md" id="searchPageEmptyNotice">검색 결과는 1페이지 분량뿐입니다. 더 이상 결과가 없습니다.</p>
 </div>
 </div>
 </section>
@@ -564,10 +569,100 @@
             btn.textContent = tag;
             btn.addEventListener('click', () => {
                 btn.setAttribute('aria-pressed', btn.getAttribute('aria-pressed') === 'true' ? 'false' : 'true');
+                applySearchFilters();
             });
             wrap.appendChild(btn);
         });
     })();
+
+    // 실제 클라이언트 사이드 검색/필터/정렬: 화면에 있는 카드 데이터(data-* 속성) 기준으로 동작한다.
+    let currentSortOrder = 'latest'; // 'latest' | 'oldest' | 'title'
+
+    function runSearch() {
+        applySearchFilters();
+    }
+    function runQuickSearch(keyword) {
+        document.getElementById('searchKeywordInput').value = keyword;
+        applySearchFilters();
+    }
+
+    function applySearchFilters() {
+        const keyword = document.getElementById('searchKeywordInput').value.trim().toLowerCase();
+        const docTypeInput = document.querySelector('#docTypeFilter input[name="docType"]:checked');
+        const docType = docTypeInput ? docTypeInput.value : '전체';
+        const checkedDepts = Array.from(document.querySelectorAll('#deptFilter input[type="checkbox"]:checked')).map(cb => cb.value);
+        const activeTags = Array.from(document.querySelectorAll('#tagFilterList button[aria-pressed="true"]')).map(btn => btn.textContent);
+
+        const cards = Array.from(document.querySelectorAll('#searchResultsList > a'));
+        let visibleCount = 0;
+
+        cards.forEach(card => {
+            const title = (card.dataset.title || '').toLowerCase();
+            const desc = (card.dataset.desc || '').toLowerCase();
+            const tags = (card.dataset.tags || '').split(' ').filter(Boolean);
+
+            const matchesKeyword = !keyword || title.includes(keyword) || desc.includes(keyword);
+            const matchesDocType = docType === '전체' || card.dataset.doctype === docType;
+            const matchesDept = checkedDepts.length === 0 || checkedDepts.includes(card.dataset.dept);
+            const matchesTags = activeTags.length === 0 || activeTags.some(t => tags.includes(t));
+
+            const show = matchesKeyword && matchesDocType && matchesDept && matchesTags;
+            card.classList.toggle('hidden', !show);
+            if (show) visibleCount++;
+        });
+
+        sortSearchResults();
+        document.getElementById('searchResultCount').textContent = visibleCount;
+        document.getElementById('searchNoResults').classList.toggle('hidden', visibleCount > 0);
+        document.getElementById('searchResultsList').classList.toggle('hidden', visibleCount === 0);
+        goToSearchPage(1);
+    }
+
+    function sortSearchResults() {
+        const list = document.getElementById('searchResultsList');
+        const cards = Array.from(list.querySelectorAll('a'));
+        cards.sort((a, b) => {
+            if (currentSortOrder === 'title') return a.dataset.title.localeCompare(b.dataset.title, 'ko');
+            const diff = new Date(a.dataset.date) - new Date(b.dataset.date);
+            return currentSortOrder === 'oldest' ? diff : -diff;
+        });
+        cards.forEach(card => list.appendChild(card));
+    }
+
+    function cycleSortOrder() {
+        const order = ['latest', 'oldest', 'title'];
+        const labels = { latest: '최신순', oldest: '오래된순', title: '이름순' };
+        currentSortOrder = order[(order.indexOf(currentSortOrder) + 1) % order.length];
+        document.getElementById('sortToggleLabel').textContent = labels[currentSortOrder];
+        sortSearchResults();
+    }
+
+    // 페이지네이션: 실제 결과는 한 페이지 분량뿐이라 2페이지 이상은 정직하게 "결과 없음"을 보여준다.
+    function goToSearchPage(page) {
+        document.querySelectorAll('.search-page-btn').forEach(btn => {
+            const active = parseInt(btn.dataset.page, 10) === page;
+            btn.classList.toggle('bg-primary', active);
+            btn.classList.toggle('text-on-primary', active);
+            btn.classList.toggle('font-bold', active);
+            btn.classList.toggle('border', !active);
+            btn.classList.toggle('border-hairline', !active);
+            btn.classList.toggle('text-body', !active);
+        });
+        const list = document.getElementById('searchResultsList');
+        const emptyNotice = document.getElementById('searchPageEmptyNotice');
+        const noResults = document.getElementById('searchNoResults');
+        if (page === 1) {
+            emptyNotice.classList.add('hidden');
+            if (!noResults.classList.contains('hidden')) return;
+            list.classList.remove('hidden');
+        } else {
+            list.classList.add('hidden');
+            noResults.classList.add('hidden');
+            emptyNotice.classList.remove('hidden');
+        }
+    }
+
+    applySearchFilters();
 
     function openDocPreview() {
         const modal = document.getElementById('doc-preview-modal');
