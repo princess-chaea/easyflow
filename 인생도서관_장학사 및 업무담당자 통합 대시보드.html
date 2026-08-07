@@ -295,7 +295,7 @@
             <div class="flex items-center gap-xs">
                 <div class="flex items-center gap-xs text-[13px] font-bold bg-surface-soft px-md py-xs rounded-full text-ink/70">
                     <span class="material-symbols-outlined text-[16px]">calendar_today</span>
-                    <span>2026. 06. 14 기준</span>
+                    <span id="dashAsOfDate">-</span>
                 </div>
             </div>
         </div>
@@ -305,11 +305,10 @@
                 <div class="flex justify-between items-start mb-xs">
                     <span
                         class="material-symbols-outlined text-primary bg-primary-fixed p-xs rounded-lg">analytics</span>
-                    <span class="text-success font-caption-strong text-caption-strong flex items-center gap-1">+12%
-                        <span class="material-symbols-outlined text-[14px]">trending_up</span></span>
+                    <span class="font-caption-strong text-caption-strong flex items-center gap-1" id="kpiTotalTrend"></span>
                 </div>
                 <h3 class="font-caption text-caption text-muted">총 상담 건수</h3>
-                <p class="font-number-display text-[32px] text-primary mt-xxs">128</p>
+                <p class="font-number-display text-[32px] text-primary mt-xxs" id="kpiTotal">0</p>
             </div>
             <div class="glass-card p-lg rounded-xl shadow-sm border-l-4 border-secondary-container">
                 <div class="flex justify-between items-start mb-xs">
@@ -318,41 +317,41 @@
                     <span class="text-secondary font-caption-strong text-caption-strong">NEW</span>
                 </div>
                 <h3 class="font-caption text-caption text-muted">이번 달 신청</h3>
-                <p class="font-number-display text-[32px] text-on-surface mt-xxs">24</p>
+                <p class="font-number-display text-[32px] text-on-surface mt-xxs" id="kpiNewMonth">0</p>
             </div>
             <div class="glass-card p-lg rounded-xl shadow-sm border-l-4 border-success">
                 <div class="flex justify-between items-start mb-xs">
                     <span
                         class="material-symbols-outlined text-success bg-green-100 p-xs rounded-lg">check_circle</span>
-                    <span class="text-success font-caption-strong text-caption-strong">Target 95%</span>
+                    <span class="text-success font-caption-strong text-caption-strong">완료 건수 기준</span>
                 </div>
                 <h3 class="font-caption text-caption text-muted">처리 완료율</h3>
-                <p class="font-number-display text-[32px] text-on-surface mt-xxs">92%</p>
+                <p class="font-number-display text-[32px] text-on-surface mt-xxs" id="kpiCompletionRate">0%</p>
             </div>
             <div class="glass-card p-lg rounded-xl shadow-sm border-l-4 border-outline">
                 <div class="flex justify-between items-start mb-xs">
                     <span
                         class="material-symbols-outlined text-on-surface-variant bg-surface-strong p-xs rounded-lg">groups</span>
-                    <span class="text-muted font-caption-strong text-caption-strong">활동 중</span>
+                    <span class="text-muted font-caption-strong text-caption-strong">배정 등록</span>
                 </div>
                 <h3 class="font-caption text-caption text-muted">활동 멘토 수</h3>
-                <p class="font-number-display text-[32px] text-on-surface mt-xxs">16</p>
+                <p class="font-number-display text-[32px] text-on-surface mt-xxs" id="kpiMentorCount">0</p>
             </div>
             <div class="glass-card p-lg rounded-xl shadow-sm border-l-4 border-secondary">
                 <div class="flex justify-between items-start mb-xs">
                     <span class="material-symbols-outlined text-secondary bg-secondary-fixed p-xs rounded-lg">timer</span>
-                    <span class="text-success font-caption-strong text-caption-strong flex items-center gap-1">-3분<span class="material-symbols-outlined text-[14px]">trending_down</span></span>
+                    <span class="text-muted font-caption-strong text-caption-strong">완료 건 평균</span>
                 </div>
                 <h3 class="font-caption text-caption text-muted">평균 처리 시간</h3>
-                <p class="font-number-display text-[32px] text-on-surface mt-xxs">15<span class="text-[16px] text-muted ml-xxs">분</span></p>
+                <p class="font-number-display text-[32px] text-on-surface mt-xxs" id="kpiAvgTime">데이터 없음</p>
             </div>
             <div class="glass-card p-lg rounded-xl shadow-sm border-l-4 border-warning">
                 <div class="flex justify-between items-start mb-xs">
-                    <span class="material-symbols-outlined text-warning bg-secondary-fixed p-xs rounded-lg">grade</span>
-                    <span class="text-warning font-caption-strong text-caption-strong">최고 수준</span>
+                    <span class="material-symbols-outlined text-warning bg-secondary-fixed p-xs rounded-lg">forum</span>
+                    <span class="text-warning font-caption-strong text-caption-strong">답변 완료 기준</span>
                 </div>
-                <h3 class="font-caption text-caption text-muted">평균 만족도</h3>
-                <p class="font-number-display text-[32px] text-on-surface mt-xxs">4.8<span class="text-[16px] text-muted ml-xxs">/ 5.0</span></p>
+                <h3 class="font-caption text-caption text-muted">1:1 문의 처리율</h3>
+                <p class="font-number-display text-[32px] text-on-surface mt-xxs" id="kpiInquiryRate">0%</p>
             </div>
         </section>
         <!-- AI Insight (from 상담 결과 리포트 통합) -->
@@ -361,10 +360,10 @@
                 <span class="material-symbols-outlined text-[28px]">auto_awesome</span>
                 <div>
                     <h3 class="font-title-md text-title-md mb-xxs">AI 인사이트 요약</h3>
-                    <p class="font-body-sm text-body-sm opacity-90 max-w-2xl">이번 달은 성과 평가 시즌을 맞아 '복무 및 인사' 관련 질의가 전월 대비 28% 증가했습니다. 2026년 개정 복무 편람 자료를 전면에 배치하여 자동 응답률을 높일 것을 권장합니다.</p>
+                    <p class="font-body-sm text-body-sm opacity-90 max-w-2xl" id="aiInsightText">아직 집계할 상담 데이터가 없습니다.</p>
                 </div>
             </div>
-            <button class="shrink-0 px-lg py-sm bg-white/10 hover:bg-white/20 transition-colors border border-white/20 rounded-lg font-caption-strong text-caption-strong whitespace-nowrap">편람 업데이트 바로가기</button>
+            <button class="shrink-0 px-lg py-sm bg-white/10 hover:bg-white/20 transition-colors border border-white/20 rounded-lg font-caption-strong text-caption-strong whitespace-nowrap" onclick="goToHandbook()">편람 업데이트 바로가기</button>
         </section>
         <!-- Visualization Section (Bento Style) -->
         <section class="grid grid-cols-1 lg:grid-cols-12 gap-lg">
@@ -372,74 +371,13 @@
             <div class="lg:col-span-7 glass-card p-xl rounded-xl shadow-sm flex flex-col">
                 <div class="flex justify-between items-center mb-xl">
                     <div>
-                        <h2 class="font-title-md text-title-md text-primary">7개 업무 영역별 신청 현황</h2>
-                        <p class="font-caption text-caption text-muted">인사·관리 영역에서 가장 높은 수요 발생</p>
+                        <h2 class="font-title-md text-title-md text-primary">업무 분야별 상담 신청 현황</h2>
+                        <p class="font-caption text-caption text-muted" id="categoryBarsSubtitle">데이터를 불러오는 중입니다.</p>
                     </div>
-                    <button class="text-primary hover:underline font-caption-strong">전체보기</button>
+                    <button class="text-primary hover:underline font-caption-strong" id="categoryBarsToggleBtn" onclick="toggleCategoryBars()">전체보기</button>
                 </div>
-                <div class="flex-grow flex items-end justify-between gap-base h-[240px] px-md">
-                    <div class="flex flex-col items-center gap-sm flex-1">
-                        <div class="bg-primary-fixed w-full rounded-t-lg chart-bar hover:bg-primary transition-all duration-300 relative group"
-                            style="height: 60%;">
-                            <span
-                                class="absolute -top-8 left-1/2 -translate-x-1/2 font-number-display text-caption opacity-0 group-hover:opacity-100 transition-opacity">42</span>
-                        </div>
-                        <span
-                            class="font-caption text-caption text-on-surface-variant text-center leading-tight">교무학사</span>
-                    </div>
-                    <div class="flex flex-col items-center gap-sm flex-1">
-                        <div class="bg-primary-fixed w-full rounded-t-lg chart-bar hover:bg-primary transition-all duration-300 relative group"
-                            style="height: 45%;">
-                            <span
-                                class="absolute -top-8 left-1/2 -translate-x-1/2 font-number-display text-caption opacity-0 group-hover:opacity-100 transition-opacity">31</span>
-                        </div>
-                        <span
-                            class="font-caption text-caption text-on-surface-variant text-center leading-tight">연구복지</span>
-                    </div>
-                    <div class="flex flex-col items-center gap-sm flex-1">
-                        <div class="bg-primary w-full rounded-t-lg chart-bar relative group" style="height: 95%;">
-                            <span
-                                class="absolute -top-8 left-1/2 -translate-x-1/2 font-number-display text-caption text-primary font-bold">68</span>
-                        </div>
-                        <span
-                            class="font-caption-strong text-caption-strong text-primary text-center leading-tight">인사·관리</span>
-                    </div>
-                    <div class="flex flex-col items-center gap-sm flex-1">
-                        <div class="bg-primary-fixed w-full rounded-t-lg chart-bar hover:bg-primary transition-all duration-300 relative group"
-                            style="height: 30%;">
-                            <span
-                                class="absolute -top-8 left-1/2 -translate-x-1/2 font-number-display text-caption opacity-0 group-hover:opacity-100 transition-opacity">18</span>
-                        </div>
-                        <span
-                            class="font-caption text-caption text-on-surface-variant text-center leading-tight">행정·회계</span>
-                    </div>
-                    <div class="flex flex-col items-center gap-sm flex-1">
-                        <div class="bg-primary-fixed w-full rounded-t-lg chart-bar hover:bg-primary transition-all duration-300 relative group"
-                            style="height: 50%;">
-                            <span
-                                class="absolute -top-8 left-1/2 -translate-x-1/2 font-number-display text-caption opacity-0 group-hover:opacity-100 transition-opacity">35</span>
-                        </div>
-                        <span
-                            class="font-caption text-caption text-on-surface-variant text-center leading-tight">시설·안전</span>
-                    </div>
-                    <div class="flex flex-col items-center gap-sm flex-1">
-                        <div class="bg-primary-fixed w-full rounded-t-lg chart-bar hover:bg-primary transition-all duration-300 relative group"
-                            style="height: 25%;">
-                            <span
-                                class="absolute -top-8 left-1/2 -translate-x-1/2 font-number-display text-caption opacity-0 group-hover:opacity-100 transition-opacity">12</span>
-                        </div>
-                        <span
-                            class="font-caption text-caption text-on-surface-variant text-center leading-tight">정보·전산</span>
-                    </div>
-                    <div class="flex flex-col items-center gap-sm flex-1">
-                        <div class="bg-primary-fixed w-full rounded-t-lg chart-bar hover:bg-primary transition-all duration-300 relative group"
-                            style="height: 40%;">
-                            <span
-                                class="absolute -top-8 left-1/2 -translate-x-1/2 font-number-display text-caption opacity-0 group-hover:opacity-100 transition-opacity">22</span>
-                        </div>
-                        <span
-                            class="font-caption text-caption text-on-surface-variant text-center leading-tight">기타지원</span>
-                    </div>
+                <div class="flex-grow flex items-end gap-base h-[240px] px-md overflow-x-auto" id="categoryBarsContainer">
+                    <p class="w-full text-center text-muted font-body-sm text-body-sm self-center">아직 접수된 상담 신청이 없습니다.</p>
                 </div>
             </div>
             <!-- 월별 상담 추이 (Line Chart Placeholder Style) -->
@@ -447,30 +385,25 @@
                 class="lg:col-span-5 glass-card p-xl rounded-xl shadow-sm bg-primary text-white overflow-hidden relative">
                 <div class="relative z-10">
                     <h2 class="font-title-md text-title-md text-primary-fixed">월별 상담 추이</h2>
-                    <p class="font-caption text-caption text-on-primary-container">상반기 지속적인 성장 곡선</p>
-                    <div class="mt-xl h-[180px] flex items-end">
-                        <!-- Custom SVG Line Chart -->
+                    <p class="font-caption text-caption text-on-primary-container">최근 6개월 신청 건수</p>
+                    <div class="mt-xl h-[180px] flex items-end relative">
+                        <!-- Custom SVG Line Chart (실데이터 기반, JS가 path/circle을 채움) -->
                         <svg class="w-full h-full stroke-primary-fixed fill-none overflow-visible"
                             viewBox="0 0 400 150">
-                            <path d="M0,140 Q60,130 80,110 T160,90 T240,60 T320,30 T400,10" stroke-linecap="round"
+                            <path id="monthlyTrendPath" d="M0,140 L400,140" stroke-linecap="round"
                                 stroke-width="4"></path>
-                            <circle cx="80" cy="110" fill="white" r="4"></circle>
-                            <circle cx="160" cy="90" fill="white" r="4"></circle>
-                            <circle cx="240" cy="60" fill="white" r="4"></circle>
-                            <circle cx="320" cy="30" fill="white" r="4"></circle>
-                            <circle cx="400" cy="10" fill="#feb700" r="6"></circle>
+                            <g id="monthlyTrendCircles"></g>
                         </svg>
+                        <p class="absolute inset-0 flex items-center justify-center font-body-sm text-body-sm text-white/80 hidden" id="monthlyTrendEmpty">아직 데이터가 없습니다.</p>
                     </div>
                     <div
-                        class="flex justify-between mt-sm font-number-display text-caption text-primary-fixed-dim opacity-80">
-                        <span class="">1월</span><span class="">2월</span><span class="">3월</span><span
-                            class="">4월</span><span class="">5월</span><span class="">6월</span>
+                        class="flex justify-between mt-sm font-number-display text-caption text-primary-fixed-dim opacity-80" id="monthlyTrendLabels">
                     </div>
                     <div
                         class="mt-lg p-base bg-primary-container/30 rounded-lg backdrop-blur-sm border border-white/10">
                         <div class="flex justify-between items-center">
-                            <span class="font-body-sm text-body-sm">6월 예상 성장률</span>
-                            <span class="text-secondary-container font-bold">+28%</span>
+                            <span class="font-body-sm text-body-sm">전월 대비</span>
+                            <span class="text-secondary-container font-bold" id="monthlyTrendGrowth">데이터 부족</span>
                         </div>
                     </div>
                 </div>
@@ -483,31 +416,12 @@
             <!-- 영역별 현황 요약 테이블 -->
             <div class="lg:col-span-1 glass-card p-xl rounded-xl shadow-sm">
                 <h2 class="font-title-md text-title-md text-primary mb-lg">영역별 요약</h2>
-                <div class="space-y-sm">
-                    <div class="flex justify-between items-center py-sm border-b border-hairline">
-                        <span class="font-body-sm text-body-sm text-on-surface">인사·관리</span>
-                        <span class="font-number-display text-body-sm font-bold text-primary">68건</span>
-                    </div>
-                    <div class="flex justify-between items-center py-sm border-b border-hairline">
-                        <span class="font-body-sm text-body-sm text-on-surface">교무학사</span>
-                        <span class="font-number-display text-body-sm font-bold text-primary">42건</span>
-                    </div>
-                    <div class="flex justify-between items-center py-sm border-b border-hairline">
-                        <span class="font-body-sm text-body-sm text-on-surface">연구복지</span>
-                        <span class="font-number-display text-body-sm font-bold text-primary">31건</span>
-                    </div>
-                    <div class="flex justify-between items-center py-sm border-b border-hairline">
-                        <span class="font-body-sm text-body-sm text-on-surface">시설·안전</span>
-                        <span class="font-number-display text-body-sm font-bold text-primary">35건</span>
-                    </div>
-                    <div class="flex justify-between items-center py-sm">
-                        <span class="font-body-sm text-body-sm text-on-surface">정보·전산</span>
-                        <span class="font-number-display text-body-sm font-bold text-primary">12건</span>
-                    </div>
+                <div class="space-y-sm" id="categorySummaryList">
+                    <p class="text-center text-muted font-body-sm text-body-sm py-sm">아직 데이터가 없습니다.</p>
                 </div>
                 <div class="mt-lg p-lg bg-surface-strong rounded-xl text-center">
-                    <p class="font-caption text-caption text-muted">가장 시급한 지원 필요</p>
-                    <p class="font-body-strong text-body-strong text-error mt-xxs">인사 발령 관련 고충</p>
+                    <p class="font-caption text-caption text-muted">가장 수요가 많은 분야</p>
+                    <p class="font-body-strong text-body-strong text-error mt-xxs" id="topNeedCategory">데이터 없음</p>
                 </div>
             </div>
             <!-- 최근 상담 신청 실시간 목록 -->
@@ -530,64 +444,20 @@
                                 <th class="pb-base font-caption-strong text-caption-strong px-xs">신청 교사</th>
                                 <th class="pb-base font-caption-strong text-caption-strong px-xs">소속 학교</th>
                                 <th class="pb-base font-caption-strong text-caption-strong px-xs">업무 영역</th>
+                                <th class="pb-base font-caption-strong text-caption-strong px-xs">담당 멘토</th>
                                 <th class="pb-base font-caption-strong text-caption-strong px-xs">신청 일시</th>
                                 <th class="pb-base font-caption-strong text-caption-strong px-xs">상태</th>
                             </tr>
                         </thead>
-                        <tbody class="divide-y divide-hairline">
-                            <tr class="hover:bg-surface-soft transition-colors group">
-                                <td class="py-md px-xs font-body-sm text-body-sm text-on-surface">김태우</td>
-                                <td class="py-md px-xs font-body-sm text-body-sm text-on-surface-variant">경북고등학교</td>
-                                <td class="py-md px-xs font-body-sm text-body-sm text-on-surface-variant">인사·관리</td>
-                                <td class="py-md px-xs font-number-display text-caption text-muted">2026.06.14 14:22
-                                </td>
-                                <td class="py-md px-xs">
-                                    <span
-                                        class="bg-primary-fixed text-primary px-sm py-1 rounded-full font-caption-strong text-caption-strong">대기
-                                        중</span>
-                                </td>
-                            </tr>
-                            <tr class="hover:bg-surface-soft transition-colors">
-                                <td class="py-md px-xs font-body-sm text-body-sm text-on-surface">이은지</td>
-                                <td class="py-md px-xs font-body-sm text-body-sm text-on-surface-variant">포항제철중학교</td>
-                                <td class="py-md px-xs font-body-sm text-body-sm text-on-surface-variant">교무학사</td>
-                                <td class="py-md px-xs font-number-display text-caption text-muted">2026.06.14 11:45
-                                </td>
-                                <td class="py-md px-xs">
-                                    <span
-                                        class="bg-secondary-fixed text-on-secondary-fixed-variant px-sm py-1 rounded-full font-caption-strong text-caption-strong">진행
-                                        중</span>
-                                </td>
-                            </tr>
-                            <tr class="hover:bg-surface-soft transition-colors">
-                                <td class="py-md px-xs font-body-sm text-body-sm text-on-surface">박민준</td>
-                                <td class="py-md px-xs font-body-sm text-body-sm text-on-surface-variant">구미여자고등학교</td>
-                                <td class="py-md px-xs font-body-sm text-body-sm text-on-surface-variant">연구복지</td>
-                                <td class="py-md px-xs font-number-display text-caption text-muted">2026.06.13 16:30
-                                </td>
-                                <td class="py-md px-xs">
-                                    <span
-                                        class="bg-success/10 text-success px-sm py-1 rounded-full font-caption-strong text-caption-strong">처리
-                                        완료</span>
-                                </td>
-                            </tr>
-                            <tr class="hover:bg-surface-soft transition-colors">
-                                <td class="py-md px-xs font-body-sm text-body-sm text-on-surface">최윤서</td>
-                                <td class="py-md px-xs font-body-sm text-body-sm text-on-surface-variant">안동중앙중학교</td>
-                                <td class="py-md px-xs font-body-sm text-body-sm text-on-surface-variant">인사·관리</td>
-                                <td class="py-md px-xs font-number-display text-caption text-muted">2026.06.13 09:10
-                                </td>
-                                <td class="py-md px-xs">
-                                    <span
-                                        class="bg-success/10 text-success px-sm py-1 rounded-full font-caption-strong text-caption-strong">처리
-                                        완료</span>
-                                </td>
+                        <tbody class="divide-y divide-hairline" id="recentRequestsTbody">
+                            <tr>
+                                <td class="py-xl px-xs text-center text-muted font-body-sm text-body-sm" colspan="6">아직 접수된 상담 신청이 없습니다.</td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
                 <div class="mt-lg flex justify-center">
-                    <button
+                    <button id="recentRequestsToggleBtn" onclick="toggleRecentRequests()"
                         class="bg-primary text-white px-xl py-sm rounded-full font-button text-button hover:opacity-90 transition-opacity flex items-center gap-xs">
                         신청 목록 전체 보기 <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
                     </button>
@@ -613,30 +483,366 @@
 <p class="font-caption text-caption text-muted" data-ef="footer.address">경북 안동시 풍천면 도청대로 511 | 대표전화 054-805-3000</p>
 </div>
 </footer>
+    <script src="assets/js/mentoring.js"></script>
+    <script src="assets/js/inquiries.js"></script>
     <script>
-        // Simple Interaction logic
-        document.addEventListener('DOMContentLoaded', () => {
-            const bars = document.querySelectorAll('.chart-bar');
+        // 사용자 입력/동적 문자열(멘티 이름·학교·업무분야 등)을 innerHTML로 그릴 때 태그로 해석되지 않도록 이스케이프.
+        function escapeHtml(str) {
+            const div = document.createElement('div');
+            div.textContent = str == null ? '' : str;
+            return div.innerHTML;
+        }
+        function pad2(n) { return String(n).padStart(2, '0'); }
+        function monthKeyFromDate(d) { return d.getFullYear() + '-' + pad2(d.getMonth() + 1); }
+        // EF_MENTORING의 at 문자열은 'YYYY-MM-DD HH:MM' — 공백만 T로 바꿔 Date로 안전하게 파싱.
+        function parseAt(str) {
+            if (!str) return null;
+            const d = new Date(String(str).replace(' ', 'T'));
+            return isNaN(d.getTime()) ? null : d;
+        }
+        function formatDuration(ms) {
+            const minutes = Math.round(ms / 60000);
+            if (minutes < 60) return minutes + '<span class="text-[16px] text-muted ml-xxs">분</span>';
+            const hours = Math.round(minutes / 60);
+            if (hours < 24) return hours + '<span class="text-[16px] text-muted ml-xxs">시간</span>';
+            const days = Math.round(hours / 24);
+            return days + '<span class="text-[16px] text-muted ml-xxs">일</span>';
+        }
+        function statusBadge(status) {
+            if (status === '완료') return { cls: 'bg-success/10 text-success', label: '처리 완료' };
+            if (status === '진행중') return { cls: 'bg-secondary-fixed text-on-secondary-fixed-variant', label: '진행 중' };
+            if (status === '신규') return { cls: 'bg-primary-fixed text-primary', label: '신규 접수' };
+            return { cls: 'bg-surface-strong text-muted', label: status || '-' };
+        }
+
+        let categoryBarsExpanded = false;
+        let recentRequestsExpanded = false;
+        const RECENT_REQUESTS_DEFAULT_COUNT = 6;
+        const CATEGORY_BARS_DEFAULT_COUNT = 7;
+
+        function toggleCategoryBars() {
+            categoryBarsExpanded = !categoryBarsExpanded;
+            renderDashboard();
+        }
+        function toggleRecentRequests() {
+            recentRequestsExpanded = !recentRequestsExpanded;
+            renderDashboard();
+        }
+        function goToHandbook() {
+            EF_MODAL.alert('편람 콘텐츠 관리 화면은 아직 준비 중입니다. 최신 서식·자료는 서식 자료실에서 확인해 주세요.');
+        }
+
+        function renderCategoryBars(sortedCategories, total) {
+            const container = document.getElementById('categoryBarsContainer');
+            const subtitle = document.getElementById('categoryBarsSubtitle');
+            const toggleBtn = document.getElementById('categoryBarsToggleBtn');
+
+            if (!total) {
+                container.innerHTML = '<p class="w-full text-center text-muted font-body-sm text-body-sm self-center">아직 접수된 상담 신청이 없습니다.</p>';
+                subtitle.textContent = '상담 신청이 접수되면 분야별 현황이 표시됩니다.';
+                toggleBtn.classList.add('hidden');
+                return;
+            }
+            toggleBtn.classList.remove('hidden');
+            toggleBtn.textContent = categoryBarsExpanded ? '접기' : '전체보기';
+            subtitle.textContent = '\'' + sortedCategories[0].name + '\' 영역에서 가장 높은 수요 발생 (전체 ' + sortedCategories.length + '개 분야)';
+
+            const shown = categoryBarsExpanded ? sortedCategories : sortedCategories.slice(0, CATEGORY_BARS_DEFAULT_COUNT);
+            const maxCount = sortedCategories[0].count;
+            container.innerHTML = shown.map((c, i) => {
+                const heightPct = Math.max(8, Math.round(c.count / maxCount * 100));
+                const isTop = i === 0;
+                const barCls = isTop
+                    ? 'bg-primary w-full rounded-t-lg chart-bar relative group'
+                    : 'bg-primary-fixed w-full rounded-t-lg chart-bar hover:bg-primary transition-all duration-300 relative group';
+                const labelCls = isTop
+                    ? 'font-caption-strong text-caption-strong text-primary text-center leading-tight'
+                    : 'font-caption text-caption text-on-surface-variant text-center leading-tight';
+                const countCls = isTop
+                    ? 'absolute -top-8 left-1/2 -translate-x-1/2 font-number-display text-caption text-primary font-bold'
+                    : 'absolute -top-8 left-1/2 -translate-x-1/2 font-number-display text-caption opacity-0 group-hover:opacity-100 transition-opacity';
+                return '<div class="flex flex-col items-center gap-sm w-16 shrink-0">' +
+                    '<div class="' + barCls + '" style="height: ' + heightPct + '%;">' +
+                    '<span class="' + countCls + '">' + c.count + '</span>' +
+                    '</div>' +
+                    '<span class="' + labelCls + '">' + escapeHtml(c.name) + '</span>' +
+                    '</div>';
+            }).join('');
+
+            const bars = container.querySelectorAll('.chart-bar');
             bars.forEach((bar, index) => {
                 const originalHeight = bar.style.height;
                 bar.style.height = '0%';
-                setTimeout(() => {
-                    bar.style.height = originalHeight;
-                }, 100 * index);
+                setTimeout(() => { bar.style.height = originalHeight; }, 60 * index);
             });
+        }
+
+        function renderCategorySummary(sortedCategories, total) {
+            const list = document.getElementById('categorySummaryList');
+            const topNeed = document.getElementById('topNeedCategory');
+            if (!total) {
+                list.innerHTML = '<p class="text-center text-muted font-body-sm text-body-sm py-sm">아직 데이터가 없습니다.</p>';
+                topNeed.textContent = '데이터 없음';
+                return;
+            }
+            const top5 = sortedCategories.slice(0, 5);
+            list.innerHTML = top5.map((c, i) => {
+                const borderCls = i === top5.length - 1 ? 'py-sm' : 'py-sm border-b border-hairline';
+                return '<div class="flex justify-between items-center ' + borderCls + '">' +
+                    '<span class="font-body-sm text-body-sm text-on-surface">' + escapeHtml(c.name) + '</span>' +
+                    '<span class="font-number-display text-body-sm font-bold text-primary">' + c.count + '건</span>' +
+                    '</div>';
+            }).join('');
+            topNeed.textContent = sortedCategories[0].name + ' (' + sortedCategories[0].count + '건)';
+        }
+
+        function renderMonthlyTrend(threads, now) {
+            const buckets = [];
+            for (let i = 5; i >= 0; i--) {
+                const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
+                buckets.push({ key: monthKeyFromDate(d), label: (d.getMonth() + 1) + '월', count: 0 });
+            }
+            threads.forEach(t => {
+                const d = parseAt(EF_MENTORING.createdAt(t));
+                if (!d) return;
+                const key = monthKeyFromDate(d);
+                const bucket = buckets.find(b => b.key === key);
+                if (bucket) bucket.count += 1;
+            });
+
+            document.getElementById('monthlyTrendLabels').innerHTML =
+                buckets.map(b => '<span>' + b.label + '</span>').join('');
+
+            const maxCount = Math.max.apply(null, buckets.map(b => b.count));
+            const emptyEl = document.getElementById('monthlyTrendEmpty');
+            const pathEl = document.getElementById('monthlyTrendPath');
+            const circlesEl = document.getElementById('monthlyTrendCircles');
+            const growthEl = document.getElementById('monthlyTrendGrowth');
+
+            if (maxCount === 0) {
+                pathEl.setAttribute('d', 'M0,140 L400,140');
+                circlesEl.innerHTML = '';
+                emptyEl.classList.remove('hidden');
+                growthEl.textContent = '데이터 부족';
+                return;
+            }
+            emptyEl.classList.add('hidden');
+
+            const points = buckets.map((b, i) => {
+                const x = i * 80;
+                const y = 140 - Math.round((b.count / maxCount) * 130);
+                return { x, y, count: b.count };
+            });
+            pathEl.setAttribute('d', 'M' + points.map(p => p.x + ',' + p.y).join(' L'));
+            circlesEl.innerHTML = points.map((p, i) => {
+                if (i === 0) return '';
+                const isLast = i === points.length - 1;
+                return '<circle cx="' + p.x + '" cy="' + p.y + '" fill="' + (isLast ? '#feb700' : 'white') + '" r="' + (isLast ? 6 : 4) + '"></circle>';
+            }).join('');
+
+            const last = buckets[buckets.length - 1].count;
+            const prev = buckets[buckets.length - 2].count;
+            if (prev > 0) {
+                const pct = Math.round((last - prev) / prev * 100);
+                growthEl.textContent = (pct >= 0 ? '+' : '') + pct + '%';
+            } else if (last > 0) {
+                growthEl.textContent = '신규 발생';
+            } else {
+                growthEl.textContent = '변화 없음';
+            }
+        }
+
+        function renderAiInsight(sortedCategories, total, newThisMonth, newLastMonth) {
+            const el = document.getElementById('aiInsightText');
+            if (!total) {
+                el.textContent = '아직 집계할 상담 데이터가 없습니다. 상담 신청이 접수되면 분야별 인사이트가 표시됩니다.';
+                return;
+            }
+            const top = sortedCategories[0];
+            const topPct = Math.round(top.count / total * 100);
+            let msg = '현재까지 접수된 상담 중 \'' + escapeHtml(top.name) + '\' 분야가 ' + top.count + '건(' + topPct + '%)으로 가장 많습니다.';
+            if (newLastMonth > 0) {
+                const pct = Math.round((newThisMonth - newLastMonth) / newLastMonth * 100);
+                msg += ' 이번 달 신규 신청은 전월 대비 ' + (pct >= 0 ? '+' : '') + pct + '%입니다.';
+            } else if (newThisMonth > 0) {
+                msg += ' 이번 달 신규 신청 ' + newThisMonth + '건이 접수되었습니다.';
+            }
+            el.textContent = msg;
+        }
+
+        function renderRecentRequests(threads) {
+            const tbody = document.getElementById('recentRequestsTbody');
+            const toggleBtn = document.getElementById('recentRequestsToggleBtn');
+            if (!threads.length) {
+                tbody.innerHTML = '<tr><td class="py-xl px-xs text-center text-muted font-body-sm text-body-sm" colspan="6">아직 접수된 상담 신청이 없습니다.</td></tr>';
+                toggleBtn.classList.add('hidden');
+                return;
+            }
+            const sorted = threads.slice().sort((a, b) => {
+                const da = parseAt(EF_MENTORING.createdAt(a));
+                const db = parseAt(EF_MENTORING.createdAt(b));
+                return (db ? db.getTime() : 0) - (da ? da.getTime() : 0);
+            });
+            const shown = recentRequestsExpanded ? sorted : sorted.slice(0, RECENT_REQUESTS_DEFAULT_COUNT);
+            tbody.innerHTML = shown.map(q => {
+                const badge = statusBadge(q.status);
+                const createdAt = EF_MENTORING.createdAt(q) || '-';
+                return '<tr class="hover:bg-surface-soft transition-colors">' +
+                    '<td class="py-md px-xs font-body-sm text-body-sm text-on-surface">' + escapeHtml(q.name) + '</td>' +
+                    '<td class="py-md px-xs font-body-sm text-body-sm text-on-surface-variant">' + escapeHtml(q.school) + '</td>' +
+                    '<td class="py-md px-xs font-body-sm text-body-sm text-on-surface-variant">' + escapeHtml(q.category) + '</td>' +
+                    '<td class="py-md px-xs font-body-sm text-body-sm text-on-surface-variant">' + escapeHtml(q.mentorName || '미배정') + '</td>' +
+                    '<td class="py-md px-xs font-number-display text-caption text-muted">' + escapeHtml(createdAt) + '</td>' +
+                    '<td class="py-md px-xs"><span class="' + badge.cls + ' px-sm py-1 rounded-full font-caption-strong text-caption-strong">' + badge.label + '</span></td>' +
+                    '</tr>';
+            }).join('');
+            toggleBtn.classList.remove('hidden');
+            toggleBtn.innerHTML = recentRequestsExpanded
+                ? '접기 <span class="material-symbols-outlined text-[18px]">expand_less</span>'
+                : '신청 목록 전체 보기 <span class="material-symbols-outlined text-[18px]">arrow_forward</span>';
+        }
+
+        function renderDashboard() {
+            const threads = EF_MENTORING.all();
+            const inquiries = EF_INQUIRY.all();
+            const mentors = EF_MENTOR_ROSTER.all();
+            const now = new Date();
+            const thisMonthKey = monthKeyFromDate(now);
+            const prevMonthDate = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+            const prevMonthKey = monthKeyFromDate(prevMonthDate);
+
+            document.getElementById('dashAsOfDate').textContent =
+                now.getFullYear() + '. ' + pad2(now.getMonth() + 1) + '. ' + pad2(now.getDate()) + '. 기준';
+
+            const total = threads.length;
+            document.getElementById('kpiTotal').textContent = total;
+            const newThisMonth = threads.filter(t => {
+                const d = parseAt(EF_MENTORING.createdAt(t));
+                return d && monthKeyFromDate(d) === thisMonthKey;
+            }).length;
+            const newLastMonth = threads.filter(t => {
+                const d = parseAt(EF_MENTORING.createdAt(t));
+                return d && monthKeyFromDate(d) === prevMonthKey;
+            }).length;
+            document.getElementById('kpiNewMonth').textContent = newThisMonth;
+
+            const trendEl = document.getElementById('kpiTotalTrend');
+            if (newLastMonth > 0) {
+                const pct = Math.round((newThisMonth - newLastMonth) / newLastMonth * 100);
+                const up = pct >= 0;
+                trendEl.className = 'font-caption-strong text-caption-strong flex items-center gap-1 ' + (up ? 'text-success' : 'text-danger');
+                trendEl.innerHTML = (up ? '+' : '') + pct + '% <span class="material-symbols-outlined text-[14px]">' + (up ? 'trending_up' : 'trending_down') + '</span>';
+            } else if (newThisMonth > 0) {
+                trendEl.className = 'font-caption-strong text-caption-strong text-secondary';
+                trendEl.textContent = '신규';
+            } else {
+                trendEl.className = 'font-caption-strong text-caption-strong text-muted';
+                trendEl.textContent = '';
+            }
+
+            const doneCount = threads.filter(t => t.status === '완료').length;
+            document.getElementById('kpiCompletionRate').textContent = total ? Math.round(doneCount / total * 100) + '%' : '0%';
+            document.getElementById('kpiMentorCount').textContent = mentors.length;
+
+            const doneDurations = threads.filter(t => t.status === '완료').map(t => {
+                const start = parseAt(EF_MENTORING.createdAt(t));
+                const end = parseAt(EF_MENTORING.lastActivityAt(t));
+                if (!start || !end) return null;
+                const diff = end.getTime() - start.getTime();
+                return diff >= 0 ? diff : null;
+            }).filter(v => v != null);
+            const kpiAvgTimeEl = document.getElementById('kpiAvgTime');
+            if (doneDurations.length) {
+                const avgMs = doneDurations.reduce((a, b) => a + b, 0) / doneDurations.length;
+                kpiAvgTimeEl.innerHTML = formatDuration(avgMs);
+            } else {
+                kpiAvgTimeEl.textContent = '데이터 없음';
+            }
+
+            const inqTotal = inquiries.length;
+            const inqAnswered = inquiries.filter(q => q.status === '답변완료').length;
+            document.getElementById('kpiInquiryRate').textContent = inqTotal ? Math.round(inqAnswered / inqTotal * 100) + '%' : '0%';
+
+            const categoryCounts = {};
+            threads.forEach(t => {
+                const key = t.category || '미분류';
+                categoryCounts[key] = (categoryCounts[key] || 0) + 1;
+            });
+            const sortedCategories = Object.keys(categoryCounts)
+                .map(name => ({ name: name, count: categoryCounts[name] }))
+                .sort((a, b) => b.count - a.count);
+
+            renderCategoryBars(sortedCategories, total);
+            renderCategorySummary(sortedCategories, total);
+            renderMonthlyTrend(threads, now);
+            renderAiInsight(sortedCategories, total, newThisMonth, newLastMonth);
+            renderRecentRequests(threads);
+        }
+
+        function buildLogMonthOptions() {
+            const select = document.getElementById('logMonthSelect');
+            const logs = EF_CONSULT_LOG.all();
+            const now = new Date();
+            const keys = new Set([monthKeyFromDate(now)]);
+            logs.forEach(l => { if (l.date) keys.add(l.date.slice(0, 7)); });
+            const sortedKeys = Array.from(keys).sort().reverse();
+            select.innerHTML = sortedKeys.map(k => {
+                const parts = k.split('-');
+                return '<option value="' + k + '">' + parts[0] + '년 ' + parseInt(parts[1], 10) + '월</option>';
+            }).join('');
+        }
+
+        function renderConsultLog() {
+            const select = document.getElementById('logMonthSelect');
+            const ym = select.value;
+            const parts = ym.split('-');
+            const label = parts[0] + '년 ' + parseInt(parts[1], 10) + '월';
+            document.getElementById('logAreaTitle').textContent = label + ' 인생도서관 상담 일지';
+            document.getElementById('logAreaSubtitle').textContent = label + ' 상담 내역';
+            const now = new Date();
+            document.getElementById('logPrintDate').textContent = now.getFullYear() + '.' + pad2(now.getMonth() + 1) + '.' + pad2(now.getDate());
+
+            const mentorNameOf = (email) => {
+                const m = EF_MENTOR_ROSTER.byEmail(email);
+                return m ? m.name : (email || '-');
+            };
+            const logs = EF_CONSULT_LOG.all()
+                .filter(l => l.date && l.date.indexOf(ym) === 0)
+                .sort((a, b) => a.date.localeCompare(b.date));
+
+            const tbody = document.getElementById('logTableBody');
+            if (!logs.length) {
+                tbody.innerHTML = '<tr><td class="border border-hairline p-2 text-center text-muted" colspan="5">해당 월의 상담 일지가 없습니다.</td></tr>';
+                return;
+            }
+            tbody.innerHTML = logs.map(l => {
+                const mmdd = l.date.slice(5).replace('-', '.');
+                const statusCls = l.status === '완료' ? 'text-success font-bold' : 'text-muted font-bold';
+                return '<tr>' +
+                    '<td class="border border-hairline p-2 text-center">' + escapeHtml(mmdd) + '</td>' +
+                    '<td class="border border-hairline p-2 text-center"><span class="bg-primary/10 text-primary px-2 py-0.5 rounded text-xs font-bold">' + escapeHtml(l.category || '-') + '</span></td>' +
+                    '<td class="border border-hairline p-2 text-center">' + escapeHtml(mentorNameOf(l.mentorEmail)) + '</td>' +
+                    '<td class="border border-hairline p-2">' + escapeHtml(l.summary || '') + '</td>' +
+                    '<td class="border border-hairline p-2 text-center"><span class="' + statusCls + '">' + escapeHtml(l.status || '-') + '</span></td>' +
+                    '</tr>';
+            }).join('');
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            renderDashboard();
+            buildLogMonthOptions();
+            renderConsultLog();
         });
+
+        function openLogModal() {
+            renderConsultLog();
+            document.getElementById('logModal').classList.remove('hidden');
+        }
+
+        function closeLogModal() {
+            document.getElementById('logModal').classList.add('hidden');
+        }
     </script>
-
-
-<script>
-  function openLogModal() {
-      document.getElementById('logModal').classList.remove('hidden');
-  }
-  
-  function closeLogModal() {
-      document.getElementById('logModal').classList.add('hidden');
-  }
-</script>
 <!-- Monthly Log Modal -->
 <div class="hidden fixed inset-0 z-50 bg-ink/50 flex items-center justify-center p-4 backdrop-blur-sm transition-opacity" id="logModal">
 <div class="bg-canvas rounded-2xl shadow-xl w-full max-w-4xl max-h-[90vh] overflow-hidden flex flex-col border border-hairline anim-pop">
@@ -647,52 +853,32 @@
 <div class="p-6 flex-1 overflow-y-auto bg-canvas">
 <div class="flex justify-between items-end mb-4 no-print">
 <div>
-<h4 class="font-bold text-ink">2026년 5월 상담 내역</h4>
-<p class="text-sm text-muted">교육청 홈페이지 탑재 및 장학사 제출용 보고서 양식입니다.</p>
+<h4 class="font-bold text-ink" id="logAreaSubtitle">상담 내역</h4>
+<p class="text-sm text-muted">교육청 홈페이지 탑재 및 장학사 제출용 보고서 양식입니다 (전체 멘토 기준).</p>
 </div>
 <div class="flex gap-2">
-<select class="border border-hairline rounded-md text-sm p-1.5 bg-surface-soft">
-<option>2026년 5월</option>
-<option>2026년 4월</option>
-<option>2026년 3월</option>
-</select>
+<select class="border border-hairline rounded-md text-sm p-1.5 bg-surface-soft" id="logMonthSelect" onchange="renderConsultLog()"></select>
 </div>
 </div>
 <!-- Printable Table Area -->
 <div class="bg-white border border-hairline p-8 shadow-sm" id="printArea">
-<h2 class="text-center font-title-lg text-ink mb-6">2026학년도 5월 인생도서관 상담 일지</h2>
+<h2 class="text-center font-title-lg text-ink mb-6" id="logAreaTitle">인생도서관 상담 일지</h2>
 <div class="flex justify-end text-sm mb-2 text-ink">
-<span class="mr-4"><strong>작성자:</strong> 김교사 멘토</span>
-<span><strong>제출일:</strong> 2026.05.31</span>
+<span class="mr-4"><strong>출력 대상:</strong> 전체 멘토</span>
+<span><strong>출력일:</strong> <span id="logPrintDate">-</span></span>
 </div>
 <table class="w-full border-collapse border border-hairline text-sm text-left">
 <thead class="bg-surface-strong text-ink">
 <tr>
 <th class="border border-hairline p-2 text-center w-24">일자</th>
 <th class="border border-hairline p-2 text-center w-28">분야</th>
+<th class="border border-hairline p-2 text-center w-32">담당 멘토</th>
 <th class="border border-hairline p-2">상담(질문) 요약 내용</th>
 <th class="border border-hairline p-2 text-center w-20">상태</th>
 </tr>
 </thead>
-<tbody>
-<tr>
-<td class="border border-hairline p-2 text-center">05.02</td>
-<td class="border border-hairline p-2 text-center"><span class="bg-primary/10 text-primary px-2 py-0.5 rounded text-xs font-bold">교무/학사</span></td>
-<td class="border border-hairline p-2">교원 복무 규정 중 특별휴가(경조사) 관련 지침 질의 및 필요 서류 문의</td>
-<td class="border border-hairline p-2 text-center"><span class="text-success font-bold">완료</span></td>
-</tr>
-<tr>
-<td class="border border-hairline p-2 text-center">05.10</td>
-<td class="border border-hairline p-2 text-center"><span class="bg-warning/10 text-warning px-2 py-0.5 rounded text-xs font-bold">생활/안전</span></td>
-<td class="border border-hairline p-2">학교 폭력 사안 접수 시 초기 대응 절차 및 전담기구 구성 요건 문의</td>
-<td class="border border-hairline p-2 text-center"><span class="text-success font-bold">완료</span></td>
-</tr>
-<tr>
-<td class="border border-hairline p-2 text-center">05.21</td>
-<td class="border border-hairline p-2 text-center"><span class="bg-success/10 text-success px-2 py-0.5 rounded text-xs font-bold">행정/예산</span></td>
-<td class="border border-hairline p-2">현장체험학습 예산 집행 품의 작성 시 유의사항 및 여비 정산 규정</td>
-<td class="border border-hairline p-2 text-center"><span class="text-muted font-bold">대기</span></td>
-</tr>
+<tbody id="logTableBody">
+<tr><td class="border border-hairline p-2 text-center text-muted" colspan="5">해당 월의 상담 일지가 없습니다.</td></tr>
 </tbody>
 </table>
 </div>
