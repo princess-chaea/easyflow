@@ -402,7 +402,7 @@
                 <section class="bg-white p-xl rounded-xxl border border-hairline shadow-sm">
                     <div class="flex items-center justify-between mb-lg">
                         <h2 class="font-title-md text-title-md text-on-surface">최근 완료된 상담</h2>
-                        <button class="p-xxs hover:bg-surface-soft rounded-full">
+                        <button class="p-xxs hover:bg-surface-soft rounded-full" id="recentAnsweredMoreBtn" title="월별 상담일지 출력" aria-label="월별 상담일지 출력">
                             <span class="material-symbols-outlined text-muted" data-icon="more_vert">more_vert</span>
                         </button>
                     </div>
@@ -1282,6 +1282,10 @@
             if (editingSlotId === id) editingSlotId = null;
             renderSlotList();
         }
+
+        // "최근 완료된 상담" 카드의 케밥 메뉴는 원래 아무 핸들러도 없이 장식으로만 있었음 -
+        // 같은 맥락(완료된 상담 정리)의 기존 기능인 월별 상담일지 출력 모달로 바로가기 연결.
+        document.getElementById('recentAnsweredMoreBtn').addEventListener('click', () => openLogModal());
 
         document.getElementById('mtMentorName').textContent = mentorDisplayName;
         document.getElementById('maCompleteBtn').addEventListener('click', toggleMaComplete);

@@ -3508,7 +3508,11 @@
       if (el) el.addEventListener('change', () => { S[key] = el.checked; saveSettings(); applySettings(); render(); });
     });
 
-    document.getElementById('btnResetOpts').addEventListener('click', () => {
+    // 원래 "초기화 확인" 모달(#resetConfirmModal)이 따로 있었지만 열어주는 코드가 없어
+    // 한 번도 뜨지 않았고, 안의 확인 버튼(#btnResetConfirm)도 미바인딩 상태였음 - 이 파일
+    // 다른 곳(구글/아웃룩 연동 해제 등)과 동일하게 EF_MODAL.confirm으로 통일.
+    document.getElementById('btnResetOpts').addEventListener('click', async () => {
+      if (!await EF_MODAL.confirm('모든 보기 설정을 기본값으로 되돌립니다.\n계속하시겠습니까?', { confirmLabel: '초기화' })) return;
       S = { ...DEFAULTS }; saveSettings(); applySettings(); render();
       toast('보기 설정을 기본값으로 되돌렸습니다', 'restart_alt');
     });
@@ -5115,7 +5119,7 @@ function outlookShowState(id) {
 <div class="flex justify-end">
 <button class="w-full sm:w-auto bg-primary text-white px-xl py-base rounded-full font-bold hover:bg-primary-active active:scale-95 transition-all shadow-md" onclick="showOutlookToast()">설정 저장</button>
 </div>
-</section><section class="hidden" id="stateExpired">
+</section><section class="hidden" id="outlookStateExpired">
 <div class="bg-warning/5 border border-warning/30 rounded-2xl p-lg sm:p-xxl text-center">
 <div class="w-16 h-16 mx-auto mb-lg rounded-full bg-warning/10 flex items-center justify-center">
 <span class="material-symbols-outlined text-warning text-[32px]">warning</span>
@@ -5155,20 +5159,5 @@ function outlookShowState(id) {
     })();
 </script>
 
-<!-- 초기화 확인 모달 -->
-<div aria-modal="true" class="hidden fixed inset-0 z-[100] flex items-center justify-center" id="resetConfirmModal" role="dialog">
-  <div class="absolute inset-0 bg-ink/50 backdrop-blur-sm" onclick="document.getElementById('resetConfirmModal').classList.add('hidden')"></div>
-  <div class="relative bg-canvas rounded-2xl shadow-2xl p-lg w-[90vw] max-w-sm text-center">
-    <div class="w-14 h-14 rounded-full bg-warning/10 flex items-center justify-center mx-auto mb-md">
-      <span class="material-symbols-outlined text-warning text-[28px]">restart_alt</span>
-    </div>
-    <h3 class="text-title-md font-bold mb-xs">보기 설정 초기화</h3>
-    <p class="text-body text-muted mb-lg">모든 보기 설정을 기본값으로 되돌립니다.<br>계속하시겠습니까?</p>
-    <div class="flex gap-sm">
-      <button class="flex-1 h-11 rounded-pill bg-surface-strong text-body font-semibold hover:bg-hairline transition-colors" onclick="document.getElementById('resetConfirmModal').classList.add('hidden')">취소</button>
-      <button class="flex-1 h-11 rounded-pill bg-warning text-white font-semibold hover:bg-warning/80 transition-colors" id="btnResetConfirm">초기화</button>
-    </div>
-  </div>
-</div>
 </body>
 </html>

@@ -397,10 +397,7 @@
 <div class="flex-1 overflow-y-auto p-4 space-y-4">
 <div>
 <h3 class="text-xs font-bold text-muted mb-2 uppercase tracking-wider">최근 대화 내역</h3>
-<ul class="space-y-1" id="chatHistoryList">
-<li><button class="w-full text-left px-3 py-2 rounded-md text-sm hover:bg-surface-strong truncate">교원 복무 규정 질의</button></li>
-<li><button class="w-full text-left px-3 py-2 rounded-md text-sm hover:bg-surface-strong truncate">학교 폭력 사안 처리 절차</button></li>
-</ul>
+<ul class="space-y-1" id="chatHistoryList"></ul>
 </div>
 </div>
 </aside>
@@ -450,72 +447,6 @@
 <p class="text-center text-[11px] text-muted mt-2">AI는 실수를 할 수 있습니다. 중요한 정보는 교육청 공식 지침을 확인하세요.</p>
 </div>
 </div>
-<!-- Monthly Log Modal -->
-<div class="hidden fixed inset-0 z-50 bg-ink/50 flex items-center justify-center p-4 backdrop-blur-sm transition-opacity" id="logModal">
-<div class="bg-canvas rounded-2xl shadow-xl w-full max-w-4xl max-h-[90vh] overflow-hidden flex flex-col border border-hairline anim-pop">
-<div class="px-6 py-4 border-b border-hairline flex justify-between items-center bg-surface-container-low">
-<h3 class="font-title-md text-primary flex items-center gap-2"><span class="material-symbols-outlined">print</span> 인생도서관 월별 상담 일지</h3>
-<button class="text-muted hover:text-ink transition-colors w-8 h-8 rounded-full flex items-center justify-center hover:bg-surface-strong" onclick="closeLogModal()"><span class="material-symbols-outlined">close</span></button>
-</div>
-<div class="p-6 flex-1 overflow-y-auto bg-canvas">
-<div class="flex justify-between items-end mb-4 no-print">
-<div>
-<h4 class="font-bold text-ink">2026년 5월 상담 내역</h4>
-<p class="text-sm text-muted">교육청 홈페이지 탑재 및 장학사 제출용 보고서 양식입니다.</p>
-</div>
-<div class="flex gap-2">
-<select class="border border-hairline rounded-md text-sm p-1.5 bg-surface-soft">
-<option>2026년 5월</option>
-<option>2026년 4월</option>
-<option>2026년 3월</option>
-</select>
-</div>
-</div>
-<!-- Printable Table Area -->
-<div class="bg-white border border-hairline p-8 shadow-sm" id="printArea">
-<h2 class="text-center font-title-lg text-ink mb-6">2026학년도 5월 인생도서관 상담 일지</h2>
-<div class="flex justify-end text-sm mb-2 text-ink">
-<span class="mr-4"><strong>작성자:</strong> 김교사 멘토</span>
-<span><strong>제출일:</strong> 2026.05.31</span>
-</div>
-<table class="w-full border-collapse border border-hairline text-sm text-left">
-<thead class="bg-surface-strong text-ink">
-<tr>
-<th class="border border-hairline p-2 text-center w-24">일자</th>
-<th class="border border-hairline p-2 text-center w-28">분야</th>
-<th class="border border-hairline p-2">상담(질문) 요약 내용</th>
-<th class="border border-hairline p-2 text-center w-20">상태</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="border border-hairline p-2 text-center">05.02</td>
-<td class="border border-hairline p-2 text-center"><span class="bg-primary/10 text-primary px-2 py-0.5 rounded text-xs font-bold">교무/학사</span></td>
-<td class="border border-hairline p-2">교원 복무 규정 중 특별휴가(경조사) 관련 지침 질의 및 필요 서류 문의</td>
-<td class="border border-hairline p-2 text-center"><span class="text-success font-bold">완료</span></td>
-</tr>
-<tr>
-<td class="border border-hairline p-2 text-center">05.10</td>
-<td class="border border-hairline p-2 text-center"><span class="bg-warning/10 text-warning px-2 py-0.5 rounded text-xs font-bold">생활/안전</span></td>
-<td class="border border-hairline p-2">학교 폭력 사안 접수 시 초기 대응 절차 및 전담기구 구성 요건 문의</td>
-<td class="border border-hairline p-2 text-center"><span class="text-success font-bold">완료</span></td>
-</tr>
-<tr>
-<td class="border border-hairline p-2 text-center">05.21</td>
-<td class="border border-hairline p-2 text-center"><span class="bg-success/10 text-success px-2 py-0.5 rounded text-xs font-bold">행정/예산</span></td>
-<td class="border border-hairline p-2">현장체험학습 예산 집행 품의 작성 시 유의사항 및 여비 정산 규정</td>
-<td class="border border-hairline p-2 text-center"><span class="text-muted font-bold">대기</span></td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<div class="px-6 py-4 border-t border-hairline bg-surface-container-low flex justify-end gap-2 no-print">
-<button class="px-4 py-2 text-sm font-semibold text-muted hover:bg-hairline rounded-lg transition-colors" onclick="closeLogModal()">닫기</button>
-<button class="px-4 py-2 text-sm font-semibold bg-primary text-white hover:bg-primary-active rounded-lg transition-colors flex items-center gap-1 shadow-sm" onclick="window.print()"><span class="material-symbols-outlined text-[16px]">print</span> PDF 출력 및 인쇄</button>
-</div>
-</div>
-</div>
 </main>
 </div>
 <!-- Mentor Modal -->
@@ -544,12 +475,17 @@
 </div>
 <script>
   let currentCategoryPath = [];
+  let currentSessionId = null;
+  let currentSessionTitle = '';
 
   function resetChat() {
     currentCategoryPath = [];
+    currentSessionId = null;
+    currentSessionTitle = '';
     pendingAttachments = [];
     renderAttachmentPreview();
     document.getElementById('chatWindow').innerHTML = document.getElementById('welcomeMessage').outerHTML;
+    renderChatHistory();
   }
 
   function escapeHtml(str) {
@@ -570,6 +506,71 @@
     return 'https://api.dicebear.com/7.x/avataaars/svg?seed=' + seed;
   }
 
+  // ------------------------------------------------------------------
+  // 최근 대화 내역 (프론트 전용) - 실제 채팅 서버/DB는 없지만, 이 세션에서
+  // 오간 대화를 사용자별로 localStorage에 저장해 "최근 대화 내역" 목록이
+  // 실제로 클릭해서 이어볼 수 있는 자기 대화 기록이 되도록 함.
+  // ------------------------------------------------------------------
+  function chatHistoryStorageKey() {
+    return 'ef_chat_history_' + (localStorage.getItem('currentUser') || 'guest');
+  }
+
+  function loadChatHistoryList() {
+    try {
+      return JSON.parse(localStorage.getItem(chatHistoryStorageKey())) || [];
+    } catch {
+      return [];
+    }
+  }
+
+  function saveCurrentSession() {
+    if (!currentSessionId) currentSessionId = 'chat-' + Date.now() + '-' + Math.floor(Math.random() * 1000);
+    const title = currentSessionTitle || (currentCategoryPath.length ? currentCategoryPath.join(' > ') : '새 대화');
+    const dateLabel = new Date().toLocaleDateString('ko-KR', { month: '2-digit', day: '2-digit' });
+    const html = document.getElementById('chatWindow').innerHTML;
+
+    let list = loadChatHistoryList();
+    const existingIdx = list.findIndex(s => s.id === currentSessionId);
+    if (existingIdx >= 0) list.splice(existingIdx, 1);
+    list.unshift({ id: currentSessionId, title, date: dateLabel, html });
+    if (list.length > 20) list = list.slice(0, 20);
+
+    localStorage.setItem(chatHistoryStorageKey(), JSON.stringify(list));
+    renderChatHistory();
+  }
+
+  function renderChatHistory() {
+    const listEl = document.getElementById('chatHistoryList');
+    if (!listEl) return;
+    const sessions = loadChatHistoryList();
+    if (sessions.length === 0) {
+      listEl.innerHTML = '<li class="px-3 py-2 text-sm text-muted">아직 대화 내역이 없습니다.</li>';
+      return;
+    }
+    listEl.innerHTML = sessions.map(s => {
+      const active = s.id === currentSessionId;
+      return '<li><button type="button" onclick="loadChatSession(\'' + s.id + '\')" class="w-full text-left px-3 py-2 rounded-md text-sm transition-colors flex flex-col gap-0.5 ' +
+        (active ? 'bg-primary/10 text-primary font-bold' : 'hover:bg-surface-strong') + '">' +
+        '<span class="truncate block">' + escapeHtml(s.title) + '</span>' +
+        '<span class="text-[10px] ' + (active ? 'text-primary/70' : 'text-muted') + '">' + escapeHtml(s.date) + '</span>' +
+        '</button></li>';
+    }).join('');
+  }
+
+  function loadChatSession(id) {
+    const found = loadChatHistoryList().find(s => s.id === id);
+    if (!found) return;
+    currentSessionId = found.id;
+    currentSessionTitle = found.title;
+    currentCategoryPath = [];
+    pendingAttachments = [];
+    renderAttachmentPreview();
+    const chatWindow = document.getElementById('chatWindow');
+    chatWindow.innerHTML = found.html;
+    chatWindow.scrollTop = chatWindow.scrollHeight;
+    renderChatHistory();
+  }
+
   function addMessage(text, isUser = false) {
     const chatWindow = document.getElementById('chatWindow');
     const div = document.createElement('div');
@@ -583,6 +584,7 @@
 
     chatWindow.appendChild(div);
     chatWindow.scrollTop = chatWindow.scrollHeight;
+    saveCurrentSession();
   }
 
   function showTypingIndicator() {
@@ -639,9 +641,10 @@
         return;
     }
 
-    addMessage(category + '에 대해 질문할게요.', true);
     currentCategoryPath.push(category);
-    
+    if (!currentSessionTitle && currentCategoryPath.length === 1) currentSessionTitle = category;
+    addMessage(category + '에 대해 질문할게요.', true);
+
     showTypingIndicator();
 
     setTimeout(() => {
@@ -723,6 +726,7 @@
         '</div>';
     }
     if (text) userHtml += escapeHtml(text);
+    if (text && !currentSessionTitle) currentSessionTitle = text.length > 30 ? text.slice(0, 30) + '…' : text;
 
     addMessage(userHtml, true);
     input.value = '';
@@ -760,13 +764,7 @@
     addMessage('상담 신청이 완료되었습니다! 인생도서관 멘토 선생님께 내용이 성공적으로 전달되었습니다.<br>답변이 등록되면 알림을 통해 알려드리겠습니다.', false);
   }
 
-  function openLogModal() {
-      document.getElementById('logModal').classList.remove('hidden');
-  }
-  
-  function closeLogModal() {
-      document.getElementById('logModal').classList.add('hidden');
-  }
+  renderChatHistory();
 </script>
 
 </div></div></main>

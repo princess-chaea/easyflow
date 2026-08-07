@@ -4947,13 +4947,26 @@
         if (circle) circle.style.clipPath = 'polygon(0 0, 100% 0, 100% ' + rate + '%, 0 ' + rate + '%)';
     }
 
+    // 검색어로 문항을 걸러낼 때, 대분류 그룹 헤더 행(class="checklist-item" 없음)은
+    // 그 아래 딸린 문항이 전부 안 보이는데 헤더만 남는 경우가 있어 함께 숨김 처리한다.
     function applyFilters() {
         var term = (document.getElementById('searchTerm').value || '').trim().toLowerCase();
-        document.querySelectorAll('#checklistTableBody tr.checklist-item').forEach(function (tr) {
-            var contentEl = tr.querySelector('.item-content');
-            if (!contentEl) return;
-            tr.style.display = contentEl.textContent.toLowerCase().indexOf(term) !== -1 ? '' : 'none';
+        var rows = document.querySelectorAll('#checklistTableBody > tr');
+        var pendingHeader = null;
+        var pendingVisible = false;
+        rows.forEach(function (tr) {
+            if (tr.classList.contains('checklist-item')) {
+                var contentEl = tr.querySelector('.item-content');
+                var match = contentEl ? contentEl.textContent.toLowerCase().indexOf(term) !== -1 : true;
+                tr.style.display = match ? '' : 'none';
+                if (match) pendingVisible = true;
+            } else {
+                if (pendingHeader) pendingHeader.style.display = pendingVisible ? '' : 'none';
+                pendingHeader = tr;
+                pendingVisible = false;
+            }
         });
+        if (pendingHeader) pendingHeader.style.display = pendingVisible ? '' : 'none';
     }
 
     function base64ToUint8Array(base64) {

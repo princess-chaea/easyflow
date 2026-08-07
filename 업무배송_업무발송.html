@@ -708,5 +708,20 @@
 <p class="font-caption text-caption text-muted" data-ef="footer.address">경북 안동시 풍천면 도청대로 511 | 대표전화 054-805-3000</p>
 </div>
 </footer>
+<!-- TODO: 실제 서버 연동 시 이 값들은 localStorage가 아니라 서버(DB)에서 불러오도록 교체해야 함.
+     푸터 정보는 서버관리자_푸터관리.html 에서만 수정할 수 있음(브라우저별 임시 저장). -->
+<script>
+    (function () {
+        function efLoadFooter() {
+            ['org', 'address', 'copyright'].forEach(function (f) {
+                var v = localStorage.getItem('ef_footer_' + f);
+                if (!v) return;
+                var view = document.querySelector('[data-ef="footer.' + f + '"]');
+                if (view) view.textContent = v;
+            });
+        }
+        efLoadFooter();
+    })();
+</script>
 </body>
 </html>
