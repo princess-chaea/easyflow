@@ -419,10 +419,12 @@
 <div class="relative">
 <label class="block text-xs font-bold text-ink mb-1">기관명 (학교명) <span class="text-secondary ml-1" title="AI 자동 입력">✨</span></label>
 <input class="w-full border border-secondary/50 focus:border-secondary rounded-lg p-2 bg-secondary/5 font-medium text-ink transition-colors" id="wizSchoolName" oninput="updatePreview('schoolName', this.value)" type="text" value="옥계초등학교"/>
+<p class="text-[10px] text-muted mt-1">로그인 계정의 소속 정보가 있으면 자동으로 채워집니다.</p>
 </div>
 <div class="relative">
-<label class="block text-xs font-bold text-ink mb-1">기관장명 (교장) <span class="text-secondary ml-1" title="AI 자동 입력">✨</span></label>
-<input class="w-full border border-secondary/50 focus:border-secondary rounded-lg p-2 bg-secondary/5 font-medium text-ink transition-colors" id="wizPrincipalName" oninput="updatePreview('principalName', this.value)" type="text" value="홍길동"/>
+<label class="block text-xs font-bold text-ink mb-1">기관장명 (교장)</label>
+<input class="w-full border border-hairline focus:border-primary rounded-lg p-2 bg-surface-soft font-medium text-ink transition-colors" id="wizPrincipalName" oninput="updatePreview('principalName', this.value)" placeholder="예: 홍길동" type="text" value="홍길동"/>
+<p class="text-[10px] text-muted mt-1">계정에 저장된 정보가 아니라 직접 확인 후 입력해야 합니다. (본인이 교장으로 등록된 경우 자동 입력됩니다.)</p>
 </div>
 </div>
 </div>
@@ -542,6 +544,20 @@
         wizMeetingAgenda: '1. 2026학년도 1학기 방과후학교 운영 계획(안)\n2. 학교급식 소위원회 구성(안)\n3. 기타 안건'
     };
     const WIZARD_FIELD_KEYS = { wizSchoolName: 'schoolName', wizPrincipalName: 'principalName', wizMeetingDate: 'meetingDate', wizMeetingPlace: 'meetingPlace', wizMeetingAgenda: 'meetingAgenda' };
+
+    // 계정에 저장된 소속 정보로 기본값을 실제 정보로 덮어쓴다 - 매번 학교명을 새로 타이핑하지
+    // 않아도 되도록 한다. 기관장명(교장)은 이 앱에 저장된 데이터가 없어 함부로 추정하지 않되,
+    // 로그인한 사용자 본인의 직위가 "교장"이면 본인 이름으로 채운다.
+    (function applyAccountDefaults() {
+        const currentUser = localStorage.getItem('currentUser');
+        if (!currentUser) return;
+        const myOrg = (localStorage.getItem('org_' + currentUser) || '').trim();
+        const myRank = (localStorage.getItem('rank_' + currentUser) || '').trim();
+        const myName = currentUser.split('@')[0];
+        if (myOrg) WIZARD_DEFAULT_FIELDS.wizSchoolName = myOrg;
+        WIZARD_DEFAULT_FIELDS.wizPrincipalName = myRank.includes('교장') ? myName : '';
+    })();
+
     async function resetWizardForm() {
         const ok = await EF_MODAL.confirm('입력하신 내용을 초기값으로 되돌릴까요? 수정한 내용은 사라집니다.');
         if (!ok) return;
@@ -565,6 +581,16 @@
         }
 
         const fieldIds = { schoolName: 'wizSchoolName', principalName: 'wizPrincipalName', meetingDate: 'wizMeetingDate', meetingPlace: 'wizMeetingPlace', meetingAgenda: 'wizMeetingAgenda' };
+
+        // 계정 기반 기본값(applyAccountDefaults가 채워둔 WIZARD_DEFAULT_FIELDS)을 먼저 적용하고,
+        // 이전에 이 화면에서 직접 수정했던 값(wizardState)이 있으면 그 값으로 덮어쓴다 - 사용자가
+        // 이미 손댄 내용을 계정 기본값이 되돌리지 않도록 순서가 중요하다.
+        Object.keys(WIZARD_DEFAULT_FIELDS).forEach(function (fieldId) {
+            const input = document.getElementById(fieldId);
+            if (!input) return;
+            input.value = WIZARD_DEFAULT_FIELDS[fieldId];
+            updatePreview(WIZARD_FIELD_KEYS[fieldId], WIZARD_DEFAULT_FIELDS[fieldId]);
+        });
         Object.keys(fieldIds).forEach(function (key) {
             if (wizardState[key] === undefined) return;
             const input = document.getElementById(fieldIds[key]);
@@ -605,37 +631,6 @@
 <p class="font-caption text-caption text-muted" data-ef="footer.address">경북 안동시 풍천면 도청대로 511 | 대표전화 054-805-3000</p>
 </div>
 </footer>
-<!-- Micro-interaction Script -->
-<script>
-        // Simple logic for card selection visual feedback
-        document.querySelectorAll('.group.cursor-pointer').forEach(card => {
-            card.addEventListener('click', () => {
-                // Clear existing selections (simulated)
-                document.querySelectorAll('.group.cursor-pointer').forEach(c => {
-                    c.classList.remove('border-secondary', 'border-2', 'shadow-md');
-                    c.classList.add('border-hairline', 'border');
-                    const check = c.querySelector('.absolute.top-4.right-4');
-                    if (check) check.remove();
-                });
-
-                // Set active
-                card.classList.remove('border-hairline', 'border');
-                card.classList.add('border-secondary', 'border-2', 'shadow-md');
-                
-                // Add checkmark if not present
-                if (!card.querySelector('.absolute.top-4.right-4')) {
-                    const checkDiv = document.createElement('div');
-                    checkDiv.className = 'absolute top-4 right-4 bg-secondary text-on-secondary rounded-full p-1 flex items-center justify-center';
-                    checkDiv.innerHTML = '<span class="material-symbols-outlined text-sm" style="font-variation-settings: \'FILL\' 1;">check</span>';
-                    card.appendChild(checkDiv);
-                }
-
-                // Update bottom bar text
-                const title = card.querySelector('h3').innerText;
-                document.querySelector('.hidden.lg\\:flex .font-bold.text-primary').innerText = title;
-            });
-        });
-    </script>
 <!-- TODO: 실제 서버 연동 시 이 값들은 localStorage가 아니라 서버(DB)에서 불러오도록 교체해야 함.
      푸터 정보는 서버관리자_푸터관리.html 에서만 수정할 수 있음(브라우저별 임시 저장). -->
 <script>
