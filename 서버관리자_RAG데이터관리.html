@@ -377,11 +377,11 @@
 <p class="text-[15px] text-ink/70">지식 베이스의 실시간 동기화 상태를 관리하고 새로운 데이터를 학습시킵니다.</p>
 </div>
 <div class="flex gap-xs">
-<button class="px-base py-sm bg-surface-strong text-ink rounded-full font-button flex items-center gap-xs hover:bg-surface-container-high transition-colors">
+<button class="px-base py-sm bg-surface-strong text-ink rounded-full font-button flex items-center gap-xs hover:bg-surface-container-high transition-colors" id="syncHistoryBtn">
 <span class="material-symbols-outlined">history</span>
                     동기화 이력
                 </button>
-<button class="px-base py-sm bg-primary text-on-primary rounded-full font-button flex items-center gap-xs hover:opacity-90 transition-opacity">
+<button class="px-base py-sm bg-primary text-on-primary rounded-full font-button flex items-center gap-xs hover:opacity-90 transition-opacity" id="fullRefreshBtn">
 <span class="material-symbols-outlined">refresh</span>
                     전체 새로고침
                 </button>
@@ -438,7 +438,7 @@
 <span class="font-caption text-caption opacity-80">평균 검색 지연 시간</span>
 <span class="font-body-strong text-body-strong font-number-display">12ms</span>
 </div>
-<button class="w-full mt-base py-sm bg-white text-primary rounded-full font-button hover:bg-primary-fixed transition-colors">
+<button class="w-full mt-base py-sm bg-white text-primary rounded-full font-button hover:bg-primary-fixed transition-colors" id="dbDiagBtn">
                         상세 진단하기
                     </button>
 </div>
@@ -457,9 +457,9 @@
 <div class="flex items-center gap-sm">
 <div class="relative">
 <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-muted text-[20px]">search</span>
-<input class="pl-10 pr-base py-2 bg-surface-container-low border border-outline-variant rounded-lg font-body-sm text-body-sm focus:ring-1 focus:ring-primary focus:border-primary outline-none transition-all w-[240px]" placeholder="소스명 또는 유형 검색..." type="text"/>
+<input class="pl-10 pr-base py-2 bg-surface-container-low border border-outline-variant rounded-lg font-body-sm text-body-sm focus:ring-1 focus:ring-primary focus:border-primary outline-none transition-all w-[240px]" id="dsSearchInput" placeholder="소스명 또는 유형 검색..." type="text"/>
 </div>
-<button class="w-10 h-10 flex items-center justify-center border border-outline-variant rounded-lg hover:bg-surface-strong transition-colors">
+<button class="w-10 h-10 flex items-center justify-center border border-outline-variant rounded-lg hover:bg-surface-strong transition-colors" id="dsFilterBtn">
 <span class="material-symbols-outlined">filter_list</span>
 </button>
 </div>
@@ -482,7 +482,7 @@
                                 관리</th>
 </tr>
 </thead>
-<tbody class="divide-y divide-hairline">
+<tbody class="divide-y divide-hairline" id="dsTableBody">
 <!-- Optimal Row -->
 <tr class="hover:bg-surface-container-low transition-colors group">
 <td class="px-xl py-lg">
@@ -516,7 +516,7 @@
 <button class="px-base py-1.5 border border-primary text-primary rounded-full font-button text-sm hover:bg-primary hover:text-white transition-all opacity-0 group-hover:opacity-100">
                                     Sync Now
                                 </button>
-<button class="ml-sm text-muted hover:text-primary transition-colors">
+<button class="ml-sm text-muted hover:text-primary transition-colors ds-more-btn">
 <span class="material-symbols-outlined">more_vert</span>
 </button>
 </td>
@@ -555,7 +555,7 @@
 <button class="px-base py-1.5 border border-outline-variant text-muted rounded-full font-button text-sm cursor-not-allowed" disabled="">
                                     Wait...
                                 </button>
-<button class="ml-sm text-muted hover:text-primary transition-colors">
+<button class="ml-sm text-muted hover:text-primary transition-colors ds-more-btn">
 <span class="material-symbols-outlined">more_vert</span>
 </button>
 </td>
@@ -569,7 +569,7 @@
 </div>
 <div>
 <div class="font-body-strong text-body-strong">노션 워크스페이스 '정책백서'</div>
-<div class="font-caption text-caption text-muted text-error">Notion API Token
+<div class="font-caption text-caption text-muted text-error" id="src3-errormsg">Notion API Token
                                             Expired</div>
 </div>
 </div>
@@ -578,22 +578,22 @@
 <span class="font-body-sm text-body-sm text-on-surface-variant">API Integration</span>
 </td>
 <td class="px-xl py-lg">
-<div class="flex items-center gap-xs">
+<div class="flex items-center gap-xs" id="src3-status">
 <span class="material-symbols-outlined text-danger text-[18px]">error</span>
 <span class="font-body-sm text-body-sm text-danger font-bold">Error</span>
 </div>
 </td>
 <td class="px-xl py-lg">
-<div class="font-number-display text-body-sm">2024.05.19 09:12</div>
+<div class="font-number-display text-body-sm" id="src3-updated">2024.05.19 09:12</div>
 </td>
 <td class="px-xl py-lg">
 <div class="font-number-display text-body-sm">18,540</div>
 </td>
 <td class="px-xl py-lg text-right whitespace-nowrap">
-<button class="px-base py-1.5 bg-danger text-white rounded-full font-button text-sm hover:opacity-90 transition-all">
+<button class="px-base py-1.5 bg-danger text-white rounded-full font-button text-sm hover:opacity-90 transition-all" id="src3-reconnect-btn">
                                     Reconnect
                                 </button>
-<button class="ml-sm text-muted hover:text-primary transition-colors">
+<button class="ml-sm text-muted hover:text-primary transition-colors ds-more-btn">
 <span class="material-symbols-outlined">more_vert</span>
 </button>
 </td>
@@ -631,7 +631,7 @@
 <button class="px-base py-1.5 border border-primary text-primary rounded-full font-button text-sm hover:bg-primary hover:text-white transition-all opacity-0 group-hover:opacity-100">
                                     Sync Now
                                 </button>
-<button class="ml-sm text-muted hover:text-primary transition-colors">
+<button class="ml-sm text-muted hover:text-primary transition-colors ds-more-btn">
 <span class="material-symbols-outlined">more_vert</span>
 </button>
 </td>
@@ -646,7 +646,7 @@
 <span class="material-symbols-outlined">chevron_left</span>
 </button>
 <span class="font-caption-strong text-caption-strong">1</span>
-<button class="w-8 h-8 flex items-center justify-center rounded-lg border border-hairline text-muted hover:bg-surface-strong transition-colors">
+<button class="w-8 h-8 flex items-center justify-center rounded-lg border border-hairline text-muted hover:bg-surface-strong transition-colors" id="dsPageNext">
 <span class="material-symbols-outlined">chevron_right</span>
 </button>
 </div>
@@ -759,6 +759,99 @@
             });
         }
         efLoadFooter();
+    })();
+</script>
+<script>
+    (function () {
+        var STATUS_KEY = 'ef_rag_source_status'; // { src3: 'optimal' } — Reconnect로 복구된 상태를 새로고침 후에도 유지
+
+        function loadOverrides() {
+            try { return JSON.parse(localStorage.getItem(STATUS_KEY)) || {}; } catch (e) { return {}; }
+        }
+        function saveOverrides(o) { localStorage.setItem(STATUS_KEY, JSON.stringify(o)); }
+
+        function nowStamp() {
+            var d = new Date();
+            function p(n) { return String(n).padStart(2, '0'); }
+            return d.getFullYear() + '.' + p(d.getMonth() + 1) + '.' + p(d.getDate()) + ' ' + p(d.getHours()) + ':' + p(d.getMinutes());
+        }
+
+        function applySrc3Optimal() {
+            var statusEl = document.getElementById('src3-status');
+            if (statusEl) statusEl.innerHTML = '<span class="w-2 h-2 rounded-full bg-success"></span><span class="font-body-sm text-body-sm text-success font-bold">Optimal</span>';
+            var errMsg = document.getElementById('src3-errormsg');
+            if (errMsg) { errMsg.textContent = 'Notion_Workspace/정책백서/'; errMsg.classList.remove('text-error'); }
+            var reconnectBtn = document.getElementById('src3-reconnect-btn');
+            if (reconnectBtn) {
+                reconnectBtn.textContent = 'Sync Now';
+                reconnectBtn.className = 'px-base py-1.5 border border-primary text-primary rounded-full font-button text-sm hover:bg-primary hover:text-white transition-all';
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            var overrides = loadOverrides();
+            if (overrides.src3 === 'optimal') applySrc3Optimal();
+        });
+
+        var reconnectBtn = document.getElementById('src3-reconnect-btn');
+        if (reconnectBtn) reconnectBtn.addEventListener('click', function () {
+            if (reconnectBtn.textContent.trim() === 'Reconnect') {
+                EF_MODAL.confirm('Notion API 토큰을 재연결하시겠습니까?').then(function (ok) {
+                    if (!ok) return;
+                    var o = loadOverrides();
+                    o.src3 = 'optimal';
+                    saveOverrides(o);
+                    applySrc3Optimal();
+                    var updated = document.getElementById('src3-updated');
+                    if (updated) updated.textContent = nowStamp();
+                    EF_MODAL.alert('Notion 워크스페이스 연결이 복구되었습니다.');
+                });
+            } else {
+                var updated2 = document.getElementById('src3-updated');
+                if (updated2) updated2.textContent = nowStamp();
+                EF_MODAL.alert('동기화가 완료되었습니다.');
+            }
+        });
+
+        var searchInput = document.getElementById('dsSearchInput');
+        if (searchInput) searchInput.addEventListener('input', function () {
+            var q = searchInput.value.trim().toLowerCase();
+            document.querySelectorAll('#dsTableBody tr').forEach(function (tr) {
+                var text = tr.textContent.toLowerCase();
+                tr.style.display = (!q || text.indexOf(q) !== -1) ? '' : 'none';
+            });
+        });
+
+        var dsFilterBtn = document.getElementById('dsFilterBtn');
+        if (dsFilterBtn) dsFilterBtn.addEventListener('click', function () {
+            EF_MODAL.alert('유형별 필터 기능은 추후 지원 예정입니다.');
+        });
+
+        var syncHistoryBtn = document.getElementById('syncHistoryBtn');
+        if (syncHistoryBtn) syncHistoryBtn.addEventListener('click', function () {
+            EF_MODAL.alert('최근 동기화 이력\n\n2024.05.22 00:05  교직원 인사 발령 데이터 (성공)\n2024.05.21 14:32  2024년 교육과정 가이드라인 (성공)\n2024.05.19 09:12  노션 워크스페이스 정책백서 (실패: 토큰 만료)');
+        });
+
+        var fullRefreshBtn = document.getElementById('fullRefreshBtn');
+        if (fullRefreshBtn) fullRefreshBtn.addEventListener('click', function () {
+            EF_MODAL.alert('전체 데이터 소스 동기화를 요청했습니다. 완료까지 다소 시간이 걸릴 수 있습니다.');
+        });
+
+        var dbDiagBtn = document.getElementById('dbDiagBtn');
+        if (dbDiagBtn) dbDiagBtn.addEventListener('click', function () {
+            EF_MODAL.alert('데이터베이스 진단 결과\n\n인덱싱 정확도: 98.4%\n총 벡터 임베딩: 1,429,203개\n평균 검색 지연 시간: 12ms\n\n전반적으로 우수한 상태입니다.');
+        });
+
+        var dsPageNext = document.getElementById('dsPageNext');
+        if (dsPageNext) dsPageNext.addEventListener('click', function () {
+            EF_MODAL.alert('마지막 페이지입니다.');
+        });
+
+        document.querySelectorAll('.ds-more-btn').forEach(function (btn) {
+            btn.addEventListener('click', function () {
+                EF_MODAL.alert('데이터 소스별 상세 관리 메뉴는 추후 지원 예정입니다.');
+            });
+        });
     })();
 </script>
 </body>

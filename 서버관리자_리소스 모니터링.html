@@ -532,10 +532,10 @@
 <h2 class="font-title-lg text-title-lg text-on-surface">서버 노드 상태</h2>
 <div class="flex items-center gap-xs">
 <div class="relative">
-<input class="pl-10 pr-base py-xs bg-surface border border-hairline rounded-lg text-body-sm focus:border-primary focus:ring-0 transition-all w-64" placeholder="검색어 입력..." type="text"/>
+<input class="pl-10 pr-base py-xs bg-surface border border-hairline rounded-lg text-body-sm focus:border-primary focus:ring-0 transition-all w-64" id="nodeSearchInput" placeholder="검색어 입력..." type="text"/>
 <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-muted" data-icon="search">search</span>
 </div>
-<button class="flex items-center gap-xs px-base py-xs bg-surface-strong text-on-surface rounded-lg font-button hover:bg-surface-container-high transition-colors">
+<button class="flex items-center gap-xs px-base py-xs bg-surface-strong text-on-surface rounded-lg font-button hover:bg-surface-container-high transition-colors" id="nodeFilterBtn">
 <span class="material-symbols-outlined text-body-sm" data-icon="filter_list">filter_list</span>
                             Filter
                         </button>
@@ -561,7 +561,7 @@
                                     Actions</th>
 </tr>
 </thead>
-<tbody class="divide-y divide-hairline">
+<tbody class="divide-y divide-hairline" id="nodeTableBody">
 <!-- Node 1 -->
 <tr class="hover:bg-surface-container-low transition-colors group">
 <td class="px-lg py-base">
@@ -582,7 +582,7 @@
 <td class="px-lg py-base font-body-sm text-body">14%</td>
 <td class="px-lg py-base font-body-sm text-body">152d 4h 12m</td>
 <td class="px-lg py-base text-right">
-<button class="text-muted hover:text-primary transition-colors">
+<button class="text-muted hover:text-primary transition-colors node-more-btn">
 <span class="material-symbols-outlined" data-icon="more_vert">more_vert</span>
 </button>
 </td>
@@ -607,7 +607,7 @@
 <td class="px-lg py-base font-body-sm text-body">72%</td>
 <td class="px-lg py-base font-body-sm text-body">84d 11h 05m</td>
 <td class="px-lg py-base text-right">
-<button class="text-muted hover:text-primary transition-colors">
+<button class="text-muted hover:text-primary transition-colors node-more-btn">
 <span class="material-symbols-outlined" data-icon="more_vert">more_vert</span>
 </button>
 </td>
@@ -632,7 +632,7 @@
 <td class="px-lg py-base font-body-sm text-body">92%</td>
 <td class="px-lg py-base font-body-sm text-body">312d 1h 45m</td>
 <td class="px-lg py-base text-right">
-<button class="text-muted hover:text-primary transition-colors">
+<button class="text-muted hover:text-primary transition-colors node-more-btn">
 <span class="material-symbols-outlined" data-icon="more_vert">more_vert</span>
 </button>
 </td>
@@ -657,7 +657,7 @@
 <td class="px-lg py-base font-body-sm text-body">0%</td>
 <td class="px-lg py-base font-body-sm text-body">0d 0h 00m</td>
 <td class="px-lg py-base text-right">
-<button class="text-muted hover:text-primary transition-colors">
+<button class="text-muted hover:text-primary transition-colors node-more-btn">
 <span class="material-symbols-outlined" data-icon="more_vert">more_vert</span>
 </button>
 </td>
@@ -668,10 +668,10 @@
 <div class="p-lg bg-surface-container-lowest border-t border-hairline flex justify-between items-center">
 <p class="font-caption text-caption text-muted">Showing 4 of 4 nodes</p>
 <div class="flex gap-xs">
-<button class="p-xs bg-surface border border-hairline rounded-lg text-muted hover:bg-surface-strong transition-colors">
+<button class="p-xs bg-surface border border-hairline rounded-lg text-muted hover:bg-surface-strong transition-colors" disabled="" id="nodePagePrev">
 <span class="material-symbols-outlined" data-icon="chevron_left">chevron_left</span>
 </button>
-<button class="p-xs bg-surface border border-hairline rounded-lg text-muted hover:bg-surface-strong transition-colors">
+<button class="p-xs bg-surface border border-hairline rounded-lg text-muted hover:bg-surface-strong transition-colors" disabled="" id="nodePageNext">
 <span class="material-symbols-outlined" data-icon="chevron_right">chevron_right</span>
 </button>
 </div>
@@ -733,6 +733,40 @@
             });
         }
         efLoadFooter();
+    })();
+</script>
+<script>
+    (function () {
+        var searchInput = document.getElementById('nodeSearchInput');
+        if (searchInput) searchInput.addEventListener('input', function () {
+            var q = searchInput.value.trim().toLowerCase();
+            document.querySelectorAll('#nodeTableBody tr').forEach(function (tr) {
+                var text = tr.textContent.toLowerCase();
+                tr.style.display = (!q || text.indexOf(q) !== -1) ? '' : 'none';
+            });
+        });
+
+        var filterBtn = document.getElementById('nodeFilterBtn');
+        if (filterBtn) filterBtn.addEventListener('click', function () {
+            EF_MODAL.alert('상태별 필터 기능은 추후 지원 예정입니다.');
+        });
+
+        document.querySelectorAll('.node-more-btn').forEach(function (btn) {
+            btn.addEventListener('click', function () {
+                var row = btn.closest('tr');
+                var name = row ? row.querySelector('.font-body-strong').textContent.trim() : '이 노드';
+                EF_MODAL.confirm(name + ' 노드를 재시작하시겠습니까?').then(function (ok) {
+                    if (!ok) return;
+                    EF_MODAL.alert('재시작 요청을 전송했습니다. (실제 인프라 제어는 백엔드 연동 후 지원됩니다.)');
+                });
+            });
+        });
+
+        // 전체 4개 노드가 이미 한 페이지에 모두 표시되어 있어 페이지네이션은 실질적으로 할 일이 없음 — 명확히 비활성 처리
+        ['nodePagePrev', 'nodePageNext'].forEach(function (id) {
+            var btn = document.getElementById(id);
+            if (btn) btn.classList.add('opacity-40', 'cursor-not-allowed');
+        });
     })();
 </script>
 </body>

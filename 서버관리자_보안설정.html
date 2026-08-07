@@ -378,10 +378,10 @@
 <p class="text-[15px] text-ink/70">서버 보안 및 관리자 접속 권한을 통합 관리합니다.</p>
 </div>
 <div class="flex gap-xs">
-<button class="px-base py-xs rounded-full bg-surface-strong text-on-surface font-button hover:opacity-80 transition-opacity">
+<button class="px-base py-xs rounded-full bg-surface-strong text-on-surface font-button hover:opacity-80 transition-opacity" id="exportLogBtn">
                     전체 로그 내보내기
                 </button>
-<button class="px-base py-xs rounded-full bg-primary text-on-primary font-button hover:opacity-90 transition-opacity shadow-sm">
+<button class="px-base py-xs rounded-full bg-primary text-on-primary font-button hover:opacity-90 transition-opacity shadow-sm" id="saveSecuritySettingsBtn">
                     설정 변경 저장
                 </button>
 </div>
@@ -396,53 +396,28 @@
 <span class="material-symbols-outlined text-primary" data-icon="security">security</span>
 <h3 class="font-title-lg text-title-lg text-primary">접속 IP 제어</h3>
 </div>
-<button class="text-primary hover:underline font-button text-body-sm flex items-center gap-xxs">
+<button class="text-primary hover:underline font-button text-body-sm flex items-center gap-xxs" id="ipAddBtn">
 <span class="material-symbols-outlined text-[18px]" data-icon="add">add</span> IP 추가
                         </button>
 </div>
 <div class="space-y-base">
 <div class="flex flex-col gap-xs">
 <span class="font-caption-strong text-muted px-xxs">관리자 허용 화이트리스트</span>
-<div class="bg-surface-container-low rounded-lg border border-hairline">
-<div class="p-base border-b border-hairline flex justify-between items-center">
-<div>
-<p class="font-body-strong text-primary">211.234.XX.12</p>
-<p class="font-caption text-muted">본청 메인 서버망 (고정)</p>
+<div class="hidden bg-surface-container-low rounded-lg border border-primary/40 p-base flex-col gap-sm mb-xs" id="ipAddForm">
+<div class="flex flex-col md:flex-row gap-sm">
+<input class="flex-1 px-sm py-xs bg-canvas border border-outline-variant rounded-lg text-body-sm focus:border-primary focus:ring-0 outline-none" id="ipAddIpInput" placeholder="IP 주소 (예: 203.0.113.10)" type="text"/>
+<input class="flex-1 px-sm py-xs bg-canvas border border-outline-variant rounded-lg text-body-sm focus:border-primary focus:ring-0 outline-none" id="ipAddLabelInput" placeholder="설명 (예: 원격 근무 VPN)" type="text"/>
 </div>
-<span class="px-xs py-xxs bg-success/10 text-success rounded font-caption-strong">활성</span>
-</div>
-<div class="p-base border-b border-hairline flex justify-between items-center">
-<div>
-<p class="font-body-strong text-primary">125.141.XX.89</p>
-<p class="font-caption text-muted">교육지원청 보안 VPN</p>
-</div>
-<span class="px-xs py-xxs bg-success/10 text-success rounded font-caption-strong">활성</span>
-</div>
-<div class="p-base flex justify-between items-center">
-<div>
-<p class="font-body-strong text-primary">112.169.XX.45</p>
-<p class="font-caption text-muted">외부 기술 지원 (임시)</p>
-</div>
-<button class="text-danger hover:opacity-70 transition-opacity">
-<span class="material-symbols-outlined" data-icon="delete">delete</span>
-</button>
+<div class="flex gap-xs justify-end">
+<button class="px-base py-xs rounded-full bg-surface text-on-surface font-button text-body-sm border border-hairline hover:bg-surface-strong transition-colors" id="ipAddCancelBtn">취소</button>
+<button class="px-base py-xs rounded-full bg-primary text-on-primary font-button text-body-sm hover:opacity-90 transition-opacity" id="ipAddConfirmBtn">추가</button>
 </div>
 </div>
+<div class="bg-surface-container-low rounded-lg border border-hairline" id="ipAllowList"></div>
 </div>
 <div class="flex flex-col gap-xs mt-lg">
 <span class="font-caption-strong text-muted px-xxs">차단된 IP (블랙리스트)</span>
-<div class="bg-surface-container-low rounded-lg border border-hairline">
-<div class="p-base flex justify-between items-center">
-<div class="flex items-center gap-sm">
-<span class="material-symbols-outlined text-danger text-[20px]" data-icon="block">block</span>
-<div>
-<p class="font-body-strong text-danger">45.12.XXX.21</p>
-<p class="font-caption text-muted">반복적 로그인 실패 감지 (해외)</p>
-</div>
-</div>
-<button class="font-button text-body-sm text-primary hover:underline">차단 해제</button>
-</div>
-</div>
+<div class="bg-surface-container-low rounded-lg border border-hairline" id="ipBlockList"></div>
 </div>
 </div>
 </div>
@@ -461,7 +436,7 @@
 <p class="font-caption text-muted">로그인 시 OTP 또는 SMS 인증 필수</p>
 </div>
 <label class="relative inline-flex items-center cursor-pointer">
-<input checked="" class="sr-only peer" type="checkbox"/>
+<input checked="" class="sr-only peer" id="mfaToggle" type="checkbox"/>
 <div class="w-11 h-6 bg-surface-container-highest peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary">
 </div>
 </label>
@@ -469,9 +444,9 @@
 <div class="space-y-xs">
 <div class="flex justify-between items-center">
 <p class="font-body-strong text-on-surface">비밀번호 만료 주기</p>
-<span class="text-primary font-number-display">90일</span>
+<span class="text-primary font-number-display" id="pwExpiryValue">90일</span>
 </div>
-<input class="w-full h-2 bg-surface-container-highest rounded-lg appearance-none cursor-pointer accent-primary" max="365" min="30" type="range" value="90"/>
+<input class="w-full h-2 bg-surface-container-highest rounded-lg appearance-none cursor-pointer accent-primary" id="pwExpiryRange" max="365" min="30" type="range" value="90"/>
 </div>
 <div class="pt-base border-t border-hairline">
 <p class="font-caption-strong text-muted mb-base">보안 강화 기능</p>
@@ -484,9 +459,9 @@
 <span class="material-symbols-outlined text-[20px] text-success" data-icon="check_circle">check_circle</span>
 <span class="font-body-sm">최근 3회 비밀번호 재사용 제한</span>
 </li>
-<li class="flex items-center gap-sm">
-<span class="material-symbols-outlined text-[20px] text-muted/40" data-icon="radio_button_unchecked">radio_button_unchecked</span>
-<span class="font-body-sm text-muted">동시 접속 세션 수 제한 (미사용)</span>
+<li class="flex items-center gap-sm cursor-pointer hover:opacity-80 transition-opacity" id="concurrentSessionItem">
+<span class="material-symbols-outlined text-[20px] text-muted/40" data-icon="radio_button_unchecked" id="concurrentSessionIcon">radio_button_unchecked</span>
+<span class="font-body-sm text-muted" id="concurrentSessionLabel">동시 접속 세션 수 제한 (미사용) · 클릭하여 전환</span>
 </li>
 </ul>
 </div>
@@ -501,16 +476,16 @@
 <span class="material-symbols-outlined text-primary" data-icon="list_alt">list_alt</span>
 <h3 class="font-title-lg text-title-lg text-primary">최근 보안 로그</h3>
 </div>
-<div class="flex items-center gap-xs bg-surface-container p-xxs rounded-lg">
-<button class="px-base py-xxs bg-white rounded-md shadow-sm text-primary font-button text-body-sm">전체</button>
-<button class="px-base py-xxs text-on-surface-variant font-button text-body-sm hover:bg-white/50 rounded-md transition-all">이상
+<div class="flex items-center gap-xs bg-surface-container p-xxs rounded-lg" id="secLogFilterGroup">
+<button class="px-base py-xxs bg-white rounded-md shadow-sm text-primary font-button text-body-sm" data-log-filter="all" id="logFilterAll">전체</button>
+<button class="px-base py-xxs text-on-surface-variant font-button text-body-sm hover:bg-white/50 rounded-md transition-all" data-log-filter="anomaly" id="logFilterAnomaly">이상
                                 징후</button>
-<button class="px-base py-xxs text-on-surface-variant font-button text-body-sm hover:bg-white/50 rounded-md transition-all">인증
+<button class="px-base py-xxs text-on-surface-variant font-button text-body-sm hover:bg-white/50 rounded-md transition-all" data-log-filter="login_success" id="logFilterSuccess">인증
                                 성공</button>
 </div>
 </div>
 <div class="overflow-x-auto">
-<table class="w-full text-left">
+<table class="w-full text-left" id="secLogTable">
 <thead class="border-b border-hairline">
 <tr class="font-caption-strong text-muted uppercase">
 <th class="pb-base px-xxs">타임스탬프</th>
@@ -521,8 +496,8 @@
 <th class="pb-base px-xxs text-right">상세</th>
 </tr>
 </thead>
-<tbody class="divide-y divide-hairline">
-<tr>
+<tbody class="divide-y divide-hairline" id="secLogBody">
+<tr data-log-type="login_success">
 <td class="py-base font-number-display text-body-sm">2024-05-20 14:22:15</td>
 <td class="py-base">
 <div class="flex items-center gap-xs">
@@ -536,10 +511,10 @@
 <span class="px-xs py-xxs bg-success/10 text-success rounded-full font-caption-strong">성공</span>
 </td>
 <td class="py-base text-right">
-<button class="text-primary hover:opacity-70"><span class="material-symbols-outlined" data-icon="open_in_new">open_in_new</span></button>
+<button class="text-primary hover:opacity-70 secLogDetailBtn"><span class="material-symbols-outlined" data-icon="open_in_new">open_in_new</span></button>
 </td>
 </tr>
-<tr class="bg-error-container/5">
+<tr class="bg-error-container/5" data-log-type="anomaly">
 <td class="py-base font-number-display text-body-sm">2024-05-20 13:45:02</td>
 <td class="py-base">
 <div class="flex items-center gap-xs">
@@ -553,10 +528,10 @@
 <span class="px-xs py-xxs bg-error/10 text-error rounded-full font-caption-strong">차단됨</span>
 </td>
 <td class="py-base text-right">
-<button class="text-primary hover:opacity-70"><span class="material-symbols-outlined" data-icon="open_in_new">open_in_new</span></button>
+<button class="text-primary hover:opacity-70 secLogDetailBtn"><span class="material-symbols-outlined" data-icon="open_in_new">open_in_new</span></button>
 </td>
 </tr>
-<tr>
+<tr data-log-type="policy_change">
 <td class="py-base font-number-display text-body-sm">2024-05-20 11:10:48</td>
 <td class="py-base">
 <div class="flex items-center gap-xs">
@@ -570,10 +545,10 @@
 <span class="px-xs py-xxs bg-success/10 text-success rounded-full font-caption-strong">완료</span>
 </td>
 <td class="py-base text-right">
-<button class="text-primary hover:opacity-70"><span class="material-symbols-outlined" data-icon="open_in_new">open_in_new</span></button>
+<button class="text-primary hover:opacity-70 secLogDetailBtn"><span class="material-symbols-outlined" data-icon="open_in_new">open_in_new</span></button>
 </td>
 </tr>
-<tr>
+<tr data-log-type="logout">
 <td class="py-base font-number-display text-body-sm">2024-05-20 09:05:33</td>
 <td class="py-base">
 <div class="flex items-center gap-xs">
@@ -587,7 +562,7 @@
 <span class="px-xs py-xxs bg-surface-container-highest text-muted rounded-full font-caption-strong">일반</span>
 </td>
 <td class="py-base text-right">
-<button class="text-primary hover:opacity-70"><span class="material-symbols-outlined" data-icon="open_in_new">open_in_new</span></button>
+<button class="text-primary hover:opacity-70 secLogDetailBtn"><span class="material-symbols-outlined" data-icon="open_in_new">open_in_new</span></button>
 </td>
 </tr>
 </tbody>
@@ -614,23 +589,248 @@
 </div>
 </footer>
 <script>
-        // Micro-interaction for toggle switches
-        document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
-            checkbox.addEventListener('change', function () {
-                const parent = this.closest('div');
-                if (this.checked) {
-                    console.log('Policy Enabled');
-                } else {
-                    console.log('Policy Disabled');
-                }
-            });
-        });
-
         // Hover animation for table rows
         document.querySelectorAll('tbody tr').forEach(row => {
             row.classList.add('transition-all', 'duration-200', 'hover:bg-surface-container-low/50', 'cursor-default');
         });
     </script>
+<script>
+    (function () {
+        function escapeHtml(s) {
+            return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
+                return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+            });
+        }
+
+        var KEY_ALLOW = 'ef_security_ip_allowlist';
+        var KEY_BLOCK = 'ef_security_ip_blocklist';
+        var SEED_ALLOW = [
+            { id: 1, ip: '211.234.XX.12', label: '본청 메인 서버망 (고정)', removable: false },
+            { id: 2, ip: '125.141.XX.89', label: '교육지원청 보안 VPN', removable: false },
+            { id: 3, ip: '112.169.XX.45', label: '외부 기술 지원 (임시)', removable: true }
+        ];
+        var SEED_BLOCK = [
+            { id: 1, ip: '45.12.XXX.21', label: '반복적 로그인 실패 감지 (해외)' }
+        ];
+
+        function loadList(key, seed) {
+            try {
+                var raw = localStorage.getItem(key);
+                if (raw) return JSON.parse(raw);
+            } catch (e) { /* fall through to reseed */ }
+            localStorage.setItem(key, JSON.stringify(seed));
+            return seed.slice();
+        }
+        function saveList(key, list) { localStorage.setItem(key, JSON.stringify(list)); }
+
+        function renderAllowList() {
+            var list = loadList(KEY_ALLOW, SEED_ALLOW);
+            var container = document.getElementById('ipAllowList');
+            if (!container) return;
+            if (list.length === 0) {
+                container.innerHTML = '<div class="p-base text-body-sm text-muted">등록된 허용 IP가 없습니다.</div>';
+                return;
+            }
+            container.innerHTML = list.map(function (item, idx) {
+                var borderClass = idx < list.length - 1 ? ' border-b border-hairline' : '';
+                var action = item.removable
+                    ? '<button class="text-danger hover:opacity-70 transition-opacity ip-allow-delete-btn" data-id="' + item.id + '"><span class="material-symbols-outlined" data-icon="delete">delete</span></button>'
+                    : '<span class="px-xs py-xxs bg-success/10 text-success rounded font-caption-strong">활성</span>';
+                return '<div class="p-base flex justify-between items-center' + borderClass + '">'
+                    + '<div><p class="font-body-strong text-primary">' + escapeHtml(item.ip) + '</p><p class="font-caption text-muted">' + escapeHtml(item.label) + '</p></div>'
+                    + action
+                    + '</div>';
+            }).join('');
+        }
+
+        function renderBlockList() {
+            var list = loadList(KEY_BLOCK, SEED_BLOCK);
+            var container = document.getElementById('ipBlockList');
+            if (!container) return;
+            if (list.length === 0) {
+                container.innerHTML = '<div class="p-base text-body-sm text-muted">차단된 IP가 없습니다.</div>';
+                return;
+            }
+            container.innerHTML = list.map(function (item) {
+                return '<div class="p-base flex justify-between items-center">'
+                    + '<div class="flex items-center gap-sm"><span class="material-symbols-outlined text-danger text-[20px]" data-icon="block">block</span>'
+                    + '<div><p class="font-body-strong text-danger">' + escapeHtml(item.ip) + '</p><p class="font-caption text-muted">' + escapeHtml(item.label) + '</p></div></div>'
+                    + '<button class="font-button text-body-sm text-primary hover:underline ip-block-release-btn" data-id="' + item.id + '">차단 해제</button>'
+                    + '</div>';
+            }).join('');
+        }
+
+        renderAllowList();
+        renderBlockList();
+
+        var ipAllowListEl = document.getElementById('ipAllowList');
+        if (ipAllowListEl) ipAllowListEl.addEventListener('click', function (e) {
+            var btn = e.target.closest('.ip-allow-delete-btn');
+            if (!btn) return;
+            var id = btn.getAttribute('data-id');
+            EF_MODAL.confirm('이 IP를 허용 목록에서 삭제하시겠습니까?', { confirmLabel: '삭제', danger: true }).then(function (ok) {
+                if (!ok) return;
+                var list = loadList(KEY_ALLOW, SEED_ALLOW).filter(function (i) { return String(i.id) !== String(id); });
+                saveList(KEY_ALLOW, list);
+                renderAllowList();
+            });
+        });
+
+        var ipBlockListEl = document.getElementById('ipBlockList');
+        if (ipBlockListEl) ipBlockListEl.addEventListener('click', function (e) {
+            var btn = e.target.closest('.ip-block-release-btn');
+            if (!btn) return;
+            var id = btn.getAttribute('data-id');
+            EF_MODAL.confirm('이 IP의 차단을 해제하시겠습니까?').then(function (ok) {
+                if (!ok) return;
+                var list = loadList(KEY_BLOCK, SEED_BLOCK).filter(function (i) { return String(i.id) !== String(id); });
+                saveList(KEY_BLOCK, list);
+                renderBlockList();
+            });
+        });
+
+        var ipAddBtn = document.getElementById('ipAddBtn');
+        var ipAddForm = document.getElementById('ipAddForm');
+        var ipAddIpInput = document.getElementById('ipAddIpInput');
+        var ipAddLabelInput = document.getElementById('ipAddLabelInput');
+        if (ipAddBtn && ipAddForm) ipAddBtn.addEventListener('click', function () {
+            ipAddForm.classList.toggle('hidden');
+            ipAddForm.classList.toggle('flex');
+            if (!ipAddForm.classList.contains('hidden') && ipAddIpInput) ipAddIpInput.focus();
+        });
+        var ipAddCancelBtn = document.getElementById('ipAddCancelBtn');
+        if (ipAddCancelBtn) ipAddCancelBtn.addEventListener('click', function () {
+            ipAddForm.classList.add('hidden');
+            ipAddForm.classList.remove('flex');
+            ipAddIpInput.value = '';
+            ipAddLabelInput.value = '';
+        });
+        var ipAddConfirmBtn = document.getElementById('ipAddConfirmBtn');
+        if (ipAddConfirmBtn) ipAddConfirmBtn.addEventListener('click', function () {
+            var ip = ipAddIpInput.value.trim();
+            var label = ipAddLabelInput.value.trim();
+            if (!ip) { EF_MODAL.alert('IP 주소를 입력해주세요.'); return; }
+            var list = loadList(KEY_ALLOW, SEED_ALLOW);
+            list.push({ id: Date.now(), ip: ip, label: label || '관리자 등록', removable: true });
+            saveList(KEY_ALLOW, list);
+            renderAllowList();
+            ipAddForm.classList.add('hidden');
+            ipAddForm.classList.remove('flex');
+            ipAddIpInput.value = '';
+            ipAddLabelInput.value = '';
+            EF_MODAL.alert('허용 목록에 추가되었습니다.');
+        });
+
+        var mfaToggle = document.getElementById('mfaToggle');
+        if (mfaToggle) {
+            var savedMfa = localStorage.getItem('ef_security_mfa_enabled');
+            if (savedMfa !== null) mfaToggle.checked = savedMfa === '1';
+            mfaToggle.addEventListener('change', function () {
+                localStorage.setItem('ef_security_mfa_enabled', mfaToggle.checked ? '1' : '0');
+            });
+        }
+
+        var pwExpiryRange = document.getElementById('pwExpiryRange');
+        var pwExpiryValue = document.getElementById('pwExpiryValue');
+        if (pwExpiryRange && pwExpiryValue) {
+            var savedExpiry = localStorage.getItem('ef_security_pw_expiry_days');
+            if (savedExpiry) { pwExpiryRange.value = savedExpiry; pwExpiryValue.textContent = savedExpiry + '일'; }
+            pwExpiryRange.addEventListener('input', function () {
+                pwExpiryValue.textContent = pwExpiryRange.value + '일';
+            });
+            pwExpiryRange.addEventListener('change', function () {
+                localStorage.setItem('ef_security_pw_expiry_days', pwExpiryRange.value);
+            });
+        }
+
+        var concurrentItem = document.getElementById('concurrentSessionItem');
+        var concurrentIcon = document.getElementById('concurrentSessionIcon');
+        var concurrentLabel = document.getElementById('concurrentSessionLabel');
+        function applyConcurrentState(enabled) {
+            if (enabled) {
+                concurrentIcon.textContent = 'check_circle';
+                concurrentIcon.className = 'material-symbols-outlined text-[20px] text-success';
+                concurrentLabel.textContent = '동시 접속 세션 수 제한 (사용 중) · 클릭하여 전환';
+                concurrentLabel.className = 'font-body-sm';
+            } else {
+                concurrentIcon.textContent = 'radio_button_unchecked';
+                concurrentIcon.className = 'material-symbols-outlined text-[20px] text-muted/40';
+                concurrentLabel.textContent = '동시 접속 세션 수 제한 (미사용) · 클릭하여 전환';
+                concurrentLabel.className = 'font-body-sm text-muted';
+            }
+        }
+        if (concurrentItem && concurrentIcon && concurrentLabel) {
+            applyConcurrentState(localStorage.getItem('ef_security_concurrent_limit') === '1');
+            concurrentItem.addEventListener('click', function () {
+                var next = localStorage.getItem('ef_security_concurrent_limit') !== '1';
+                localStorage.setItem('ef_security_concurrent_limit', next ? '1' : '0');
+                applyConcurrentState(next);
+            });
+        }
+
+        var exportLogBtn = document.getElementById('exportLogBtn');
+        if (exportLogBtn) exportLogBtn.addEventListener('click', function () {
+            var rows = [['타임스탬프', '이벤트 유형', '소스 IP', '관리자 계정', '상태']];
+            document.querySelectorAll('#secLogBody tr').forEach(function (tr) {
+                if (tr.style.display === 'none') return;
+                var cells = tr.querySelectorAll('td');
+                if (cells.length < 5) return;
+                rows.push([0, 1, 2, 3, 4].map(function (i) { return cells[i].textContent.trim(); }));
+            });
+            var csv = rows.map(function (r) {
+                return r.map(function (v) { return '"' + String(v).replace(/"/g, '""') + '"'; }).join(',');
+            }).join('\n');
+            var blob = new Blob(['﻿' + csv], { type: 'text/csv;charset=utf-8;' });
+            var url = URL.createObjectURL(blob);
+            var a = document.createElement('a');
+            a.href = url;
+            a.download = 'security_log_' + new Date().toISOString().slice(0, 10) + '.csv';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        });
+
+        var saveSettingsBtn = document.getElementById('saveSecuritySettingsBtn');
+        if (saveSettingsBtn) saveSettingsBtn.addEventListener('click', function () {
+            EF_MODAL.alert('보안 설정이 저장되었습니다.');
+        });
+
+        var ACTIVE_FILTER_CLASS = 'px-base py-xxs bg-white rounded-md shadow-sm text-primary font-button text-body-sm';
+        var INACTIVE_FILTER_CLASS = 'px-base py-xxs text-on-surface-variant font-button text-body-sm hover:bg-white/50 rounded-md transition-all';
+        function setActiveFilterBtn(activeId) {
+            ['logFilterAll', 'logFilterAnomaly', 'logFilterSuccess'].forEach(function (id) {
+                var btn = document.getElementById(id);
+                if (btn) btn.className = (id === activeId ? ACTIVE_FILTER_CLASS : INACTIVE_FILTER_CLASS);
+            });
+        }
+        function applyLogFilter(type) {
+            document.querySelectorAll('#secLogBody tr').forEach(function (tr) {
+                var t = tr.getAttribute('data-log-type');
+                tr.style.display = (type === 'all' || t === type) ? '' : 'none';
+            });
+        }
+        document.querySelectorAll('#secLogFilterGroup button[data-log-filter]').forEach(function (btn) {
+            btn.addEventListener('click', function () {
+                setActiveFilterBtn(btn.id);
+                applyLogFilter(btn.getAttribute('data-log-filter'));
+            });
+        });
+
+        document.querySelectorAll('.secLogDetailBtn').forEach(function (btn) {
+            btn.addEventListener('click', function () {
+                var tr = btn.closest('tr');
+                var cells = tr.querySelectorAll('td');
+                var msg = '타임스탬프: ' + cells[0].textContent.trim() + '\n'
+                    + '이벤트 유형: ' + cells[1].textContent.trim() + '\n'
+                    + '소스 IP: ' + cells[2].textContent.trim() + '\n'
+                    + '관리자 계정: ' + cells[3].textContent.trim() + '\n'
+                    + '상태: ' + cells[4].textContent.trim();
+                EF_MODAL.alert(msg);
+            });
+        });
+    })();
+</script>
 <!-- TODO: 실제 서버 연동 시 이 값들은 localStorage가 아니라 서버(DB)에서 불러오도록 교체해야 함.
      푸터 정보는 서버관리자_푸터관리.html 에서만 수정할 수 있음(브라우저별 임시 저장). -->
 <script>

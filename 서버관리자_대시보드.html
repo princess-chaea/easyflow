@@ -249,6 +249,8 @@
         }
       </script>
     <script src="assets/js/auth.js"></script>
+    <script src="assets/js/inquiries.js"></script>
+    <script src="assets/js/mentoring.js"></script>
 </head>
 <body class="bg-surface-soft text-on-surface">
 <nav class="fixed top-0 w-full z-50 h-[64px] bg-canvas">
@@ -377,11 +379,11 @@
 <p class="text-[15px] text-ink/70">실시간 인프라 상태 및 통합 행정 제어 센터입니다.</p>
 </div>
 <div class="flex gap-base">
-<button class="px-base py-sm bg-surface-strong text-ink font-button rounded-full border border-hairline hover:bg-surface-container-high transition-colors flex items-center gap-xs">
+<button class="px-base py-sm bg-surface-strong text-ink font-button rounded-full border border-hairline hover:bg-surface-container-high transition-colors flex items-center gap-xs" id="dashRefreshBtn">
 <span class="material-symbols-outlined text-[20px]">refresh</span>
                         데이터 새로고침
                     </button>
-<button class="px-base py-sm bg-primary text-on-primary font-button rounded-full hover:bg-primary-active transition-all shadow-sm flex items-center gap-xs">
+<button class="px-base py-sm bg-primary text-on-primary font-button rounded-full hover:bg-primary-active transition-all shadow-sm flex items-center gap-xs" id="dashEmergencyBtn">
 <span class="material-symbols-outlined text-[20px]">emergency</span>
                         긴급 정지
                     </button>
@@ -439,6 +441,41 @@
 <h3 class="font-number-display text-display-sm text-on-surface">14.2%</h3>
 </div>
 </div>
+<!-- Site Activity Section: 실제 localStorage 데이터(역할 승인/문의/멘토링/공지/멘토배정) 기준 -->
+<div class="mb-section">
+<div class="flex items-center justify-between mb-lg">
+<h4 class="font-title-md text-title-md text-primary">사이트 운영 현황</h4>
+<span class="font-caption text-caption text-muted">실제 저장된 데이터를 집계한 값입니다</span>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-lg mb-lg">
+<a class="bg-canvas border border-hairline p-lg rounded-2xl shadow-sm hover:shadow-md transition-shadow block" href="서버관리자_역할관리.html">
+<p class="text-caption text-muted mb-xs">역할 승인 대기</p>
+<h3 class="font-number-display text-display-sm text-on-surface"><span id="statRoleRequests">0</span><span class="text-caption font-sans text-muted">건</span></h3>
+</a>
+<a class="bg-canvas border border-hairline p-lg rounded-2xl shadow-sm hover:shadow-md transition-shadow block" href="안내센터_1대1문의관리.html">
+<p class="text-caption text-muted mb-xs">1:1 문의 미답변</p>
+<h3 class="font-number-display text-display-sm text-on-surface"><span id="statInquiries">0</span><span class="text-caption font-sans text-muted">건</span></h3>
+</a>
+<a class="bg-canvas border border-hairline p-lg rounded-2xl shadow-sm hover:shadow-md transition-shadow block" href="인생도서관_멘토상담함.html">
+<p class="text-caption text-muted mb-xs">멘토링 신규·진행중</p>
+<h3 class="font-number-display text-display-sm text-on-surface"><span id="statMentoring">0</span><span class="text-caption font-sans text-muted">건</span></h3>
+</a>
+<a class="bg-canvas border border-hairline p-lg rounded-2xl shadow-sm hover:shadow-md transition-shadow block" href="안내센터_공지사항.html">
+<p class="text-caption text-muted mb-xs">등록된 공지사항</p>
+<h3 class="font-number-display text-display-sm text-on-surface"><span id="statNotices">0</span><span class="text-caption font-sans text-muted">건</span></h3>
+</a>
+<a class="bg-canvas border border-hairline p-lg rounded-2xl shadow-sm hover:shadow-md transition-shadow block" href="서버관리자_멘토배정관리.html">
+<p class="text-caption text-muted mb-xs">배정된 멘토</p>
+<h3 class="font-number-display text-display-sm text-on-surface"><span id="statMentors">0</span><span class="text-caption font-sans text-muted">명</span></h3>
+</a>
+</div>
+<div class="bg-canvas border border-hairline rounded-2xl p-lg shadow-sm">
+<h4 class="font-title-sm text-title-sm text-primary mb-base">최근 활동</h4>
+<ul class="divide-y divide-hairline" id="recentActivityList">
+<li class="py-base text-body-sm text-muted">불러오는 중...</li>
+</ul>
+</div>
+</div>
 <!-- Main Data Section: 2 Column Layout -->
 <div class="grid grid-cols-1 lg:grid-cols-3 gap-lg">
 <!-- Traffic Chart Card -->
@@ -450,7 +487,7 @@
 </div>
 <div class="flex gap-xs">
 <button class="px-sm py-1 bg-surface-strong text-caption-strong rounded-full">일간</button>
-<button class="px-sm py-1 text-caption-strong text-muted hover:text-primary">주간</button>
+<button class="px-sm py-1 text-caption-strong text-muted hover:text-primary" id="weeklyChartBtn">주간</button>
 </div>
 </div>
 <!-- Simulated Chart -->
@@ -490,21 +527,21 @@
 <div class="bg-canvas border border-hairline rounded-2xl p-lg shadow-sm">
 <h4 class="font-title-sm text-title-sm text-primary mb-lg">빠른 행정 도구</h4>
 <div class="flex flex-col gap-sm">
-<button class="w-full flex items-center justify-between p-base bg-surface-soft hover:bg-primary-fixed rounded-lg border border-hairline transition-all group">
+<a class="w-full flex items-center justify-between p-base bg-surface-soft hover:bg-primary-fixed rounded-lg border border-hairline transition-all group" href="서버관리자_역할관리.html">
 <div class="flex items-center gap-base">
 <span class="material-symbols-outlined text-primary">admin_panel_settings</span>
 <span class="font-button text-on-surface">관리자 권한 부여</span>
 </div>
 <span class="material-symbols-outlined text-muted group-hover:text-primary">chevron_right</span>
-</button>
-<button class="w-full flex items-center justify-between p-base bg-surface-soft hover:bg-primary-fixed rounded-lg border border-hairline transition-all group">
+</a>
+<a class="w-full flex items-center justify-between p-base bg-surface-soft hover:bg-primary-fixed rounded-lg border border-hairline transition-all group" href="서버관리자_보안설정.html">
 <div class="flex items-center gap-base">
 <span class="material-symbols-outlined text-primary">security_update_good</span>
 <span class="font-button text-on-surface">IP 접속 제어</span>
 </div>
 <span class="material-symbols-outlined text-muted group-hover:text-primary">chevron_right</span>
-</button>
-<button class="w-full flex items-center justify-between p-base bg-surface-soft hover:bg-primary-fixed rounded-lg border border-hairline transition-all group">
+</a>
+<button class="w-full flex items-center justify-between p-base bg-surface-soft hover:bg-primary-fixed rounded-lg border border-hairline transition-all group" id="sysLogBtn">
 <div class="flex items-center gap-base">
 <span class="material-symbols-outlined text-primary">terminal</span>
 <span class="font-button text-on-surface">시스템 로그 조회</span>
@@ -549,7 +586,7 @@
 <div class="mt-section bg-canvas border border-hairline rounded-2xl overflow-hidden shadow-sm">
 <div class="px-lg py-base border-b border-hairline flex items-center justify-between">
 <h4 class="font-title-md text-title-md text-primary">노드 리소스</h4>
-<button class="text-primary font-button text-body-sm hover:underline">전체 클러스터 보기</button>
+<a class="text-primary font-button text-body-sm hover:underline" href="서버관리자_리소스 모니터링.html">전체 클러스터 보기</a>
 </div>
 <div class="overflow-x-auto">
 <table class="w-full text-left border-collapse">
@@ -578,7 +615,7 @@
 <td class="px-lg py-base font-number-display text-body-sm">8.4 / 32 GB</td>
 <td class="px-lg py-base font-number-display text-body-sm">1.2 Gbps / 400 Mbps</td>
 <td class="px-lg py-base text-right">
-<button class="p-xs text-on-surface-variant hover:text-primary transition-colors">
+<button class="p-xs text-on-surface-variant hover:text-primary transition-colors dash-node-more-btn">
 <span class="material-symbols-outlined">more_vert</span>
 </button>
 </td>
@@ -598,7 +635,7 @@
 <td class="px-lg py-base font-number-display text-body-sm">48.2 / 64 GB</td>
 <td class="px-lg py-base font-number-display text-body-sm">8.4 Gbps / 2.1 Gbps</td>
 <td class="px-lg py-base text-right">
-<button class="p-xs text-on-surface-variant hover:text-primary transition-colors">
+<button class="p-xs text-on-surface-variant hover:text-primary transition-colors dash-node-more-btn">
 <span class="material-symbols-outlined">more_vert</span>
 </button>
 </td>
@@ -617,7 +654,7 @@
 <td class="px-lg py-base font-number-display text-body-sm">14.1 / 128 GB</td>
 <td class="px-lg py-base font-number-display text-body-sm">240 Mbps / 90 Mbps</td>
 <td class="px-lg py-base text-right">
-<button class="p-xs text-on-surface-variant hover:text-primary transition-colors">
+<button class="p-xs text-on-surface-variant hover:text-primary transition-colors dash-node-more-btn">
 <span class="material-symbols-outlined">more_vert</span>
 </button>
 </td>
@@ -670,6 +707,111 @@
             });
         }
         efLoadFooter();
+    })();
+</script>
+<script>
+    (function () {
+        function escapeHtml(s) {
+            return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
+                return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+            });
+        }
+        function loadJSON(key) {
+            try { return JSON.parse(localStorage.getItem(key)) || []; } catch (e) { return []; }
+        }
+        function setText(id, value) {
+            var el = document.getElementById(id);
+            if (el) el.textContent = value;
+        }
+        function lastMessageAt(m) {
+            var msgs = m.messages || [];
+            return msgs.length ? (msgs[msgs.length - 1].at || '') : '';
+        }
+
+        // 서버관리자가 실제로 궁금해할 사이트 운영 지표: 역할 승인 대기/1:1 문의/멘토링/공지/멘토배정
+        // localStorage에 실제로 쌓이는 데이터를 그대로 집계한다(인프라 수치와 달리 백엔드 없이도 실측 가능).
+        function renderDashboardStats() {
+            var roleRequests = loadJSON('roleRequests');
+            var inquiries = window.EF_INQUIRY ? EF_INQUIRY.all() : loadJSON('ef_inquiries');
+            var mentoring = window.EF_MENTORING ? EF_MENTORING.all() : loadJSON('ef_mentoring');
+            var notices = loadJSON('ef_notices');
+            var mentors = window.EF_MENTOR_ROSTER ? EF_MENTOR_ROSTER.all() : loadJSON('ef_mentor_roster');
+
+            var unanswered = inquiries.filter(function (q) { return q.status !== '답변완료'; });
+            var activeMentoring = mentoring.filter(function (m) { return m.status === '신규' || m.status === '진행중'; });
+
+            setText('statRoleRequests', roleRequests.length);
+            setText('statInquiries', unanswered.length);
+            setText('statMentoring', activeMentoring.length);
+            setText('statNotices', notices.length);
+            setText('statMentors', mentors.length);
+
+            var items = [];
+            roleRequests.forEach(function (r) {
+                items.push({ html: escapeHtml(r.email) + '님이 <b>' + escapeHtml(r.requestedRole) + '</b> 역할을 신청했습니다', href: '서버관리자_역할관리.html' });
+            });
+            unanswered.slice().sort(function (a, b) { return String(b.date || '').localeCompare(String(a.date || '')); }).slice(0, 3).forEach(function (q) {
+                items.push({ html: '<b>1:1 문의</b> · ' + escapeHtml(q.title) + ' <span class="text-muted">(' + escapeHtml(q.date || '') + ')</span>', href: '안내센터_1대1문의관리.html' });
+            });
+            activeMentoring.slice().sort(function (a, b) { return lastMessageAt(b).localeCompare(lastMessageAt(a)); }).slice(0, 3).forEach(function (m) {
+                items.push({ html: '<b>멘토링</b> · ' + escapeHtml(m.name || m.email) + '님 · ' + escapeHtml(m.title), href: '인생도서관_멘토상담함.html' });
+            });
+            if (notices.length) {
+                var latestNotice = notices[notices.length - 1];
+                items.push({ html: '<b>공지</b> · ' + escapeHtml(latestNotice.title || ''), href: '안내센터_공지사항.html' });
+            }
+
+            var list = document.getElementById('recentActivityList');
+            if (!list) return;
+            if (items.length === 0) {
+                list.innerHTML = '<li class="py-base text-body-sm text-muted">최근 활동이 없습니다.</li>';
+                return;
+            }
+            list.innerHTML = items.slice(0, 8).map(function (it) {
+                return '<li class="py-base"><a class="text-body-sm text-on-surface hover:text-primary transition-colors" href="' + it.href + '">' + it.html + '</a></li>';
+            }).join('');
+        }
+
+        function replayChartBars() {
+            document.querySelectorAll('.chart-bar').forEach(function (bar) {
+                var targetHeight = bar.dataset.targetHeight || bar.style.height;
+                bar.dataset.targetHeight = targetHeight;
+                bar.style.height = '0%';
+                setTimeout(function () { bar.style.height = targetHeight; }, 300);
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', renderDashboardStats);
+
+        var refreshBtn = document.getElementById('dashRefreshBtn');
+        if (refreshBtn) refreshBtn.addEventListener('click', function () {
+            renderDashboardStats();
+            replayChartBars();
+        });
+
+        var emergencyBtn = document.getElementById('dashEmergencyBtn');
+        if (emergencyBtn) emergencyBtn.addEventListener('click', function () {
+            EF_MODAL.confirm('정말로 전체 시스템을 긴급 정지하시겠습니까? 모든 사용자의 접속이 즉시 차단됩니다.', { confirmLabel: '긴급 정지', danger: true }).then(function (ok) {
+                if (!ok) return;
+                EF_MODAL.alert('긴급 정지 요청이 접수되었습니다. (실제 인프라 제어는 백엔드 연동 후 지원됩니다.)');
+            });
+        });
+
+        var sysLogBtn = document.getElementById('sysLogBtn');
+        if (sysLogBtn) sysLogBtn.addEventListener('click', function () {
+            EF_MODAL.alert('시스템 로그 조회 화면은 준비 중입니다. 실제 로그 수집·저장은 백엔드 연동 후 지원됩니다.');
+        });
+
+        var weeklyChartBtn = document.getElementById('weeklyChartBtn');
+        if (weeklyChartBtn) weeklyChartBtn.addEventListener('click', function () {
+            EF_MODAL.alert('현재 화면은 일간 트래픽만 제공합니다. 주간 통계는 추후 지원 예정입니다.');
+        });
+
+        document.querySelectorAll('.dash-node-more-btn').forEach(function (btn) {
+            btn.addEventListener('click', function () {
+                EF_MODAL.alert('노드 상세 관리 메뉴는 추후 지원 예정입니다.');
+            });
+        });
     })();
 </script>
 </body>
