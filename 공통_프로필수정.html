@@ -80,6 +80,10 @@
         }
     </script>
     <script src="assets/js/auth.js"></script>
+    <script>
+        // 실제 프로필 편집은 공용 모달 하나로 제공한다. 오래된 정적 화면을 직접 열어도 같은 편집기로 보낸다.
+        if (localStorage.getItem('currentUser')) window.location.replace('index.html?openProfile=1');
+    </script>
 </head>
 <body class="text-ink flex flex-col min-h-screen">
     

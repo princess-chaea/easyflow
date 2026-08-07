@@ -3621,6 +3621,16 @@
        ═══════════════════════════════════════════════════════════════════════ */
     const GEMINI_KEY = 'YOUR_API_KEY_HERE';
     const GEMINI_MODEL = 'gemini-2.5-flash';
+    const AI_BACKEND_PENDING = GEMINI_KEY === 'YOUR_API_KEY_HERE';
+    function requireAiBackend() {
+      if (!AI_BACKEND_PENDING) return;
+      const error = new Error('AI_BACKEND_PENDING');
+      error.code = 'AI_BACKEND_PENDING';
+      throw error;
+    }
+    function showAiBackendPending(el, suffix) {
+      el.textContent = 'AI 서버 연동이 필요합니다. ' + suffix;
+    }
     let aiCache = {};
     try { aiCache = JSON.parse(localStorage.getItem('ef_ai_cache') || '{}'); } catch (e) { aiCache = {}; }
     function saveAiCache() {
@@ -3629,6 +3639,7 @@
     }
 
     async function askGemini(userPrompt, systemPrompt) {
+      requireAiBackend();
       const res = await fetch('https://generativelanguage.googleapis.com/v1beta/models/' + GEMINI_MODEL + ':generateContent', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'x-goog-api-key': GEMINI_KEY },
@@ -3755,6 +3766,7 @@
         saveAiCache();
         showAiResult(action, aiCache[aiKey(action)], false);
       } catch (err) {
+        if (err.code === 'AI_BACKEND_PENDING') { showAiBackendPending(out, '처리 매뉴얼과 서식을 이용해 주세요.'); return; }
         out.innerHTML =
           '<div class="flex items-start gap-xs py-xs">'
           + '<span class="material-symbols-outlined text-[18px] text-warning mt-[1px]">wifi_off</span>'
@@ -3814,6 +3826,7 @@
         saveAiCache();
         showBrief(aiCache[cacheKey], false);
       } catch (err) {
+        if (err.code === 'AI_BACKEND_PENDING') { showAiBackendPending(out, '업무 목록의 마감순 정렬은 그대로 이용할 수 있습니다.'); return; }
         out.innerHTML = '<p class="text-caption text-muted py-xs">'
           + '<span class="material-symbols-outlined text-[14px] align-middle text-warning">wifi_off</span> '
           + 'AI 연결이 어렵습니다. 위 목록의 마감순 정렬은 그대로 유효합니다. '
@@ -3953,6 +3966,7 @@
        - 인사말·서명·연락처는 버리고 실무 정보(제목/일시/장소/준비물)만 담는다
        ═══════════════════════════════════════════════════════════════════════ */
     async function askGeminiJSON(parts, systemPrompt) {
+      requireAiBackend();
       const res = await fetch('https://generativelanguage.googleapis.com/v1beta/models/' + GEMINI_MODEL + ':generateContent', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'x-goog-api-key': GEMINI_KEY },
@@ -4033,6 +4047,7 @@
         }
         renderAiPreview();
       } catch (err) {
+        if (err.code === 'AI_BACKEND_PENDING') { showAiBackendPending(st, '일정은 아래 입력란에서 직접 등록할 수 있습니다.'); return; }
         st.innerHTML = '<p class="text-caption text-body flex items-center gap-xxs">'
           + '<span class="material-symbols-outlined text-[15px] text-warning">wifi_off</span>'
           + 'AI 연결이 어렵습니다(' + esc(err.message) + '). 아래에 직접 입력해 주세요.</p>';

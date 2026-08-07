@@ -210,6 +210,15 @@
         });
     });
 
+    // 직접 프로필 수정 URL로 접근한 경우에도 가짜 정적 화면 대신 같은 공용 모달을 연다.
+    const profileParams = new URLSearchParams(window.location.search);
+    if (profileParams.get('openProfile') === '1') {
+        profileParams.delete('openProfile');
+        const query = profileParams.toString();
+        history.replaceState(null, '', window.location.pathname + (query ? '?' + query : '') + window.location.hash);
+        overlay.classList.add('active');
+    }
+
     const closeModal = () => {
         overlay.classList.remove('active');
     };

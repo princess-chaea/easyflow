@@ -44,6 +44,11 @@ AI챗봇, 안내센터 2개, 서버관리자 3개)를 병렬로 마지막 점검
 
 ---
 
+**2026-08-08 인계 정합성 최신화**: 1.1~1.3, 1.7, 1.9, 3.2~3.4, 4.1~4.6의 일부 본문은
+수정 전 원인 기록을 보존한다. 제목 또는 인라인의 ✅가 붙은 항목은 현재 프론트에서 수정 완료된 이력이며,
+백엔드는 그 과거 버그를 재현·호환할 필요가 없다. 현재 미구현은 실제 인증·공유 DB·파일 스토리지·AI/RAG·실측
+인프라 지표이며, 아래 최신 상태 요약과 섹션 2의 정규화 모델을 우선 기준으로 삼는다.
+
 ## 0. 가장 먼저 읽을 것 — 실제로 동작하는 것 vs 전부 장식인 것
 
 프로토타입 특성상 "그럴듯해 보이지만 버튼을 눌러도 아무 일도 안 일어나는" 화면이 대부분입니다. 아래는 **실제로
@@ -81,7 +86,11 @@ localStorage를 읽고 쓰며 상태가 바뀌는, 진짜 동작하는 흐름**�
 문제**입니다. 백엔드 스키마를 페이지별로 그대로 베끼면 이 불일치까지 같이 이식되므로, 먼저 어느 쪽을
 "정답"으로 통일할지 결정하고 시작하는 것을 권장합니다.
 
-### 1.1 `currentUser`가 파일마다 다르게 취급됨 — 업무발송이 사실상 항상 실패 ✅ 2026-08-06 수정 완료
+### 1.1 `currentUser` 값 처리 불일치 — ✅ 2026-08-06 프론트 수정 완료, 인증 전환 필요
+
+> **현재 상태 (2026-08-08)**: 아래 내용은 수정 전의 원인 기록이다. 현재 업무발송은 이메일을 JSON으로
+> 파싱하지 않고, `org_<email>`에서 발신 소속을 읽어 `ef_mail_data`에 정상 저장한다. 백엔드는 이 과거
+> 데이터 형태를 호환할 필요가 없으며, 세션/토큰의 `/users/me`로 사용자·소속·부서·직위를 제공하면 된다.
 
 - `공통_로그인.html`과 `assets/js/auth.js`는 `currentUser`를 **순수 문자열(이메일)**로 저장/사용합니다.
   (`localStorage.setItem('currentUser', email)`)
@@ -99,7 +108,10 @@ localStorage를 읽고 쓰며 상태가 바뀌는, 진짜 동작하는 흐름**�
   바뀌면 이 문제는 자연히 해소됩니다. 다만 프론트가 이 값을 참조하는 모든 지점(위 두 파일 포함)을 새 인증
   방식에 맞게 같이 고쳐야 합니다.
 
-### 1.2 `roleRequests`가 두 가지 다른 모양으로 쓰이고 있음 ✅ 2026-08-06 수정 완료 (배열로 통일)
+### 1.2 `roleRequests` 데이터 형태 불일치 — ✅ 2026-08-06 프론트 수정 완료
+
+> **현재 상태 (2026-08-08)**: 역할 요청은 `[{email, requestedRole}]` 배열로 통일됐다. 회원가입·프로필·역할관리·회원관리가
+> 같은 데이터를 읽고, 회원관리 승인도 요청 제거와 `grantedRoles_<email>` 반영을 함께 수행한다. 아래는 수정 전 불일치 기록이다.
 
 - `공통_회원가입.html`, `profile-modal.js`, `서버관리자_역할관리.html` — **배열**로 사용:
   `[{email, requestedRole}, ...]`
@@ -110,7 +122,10 @@ localStorage를 읽고 쓰며 상태가 바뀌는, 진짜 동작하는 흐름**�
 - **백엔드 조치**: `role_requests` 테이블(id, user_id, requested_role, status, created_at)로 정규화하고,
   두 화면 모두 이 테이블 하나만 보도록 통일. 프론트 두 곳의 로컬 로직은 모두 폐기.
 
-### 1.3 `grantedRoles` 키 규칙도 두 가지가 공존 ✅ 2026-08-06 수정 완료 (`grantedRoles_<email>`로 통일)
+### 1.3 `grantedRoles` 키 규칙 불일치 — ✅ 2026-08-06 수정 완료 (`grantedRoles_<email>`로 통일)
+
+> **현재 상태 (2026-08-08)**: 승인 역할은 사용자별 `grantedRoles_<email>` 배열로 통일됐다. 회원관리에서 승인한
+> 역할도 `EF_ROLE.effective()`의 실제 권한 판정에 반영된다. 아래는 수정 전 전역 키 사용 문제의 기록이다.
 
 - `auth.js`(실제 권한 판정에 사용), `profile-modal.js`, `서버관리자_역할관리.html` — 사용자별 키:
   `grantedRoles_<email>` (JSON 배열)
@@ -163,6 +178,10 @@ localStorage를 읽고 쓰며 상태가 바뀌는, 진짜 동작하는 흐름**�
 
 ### 1.7 XSS: 업무우편함이 이스케이프 없이 innerHTML 사용 ✅ 2026-08-06 수정 완료
 
+> **현재 상태 (2026-08-08)**: 업무우편함과 AI 챗봇의 사용자 입력은 텍스트·속성값 이스케이프가 적용됐고,
+> 업무 링크는 http/https만 허용한다. 아래는 수정 전 취약점과 재발 방지를 위한 기록이다. API 응답도 같은
+> 렌더링 규칙을 지키고, 서버는 입력 길이·형식·URL·파일명을 검증해야 한다.
+
 - `업무배송_업무우편함.html`의 `renderMailList()`는 메일의 `title/desc/file/dept/category` 값을 이스케이프
   없이 문자열 결합으로 `innerHTML`에 삽입합니다(속성값에도 따옴표 이스케이프 없음).
 - 이 값들은 `업무배송_업무발송.html`에서 **업무배송 담당자가 직접 입력하는 제목/설명/업로드 파일명**이므로,
@@ -189,6 +208,7 @@ localStorage를 읽고 쓰며 상태가 바뀌는, 진짜 동작하는 흐름**�
   실배포 전 반드시 제거.
 
 ### 1.9 프로필 수정(소속·직위)이 저장되지 않는 버그 ✅ 2026-08-06 수정 완료
+> **2026-08-08**: 실제 모달은 소속·직위를 저장하며, 정적 프로필 URL도 `index.html?openProfile=1`로 연결했다.
 
 - `profile-modal.js`가 주입하는 프로필 모달에서 소속/직위 입력란은 있지만, "확인 및 닫기" 버튼
   핸들러가 모달을 닫기만 할 뿐 `org_<email>`/`rank_<email>`에 값을 저장하는 로직이 없습니다. 아바타
@@ -215,16 +235,23 @@ localStorage를 읽고 쓰며 상태가 바뀌는, 진짜 동작하는 흐름**�
 
 localStorage 키 분석을 기반으로 도출한 최소 테이블 목록입니다. 정확한 컬럼은 섹션 4/6 참고.
 
-- `users` (id, email, password_hash, name, org, dept, rank, avatar_url, created_at)
+- `organizations` (id, name, organization_type, neis_school_code, parent_id, active) — 학교·교육지원청 등 데이터 격리 단위
+- `users` (id, email, password_hash, name, dept, rank, avatar_url, created_at)
+- `organization_memberships` (user_id, organization_id, membership_type, active_from, active_to) — 사용자의 소속은 문자열 `org`가 아닌 이 테이블로 관리
 - `role_requests` (id, user_id, requested_role, status, created_at)
-- `user_roles` (user_id, role) — 승인된 역할 (grantedRoles 대체)
+- `user_roles` (user_id, role_code, scope_type, scope_id, granted_by, granted_at) — 승인된 역할과 학교·관할 범위 (`grantedRoles` 대체)
 - `inquiries` (id, user_id, type, title, content, status, answer, answered_by, answered_at, created_at)
-- `mentoring_requests` (id, requester_id, category, title, content, status, answer, answered_by, answered_at, created_at)
+- `mentoring_requests` (id, requester_id, assigned_mentor_id, category, title, status, created_at, completed_at) — 현재 프론트의 단일 답변이 아닌 대화 스레드의 상위 엔터티
+- `mentoring_messages` (id, request_id, sender_id, message_type, content, attachment_id, created_at) — `messages[]` 이관 대상
+- `mentor_expertise` (mentor_id, category_code, scope_type, scope_id, active) — 분야별 다중 멘토 배정
+- `mentor_slots` (id, mentor_id, starts_at, ends_at, status) 및 `appointments` (id, slot_id, request_id, mentee_id, platform, join_link, meeting_id, status)
+- `consult_logs` (id, request_id, mentor_id, category, consulted_at, summary, action, status) — 상담일지·월별 출력의 원천 데이터
 - `checklist_progress` (org, period, sector, category_id, item_no, result, action, checked_by, checked_at) —
   또는 `checklist_responses` 단일 행 테이블로 정규화 권장(현재는 org당 통째로 JSON 하나)
 - `notices` (id, badge, title, date, views, author, body, created_by, created_at)
-- `dispatches` (id, sender_id, title, desc, categories[], due_date, dispatch_timing, status, created_at)
-- `dispatch_files` (dispatch_id, filename, url) — 현재 프론트는 다중 파일 중 1개만 저장하는 버그가 있음(3.3 참고)
+- `dispatches` (id, sender_id, title, description, due_at, dispatch_at, status, created_at)
+- `dispatch_categories` (dispatch_id, category_code) 및 `dispatch_targets` (dispatch_id, target_type, target_id) — 수신 대상·분야를 정규화
+- `dispatch_files` (id, dispatch_id, storage_key, filename, content_type, size, uploaded_at) — 현재 프론트의 다중 파일 시뮬레이션을 실제 객체 스토리지로 이관
 - `mail_subscriptions` (user_id, category)
 - `mail_bookmarks` (user_id, mail_id)
 - `mail_reads` (user_id, mail_id, read_at) — 현재는 메일 자체의 전역 속성처럼 처리되어 사용자별 읽음 상태가 없음
@@ -237,7 +264,7 @@ localStorage 키 분석을 기반으로 도출한 최소 테이블 목록입니�
 
 ### 2.3 파일 스토리지
 다음 기능들은 전부 실제 파일 업로드/다운로드가 필요하지만 현재는 파일명만 저장하거나 완전히 가짜입니다:
-- 업무발송 첨부파일(다중 파일 중 1개만 저장되는 버그 있음, 3.3)
+- 업무발송 첨부파일(현재 프론트는 다중 파일·링크 메타데이터를 시뮬레이션하지만 실제 바이너리를 저장하지 않음)
 - 마이페이지 "자료 추가하기"
 - 서식 자동완성 마법사 최종 산출물(HWP/HWPX/PDF)
 - 공문 OCR 업로드 원본
@@ -246,6 +273,7 @@ localStorage 키 분석을 기반으로 도출한 최소 테이블 목록입니�
   Storage + CDN URL로 교체 필요)
 
 ### 2.4 AI/외부 연동
+> **2026-08-08**: AI 키가 없을 때 스마트공문달력은 호출 대신 서버 연동 필요와 수동 처리 경로를 안내한다.
 - NEIS Open API: 학사일정 조회(스마트공문달력), 학교 검색 자동완성(회원가입/프로필) — 서버 프록시로 이전.
   참고로 NEIS 학교기본정보 API에는 학교장(교장) 이름 필드가 없음(개인정보라 공개 API 범주 밖) — 서식
   자동완성의 "기관장명" 자동 채우기는 NEIS로 해결 불가, 별도의 학교→교장 매핑 데이터가 있어야 함.
@@ -255,6 +283,12 @@ localStorage 키 분석을 기반으로 도출한 최소 테이블 목록입니�
   RAG 기반으로 실제 작성"은 사용자가 이 제품의 핵심 차별점으로 명시한 기능이니 섹션 4.3.1을 우선 참고.**
 - 실시간성 요구: 업무우편함/1:1문의/멘토링/공지사항은 폴링이나 웹소켓 없이도 새로고침 기반으로 충분해
   보입니다(현재 UI에 "실시간 업데이트 중" 뱃지가 있는 화면이 일부 있으나 실제 로직은 없음 — 우선순위 낮음).
+
+### 2.5 제품 가치와 구현 우선순위
+
+- 핵심 흐름은 공문 배포가 아니라 **업무 수신 → 마감·서식 처리 → 멘토 상담 → 학교 점검·지원 현황**이다.
+  업무배송과 인생도서관은 같은 사용자·학교·업무분야 체계 위에서 연결해야 한다.
+- 1차는 공문 수신·확인·처리, 2차는 멘토 상담·학교 체크리스트, 3차는 RAG 기반 문서 초안·관리자 집계 순으로 구현한다.
 
 ---
 
@@ -600,10 +634,8 @@ ID/응답시각 미기록 — `answered_by`, `answered_at` 컬럼 추가 필요.
 | `currentUser` | 문자열(이메일) | 전역(auth.js) |
 | `currentRole` | 문자열(한글 역할명) | 전역(auth.js) |
 | `grantedRoles_<email>` | 배열 | auth.js, profile-modal.js, 서버관리자_역할관리.html |
-| `grantedRoles` (접미사 없음) | 객체 | **member-management.js만 사용 — 1.3 참고, 다른 곳과 불일치** |
 | `roleRequests` | 배열 `[{email, requestedRole}]` | 회원가입, profile-modal.js, 역할관리.html |
-| `roleRequests` (같은 키, 다른 모양) | 객체 `{email: [role]}` | **member-management.js만 이렇게 읽음 — 1.2 참고** |
-| `org_<email>`, `rank_<email>` | 문자열 | profile-modal.js(단, 저장 로직 누락 — 1.9) |
+| `org_<email>`, `rank_<email>` | 문자열 | profile-modal.js(✅ 저장 동작, 백엔드에서는 organization_id·profile 필드로 이관) |
 | `avatar_<email>` | base64 dataURL | profile-modal.js |
 | `ef_inquiries` | 배열, 각 항목에 `answeredBy`(문자열, 이메일)/`answeredAt`(문자열, YYYY.MM.DD) 포함 | assets/js/inquiries.js (✅ 2026-08-07 답변자/답변일 자동 기록 추가) |
 | `ef_mentoring` | 배열 `[{id, email, mentorEmail, mentorName, category, title, status, messages[]}]` | assets/js/mentoring.js (✅ 2026-08-06 "쪽지 1건-답변 1건"→대화 스레드로 재구성, `content`/`answer` 필드는 `messages[]`로 대체됨) |
