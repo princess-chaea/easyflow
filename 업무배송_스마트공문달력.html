@@ -3556,7 +3556,7 @@
     // document.getElementById('btnDayPrint').addEventListener('click', () => { fillPrintHeader(); window.print(); });
 
     /* ── CSV 내보내기: 현재 화면(기간·필터)에 보이는 업무를 엑셀용으로 저장 ── */
-    /* document.getElementById('btnCsv').addEventListener('click', () => {
+    document.getElementById('btnCsv').addEventListener('click', () => {
       const y = cursor.getFullYear(), m = cursor.getMonth() + 1;
       const src = view === 'list' ? tasksInRange(y, m) : { list: tasksOfMonth(y, m), label: y + '년 ' + m + '월' };
       const rows = src.list.filter(passFilter).sort((a, b) => a.due.localeCompare(b.due));
@@ -3578,7 +3578,7 @@
       a.click();
       URL.revokeObjectURL(a.href);
       toast(rows.length + '건을 CSV로 저장했습니다. 엑셀에서 바로 열립니다', 'table_view');
-    }); */
+});
     // document.getElementById('btnSearch').addEventListener('click', () => document.getElementById('taskSearch').focus());
 
     /* 키보드 단축키 */

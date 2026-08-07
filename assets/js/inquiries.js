@@ -44,6 +44,8 @@ const EF_INQUIRY = (function () {
             if (!item) return null;
             item.answer = answerText;
             item.status = '답변완료';
+            item.answeredBy = localStorage.getItem('currentUser') || null;
+            item.answeredAt = new Date().toISOString().slice(0, 10).replace(/-/g, '.');
             save(list);
             return item;
         },

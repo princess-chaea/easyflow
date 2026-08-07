@@ -895,16 +895,16 @@
             } else {
                 container.innerHTML = resources.map(res => `
                     <div class="group flex items-center justify-between p-base bg-surface-soft hover:bg-surface-strong rounded-xl transition-all border border-hairline">
-                        <a class="flex items-center gap-md flex-1 overflow-hidden" href="#" onclick="event.preventDefault(); mpToast('${res.name} 다운로드를 시작합니다', 'download')">
+                        <a class="flex items-center gap-md flex-1 overflow-hidden" href="#" data-res-id="${escapeHtml(res.id)}" onclick="event.preventDefault(); mpToast(this.dataset.resName + ' 다운로드를 시작합니다', 'download')" data-res-name="${escapeHtml(res.name)}">
                             <div class="w-10 h-10 ${res.colorClass} rounded-lg flex items-center justify-center">
                                 <span class="material-symbols-outlined" data-icon="${res.icon}">${res.icon}</span>
                             </div>
                             <div class="flex-1 overflow-hidden">
-                                <p class="font-body-sm text-body-sm font-medium truncate text-on-surface">${res.name}</p>
-                                <p class="font-caption text-caption text-muted">${res.size} · ${res.date}</p>
+                                <p class="font-body-sm text-body-sm font-medium truncate text-on-surface">${escapeHtml(res.name)}</p>
+                                <p class="font-caption text-caption text-muted">${escapeHtml(res.size)} · ${escapeHtml(res.date)}</p>
                             </div>
                         </a>
-                        <button class="p-xs text-muted hover:text-danger opacity-0 group-hover:opacity-100 transition-opacity" onclick="deleteResource('${res.id}')">
+                        <button class="p-xs text-muted hover:text-danger opacity-0 group-hover:opacity-100 transition-opacity" onclick="deleteResource('${escapeHtml(res.id)}')">
                             <span class="material-symbols-outlined text-[18px]">delete</span>
                         </button>
                     </div>

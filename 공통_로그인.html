@@ -92,7 +92,7 @@
         <!-- Form -->
         <div class="p-8 flex flex-col gap-6">
             
-            <button class="w-full h-12 bg-white border border-gray-300 rounded-xl flex items-center justify-center gap-3 hover:bg-gray-50 transition-colors shadow-sm">
+            <button type="button" id="certLoginBtn" class="w-full h-12 bg-white border border-gray-300 rounded-xl flex items-center justify-center gap-3 hover:bg-gray-50 transition-colors shadow-sm">
                 <img src="assets/images/gbe_symbol.jpg" alt="GBE Logo" class="w-6 h-6 rounded-full object-cover">
                 <span class="font-bold text-[16px] text-ink">교육기관 인증서로 로그인</span>
             </button>
@@ -131,7 +131,7 @@
                 <div class="flex flex-col gap-1.5">
                     <div class="flex justify-between items-center">
                         <label class="text-[14px] font-bold text-ink">비밀번호</label>
-                        <a href="#" class="text-[13px] text-primary hover:underline">비밀번호 찾기</a>
+                        <a href="#" id="findPwLink" class="text-[13px] text-primary hover:underline">비밀번호 찾기</a>
                     </div>
                     <input type="password" id="pwInput" placeholder="비밀번호를 입력하세요" class="w-full border border-gray-300 rounded-xl px-4 py-3 text-[15px] focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors">
                     <div id="pwError" class="error-msg">비밀번호를 확인해주세요.</div>
@@ -150,6 +150,15 @@
     </div>
 
         <script>
+        document.getElementById('certLoginBtn').addEventListener('click', function() {
+            EF_MODAL.alert('교육기관 인증서 로그인은 준비 중인 기능입니다.\nGBE 이메일로 로그인해주세요.');
+        });
+
+        document.getElementById('findPwLink').addEventListener('click', function(e) {
+            e.preventDefault();
+            EF_MODAL.alert('비밀번호 재설정 기능은 준비 중입니다.\n계정 관련 문의는 안내센터의 1:1 문의를 이용해주세요.');
+        });
+
         // [개발용] 빠른 역할 선택 로직
         document.getElementById('devRoleSelect').addEventListener('change', function(e) {
             if (e.target.value) {

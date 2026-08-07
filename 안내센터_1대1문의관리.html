@@ -293,7 +293,7 @@
 <div class="p-lg overflow-y-auto flex flex-col gap-md">
 <p class="text-body-sm text-on-surface leading-relaxed whitespace-pre-line" id="amContent">—</p>
 <div class="hidden p-base bg-primary/5 border border-primary/20 rounded-xl" id="amAnswerBox">
-<p class="text-caption-strong text-primary mb-xxs">등록된 답변</p>
+<p class="text-caption-strong text-primary mb-xxs">등록된 답변 <span class="font-normal text-on-surface-variant" id="amAnswerMeta"></span></p>
 <p class="text-body-sm text-on-surface whitespace-pre-line" id="amAnswerText"></p>
 </div>
 <div class="flex flex-col gap-xs">
@@ -389,6 +389,9 @@
         if (q.answer) {
             answerBox.classList.remove('hidden');
             document.getElementById('amAnswerText').textContent = q.answer;
+            document.getElementById('amAnswerMeta').textContent = q.answeredBy && q.answeredAt
+                ? '· ' + q.answeredBy + ' · ' + q.answeredAt
+                : '';
             answerInput.value = q.answer;
             document.getElementById('amSubmitBtn').textContent = '답변 수정';
         } else {

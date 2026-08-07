@@ -693,7 +693,8 @@
             let body = '<div class="flex items-center gap-xs mb-base"><span class="px-xs py-1 rounded ' + statusClass + ' font-caption-strong text-caption-strong">' + q.status + '</span><span class="text-caption text-muted ml-auto">' + q.date + ' 등록</span></div>'
                 + '<p class="text-body-sm text-on-surface mb-lg whitespace-pre-line">' + escHtml(q.content) + '</p>';
             if (q.answer) {
-                body += '<div class="p-base bg-primary/5 border border-primary/20 rounded-xl"><p class="text-caption-strong text-primary mb-xxs">담당자 답변</p><p class="text-body-sm text-on-surface whitespace-pre-line">' + escHtml(q.answer) + '</p></div>';
+                const answerMeta = q.answeredBy && q.answeredAt ? ' <span class="font-normal text-on-surface-variant">· ' + escHtml(q.answeredBy) + ' · ' + escHtml(q.answeredAt) + '</span>' : '';
+                body += '<div class="p-base bg-primary/5 border border-primary/20 rounded-xl"><p class="text-caption-strong text-primary mb-xxs">담당자 답변' + answerMeta + '</p><p class="text-body-sm text-on-surface whitespace-pre-line">' + escHtml(q.answer) + '</p></div>';
             } else {
                 body += '<div class="p-base bg-surface-soft rounded-xl text-body-sm text-on-surface-variant">담당자가 확인 중입니다. 1~3일 이내에 답변을 남겨드릴게요.</div>';
             }

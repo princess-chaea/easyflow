@@ -435,7 +435,7 @@
 <span id="mdBookmarkLabel">내 달력에 표시 중</span>
 </button>
 <div class="flex items-center gap-xs">
-<button class="px-md py-sm rounded-full text-[14px] font-bold bg-surface-strong text-ink hover:bg-hairline transition-colors flex items-center gap-xxs"><span class="material-symbols-outlined text-[18px]">download</span>서식 다운로드</button>
+<button class="px-md py-sm rounded-full text-[14px] font-bold bg-surface-strong text-ink hover:bg-hairline transition-colors flex items-center gap-xxs" onclick="downloadMailFile()"><span class="material-symbols-outlined text-[18px]">download</span>서식 다운로드</button>
 <button class="px-md py-sm rounded-full text-[14px] font-bold bg-primary text-white hover:bg-primary-active transition-colors" onclick="closeMailDetail()">확인</button>
 </div>
 </div>
@@ -695,6 +695,22 @@
             syncModalBookmark();
             mailDetailModal.classList.remove('hidden');
             mailDetailModal.classList.add('flex');
+        }
+        function downloadMailFile() {
+            const fileName = document.getElementById('mdFile').textContent || '첨부서식.txt';
+            const title = document.getElementById('mdTitle').textContent || '';
+            const blob = new Blob(
+                ['[이지플로우 프로토타입 안내]\n\n이 파일은 "' + fileName + '"의 데모용 대체 파일입니다.\n실제 첨부 서식 원본은 백엔드 파일 스토리지 연동 후 제공됩니다.\n\n관련 업무: ' + title + '\n'],
+                { type: 'text/plain;charset=utf-8' }
+            );
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = fileName.replace(/\.(hwp|hwpx|docx|pdf|xlsx)$/i, '') + '.txt';
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+            URL.revokeObjectURL(url);
         }
         function closeMailDetail() {
             mailDetailModal.classList.add('hidden');
