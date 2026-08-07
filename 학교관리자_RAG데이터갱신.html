@@ -363,8 +363,38 @@
 <h1 class="text-[28px] font-bold text-ink mb-xs">RAG 데이터 갱신</h1>
 <p class="text-[15px] text-ink/70">신규 행정 가이드나 우수 사례 문서를 업로드하면 AI 검색 및 챗봇이 참조할 수 있도록 데이터베이스에 반영합니다.</p>
 </div>
-<div class="bg-canvas p-xl rounded-2xl border border-hairline shadow-sm min-h-[400px]">
-<p>신규 행정 가이드나 우수 사례 문서를 업로드하여 AI 검색 및 챗봇이 참조할 수 있도록 데이터베이스에 반영합니다.</p>
+<div class="bg-primary-fixed border border-primary/20 rounded-2xl p-lg mb-lg flex items-start gap-base" id="ragChecklistHint">
+<span class="material-symbols-outlined text-primary mt-xxs">lightbulb</span>
+<p class="font-body-sm text-body-sm text-on-primary-fixed leading-relaxed">불러오는 중...</p>
+</div>
+<div class="bg-canvas p-xl rounded-2xl border border-hairline shadow-sm">
+<div class="flex items-center justify-between mb-lg flex-wrap gap-sm">
+<h3 class="font-title-lg text-title-lg text-primary">신규 자료 업로드</h3>
+<span class="px-xs py-1 bg-primary-fixed text-on-primary-fixed rounded-md font-caption-strong text-caption-strong">PDF, HWP, HWPX, DOC(X), TXT 지원</span>
+</div>
+<div class="relative group border-2 border-dashed border-outline-variant rounded-2xl p-xxl flex flex-col items-center justify-center bg-surface-container-lowest transition-all hover:border-primary" id="ragDropZone">
+<input class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" id="ragFileInput" multiple="" type="file" accept=".pdf,.hwp,.hwpx,.doc,.docx,.txt"/>
+<div class="w-16 h-16 bg-surface-container rounded-full flex items-center justify-center mb-base text-primary group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-[32px]">cloud_upload</span>
+</div>
+<p class="font-title-md text-title-md text-on-surface text-center mb-xxs">파일을 드래그하거나 클릭하여 업로드</p>
+<p class="font-body-sm text-body-sm text-muted text-center">한 번에 최대 50MB까지 지원됩니다.</p>
+</div>
+<div class="mt-lg flex items-center gap-base">
+<div class="flex-1 h-2 bg-surface-container rounded-full overflow-hidden">
+<div class="w-0 h-full bg-primary transition-all duration-300" id="ragUploadProgress"></div>
+</div>
+<span class="font-caption text-caption text-muted" id="ragUploadStatus">대기 중</span>
+</div>
+</div>
+<div class="bg-canvas rounded-2xl border border-hairline overflow-hidden mt-lg">
+<div class="px-xl py-lg border-b border-hairline flex items-center justify-between">
+<h3 class="font-title-md text-title-md text-on-surface">최근 업로드한 자료</h3>
+<span class="font-caption text-caption text-muted" id="ragUploadCount">0건</span>
+</div>
+<div id="ragUploadList" class="divide-y divide-hairline">
+<p class="p-xl text-center font-body-sm text-body-sm text-muted">아직 업로드한 자료가 없습니다.</p>
+</div>
 </div>
 </section>
 </div></div></main>
@@ -448,6 +478,181 @@
             });
         }
         efLoadFooter();
+    })();
+</script>
+<!-- RAG 데이터 갱신 업로드 UI: 실제 파일을 서버로 전송하지는 않지만(백엔드 없음),
+     드래그앤드롭/선택 자체는 실제 File 객체를 읽어 파일명·용량을 반영하고,
+     업로드 이력은 학교(org)별 localStorage에 남아 새로고침해도 유지된다. -->
+<script>
+    (function () {
+        function escapeHtml(str) {
+            var div = document.createElement('div');
+            div.textContent = str == null ? '' : str;
+            return div.innerHTML;
+        }
+
+        function getOrg() {
+            var user = localStorage.getItem('currentUser') || 'guest';
+            return localStorage.getItem('org_' + user) || '기본기관';
+        }
+
+        function uploadsStorageKey() {
+            return 'ef_rag_school_uploads_' + getOrg();
+        }
+
+        function loadUploads() {
+            try {
+                var arr = JSON.parse(localStorage.getItem(uploadsStorageKey()) || '[]');
+                return Array.isArray(arr) ? arr : [];
+            } catch (e) { return []; }
+        }
+
+        function saveUploads(list) {
+            localStorage.setItem(uploadsStorageKey(), JSON.stringify(list));
+        }
+
+        function formatSize(bytes) {
+            if (!bytes && bytes !== 0) return '-';
+            if (bytes < 1024) return bytes + ' B';
+            if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
+            return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
+        }
+
+        function iconFor(name) {
+            var ext = (name.split('.').pop() || '').toLowerCase();
+            if (ext === 'pdf') return 'picture_as_pdf';
+            if (ext === 'hwp' || ext === 'hwpx') return 'description';
+            if (ext === 'doc' || ext === 'docx') return 'article';
+            return 'draft';
+        }
+
+        function renderUploadList() {
+            var list = loadUploads();
+            var container = document.getElementById('ragUploadList');
+            var countEl = document.getElementById('ragUploadCount');
+            if (countEl) countEl.textContent = list.length + '건';
+            if (!container) return;
+            if (list.length === 0) {
+                container.innerHTML = '<p class="p-xl text-center font-body-sm text-body-sm text-muted">아직 업로드한 자료가 없습니다.</p>';
+                return;
+            }
+            container.innerHTML = list.slice().reverse().slice(0, 10).map(function (item) {
+                return '<div class="flex items-center gap-base px-xl py-base">' +
+                    '<div class="w-10 h-10 bg-primary-fixed rounded-lg flex items-center justify-center text-primary shrink-0">' +
+                    '<span class="material-symbols-outlined">' + iconFor(item.name || '') + '</span>' +
+                    '</div>' +
+                    '<div class="flex-1 min-w-0">' +
+                    '<p class="font-body-strong text-body-strong text-on-surface truncate">' + escapeHtml(item.name) + '</p>' +
+                    '<p class="font-caption text-caption text-muted">' + formatSize(item.size) + ' · ' + escapeHtml(item.uploadedAt) + '</p>' +
+                    '</div>' +
+                    '<span class="px-sm py-xxs bg-success/10 text-success rounded-full font-caption-strong text-[11px] shrink-0">벡터화 완료</span>' +
+                    '</div>';
+            }).join('');
+        }
+
+        function renderChecklistHint() {
+            var el = document.querySelector('#ragChecklistHint p');
+            if (!el) return;
+            var org = getOrg();
+            var raw = localStorage.getItem('ef_checklist_progress_' + org);
+            if (!raw) {
+                el.textContent = '우리 학교(' + org + ')는 아직 업무 체크리스트 점검을 시작하지 않았습니다. 체크리스트를 먼저 진행하면 어떤 규정/서식 자료를 우선 갱신해야 할지 파악하기 쉬워집니다.';
+                return;
+            }
+            var data;
+            try { data = JSON.parse(raw); } catch (e) { data = null; }
+            var alertCount = 0, total = 0;
+            if (data) {
+                ['first', 'second'].forEach(function (period) {
+                    if (!data[period]) return;
+                    ['academic', 'finance'].forEach(function (sector) {
+                        if (!data[period][sector]) return;
+                        Object.keys(data[period][sector]).forEach(function (catId) {
+                            Object.keys(data[period][sector][catId]).forEach(function (itemNo) {
+                                var item = data[period][sector][catId][itemNo];
+                                total++;
+                                if (item && item.result === 'X') alertCount++;
+                            });
+                        });
+                    });
+                });
+            }
+            if (total === 0) {
+                el.textContent = '우리 학교는 아직 업무 체크리스트 점검을 시작하지 않았습니다.';
+            } else if (alertCount > 0) {
+                el.textContent = '현재 우리 학교 업무 체크리스트에서 미이행(X)으로 표시된 문항이 ' + alertCount + '건 있습니다. 관련 규정·서식 자료를 우선 갱신하면 AI 챗봇/검색 정확도가 개선됩니다.';
+            } else {
+                el.textContent = '현재 우리 학교 업무 체크리스트 상 미이행(X) 문항은 없습니다. 최신 지침이 있다면 계속 자료를 갱신해 주세요.';
+            }
+        }
+
+        function handleFiles(files) {
+            if (!files || files.length === 0) return;
+            var progress = document.getElementById('ragUploadProgress');
+            var status = document.getElementById('ragUploadStatus');
+            var fileArr = Array.prototype.slice.call(files);
+
+            status.textContent = fileArr.map(function (f) { return f.name; }).join(', ') + ' 업로드 중...';
+            status.classList.remove('text-muted', 'text-success');
+            status.classList.add('text-primary');
+
+            var width = 0;
+            var interval = setInterval(function () {
+                width += Math.random() * 30;
+                if (width >= 100) {
+                    width = 100;
+                    clearInterval(interval);
+                    var list = loadUploads();
+                    var now = new Date();
+                    var stamp = now.getFullYear() + '.' + String(now.getMonth() + 1).padStart(2, '0') + '.' + String(now.getDate()).padStart(2, '0');
+                    fileArr.forEach(function (f) {
+                        list.push({ name: f.name, size: f.size, uploadedAt: stamp });
+                    });
+                    saveUploads(list);
+                    renderUploadList();
+                    status.textContent = '업로드 및 벡터 변환 완료 (파일 ' + fileArr.length + '개)';
+                    status.classList.replace('text-primary', 'text-success');
+                    setTimeout(function () {
+                        progress.style.width = '0%';
+                        status.textContent = '대기 중';
+                        status.classList.replace('text-success', 'text-muted');
+                    }, 3000);
+                }
+                progress.style.width = width + '%';
+            }, 300);
+        }
+
+        function wireDropZone() {
+            var dropZone = document.getElementById('ragDropZone');
+            var fileInput = document.getElementById('ragFileInput');
+            if (!dropZone || !fileInput) return;
+
+            ['dragenter', 'dragover'].forEach(function (eventName) {
+                dropZone.addEventListener(eventName, function (e) {
+                    e.preventDefault();
+                    dropZone.classList.add('border-primary', 'bg-primary-fixed');
+                }, false);
+            });
+            ['dragleave', 'drop'].forEach(function (eventName) {
+                dropZone.addEventListener(eventName, function (e) {
+                    e.preventDefault();
+                    dropZone.classList.remove('border-primary', 'bg-primary-fixed');
+                }, false);
+            });
+            dropZone.addEventListener('drop', function (e) {
+                if (e.dataTransfer && e.dataTransfer.files) handleFiles(e.dataTransfer.files);
+            });
+            fileInput.addEventListener('change', function () {
+                handleFiles(this.files);
+                this.value = '';
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            renderChecklistHint();
+            renderUploadList();
+            wireDropZone();
+        });
     })();
 </script>
 </body>

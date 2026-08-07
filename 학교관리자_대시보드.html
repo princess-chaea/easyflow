@@ -406,18 +406,19 @@
 <h3 class="font-number-display text-display-md text-on-surface">128</h3>
 </div>
 </div>
-<!-- Total Performance (Graphic Integration) -->
-<div class="glass-card p-xl rounded-2xl overflow-hidden relative group">
+<!-- Checklist Completion (실제 ef_checklist_progress_<org> 데이터 기반) -->
+<a class="glass-card p-xl rounded-2xl overflow-hidden relative group block hover:shadow-lg transition-shadow" href="인생도서관_업무체크리스트.html">
 <div class="relative z-10 h-full flex flex-col justify-between">
-<h4 class="font-title-sm text-title-sm text-primary">업무 완결성</h4>
+<h4 class="font-title-sm text-title-sm text-primary">우리 학교 체크리스트 이행률</h4>
 <div class="flex items-end gap-xs">
-<span class="font-display-md text-display-md text-on-surface">88%</span>
-<span class="mb-sm font-caption text-caption text-muted">vs 목표</span>
+<span class="font-display-md text-display-md text-on-surface" id="sadHeroChecklistRate">-</span>
+<span class="mb-sm font-caption text-caption text-muted" id="sadHeroChecklistCaption">불러오는 중</span>
 </div>
 </div>
 <div class="absolute right-0 bottom-0 w-24 h-24 opacity-20 group-hover:opacity-40 transition-opacity">
+<span class="material-symbols-outlined text-[96px]">fact_check</span>
 </div>
-</div>
+</a>
 </section>
 <!-- Work Schedule Bento Grid -->
 <section class="grid grid-cols-1 md:grid-cols-3 gap-base">
@@ -426,7 +427,7 @@
 <h3 class="font-title-md text-title-md text-primary flex items-center gap-xs">
 <span class="material-symbols-outlined">calendar_today</span> 업무 일정 현황
                             </h3>
-<button class="text-primary font-caption-strong text-caption-strong hover:underline">상세보기</button>
+<a class="text-primary font-caption-strong text-caption-strong hover:underline" href="업무배송_스마트공문달력.html">상세보기</a>
 </div>
 <div class="space-y-base">
 <div class="flex items-center gap-base p-base hover:bg-surface-soft rounded-lg transition-colors border-b border-hairline last:border-0">
@@ -498,9 +499,9 @@
 </div>
 </div>
 </div>
-<button class="mt-xl w-full py-sm bg-primary-container text-on-primary-container rounded-full font-button text-button hover:bg-opacity-80 transition-all flex items-center justify-center gap-xs">
+<a class="mt-xl w-full py-sm bg-primary-container text-on-primary-container rounded-full font-button text-button hover:bg-opacity-80 transition-all flex items-center justify-center gap-xs" href="학교관리자_데이터 리포트.html">
 <span class="material-symbols-outlined text-[18px]">bolt</span> 분석 보고서 전체보기
-                            </button>
+                            </a>
 </div>
 </div>
 </section>
@@ -557,49 +558,61 @@
 </div>
 <!-- Right Sidebar: Today's Essential Tasks -->
 <aside class="w-full lg:w-[360px] flex flex-col gap-lg">
+<!-- 우리 학교 체크리스트 현황: ef_checklist_progress_<org> 실데이터 -->
+<div class="glass-card rounded-2xl p-xl" id="sadChecklistWidget">
+<div class="flex items-center justify-between mb-lg">
+<h3 class="font-title-md text-title-md text-primary flex items-center gap-xs">
+<span class="material-symbols-outlined">fact_check</span> 우리 학교 체크리스트 현황
+</h3>
+<a class="text-primary font-caption-strong text-caption-strong hover:underline" href="인생도서관_업무체크리스트.html">바로가기</a>
+</div>
+<div id="sadChecklistBody">
+<p class="font-body-sm text-body-sm text-muted">불러오는 중...</p>
+</div>
+</div>
 <div class="glass-card rounded-2xl p-xl">
 <div class="flex items-center justify-between mb-xl">
 <h3 class="font-title-md text-title-md text-primary">오늘의 필수 과업</h3>
 <span class="px-sm py-xxs bg-surface-container-highest rounded-full font-caption-strong text-caption-strong">4개
                             남음</span>
 </div>
-<ul class="space-y-base">
-<li class="flex items-start gap-base group cursor-pointer">
-<div class="w-6 h-6 border-2 border-primary-disabled rounded-md group-hover:border-primary transition-colors mt-xxs flex items-center justify-center">
-<span class="material-symbols-outlined text-[16px] text-primary hidden group-hover:block">check</span>
+<ul class="space-y-base" id="sadTaskList">
+<li class="flex items-start gap-base group cursor-pointer" data-task-item="">
+<div class="w-6 h-6 border-2 border-primary-disabled rounded-md group-hover:border-primary transition-colors mt-xxs flex items-center justify-center" data-task-box="">
+<span class="material-symbols-outlined text-[16px] text-primary hidden" data-task-check="">check</span>
 </div>
 <div class="flex-1">
-<h4 class="font-body-md text-body-md font-semibold text-on-surface">NEIS 급여 데이터 대조</h4>
+<h4 class="font-body-md text-body-md font-semibold text-on-surface" data-task-label="">NEIS 급여 데이터 대조</h4>
 <p class="font-caption text-caption text-body">11:00 AM 까지</p>
 </div>
 </li>
-<li class="flex items-start gap-base group cursor-pointer">
-<div class="w-6 h-6 border-2 border-primary-disabled rounded-md group-hover:border-primary transition-colors mt-xxs flex items-center justify-center">
-<span class="material-symbols-outlined text-[16px] text-primary hidden group-hover:block">check</span>
+<li class="flex items-start gap-base group cursor-pointer" data-task-item="">
+<div class="w-6 h-6 border-2 border-primary-disabled rounded-md group-hover:border-primary transition-colors mt-xxs flex items-center justify-center" data-task-box="">
+<span class="material-symbols-outlined text-[16px] text-primary hidden" data-task-check="">check</span>
 </div>
 <div class="flex-1">
-<h4 class="font-body-md text-body-md font-semibold text-on-surface">학교운영위원회 회의록 업로드</h4>
+<h4 class="font-body-md text-body-md font-semibold text-on-surface" data-task-label="">학교운영위원회 회의록 업로드</h4>
 <p class="font-caption text-caption text-body">02:00 PM 까지</p>
 </div>
 </li>
-<li class="flex items-start gap-base group cursor-pointer">
-<div class="w-6 h-6 border-2 border-primary rounded-md bg-primary-fixed-dim mt-xxs flex items-center justify-center">
-<span class="material-symbols-outlined text-[16px] text-primary" style="font-variation-settings: 'FILL' 1;">check</span>
+<li class="flex items-start gap-base group cursor-pointer" data-task-item="" data-task-done="true">
+<div class="w-6 h-6 border-2 border-primary rounded-md bg-primary-fixed-dim mt-xxs flex items-center justify-center" data-task-box="">
+<span class="material-symbols-outlined text-[16px] text-primary" style="font-variation-settings: 'FILL' 1;" data-task-check="">check</span>
 </div>
 <div class="flex-1">
-<h4 class="font-body-md text-body-md font-semibold text-muted line-through">방과후 학교 강사
+<h4 class="font-body-md text-body-md font-semibold text-muted line-through" data-task-label="">방과후 학교 강사
                                     계약서 검토</h4>
-<p class="font-caption text-caption text-muted">완료됨</p>
+<p class="font-caption text-caption text-muted" data-task-status="">완료됨</p>
 </div>
 </li>
 </ul>
-<button class="mt-xl w-full py-sm border border-primary text-primary rounded-full font-button text-button hover:bg-primary hover:text-white transition-all">
+<button type="button" class="mt-xl w-full py-sm border border-primary text-primary rounded-full font-button text-button hover:bg-primary hover:text-white transition-all" id="sadAddTaskBtn">
                         새 과업 추가하기
                     </button>
 </div>
 <!-- Quick Actions / Cards -->
 <div class="space-y-base">
-<div class="p-lg rounded-2xl bg-primary-container text-white flex items-center gap-base cursor-pointer hover:shadow-lg transition-all">
+<button type="button" class="w-full text-left p-lg rounded-2xl bg-primary-container text-white flex items-center gap-base cursor-pointer hover:shadow-lg transition-all" id="sadNewDraftBtn">
 <div class="p-base bg-on-primary-container rounded-2xl">
 <span class="material-symbols-outlined">add_box</span>
 </div>
@@ -607,8 +620,8 @@
 <p class="font-title-sm text-title-sm">신규 업무 기안</p>
 <p class="font-caption text-caption opacity-80">AI 템플릿으로 빠른 기안</p>
 </div>
-</div>
-<div class="p-lg rounded-2xl bg-surface-strong text-ink flex items-center gap-base cursor-pointer hover:bg-surface-container-highest transition-all">
+</button>
+<button type="button" class="w-full text-left p-lg rounded-2xl bg-surface-strong text-ink flex items-center gap-base cursor-pointer hover:bg-surface-container-highest transition-all" id="sadDocArchiveBtn">
 <div class="p-base bg-surface-container rounded-2xl">
 <span class="material-symbols-outlined">description</span>
 </div>
@@ -616,7 +629,7 @@
 <p class="font-title-sm text-title-sm">문서 아카이브</p>
 <p class="font-caption text-caption text-body">모든 전자 결재 문서 조회</p>
 </div>
-</div>
+</button>
 </div>
 <!-- Helpful Tip (Administrative Context) -->
 <div class="mt-auto p-xl rounded-2xl border border-dashed border-primary-disabled bg-white">
@@ -673,6 +686,178 @@
             });
         }
         efLoadFooter();
+    })();
+</script>
+<!-- 학교관리자 대시보드 전용 로직: 실제 ef_checklist_progress_<org> 데이터 위젯 + 데코용 버튼 피드백 -->
+<script>
+    (function () {
+        function escapeHtml(str) {
+            var div = document.createElement('div');
+            div.textContent = str == null ? '' : str;
+            return div.innerHTML;
+        }
+
+        function getOrg() {
+            var user = localStorage.getItem('currentUser') || 'guest';
+            return localStorage.getItem('org_' + user) || '기본기관';
+        }
+
+        function emptyBucket() {
+            return { total: 0, checked: 0, ok: 0, warn: 0, alert: 0 };
+        }
+
+        // 인생도서관_업무체크리스트.html이 저장하는 구조(period->sector->catId->itemNo)를 그대로 집계.
+        // 전체 문항 taxonomy를 이 페이지에 다시 옮겨오지 않고, 저장된 데이터 자체를 분모/분자로 쓴다
+        // (체크리스트 페이지가 항상 전체 문항을 결과값 ''로라도 채워 저장하기 때문에 정확함).
+        function loadChecklistStats() {
+            var org = getOrg();
+            var raw = localStorage.getItem('ef_checklist_progress_' + org);
+            var stats = { org: org, hasData: false, overall: emptyBucket(), byPeriod: { first: emptyBucket(), second: emptyBucket() } };
+            if (!raw) return stats;
+            var data;
+            try { data = JSON.parse(raw); } catch (e) { return stats; }
+            if (!data || typeof data !== 'object') return stats;
+
+            ['first', 'second'].forEach(function (period) {
+                var periodObj = data[period];
+                if (!periodObj) return;
+                ['academic', 'finance'].forEach(function (sector) {
+                    var sectorObj = periodObj[sector];
+                    if (!sectorObj) return;
+                    Object.keys(sectorObj).forEach(function (catId) {
+                        var catObj = sectorObj[catId];
+                        if (!catObj) return;
+                        Object.keys(catObj).forEach(function (itemNo) {
+                            var item = catObj[itemNo];
+                            if (!item) return;
+                            stats.hasData = true;
+                            stats.overall.total++;
+                            stats.byPeriod[period].total++;
+                            if (item.result) {
+                                stats.overall.checked++;
+                                stats.byPeriod[period].checked++;
+                                if (item.result === 'O') { stats.overall.ok++; stats.byPeriod[period].ok++; }
+                                else if (item.result === 'S') { stats.overall.warn++; stats.byPeriod[period].warn++; }
+                                else if (item.result === 'X') { stats.overall.alert++; stats.byPeriod[period].alert++; }
+                            }
+                        });
+                    });
+                });
+            });
+            return stats;
+        }
+
+        function rateOf(bucket) {
+            return bucket.total > 0 ? Math.round(bucket.checked / bucket.total * 100) : 0;
+        }
+
+        function renderChecklistWidgets() {
+            var stats = loadChecklistStats();
+            var heroRate = document.getElementById('sadHeroChecklistRate');
+            var heroCaption = document.getElementById('sadHeroChecklistCaption');
+            var body = document.getElementById('sadChecklistBody');
+
+            if (!stats.hasData) {
+                if (heroRate) heroRate.textContent = '0%';
+                if (heroCaption) heroCaption.textContent = '점검 시작 전';
+                if (body) {
+                    body.innerHTML =
+                        '<div class="text-center py-md">' +
+                        '<span class="material-symbols-outlined text-muted text-[32px] mb-xs">checklist</span>' +
+                        '<p class="font-body-sm text-body-sm text-on-surface-variant leading-relaxed">아직 우리 학교 체크리스트 점검을 시작하지 않았습니다.</p>' +
+                        '<a class="inline-block mt-sm px-base py-xs bg-primary text-white rounded-full text-caption-strong hover:opacity-90 transition-opacity" href="인생도서관_업무체크리스트.html">체크리스트 시작하기</a>' +
+                        '</div>';
+                }
+                return;
+            }
+
+            var rate = rateOf(stats.overall);
+            var unchecked = stats.overall.total - stats.overall.checked;
+
+            if (heroRate) heroRate.textContent = rate + '%';
+            if (heroCaption) heroCaption.textContent = stats.overall.checked + '/' + stats.overall.total + '문항';
+
+            if (body) {
+                var r = 15.5, circumference = 2 * Math.PI * r;
+                var offset = circumference * (1 - rate / 100);
+                var firstRate = rateOf(stats.byPeriod.first);
+                var secondRate = rateOf(stats.byPeriod.second);
+
+                body.innerHTML =
+                    '<div class="flex items-center gap-base mb-lg">' +
+                    '<div class="relative w-16 h-16 shrink-0">' +
+                    '<svg viewBox="0 0 36 36" class="w-16 h-16 -rotate-90">' +
+                    '<circle cx="18" cy="18" r="' + r + '" fill="none" stroke="#e2e2ea" stroke-width="4"></circle>' +
+                    '<circle cx="18" cy="18" r="' + r + '" fill="none" stroke="#003893" stroke-width="4" stroke-dasharray="' + circumference.toFixed(2) + '" stroke-dashoffset="' + offset.toFixed(2) + '" stroke-linecap="round"></circle>' +
+                    '</svg>' +
+                    '<div class="absolute inset-0 flex items-center justify-center font-title-sm text-title-sm text-primary">' + rate + '%</div>' +
+                    '</div>' +
+                    '<div class="flex-1 min-w-0">' +
+                    '<p class="font-body-strong text-body-strong text-on-surface truncate">' + escapeHtml(stats.org) + '</p>' +
+                    '<p class="font-caption text-caption text-muted">전체 ' + stats.overall.total + '문항 중 ' + stats.overall.checked + '문항 점검 완료</p>' +
+                    '</div>' +
+                    '</div>' +
+                    '<div class="grid grid-cols-3 gap-xs mb-lg text-center">' +
+                    '<div class="bg-success/10 rounded-lg py-sm"><p class="font-title-sm text-title-sm text-success">' + stats.overall.ok + '</p><p class="font-caption text-caption text-muted">이행(O)</p></div>' +
+                    '<div class="bg-warning/10 rounded-lg py-sm"><p class="font-title-sm text-title-sm text-warning">' + stats.overall.warn + '</p><p class="font-caption text-caption text-muted">미흡(△)</p></div>' +
+                    '<div class="bg-danger/10 rounded-lg py-sm"><p class="font-title-sm text-title-sm text-danger">' + stats.overall.alert + '</p><p class="font-caption text-caption text-muted">미이행(X)</p></div>' +
+                    '</div>' +
+                    '<div class="space-y-sm border-t border-hairline pt-base">' +
+                    '<div class="flex justify-between items-center font-caption text-caption">' +
+                    '<span class="text-on-surface-variant">상반기</span>' +
+                    '<span class="font-bold text-ink">' + stats.byPeriod.first.checked + '/' + stats.byPeriod.first.total + ' (' + firstRate + '%)</span>' +
+                    '</div>' +
+                    '<div class="flex justify-between items-center font-caption text-caption">' +
+                    '<span class="text-on-surface-variant">하반기</span>' +
+                    '<span class="font-bold text-ink">' + stats.byPeriod.second.checked + '/' + stats.byPeriod.second.total + ' (' + secondRate + '%)</span>' +
+                    '</div>' +
+                    (unchecked > 0 ?
+                        '<p class="text-[11px] text-danger mt-xs">※ 아직 점검하지 않은 문항이 ' + unchecked + '건 있습니다.</p>' :
+                        '<p class="text-[11px] text-success mt-xs">모든 문항 점검을 완료했습니다.</p>') +
+                    '</div>';
+            }
+        }
+
+        // "오늘의 필수 과업" 체크박스: 데모용 클라이언트 전용 토글(새로고침 시 초기화, 실제 업무 데이터와 무관).
+        function wireTaskList() {
+            document.querySelectorAll('#sadTaskList [data-task-item]').forEach(function (li) {
+                li.addEventListener('click', function () {
+                    var done = li.getAttribute('data-task-done') === 'true';
+                    var box = li.querySelector('[data-task-box]');
+                    var check = li.querySelector('[data-task-check]');
+                    var label = li.querySelector('[data-task-label]');
+                    var next = !done;
+                    li.setAttribute('data-task-done', String(next));
+                    if (box) box.className = next
+                        ? 'w-6 h-6 border-2 border-primary rounded-md bg-primary-fixed-dim mt-xxs flex items-center justify-center'
+                        : 'w-6 h-6 border-2 border-primary-disabled rounded-md group-hover:border-primary transition-colors mt-xxs flex items-center justify-center';
+                    if (check) check.classList.toggle('hidden', !next);
+                    if (label) label.classList.toggle('line-through', next);
+                    if (label) label.classList.toggle('text-muted', next);
+                });
+            });
+        }
+
+        function wireDecorativeButtons() {
+            var addTaskBtn = document.getElementById('sadAddTaskBtn');
+            if (addTaskBtn) addTaskBtn.addEventListener('click', function () {
+                window.EF_MODAL.alert('새 과업 추가 기능은 백엔드(업무 관리 API) 연동 후 제공될 예정입니다.');
+            });
+            var newDraftBtn = document.getElementById('sadNewDraftBtn');
+            if (newDraftBtn) newDraftBtn.addEventListener('click', function () {
+                window.EF_MODAL.alert('AI 템플릿 기반 신규 기안 기능은 백엔드(문서 생성 API) 연동 후 제공될 예정입니다.');
+            });
+            var docArchiveBtn = document.getElementById('sadDocArchiveBtn');
+            if (docArchiveBtn) docArchiveBtn.addEventListener('click', function () {
+                window.EF_MODAL.alert('전자 결재 문서 아카이브 조회는 백엔드(문서함 API) 연동 후 제공될 예정입니다.');
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            renderChecklistWidgets();
+            wireTaskList();
+            wireDecorativeButtons();
+        });
     })();
 </script>
 </body>

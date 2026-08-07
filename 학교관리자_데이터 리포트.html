@@ -366,11 +366,11 @@
 <p class="text-[15px] text-ink/70">행정 효율성 및 AI 활용 현황을 실시간으로 분석합니다.</p>
 </div>
 <div class="flex gap-sm">
-<button class="flex items-center gap-xs px-base h-11 rounded-full bg-surface-strong text-ink font-button hover:bg-surface-container transition-colors">
+<button type="button" id="dataReportExcelBtn" class="flex items-center gap-xs px-base h-11 rounded-full bg-surface-strong text-ink font-button hover:bg-surface-container transition-colors">
 <span class="material-symbols-outlined text-[20px]">download</span>
                     Excel 다운로드
                 </button>
-<button class="flex items-center gap-xs px-base h-11 rounded-full bg-primary text-on-primary font-button hover:opacity-90 transition-opacity">
+<button type="button" id="dataReportPdfBtn" class="flex items-center gap-xs px-base h-11 rounded-full bg-primary text-on-primary font-button hover:opacity-90 transition-opacity">
 <span class="material-symbols-outlined text-[20px]">picture_as_pdf</span>
                     PDF 리포트 출력
                 </button>
@@ -397,21 +397,21 @@
 <span class="material-symbols-outlined text-[120px]" style="font-variation-settings: 'FILL' 1;">bolt</span>
 </div>
 </div>
-<div class="md:col-span-4 glass-card p-xl rounded-2xl flex flex-col justify-between overflow-hidden relative">
+<div class="md:col-span-4 glass-card p-xl rounded-2xl flex flex-col justify-between overflow-hidden relative" id="reportChecklistCard">
 <div class="z-10">
-<span class="font-caption-strong text-caption-strong text-secondary bg-secondary-fixed px-sm py-xxs rounded-full">Workload</span>
-<h3 class="font-title-md text-title-md mt-sm text-on-surface">주간 평균 처리 건수</h3>
+<span class="font-caption-strong text-caption-strong text-secondary bg-secondary-fixed px-sm py-xxs rounded-full">Checklist</span>
+<h3 class="font-title-md text-title-md mt-sm text-on-surface">우리 학교 체크리스트 이행률</h3>
 <div class="mt-md flex items-baseline gap-xs">
-<span class="font-number-display text-display-lg text-secondary">452</span>
-<span class="font-title-sm text-title-sm text-muted">건</span>
+<span class="font-number-display text-display-lg text-secondary" id="reportChecklistRate">-</span>
+<span class="font-title-sm text-title-sm text-muted">%</span>
 </div>
-<p class="font-body-sm text-body-sm mt-sm flex items-center gap-xs text-on-surface-variant">
+<p class="font-body-sm text-body-sm mt-sm flex items-center gap-xs text-on-surface-variant" id="reportChecklistDetail">
 <span class="material-symbols-outlined text-[16px]">check_circle</span>
-                        목표치 대비 94% 달성
+                        불러오는 중
                     </p>
 </div>
 <div class="absolute -right-4 -bottom-4 opacity-10">
-<span class="material-symbols-outlined text-[120px]" style="font-variation-settings: 'FILL' 1;">assignment</span>
+<span class="material-symbols-outlined text-[120px]" style="font-variation-settings: 'FILL' 1;">fact_check</span>
 </div>
 </div>
 <div class="md:col-span-4 glass-card p-xl rounded-2xl flex flex-col justify-between overflow-hidden relative">
@@ -576,7 +576,7 @@
 </div>
 </div>
 <div class="overflow-x-auto">
-<table class="w-full text-left">
+<table class="w-full text-left" id="reportTable">
 <thead class="bg-surface-strong">
 <tr>
 <th class="p-base font-caption-strong text-on-surface-variant uppercase tracking-wider">
@@ -593,7 +593,7 @@
 </th>
 </tr>
 </thead>
-<tbody class="divide-y divide-hairline">
+<tbody class="divide-y divide-hairline" id="reportTableBody">
 <tr class="hover:bg-surface-soft transition-colors">
 <td class="p-base">
 <div class="flex flex-col">
@@ -704,6 +704,120 @@
             });
         }
         efLoadFooter();
+    })();
+</script>
+<!-- Excel 다운로드: 화면에 실제로 렌더된 표 데이터를 클라이언트에서 CSV(엑셀 호환)로 직접 생성.
+     PDF 리포트 출력: 백엔드 문서 생성 없이도 브라우저 인쇄(다른 페이지의 "PDF 출력 및 인쇄"와 같은 패턴)로
+     실제 PDF 저장이 가능하도록 연결. -->
+<style>
+    @media print {
+        nav, #main-lnb, footer, #dataReportExcelBtn, #dataReportPdfBtn { display: none !important; }
+        main { padding-top: 0 !important; }
+    }
+</style>
+<script>
+    (function () {
+        function escapeHtml(str) {
+            var div = document.createElement('div');
+            div.textContent = str == null ? '' : str;
+            return div.innerHTML;
+        }
+
+        function getOrg() {
+            var user = localStorage.getItem('currentUser') || 'guest';
+            return localStorage.getItem('org_' + user) || '기본기관';
+        }
+
+        function renderChecklistCard() {
+            var rateEl = document.getElementById('reportChecklistRate');
+            var detailEl = document.getElementById('reportChecklistDetail');
+            if (!rateEl || !detailEl) return;
+            var org = getOrg();
+            var raw = localStorage.getItem('ef_checklist_progress_' + org);
+            if (!raw) {
+                rateEl.textContent = '0';
+                detailEl.innerHTML = '<span class="material-symbols-outlined text-[16px]">info</span> 아직 점검 시작 전';
+                return;
+            }
+            var data;
+            try { data = JSON.parse(raw); } catch (e) { data = null; }
+            var total = 0, checked = 0;
+            if (data) {
+                ['first', 'second'].forEach(function (period) {
+                    if (!data[period]) return;
+                    ['academic', 'finance'].forEach(function (sector) {
+                        if (!data[period][sector]) return;
+                        Object.keys(data[period][sector]).forEach(function (catId) {
+                            Object.keys(data[period][sector][catId]).forEach(function (itemNo) {
+                                total++;
+                                if (data[period][sector][catId][itemNo] && data[period][sector][catId][itemNo].result) checked++;
+                            });
+                        });
+                    });
+                });
+            }
+            var rate = total > 0 ? Math.round(checked / total * 100) : 0;
+            rateEl.textContent = String(rate);
+            detailEl.innerHTML = '<span class="material-symbols-outlined text-[16px]">check_circle</span> ' + escapeHtml(checked + '/' + total + '문항 점검 완료');
+        }
+
+        function buildCsvFromTable() {
+            var table = document.getElementById('reportTable');
+            if (!table) return null;
+            var headerCells = table.querySelectorAll('thead th');
+            var headers = [];
+            headerCells.forEach(function (th, idx) {
+                if (idx === headerCells.length - 1) return; // 마지막 "관리" 열(버튼)은 제외
+                headers.push(th.textContent.trim().replace(/\s+/g, ' '));
+            });
+            var rows = [headers];
+            table.querySelectorAll('#reportTableBody tr').forEach(function (tr) {
+                var tds = tr.querySelectorAll('td');
+                var row = [];
+                tds.forEach(function (td, idx) {
+                    if (idx === tds.length - 1) return; // 관리 열 제외
+                    var bar = td.querySelector('[style*="width"]');
+                    if (bar) {
+                        row.push(bar.style.width || '');
+                    } else {
+                        row.push(td.textContent.trim().replace(/\s+/g, ' '));
+                    }
+                });
+                rows.push(row);
+            });
+            return rows.map(function (r) {
+                return r.map(function (cell) {
+                    return '"' + String(cell).replace(/"/g, '""') + '"';
+                }).join(',');
+            }).join('\r\n');
+        }
+
+        function downloadCsv() {
+            var csv = buildCsvFromTable();
+            if (!csv) {
+                window.EF_MODAL.alert('다운로드할 표 데이터를 찾을 수 없습니다.');
+                return;
+            }
+            var bom = '﻿'; // 엑셀에서 한글이 깨지지 않도록 UTF-8 BOM 추가
+            var blob = new Blob([bom + csv], { type: 'text/csv;charset=utf-8;' });
+            var url = URL.createObjectURL(blob);
+            var a = document.createElement('a');
+            var stamp = new Date().toISOString().slice(0, 10);
+            a.href = url;
+            a.download = '데이터리포트_' + stamp + '.csv';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            renderChecklistCard();
+            var excelBtn = document.getElementById('dataReportExcelBtn');
+            if (excelBtn) excelBtn.addEventListener('click', downloadCsv);
+            var pdfBtn = document.getElementById('dataReportPdfBtn');
+            if (pdfBtn) pdfBtn.addEventListener('click', function () { window.print(); });
+        });
     })();
 </script>
 </body>
