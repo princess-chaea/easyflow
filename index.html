@@ -406,16 +406,16 @@
 </template>
 
 <template id="tpl-calendar">
-<div class="bg-canvas p-xl rounded-xl border border-hairline shadow-sm hover-lift h-full">
+<a href="업무배송_스마트공문달력.html" class="block bg-canvas p-xl rounded-xl border border-hairline shadow-sm hover-lift h-full">
 <div class="flex justify-between items-center mb-xl">
 <div class="flex items-center gap-base">
 <span class="material-symbols-outlined text-primary">local_shipping</span>
 <h2 class="font-title-lg text-title-lg">이번 주 업무 배송 일정</h2>
 </div>
 <div class="flex gap-xs">
-<button class="p-xs rounded-full hover:bg-surface-strong transition-colors"><span class="material-symbols-outlined">chevron_left</span></button>
+<button type="button" class="p-xs rounded-full hover:bg-surface-strong transition-colors" onclick="event.preventDefault(); event.stopPropagation();"><span class="material-symbols-outlined">chevron_left</span></button>
 <span class="font-body-strong px-base self-center">2026년 8월 1주</span>
-<button class="p-xs rounded-full hover:bg-surface-strong transition-colors"><span class="material-symbols-outlined">chevron_right</span></button>
+<button type="button" class="p-xs rounded-full hover:bg-surface-strong transition-colors" onclick="event.preventDefault(); event.stopPropagation();"><span class="material-symbols-outlined">chevron_right</span></button>
 </div>
 </div>
 <div class="grid grid-cols-5 gap-base">
@@ -473,7 +473,7 @@
 </div>
 </div>
 </div>
-</div>
+</a>
 </template>
 
 <template id="tpl-library">
@@ -516,14 +516,14 @@
 <span class="material-symbols-outlined text-success">check_circle</span>
 <span class="text-body-sm">교원 연수 결과 보고서.hwp</span>
 </div>
-<button type="button" class="text-primary text-caption-strong hover:underline">다운로드</button>
+<button type="button" class="text-primary text-caption-strong hover:underline" onclick="event.preventDefault(); EF_MODAL.alert('예시 항목입니다. 실제 문서는 \'서식 자료실 &gt; 서식 자동 완성\'에서 생성 후 다운로드할 수 있어요.')">다운로드</button>
 </div>
 </div>
 </div>
 </template>
 
 <template id="tpl-formArchive">
-<div class="bg-canvas p-xl rounded-xl border border-hairline shadow-sm hover-lift h-full">
+<a href="서식자료실_통합검색.html" class="block bg-canvas p-xl rounded-xl border border-hairline shadow-sm hover-lift h-full">
 <div class="flex justify-between items-center mb-xl">
 <div class="flex items-center gap-base">
 <span class="material-symbols-outlined text-primary">folder_shared</span>
@@ -563,7 +563,7 @@
 </tbody>
 </table>
 </div>
-</div>
+</a>
 </template>
 
 <template id="tpl-checklist">
@@ -594,22 +594,17 @@
 <span class="material-symbols-outlined text-primary">campaign</span>
 <h2 class="font-title-lg">최근 공지사항</h2>
 </div>
-<div class="space-y-xs" data-w="customList">
-<div class="flex items-center gap-xs py-xs text-sm hover:text-primary transition-colors">
-<span class="shrink-0 px-xs py-0.5 bg-primary-container text-white text-[10px] rounded-full font-bold">Update</span>
-<span class="truncate">2024년 상반기 행정 시스템 고도화 업데이트 안내</span>
+<div data-w="empty" class="hidden">
+<p class="text-body-sm text-on-surface-variant">아직 등록된 공지사항이 없습니다.</p>
+<p class="text-caption text-primary font-bold mt-xs">공지사항 보러 가기 →</p>
 </div>
-<div class="flex items-center gap-xs py-xs text-sm hover:text-primary transition-colors">
-<span class="shrink-0 px-xs py-0.5 bg-surface-container text-on-surface-variant text-[10px] rounded-full font-bold">일반</span>
-<span class="truncate">교육용 AI 보조 도구 사용 가이드라인 배포</span>
-</div>
-</div>
+<div class="space-y-xs" data-w="customList"></div>
 </a>
 </template>
 </section>
 
 <!-- 위젯 추가 모달 -->
-<div class="hidden fixed inset-0 z-[100] flex items-center justify-center bg-ink/50 backdrop-blur-sm p-4" id="widgetPickerModal">
+<div class="hidden fixed inset-0 z-[100] flex items-center justify-center bg-ink/50 backdrop-blur-sm p-4" id="widgetPickerModal" onclick="if(event.target===this) closeWidgetPicker()">
 <div class="bg-white rounded-2xl shadow-2xl w-full max-w-lg overflow-hidden">
 <div class="px-lg py-base border-b border-hairline flex justify-between items-center">
 <h3 class="font-bold text-ink text-lg">위젯 추가</h3>
@@ -789,14 +784,20 @@
 
         if (id === 'notices') {
             const listEl = frag.querySelector('[data-w="customList"]');
+            const emptyEl = frag.querySelector('[data-w="empty"]');
             let custom = [];
             try { custom = JSON.parse(localStorage.getItem('ef_notices')) || []; } catch (e) { /* no-op */ }
-            custom.slice(-2).reverse().forEach(n => {
-                const a = document.createElement('div');
-                a.className = 'flex items-center gap-xs py-xs text-sm hover:text-primary transition-colors';
-                a.innerHTML = '<span class="shrink-0 px-xs py-0.5 bg-primary-container text-white text-[10px] rounded-full font-bold">New</span><span class="truncate">' + escWidgetHtml(n.title) + '</span>';
-                listEl.prepend(a);
-            });
+            if (!custom.length) {
+                if (emptyEl) emptyEl.classList.remove('hidden');
+            } else {
+                // 최근 등록순(최신이 위)으로 최대 2건 표시 — appendChild이므로 newest-first 순서 그대로 쌓는다
+                custom.slice(-2).reverse().forEach(n => {
+                    const a = document.createElement('div');
+                    a.className = 'flex items-center gap-xs py-xs text-sm hover:text-primary transition-colors';
+                    a.innerHTML = '<span class="shrink-0 px-xs py-0.5 bg-primary-container text-white text-[10px] rounded-full font-bold">New</span><span class="truncate">' + escWidgetHtml(n.title) + '</span>';
+                    listEl.appendChild(a);
+                });
+            }
         }
 
         return frag;
@@ -908,6 +909,9 @@
     function closeWidgetPicker() {
         document.getElementById('widgetPickerModal').classList.add('hidden');
     }
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && !document.getElementById('widgetPickerModal').classList.contains('hidden')) closeWidgetPicker();
+    });
     function addWidget(id) {
         widgetLayout.push({ id: id, size: 1 });
         saveLayout();
