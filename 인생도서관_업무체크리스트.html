@@ -756,7 +756,7 @@
                         {
                               "no": "2-3-1_3_R",
                               "content": "• 의무교육대상자의 유예, 면제 처리 적정성",
-                              "actionCode": "2-3_1_3_A",
+                              "actionCode": "2-3-1_3_A",
                               "scope": "초"
                         },
                         {
@@ -3111,8 +3111,10 @@
         "title": "안전점검 및 재난 예방",
         "items": [
           {
-            "isGroupHeader": true,
-            "content": "재난 및 안전관리의 적절성"
+            "no": "4-1_1_R",
+            "content": "• 재난 및 안전관리의 적절성",
+            "actionCode": "4-1_1_A",
+            "scope": "각급학교"
           },
           {
             "no": "4-1_2_R",
@@ -4991,6 +4993,66 @@
         });
     }
 
+    // 媛숈? ?먮━?쒖떆?먭? 怨듭떇 ?쒗뵆由우쓽 ?쒕줈 ?ㅻⅨ ???됱뿉 以묐났??寃쎌슦 ?뱀젙 ?쒕쾲留?    // 蹂꾨룄 ?대? ?ㅻ줈 諛붽씔?? ?뚭퀎 7-4?????됱? ?댁슜???щ씪 ?낅┰ ?곹깭濡??대낫?댁빞 ?쒕떎.
+    function replaceNth(text, search, replacement, occurrence) {
+        var from = 0;
+        var found = -1;
+        for (var i = 0; i < occurrence; i++) {
+            found = text.indexOf(search, from);
+            if (found === -1) return text;
+            from = found + search.length;
+        }
+        return text.slice(0, found) + replacement + text.slice(found + search.length);
+    }
+
+    function normalizeTemplatePlaceholders(xmlText, sector) {
+        if (sector === 'academic') {
+            return xmlText.split('[[2-3_1_3_A]]').join('[[2-3-1_3_A]]');
+        }
+        if (sector !== 'finance') return xmlText;
+        xmlText = replaceNth(xmlText, '[[7-4_21_R]]', '[[7-4_21_R_b]]', 2);
+        xmlText = replaceNth(xmlText, '[[7-4_21_A]]', '[[7-4_21_A_b]]', 2);
+        return xmlText;
+    }
+
+    // 화면에서는 세부 항목을 각각 입력하지만 공식 HWPX에서는 여러 항목이
+    // 하나의 결과/조치 칸을 공유한다. X > △ > 미입력 > O 순으로 보수적으로
+    // 집계하고 조치 내용은 중복을 제거해 같은 칸에 합친다.
+    function combinedResultSymbol(states) {
+        var results = states.map(function (state) { return state && state.result ? state.result : ''; });
+        if (results.indexOf('X') !== -1) return '×';
+        if (results.indexOf('S') !== -1) return '△';
+        if (results.indexOf('') !== -1) return ' ';
+        if (results.length && results.every(function (result) { return result === 'O'; })) return '○';
+        return ' ';
+    }
+
+    function buildHwpxExportGroups(xmlText, sector) {
+        var groups = {};
+        var missing = [];
+        checklistDatabase[sector].categories.forEach(function (cat) {
+            cat.items.forEach(function (it) {
+                if (it.isGroupHeader || !it.no) return;
+                var exportNo = it.no;
+                var exactTag = '[[' + exportNo + ']]';
+                if (xmlText.indexOf(exactTag) === -1) {
+                    var groupedMatch = exportNo.match(/^(.+_R)_[a-z]+$/);
+                    if (groupedMatch && xmlText.indexOf('[[' + groupedMatch[1] + ']]') !== -1) {
+                        exportNo = groupedMatch[1];
+                    } else {
+                        missing.push(it.no);
+                        return;
+                    }
+                }
+                if (!groups[exportNo]) groups[exportNo] = [];
+                var state = userProgress[currentPeriod][sector][cat.id][it.no] || { result: '', action: '' };
+                groups[exportNo].push(state);
+            });
+        });
+        if (missing.length) throw new Error('HWPX ?쒗뵆由우뿉 ?녿뒗 ?먭? ??ぉ: ' + missing.join(', '));
+        return groups;
+    }
+
     async function downloadHWPX() {
         var btn = document.getElementById('btnDownloadHWPX');
         var originalHTML = btn.innerHTML;
@@ -5022,25 +5084,24 @@
                 var fileName = sectionFiles[fi];
                 var xmlText = await loadedZip.file(fileName).async('string');
 
-                checklistDatabase[currentSector].categories.forEach(function (cat) {
-                    cat.items.forEach(function (it) {
-                        if (it.isGroupHeader || !it.no) return;
-                        var state = userProgress[currentPeriod][currentSector][cat.id][it.no];
+                xmlText = normalizeTemplatePlaceholders(xmlText, currentSector);
+                var groups = buildHwpxExportGroups(xmlText, currentSector);
 
-                        var resSymbol = ' ';
-                        if (state.result === 'O') resSymbol = '○';
-                        else if (state.result === 'S') resSymbol = '△';
-                        else if (state.result === 'X') resSymbol = '×';
-
-                        var actionText = state.action || ' ';
-                        var resTag = '[[' + it.no + ']]';
-                        var actTag = '[[' + it.actionCode + ']]';
-
-                        xmlText = xmlText.split(resTag).join(escapeXml(resSymbol));
-                        xmlText = xmlText.split(actTag).join(escapeXml(actionText));
-                    });
+                Object.keys(groups).forEach(function (exportNo) {
+                    var states = groups[exportNo];
+                    var actionTexts = states
+                        .map(function (state) { return state && state.action ? state.action.trim() : ''; })
+                        .filter(function (text, index, all) { return text && all.indexOf(text) === index; });
+                    var actionText = actionTexts.length ? actionTexts.join(' / ') : ' ';
+                    var actionNo = exportNo.replace(/_R(?=(_[a-z]+)?$)/, '_A');
+                    xmlText = xmlText.split('[[' + exportNo + ']]').join(escapeXml(combinedResultSymbol(states)));
+                    xmlText = xmlText.split('[[' + actionNo + ']]').join(escapeXml(actionText));
                 });
 
+                var leftovers = xmlText.match(/\[\[[^\]]+\]\]/g) || [];
+                if (leftovers.length) {
+                    throw new Error('移섑솚?섏? ?딆? HWPX ??ぉ: ' + Array.from(new Set(leftovers)).join(', '));
+                }
                 xmlText = xmlText.replace(/<hp:linesegarray[^>]*>.*?<\/hp:linesegarray>/g, '');
                 loadedZip.file(fileName, xmlText);
             }

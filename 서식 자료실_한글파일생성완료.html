@@ -403,8 +403,8 @@
 <span class="material-symbols-outlined text-4xl" style="font-variation-settings: 'FILL' 1;">check_circle</span>
 </div>
 </div>
-<h1 class="text-[28px] font-bold text-ink mb-2">맞춤형 서식 준비 완료</h1>
-<p class="text-[15px] text-ink/70">입력하신 학교 정보를 기반으로 공문 서식이 성공적으로 생성되었습니다.</p>
+<h1 class="text-[28px] font-bold text-ink mb-2">맞춤형 서식 미리보기 준비 완료</h1>
+<p class="text-[15px] text-ink/70">입력하신 학교 정보를 기반으로 열람용 HTML 미리보기를 만들었습니다.</p>
 </div>
 <!-- Bento Grid Layout -->
 <div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter-grid">
@@ -413,14 +413,14 @@
 <!-- Main File Card -->
 <div class="bg-surface-card p-8 rounded-2xl border border-hairline shadow-sm flex items-start gap-6">
 <div class="w-20 h-24 bg-surface-container-low rounded-lg flex flex-col items-center justify-center border border-hairline overflow-hidden shrink-0">
-<div class="bg-hwp-blue w-full text-center text-[10px] text-white py-1 font-bold">HWP</div>
+<div class="bg-hwp-blue w-full text-center text-[10px] text-white py-1 font-bold">HTML</div>
 <span class="material-symbols-outlined text-4xl text-on-primary-container mt-2">description</span>
 </div>
 <div class="flex-1">
-<h3 class="font-title-lg text-title-lg text-on-surface mb-2 break-all" data-wizard-filename>2026_옥계초등학교_학교운영위원회_회의록.hwp</h3>
+<h3 class="font-title-lg text-title-lg text-on-surface mb-2 break-all" data-wizard-filename>2026_옥계초등학교_학교운영위원회_회의록.html</h3>
 <div class="flex gap-4 text-on-surface-variant text-sm mb-4">
-<span class="flex items-center gap-1"><span class="material-symbols-outlined text-sm">auto_stories</span> 2 Page</span>
-<span class="flex items-center gap-1"><span class="material-symbols-outlined text-sm">database</span> 124KB</span>
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-sm">auto_stories</span> 브라우저 문서</span>
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-sm">database</span> 입력값 기반</span>
 </div>
 <div class="inline-flex items-center gap-2 bg-secondary-container/30 text-on-secondary-container px-3 py-1.5 rounded-full text-sm font-bold">
 <span class="material-symbols-outlined text-sm">magic_button</span>
@@ -432,7 +432,7 @@
 <div class="bg-surface-card p-6 rounded-2xl border border-hairline relative overflow-hidden group">
 <div class="flex justify-between items-center mb-4">
 <h4 class="font-title-md text-title-md text-primary">문서 미리보기</h4>
-<button class="text-secondary font-bold text-sm flex items-center gap-1 hover:underline">
+<button class="text-secondary font-bold text-sm flex items-center gap-1 hover:underline" id="btnOpenFullPreview" type="button">
                                     전체보기 <span class="material-symbols-outlined text-sm">open_in_new</span>
 </button>
 </div>
@@ -459,18 +459,18 @@
 <div class="lg:col-span-5 flex flex-col gap-4">
 <div class="bg-surface-card p-8 rounded-2xl border-2 border-secondary shadow-lg h-fit">
 <div class="mb-6">
-<span class="text-xs font-bold text-secondary tracking-widest uppercase mb-2 block">Premium Export</span>
-<h4 class="font-title-lg text-title-lg text-primary">최종 파일 다운로드</h4>
+<span class="text-xs font-bold text-secondary tracking-widest uppercase mb-2 block">Preview Export</span>
+<h4 class="font-title-lg text-title-lg text-primary">미리보기 파일 다운로드</h4>
 </div>
 <div class="space-y-3">
 <button class="w-full py-4 bg-secondary text-on-secondary rounded-2xl font-bold flex items-center justify-center gap-3 hover:opacity-90 active:scale-95 transition-all shadow-md" id="btnDownloadHwp">
 <span class="material-symbols-outlined text-2xl">download</span>
-<span class="text-lg">최종 HWP 다운로드</span>
+<span class="text-lg">HTML 미리보기 다운로드</span>
 </button>
 <div class="grid grid-cols-2 gap-3">
-<button class="py-3 border border-secondary text-secondary rounded-2xl font-bold flex items-center justify-center gap-2 hover:bg-secondary/5 transition-colors" id="btnDownloadHwpx">
+<button class="py-3 border border-outline text-muted rounded-2xl font-bold flex items-center justify-center gap-2 opacity-60 cursor-not-allowed" id="btnDownloadHwpx" type="button" disabled aria-disabled="true" title="백엔드 문서 처리 연동 후 제공됩니다.">
 <span class="material-symbols-outlined text-xl">description</span>
-                                        HWPX
+                                        HWPX 연동 예정
                                     </button>
 <button class="py-3 border border-outline text-on-surface-variant rounded-2xl font-bold flex items-center justify-center gap-2 hover:bg-surface-variant transition-colors" id="btnPreviewPdf">
 <span class="material-symbols-outlined text-xl">picture_as_pdf</span>
@@ -479,7 +479,7 @@
 </div>
 </div>
 <div class="mt-8 pt-6 border-t border-hairline text-center">
-<p class="text-xs text-on-surface-variant mb-4">본 서식은 법적 효력이 있는 공공서식 가이드를 준수합니다.</p>
+<p class="text-xs text-on-surface-variant mb-4">미리보기 내용을 검토한 뒤 실제 결재 문서로 사용하세요.</p>
 <div class="flex justify-center gap-4">
 <a class="text-on-surface-variant hover:text-primary transition-colors flex items-center gap-1 font-button text-sm" href="서식 자료실_학교정보확인.html">
 <span class="material-symbols-outlined text-sm">edit</span>
@@ -500,7 +500,7 @@
 <p class="font-bold">스마트 팁</p>
 </div>
 <p class="text-sm text-on-primary/70 leading-relaxed">
-                                생성된 HWP 파일은 한컴오피스 2018 이상 버전에서 최적으로 편집 가능합니다. 표 서식이 깨질 경우 'PDF 미리보기'를 통해 레이아웃을 확인하세요.
+                                현재는 HTML 미리보기와 인쇄/PDF 저장만 제공합니다. 실제 HWP/HWPX 생성은 백엔드 문서 처리 또는 로컬 한글 에이전트 연동 후 제공됩니다.
                             </p>
 </div>
 </div>
@@ -540,7 +540,7 @@
             const year = new Date().getFullYear();
             wizardFileBase = year + '_' + wizardState.schoolName + '_' + wizardState.templateTitle.replace(/\s+/g, '_');
             document.querySelectorAll('[data-wizard-filename]').forEach(function (el) {
-                el.textContent = wizardFileBase + '.hwp';
+                el.textContent = wizardFileBase + '.html';
             });
         }
 
@@ -614,20 +614,22 @@
         }
 
         wireDownloadButton(document.getElementById('btnDownloadHwp'), wizardFileBase + '.html', '다운로드 시작');
-        wireDownloadButton(document.getElementById('btnDownloadHwpx'), wizardFileBase + '.html', '완료');
+        // HWPX 버튼은 실제 문서 처리 백엔드가 연결되기 전까지 비활성 상태를 유지한다.
 
         // PDF 미리보기: 실제 PDF 변환은 불가하므로 새 창에 인쇄 가능한 문서를 열어
         // 브라우저의 '인쇄 > PDF로 저장'으로 이어질 수 있게 한다.
-        const previewPdfBtn = document.getElementById('btnPreviewPdf');
-        if (previewPdfBtn) {
-            previewPdfBtn.addEventListener('click', () => {
-                const win = window.open('', '_blank');
-                if (!win) { EF_MODAL.alert('팝업이 차단되어 미리보기를 열 수 없습니다. 팝업 차단을 해제해주세요.'); return; }
-                win.document.open();
-                win.document.write(buildWizardDocumentHtml());
-                win.document.close();
-            });
+        function openWizardPreview() {
+            const win = window.open('', '_blank');
+            if (!win) { EF_MODAL.alert('팝업이 차단되어 미리보기를 열 수 없습니다. 팝업 차단을 해제해주세요.'); return; }
+            win.document.open();
+            win.document.write(buildWizardDocumentHtml());
+            win.document.close();
         }
+
+        const previewPdfBtn = document.getElementById('btnPreviewPdf');
+        if (previewPdfBtn) previewPdfBtn.addEventListener('click', openWizardPreview);
+        const fullPreviewBtn = document.getElementById('btnOpenFullPreview');
+        if (fullPreviewBtn) fullPreviewBtn.addEventListener('click', openWizardPreview);
     </script>
 <!-- TODO: 실제 서버 연동 시 이 값들은 localStorage가 아니라 서버(DB)에서 불러오도록 교체해야 함.
      푸터 정보는 서버관리자_푸터관리.html 에서만 수정할 수 있음(브라우저별 임시 저장). -->

@@ -543,17 +543,6 @@
 </footer>
 <script src="assets/js/inquiries.js"></script>
 <script>
-        // Search focus listener for additional logic if needed
-        const searchInput = document.querySelector('.search-input');
-        const searchContainer = document.querySelector('.search-container');
-
-        searchInput.addEventListener('focus', () => {
-            searchContainer.classList.add('z-20');
-        });
-        searchInput.addEventListener('blur', () => {
-            searchContainer.classList.remove('z-20');
-        });
-
         // ── 1:1 문의하기 모달 ──
         const currentUser = localStorage.getItem('currentUser');
 

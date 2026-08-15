@@ -269,6 +269,7 @@
         }
       </script>
     <script src="assets/js/auth.js"></script>
+    <script src="assets/js/mentoring.js"></script>
 </head>
 <body class="bg-surface-soft text-on-surface">
 <nav class="fixed top-0 w-full z-50 h-[64px] bg-canvas">
@@ -464,7 +465,7 @@
 </div>
 <div>
 <label class="block text-xs font-bold text-muted mb-1">추가 문의 사항</label>
-<textarea class="w-full border border-hairline rounded-md p-2 min-h-[100px]" placeholder="멘토 선생님께 남길 추가 메시지를 적어주세요."></textarea>
+<textarea class="w-full border border-hairline rounded-md p-2 min-h-[100px]" id="mentorAdditionalMessage" maxlength="2000" placeholder="멘토 선생님께 남길 추가 메시지를 적어주세요."></textarea>
 </div>
 </div>
 <div class="px-6 py-4 border-t border-hairline bg-surface-soft flex justify-end gap-2">
@@ -494,10 +495,37 @@
     return div.innerHTML;
   }
 
+  // 저장된 대화나 추후 백엔드 AI 응답에 스크립트·이벤트 속성이 섞여도
+  // 실행되지 않도록 대화 버블에 허용할 최소 HTML만 남긴다.
+  function sanitizeChatHtml(html) {
+    const template = document.createElement('template');
+    template.innerHTML = String(html == null ? '' : html);
+    template.content.querySelectorAll('script,style,iframe,object,embed,link,meta,form,input,textarea,select,option').forEach(el => el.remove());
+    template.content.querySelectorAll('*').forEach(el => {
+      Array.from(el.attributes).forEach(attr => {
+        const name = attr.name.toLowerCase();
+        const value = attr.value.trim();
+        if (name === 'onclick') {
+          if (!/^sendArs\('[^'()]{1,50}'\)$/.test(value)) el.removeAttribute(attr.name);
+          return;
+        }
+        if (name === 'src') {
+          const safeImage = /^https:\/\/api\.dicebear\.com\//.test(value) || /^data:image\/(png|jpe?g|gif|webp);base64,/i.test(value);
+          if (!safeImage) el.removeAttribute(attr.name);
+          return;
+        }
+        if (!['class', 'id', 'alt', 'title', 'type', 'aria-hidden', 'role'].includes(name)) {
+          el.removeAttribute(attr.name);
+        }
+      });
+    });
+    return template.innerHTML;
+  }
+
   function getMyAvatarUrl() {
     const currentUser = localStorage.getItem('currentUser') || '';
     const stored = localStorage.getItem('avatar_' + currentUser);
-    if (stored) return stored;
+    if (stored && /^data:image\/(png|jpe?g|gif|webp);base64,/i.test(stored)) return stored;
     const seedMap = {
       'test@gbe.kr': 'Mimi', 'test1@gbe.kr': 'Snuggles', 'test2@gbe.kr': 'Buster',
       'test3@gbe.kr': 'Oliver', 'test4@gbe.kr': 'Bella', 'test5@gbe.kr': 'Simba'
@@ -527,7 +555,7 @@
     if (!currentSessionId) currentSessionId = 'chat-' + Date.now() + '-' + Math.floor(Math.random() * 1000);
     const title = currentSessionTitle || (currentCategoryPath.length ? currentCategoryPath.join(' > ') : '새 대화');
     const dateLabel = new Date().toLocaleDateString('ko-KR', { month: '2-digit', day: '2-digit' });
-    const html = document.getElementById('chatWindow').innerHTML;
+    const html = sanitizeChatHtml(document.getElementById('chatWindow').innerHTML);
 
     let list = loadChatHistoryList();
     const existingIdx = list.findIndex(s => s.id === currentSessionId);
@@ -566,7 +594,7 @@
     pendingAttachments = [];
     renderAttachmentPreview();
     const chatWindow = document.getElementById('chatWindow');
-    chatWindow.innerHTML = found.html;
+    chatWindow.innerHTML = sanitizeChatHtml(found.html || '');
     chatWindow.scrollTop = chatWindow.scrollHeight;
     renderChatHistory();
   }
@@ -580,7 +608,7 @@
 
     let bubbleClass = isUser ? "bg-primary text-white p-4 rounded-2xl rounded-tr-none shadow-sm max-w-3xl text-body-sm" : "bg-canvas text-ink p-4 rounded-2xl rounded-tl-none shadow-sm border border-hairline max-w-3xl text-body-sm";
 
-    div.innerHTML = avatar + '<div class="flex-1 flex ' + (isUser ? "justify-end" : "") + '"><div class="' + bubbleClass + '">' + text + '</div></div>';
+    div.innerHTML = avatar + '<div class="flex-1 flex ' + (isUser ? "justify-end" : "") + '"><div class="' + bubbleClass + '">' + sanitizeChatHtml(text) + '</div></div>';
 
     chatWindow.appendChild(div);
     chatWindow.scrollTop = chatWindow.scrollHeight;
@@ -760,8 +788,42 @@
   }
 
   function submitMentorRequest() {
+    const currentUser = localStorage.getItem('currentUser') || '';
+    if (!currentUser) {
+      EF_MODAL.alert('멘토 상담 신청은 로그인 후 이용할 수 있습니다.');
+      return;
+    }
+    if (!window.EF_MENTORING || !window.EF_MENTOR_ROSTER) {
+      EF_MODAL.alert('멘토링 모듈을 불러오지 못했습니다. 페이지를 새로고침해주세요.');
+      return;
+    }
+
+    const categoryMap = { '교무/학사': '교무', '행정/예산': '복지', '생활/안전': '안전' };
+    const category = categoryMap[currentCategoryPath[0]] || '상담';
+    const summary = (document.getElementById('mentorCategoryAuto').value || '멘토 상담 요청').trim();
+    const additionalEl = document.getElementById('mentorAdditionalMessage');
+    const additional = additionalEl.value.trim();
+    const mentors = EF_MENTOR_ROSTER.mentorsForCategory(category);
+    const mentor = mentors[0] || null;
+    const school = localStorage.getItem('org_' + currentUser) || '소속 미설정';
+
+    const request = EF_MENTORING.add({
+      email: currentUser,
+      name: currentUser.split('@')[0],
+      school,
+      category,
+      title: summary,
+      content: additional || summary,
+      mentorEmail: mentor ? mentor.email : null,
+      mentorName: mentor ? mentor.name : null
+    });
+
+    additionalEl.value = '';
     closeMentorModal();
-    addMessage('상담 신청이 완료되었습니다! 인생도서관 멘토 선생님께 내용이 성공적으로 전달되었습니다.<br>답변이 등록되면 알림을 통해 알려드리겠습니다.', false);
+    const routeText = request.mentorName
+      ? escapeHtml(request.mentorName) + '에게 전달되었습니다.'
+      : '담당 멘토 배정을 기다리고 있습니다.';
+    addMessage('상담 신청이 완료되었습니다. ' + routeText + '<br>답변은 인생도서관 멘토 상담함에서 확인할 수 있습니다.', false);
   }
 
   renderChatHistory();

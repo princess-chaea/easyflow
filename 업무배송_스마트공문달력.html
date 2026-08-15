@@ -531,6 +531,10 @@
 <div class="w-full py-lg">
 <!-- 컴팩트 페이지 타이틀 — "들어가자마자 달력" 원칙을 지키기 위해 설명문 없이 제목만 한 줄로 -->
 <h1 class="text-[20px] font-bold text-ink mb-sm">스마트 공문 달력</h1>
+<div class="mb-base rounded-md border border-amber-200 bg-amber-50 px-sm py-xs flex items-start gap-xs no-print" id="runtimeModeBanner" role="status">
+<span class="material-symbols-outlined text-[18px] text-amber-700 mt-[1px]">science</span>
+<p class="text-caption text-amber-900 leading-relaxed"><b>프론트 협의용 자동 데모</b> — 서버 API를 먼저 호출하고, 연결되지 않으면 학교·학사일정·AI 결과를 고정 데모 데이터로 보여줍니다. 데모 결과에는 별도 표시가 붙습니다.</p>
+</div>
 <div class="grid grid-cols-1 xl:grid-cols-[280px_1fr] gap-lg items-start w-full" id="mainGrid" data-sidebar-target="true">
 <!-- 하단 안내 밴드 -->
 <section class="w-full no-print col-span-full">
@@ -594,7 +598,7 @@
 </div>
 <p class="text-caption text-muted mb-sm" id="todayLabel">—</p>
 <ul class="space-y-xs" id="todayList"></ul>
-<!-- Gemini 주간 브리핑 -->
+<!-- AI 주간 브리핑 -->
 <div class="mt-sm pt-sm border-t border-hairline-soft">
 <button class="w-full h-10 rounded-pill bg-primary/5 text-primary text-caption-strong hover:bg-primary/10 transition-colors flex items-center justify-center gap-xxs" id="btnAiBrief">
 <span class="material-symbols-outlined text-[16px] ms-fill">auto_awesome</span>
@@ -962,10 +966,18 @@
        ═══════════════════════════════════════════════════════════════════════ */
 
     /* ───────── 설정 ───────── */
-    const NEIS = {
-      KEY: 'de0d40e40d9f4c9b954b0e0ca1161bfa',
-      BASE: 'https://open.neis.go.kr/hub'
-    };
+    // 외부 API 키는 브라우저 번들에 포함하지 않는다. 기본은 동일 출처 API이며,
+    // 별도 API 호스트를 쓰는 환경만 EF_CONFIG.apiBase를 주입한다.
+    const EF_RUNTIME_CONFIG = window.EF_CONFIG || {};
+    const API_BASE = EF_RUNTIME_CONFIG.apiBase || '';
+    // 프론트 협의에서는 API가 없어도 전체 흐름을 끝까지 확인한다.
+    // 운영 배포에서는 window.EF_CONFIG.demoFallback = false 로 비활성화한다.
+    const DEMO_FALLBACK_ENABLED = EF_RUNTIME_CONFIG.demoFallback === true
+      || (EF_RUNTIME_CONFIG.demoFallback == null && location.protocol === 'file:');
+    if (!DEMO_FALLBACK_ENABLED) {
+      const runtimeBanner = document.getElementById('runtimeModeBanner');
+      if (runtimeBanner) runtimeBanner.classList.add('hidden');
+    }
     let SCHOOL = { atpt: 'R10', code: '8781066', name: '아천초등학교', office: '경상북도교육청', area: '김천' };
     try { SCHOOL = { ...SCHOOL, ...JSON.parse(localStorage.getItem('ef_school') || '{}') }; } catch (e) { }
 
@@ -1041,6 +1053,7 @@
     let view = 'month';
     let userChoseView = true;
     let neisCache = {};          // 'YYYY-MM' → [{date, name, content, kind}]
+    let neisSource = {};         // 'YYYY-MM' → live | demo | error
     let activeDepts = new Set(DEPT_LIST);
     let searchTerm = '';
     let openTask = null;
@@ -2703,6 +2716,16 @@
     /* ═══════════════════════════════════════════════════════════════════════
        NEIS 학사일정 연동
        ═══════════════════════════════════════════════════════════════════════ */
+    function demoNeisSchedules(year, month) {
+      const lastDay = new Date(year, month, 0).getDate();
+      const makeDate = day => year + '-' + String(month).padStart(2, '0') + '-' + String(Math.min(day, lastDay)).padStart(2, '0');
+      return [
+        { date: makeDate(5), name: '[데모] 학교자율시간 운영', content: '프론트 협의용 예시 일정입니다.', kind: '해당없음', __demo: true },
+        { date: makeDate(12), name: '[데모] 진로체험활동', content: '실제 NEIS 응답이 연결되면 자동 교체됩니다.', kind: '수업일', __demo: true },
+        { date: makeDate(20), name: '[데모] 학부모 상담주간', content: '운영 배포에서는 데모 폴백을 끕니다.', kind: '수업일', __demo: true }
+      ];
+    }
+
     async function loadNeis(year, month) {
       const key = year + '-' + String(month).padStart(2, '0');
       if (neisCache[key]) return neisCache[key];
@@ -2711,26 +2734,34 @@
       const lastDay = new Date(year, month, 0).getDate();
       const to = year + String(month).padStart(2, '0') + String(lastDay).padStart(2, '0');
 
-      const url = NEIS.BASE + '/SchoolSchedule?KEY=' + NEIS.KEY + '&Type=json&pIndex=1&pSize=300'
-        + '&ATPT_OFCDC_SC_CODE=' + SCHOOL.atpt + '&SD_SCHUL_CODE=' + SCHOOL.code
-        + '&AA_FROM_YMD=' + from + '&AA_TO_YMD=' + to;
+      const url = API_BASE + '/api/neis/schedules?officeCode=' + encodeURIComponent(SCHOOL.atpt)
+        + '&schoolCode=' + encodeURIComponent(SCHOOL.code)
+        + '&from=' + from + '&to=' + to;
 
       try {
-        const res = await fetch(url);
+        const res = await fetch(url, { credentials: 'same-origin', headers: { Accept: 'application/json' } });
+        if (!res.ok) throw new Error('HTTP ' + res.status);
         const json = await res.json();
-        const rows = json?.SchoolSchedule?.[1]?.row || [];
+        const rows = json.schedules || json?.SchoolSchedule?.[1]?.row || [];
         const list = rows.map(r => ({
           date: r.AA_YMD.slice(0, 4) + '-' + r.AA_YMD.slice(4, 6) + '-' + r.AA_YMD.slice(6, 8),
           name: r.EVENT_NM,
           content: r.EVENT_CNTNT || '',
           kind: r.SBTR_DD_SC_NM || '해당없음'
         }));
+        neisSource[key] = 'live';
         neisCache[key] = list;
         return list;
       } catch (e) {
-        console.warn('[NEIS] 조회 실패 — 오프라인이거나 네트워크가 차단되었습니다.', e);
+        console.warn('[NEIS] 서버 조회 실패.', e);
+        if (DEMO_FALLBACK_ENABLED) {
+          neisSource[key] = 'demo';
+          neisCache[key] = demoNeisSchedules(year, month);
+          return neisCache[key];
+        }
+        neisSource[key] = 'error';
         neisCache[key] = [];
-        return [];
+        return neisCache[key];
       }
     }
 
@@ -3010,11 +3041,14 @@
         })()
         : '일주일 내 마감 업무가 없습니다';
 
-      const nk = (neisCache[y + '-' + String(m).padStart(2, '0')] || []);
+      const neisKey = y + '-' + String(m).padStart(2, '0');
+      const nk = (neisCache[neisKey] || []);
       document.getElementById('kpiNeis').textContent = nk.length;
-      document.getElementById('kpiNeisSub').textContent = nk.length
-        ? SCHOOL.name + ' 기준'
-        : 'NEIS 응답 없음 (오프라인일 수 있습니다)';
+      document.getElementById('kpiNeisSub').textContent = neisSource[neisKey] === 'demo'
+        ? '데모 학사일정 · ' + SCHOOL.name + ' 기준'
+        : nk.length
+          ? SCHOOL.name + ' 기준 · NEIS 실데이터'
+          : 'NEIS 응답 없음';
 
       const doneCnt = all.filter(t => done.has(taskKey(t, t.due))).length;
       const pct = all.length ? Math.round(doneCnt / all.length * 100) : 0;
@@ -3313,7 +3347,7 @@
         + '<p class="text-body-sm text-muted mt-xs">아직 등록된 처리 사례가 없습니다.</p>'
         + '<p class="text-caption text-muted-soft mt-xxs">이 업무를 처리한 뒤 사례를 남기면 다음 선생님께 큰 도움이 됩니다.</p></div>';
 
-      /* --- 탭 4 : AI 도우미 (Gemini 실연동) --- */
+      /* --- 탭 4 : AI 도우미 (서버 프록시 우선 + 협의용 데모 폴백) --- */
       renderAiTab();
 
       switchTab('forms');
@@ -3350,42 +3384,66 @@
        학교 검색 (NEIS schoolInfo 실연동)
        ═══════════════════════════════════════════════════════════════════════ */
     let schoolTimer;
+    const CALENDAR_DEMO_SCHOOLS = [
+      { ATPT_OFCDC_SC_CODE: 'R10', SD_SCHUL_CODE: 'DEMO-S001', SCHUL_NM: '아천초등학교', ATPT_OFCDC_SC_NM: '경상북도교육청', JU_ORG_NM: '김천', ORG_RDNMA: '김천시 협의용 예시 주소' },
+      { ATPT_OFCDC_SC_CODE: 'R10', SD_SCHUL_CODE: 'DEMO-S002', SCHUL_NM: '안동중학교', ATPT_OFCDC_SC_NM: '경상북도교육청', JU_ORG_NM: '안동', ORG_RDNMA: '안동시 협의용 예시 주소' },
+      { ATPT_OFCDC_SC_CODE: 'R10', SD_SCHUL_CODE: 'DEMO-S003', SCHUL_NM: '구미고등학교', ATPT_OFCDC_SC_NM: '경상북도교육청', JU_ORG_NM: '구미', ORG_RDNMA: '구미시 협의용 예시 주소' },
+      { ATPT_OFCDC_SC_CODE: 'R10', SD_SCHUL_CODE: 'DEMO-S004', SCHUL_NM: '포항여자중학교', ATPT_OFCDC_SC_NM: '경상북도교육청', JU_ORG_NM: '포항', ORG_RDNMA: '포항시 협의용 예시 주소' }
+    ];
+
+    function renderSchoolRows(rows, source) {
+      const box = document.getElementById('schoolResults');
+      if (!rows.length) {
+        box.innerHTML = '<li class="px-base py-sm text-body-sm text-muted">검색 결과가 없습니다' + (source === 'demo' ? ' · 데모 학교 목록 기준' : '') + '.</li>';
+        box.classList.remove('hidden');
+        return;
+      }
+      box.innerHTML = (source === 'demo'
+        ? '<li class="px-base py-xs text-caption text-amber-800 bg-amber-50 border-b border-amber-200">서버 미연결 · 아래는 협의용 데모 학교입니다.</li>'
+        : '') + rows.map(r =>
+        '<li><button class="w-full text-left px-base py-sm hover:bg-surface-soft transition-colors" '
+        + 'data-atpt="' + esc(r.ATPT_OFCDC_SC_CODE) + '" data-code="' + esc(r.SD_SCHUL_CODE) + '" '
+        + 'data-name="' + esc(r.SCHUL_NM) + '" data-office="' + esc(r.ATPT_OFCDC_SC_NM) + '" data-org="' + esc(r.JU_ORG_NM || '') + '" data-demo="' + (source === 'demo') + '">'
+        + '<span class="flex items-center gap-xs"><span class="block text-body-sm text-ink">' + esc(r.SCHUL_NM) + '</span>'
+        + (source === 'demo' ? '<span class="text-[10px] font-bold text-amber-700 bg-amber-50 border border-amber-200 rounded-pill px-xs">데모</span>' : '') + '</span>'
+        + '<span class="block text-caption text-muted">' + esc(r.ATPT_OFCDC_SC_NM) + ' · ' + esc(r.ORG_RDNMA || '') + '</span>'
+        + '</button></li>').join('');
+      box.classList.remove('hidden');
+
+      box.querySelectorAll('button').forEach(b => b.addEventListener('click', () => {
+        SCHOOL = { atpt: b.dataset.atpt, code: b.dataset.code, name: b.dataset.name, office: b.dataset.office, area: b.dataset.org, demo: b.dataset.demo === 'true' };
+        localStorage.setItem('ef_school', JSON.stringify(SCHOOL));
+        document.getElementById('schoolInput').value = SCHOOL.name;
+        document.getElementById('schoolMeta').textContent = SCHOOL.office + ' · ' + (SCHOOL.area || '-') + ' · 코드 ' + SCHOOL.code + (SCHOOL.demo ? ' · 데모' : '');
+        syncSchoolLabels();
+        box.classList.add('hidden');
+        neisCache = {};
+        neisSource = {};
+        toast(SCHOOL.name + (SCHOOL.demo ? ' 데모 학사일정을 표시합니다' : ' 학사일정을 불러옵니다'), 'school');
+        closeSchoolModal();
+        render();
+      }));
+    }
+
     async function searchSchool(q) {
       const box = document.getElementById('schoolResults');
       if (!q || q.length < 2) { box.classList.add('hidden'); return; }
 
       try {
-        const url = NEIS.BASE + '/schoolInfo?KEY=' + NEIS.KEY + '&Type=json&pIndex=1&pSize=12&SCHUL_NM=' + encodeURIComponent(q);
-        const json = await (await fetch(url)).json();
-        const rows = json?.schoolInfo?.[1]?.row || [];
-        if (!rows.length) {
-          box.innerHTML = '<li class="px-base py-sm text-body-sm text-muted">검색 결과가 없습니다.</li>';
-          box.classList.remove('hidden'); return;
-        }
-        box.innerHTML = rows.map(r =>
-          '<li><button class="w-full text-left px-base py-sm hover:bg-surface-soft transition-colors" '
-          + 'data-atpt="' + r.ATPT_OFCDC_SC_CODE + '" data-code="' + r.SD_SCHUL_CODE + '" '
-          + 'data-name="' + esc(r.SCHUL_NM) + '" data-office="' + esc(r.ATPT_OFCDC_SC_NM) + '" data-org="' + esc(r.JU_ORG_NM || '') + '">'
-          + '<span class="block text-body-sm text-ink">' + esc(r.SCHUL_NM) + '</span>'
-          + '<span class="block text-caption text-muted">' + esc(r.ATPT_OFCDC_SC_NM) + ' · ' + esc(r.ORG_RDNMA || '') + '</span>'
-          + '</button></li>').join('');
-        box.classList.remove('hidden');
-
-        box.querySelectorAll('button').forEach(b => b.addEventListener('click', () => {
-          SCHOOL = { atpt: b.dataset.atpt, code: b.dataset.code, name: b.dataset.name, office: b.dataset.office, area: b.dataset.org };
-          localStorage.setItem('ef_school', JSON.stringify(SCHOOL));   // 한 번 고르면 계속 기억
-          document.getElementById('schoolInput').value = SCHOOL.name;
-          document.getElementById('schoolMeta').textContent = SCHOOL.office + ' · ' + (SCHOOL.area || '-') + ' · 코드 ' + SCHOOL.code;
-          syncSchoolLabels();
-          box.classList.add('hidden');
-          neisCache = {};
-          toast(SCHOOL.name + ' 학사일정을 불러옵니다', 'school');
-          closeSchoolModal();
-          render();
-        }));
+        const url = API_BASE + '/api/neis/schools?query=' + encodeURIComponent(q) + '&limit=12';
+        const response = await fetch(url, { credentials: 'same-origin', headers: { Accept: 'application/json' } });
+        if (!response.ok) throw new Error('HTTP ' + response.status);
+        const json = await response.json();
+        const rows = json.schools || json?.schoolInfo?.[1]?.row || [];
+        renderSchoolRows(rows, 'live');
       } catch (e) {
-        box.innerHTML = '<li class="px-base py-sm text-body-sm text-danger">NEIS 연결에 실패했습니다.</li>';
-        box.classList.remove('hidden');
+        if (DEMO_FALLBACK_ENABLED) {
+          const rows = CALENDAR_DEMO_SCHOOLS.filter(s => s.SCHUL_NM.includes(q) || s.JU_ORG_NM.includes(q));
+          renderSchoolRows(rows, 'demo');
+        } else {
+          box.innerHTML = '<li class="px-base py-sm text-body-sm text-danger">NEIS 연결에 실패했습니다.</li>';
+          box.classList.remove('hidden');
+        }
       }
     }
 
@@ -3610,27 +3668,14 @@
     });
 
     /* ═══════════════════════════════════════════════════════════════════════
-       ③ AI 도우미 (Google Gemini 실연동)
+       ③ AI 도우미 (백엔드 AI 프록시 연동)
        ─────────────────────────────────────────────────────────────────────
-       ⚠ [서버 참고] 데모 편의상 API 키를 클라이언트에 직접 둡니다.
-         운영 배포 시에는 NEIS 키와 마찬가지로 서버 프록시(/api/ai-proxy)로
-         옮겨야 합니다. (오늘의 한끼 앱 neis-proxy.js 패턴 그대로)
-       - 모델: gemini-2.5-flash (속도 우선)
-       - 실패/오프라인 시: 데모 폴백 문구 + 재시도 버튼 (화면이 깨지지 않음)
+       브라우저는 모델 공급자와 API 키를 알지 않는다. /api/ai/generate가
+       인증·권한·RAG·사용량 제한을 적용한 뒤 공급자 응답을 정규화한다.
+       - 모델 선택: 서버 환경설정 및 정책에서 결정
+       - 실패/오프라인 시: 명시적으로 표시된 고정 데모 결과로 전체 흐름 유지
        - 같은 업무·같은 요청은 localStorage 캐시로 재호출 방지
        ═══════════════════════════════════════════════════════════════════════ */
-    const GEMINI_KEY = 'YOUR_API_KEY_HERE';
-    const GEMINI_MODEL = 'gemini-2.5-flash';
-    const AI_BACKEND_PENDING = GEMINI_KEY === 'YOUR_API_KEY_HERE';
-    function requireAiBackend() {
-      if (!AI_BACKEND_PENDING) return;
-      const error = new Error('AI_BACKEND_PENDING');
-      error.code = 'AI_BACKEND_PENDING';
-      throw error;
-    }
-    function showAiBackendPending(el, suffix) {
-      el.textContent = 'AI 서버 연동이 필요합니다. ' + suffix;
-    }
     let aiCache = {};
     try { aiCache = JSON.parse(localStorage.getItem('ef_ai_cache') || '{}'); } catch (e) { aiCache = {}; }
     function saveAiCache() {
@@ -3638,23 +3683,40 @@
       catch (e) { aiCache = {}; localStorage.removeItem('ef_ai_cache'); } // 용량 초과 시 캐시 비움
     }
 
-    async function askGemini(userPrompt, systemPrompt) {
-      requireAiBackend();
-      const res = await fetch('https://generativelanguage.googleapis.com/v1beta/models/' + GEMINI_MODEL + ':generateContent', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'x-goog-api-key': GEMINI_KEY },
-        body: JSON.stringify({
-          systemInstruction: { parts: [{ text: systemPrompt }] },
-          contents: [{ role: 'user', parts: [{ text: userPrompt }] }],
-          generationConfig: { temperature: 0.4, maxOutputTokens: 1500 }
-        }),
-        signal: AbortSignal.timeout(25000)
-      });
-      if (!res.ok) throw new Error('HTTP ' + res.status);
-      const j = await res.json();
-      const txt = ((j.candidates || [])[0]?.content?.parts || []).map(p => p.text || '').join('');
-      if (!txt.trim()) throw new Error('빈 응답');
-      return txt.trim();
+    function demoAiText(userPrompt) {
+      const title = openTask && openTask.title ? openTask.title : '학교 업무';
+      if (userPrompt.includes('앞으로 2주') || userPrompt.includes('주간')) {
+        return '## 이번 주 핵심 3가지\n1. 가장 가까운 마감 업무의 담당자와 제출 서식을 확인합니다.\n2. 결재가 필요한 문서는 초안을 먼저 공유합니다.\n3. 다음 주 행사를 위해 장소와 참석 대상을 확정합니다.\n\n## 미리 준비하면 좋은 것\n- 관련 공문과 전년도 자료를 한 폴더에 모아 두세요.\n\n## 한 줄 응원\n오늘은 우선순위 세 가지만 끝내도 충분합니다.';
+      }
+      if (userPrompt.includes('신규 교사') || userPrompt.includes('코칭')) {
+        return '## 오늘 바로 할 일 3가지\n- 담당 부서와 최종 마감일 확인\n- 전년도 결과물과 최신 서식 확보\n- 결재선 및 협조자 확인\n\n## 단계별 진행 요령\n1. 공문과 업무 설명에서 필수 제출 항목을 표시합니다.\n2. ' + title + ' 초안을 작성해 담당자에게 먼저 확인받습니다.\n3. 파일명과 제출 경로를 확인한 뒤 기한 하루 전에 마무리합니다.\n\n## 자주 하는 실수 3가지\n- 전년도 날짜를 그대로 둠\n- 붙임 파일명과 본문 표기가 다름\n- 결재 완료 전에 외부로 발송함';
+      }
+      return '## 제목\n' + title + ' 추진 계획(안)\n\n## 관련\n1. 해당 업무 안내 공문 및 학교교육계획\n\n## 본문\n1. ' + title + '을(를) 원활히 추진하고자 합니다.\n2. 세부 일정과 담당 업무는 관련 부서 협의를 거쳐 확정합니다.\n3. 결과 자료는 업무 종료 후 내부 공유 폴더에 보관합니다.\n\n## 붙임\n1. 세부 추진 계획 1부.  끝.';
+    }
+
+    async function askAi(userPrompt, systemPrompt) {
+      const canCallBackend = location.protocol !== 'file:' || Boolean(API_BASE);
+      if (canCallBackend) {
+        try {
+          const res = await fetch(API_BASE + '/api/ai/generate', {
+            method: 'POST',
+            credentials: 'same-origin',
+            headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+            body: JSON.stringify({ task: 'calendar-assistant', prompt: userPrompt, systemPrompt, responseFormat: 'text' }),
+            signal: AbortSignal.timeout(25000)
+          });
+          if (!res.ok) throw new Error('HTTP ' + res.status);
+          const json = await res.json();
+          const text = typeof json.text === 'string' ? json.text.trim() : '';
+          if (!text) throw new Error('빈 응답');
+          return { text, demo: false };
+        } catch (error) {
+          if (!DEMO_FALLBACK_ENABLED) throw error;
+          console.warn('[AI] 서버 호출 실패 — 협의용 데모 결과로 전환합니다.', error);
+        }
+      }
+      if (!DEMO_FALLBACK_ENABLED) throw new Error('AI 서버가 연결되지 않았습니다.');
+      return { text: demoAiText(userPrompt), demo: true };
     }
 
     /* 마크다운 경량 렌더러 — AI 응답 전용. esc() 선적용으로 XSS 차단 */
@@ -3720,8 +3782,8 @@
         '<div class="rounded-md bg-surface-soft border border-hairline p-sm mb-base flex items-start gap-xs">'
         + '<span class="material-symbols-outlined text-[18px] text-accent-gold mt-[1px] ms-fill">auto_awesome</span>'
         + '<p class="text-caption text-body leading-relaxed">'
-        + '<b class="text-ink">Google Gemini</b>가 이 업무의 정보(절차·근거·서식)를 바탕으로 실시간 생성합니다. '
-        + '생성 결과는 <b class="text-ink">초안</b>이므로 반드시 검토 후 사용하세요. 같은 요청은 저장해 두어 다시 부르지 않습니다.'
+        + '<b class="text-ink">AI 도우미</b>가 이 업무의 정보(절차·근거·서식)를 바탕으로 초안을 만듭니다. '
+        + '서버 미연결 시에는 <b class="text-amber-700">협의용 데모 결과</b>로 전체 흐름을 보여주며, 결과는 반드시 검토 후 사용하세요.'
         + '</p></div>'
         + Object.entries(AI_ACTIONS).map(([k, a]) =>
           '<div class="rounded-md border border-hairline mb-sm overflow-hidden">'
@@ -3759,14 +3821,13 @@
       out.innerHTML =
         '<div class="flex items-center gap-sm py-sm" role="status">'
         + '<span class="ai-spin material-symbols-outlined text-[20px] text-primary">progress_activity</span>'
-        + '<p class="text-body-sm text-body">Gemini가 작성 중입니다… <span class="text-caption text-muted">(보통 5~15초)</span></p></div>';
+        + '<p class="text-body-sm text-body">AI가 초안을 구성 중입니다…</p></div>';
       try {
-        const text = await askGemini(a.prompt(openTask), a.sys);
-        aiCache[aiKey(action)] = { text, at: new Date().toISOString().slice(0, 16).replace('T', ' ') };
+        const result = await askAi(a.prompt(openTask), a.sys);
+        aiCache[aiKey(action)] = { text: result.text, demo: result.demo, at: new Date().toISOString().slice(0, 16).replace('T', ' ') };
         saveAiCache();
         showAiResult(action, aiCache[aiKey(action)], false);
       } catch (err) {
-        if (err.code === 'AI_BACKEND_PENDING') { showAiBackendPending(out, '처리 매뉴얼과 서식을 이용해 주세요.'); return; }
         out.innerHTML =
           '<div class="flex items-start gap-xs py-xs">'
           + '<span class="material-symbols-outlined text-[18px] text-warning mt-[1px]">wifi_off</span>'
@@ -3785,7 +3846,7 @@
         '<div class="flex items-center justify-between gap-xs mb-xs">'
         + '<p class="text-caption text-muted flex items-center gap-xxs">'
         + '<span class="material-symbols-outlined text-[14px]">' + (fromCache ? 'history' : 'check_circle') + '</span>'
-        + (fromCache ? '저장된 결과 · ' : '생성 완료 · ') + esc(cached.at) + '</p>'
+        + (cached.demo ? '협의용 데모 초안 · ' : (fromCache ? '저장된 결과 · ' : '생성 완료 · ')) + esc(cached.at) + '</p>'
         + '<div class="flex gap-xxs">'
         + '<button class="ai-copy h-8 px-sm rounded-pill bg-surface-strong text-caption-strong text-ink hover:bg-hairline transition-colors flex items-center gap-xxs" data-copy="' + action + '">'
         + '<span class="material-symbols-outlined text-[14px]">content_copy</span>복사</button>'
@@ -3818,15 +3879,14 @@
       try {
         const list = ahead.slice(0, 20).map(t =>
           '- ' + t.due + ' [' + t.dept + '] ' + t.title + ' (소요 ' + t.est + (t.p === 3 ? ', 기한엄수' : '') + ')').join('\n');
-        const text = await askGemini(
+        const result = await askAi(
           '오늘은 ' + fmt(today) + '입니다. ' + SCHOOL.name + ' 교사의 앞으로 2주 업무 목록입니다.\n\n' + list
           + '\n\n형식:\n## 이번 주 핵심 3가지\n(가장 급하고 중요한 순서로, 이유 포함)\n## 미리 준비하면 좋은 것\n(다음 주 업무 대비 1~2가지)\n## 한 줄 응원\n(따뜻하게 1줄)\n\n전체 200자 내외로 간결하게.',
           '당신은 초등학교 교사의 업무 비서입니다. 바쁜 교사가 10초 만에 읽도록 핵심만 간결한 한국어로 브리핑합니다.');
-        aiCache[cacheKey] = { text, at: new Date().toISOString().slice(0, 16).replace('T', ' ') };
+        aiCache[cacheKey] = { text: result.text, demo: result.demo, at: new Date().toISOString().slice(0, 16).replace('T', ' ') };
         saveAiCache();
         showBrief(aiCache[cacheKey], false);
       } catch (err) {
-        if (err.code === 'AI_BACKEND_PENDING') { showAiBackendPending(out, '업무 목록의 마감순 정렬은 그대로 이용할 수 있습니다.'); return; }
         out.innerHTML = '<p class="text-caption text-muted py-xs">'
           + '<span class="material-symbols-outlined text-[14px] align-middle text-warning">wifi_off</span> '
           + 'AI 연결이 어렵습니다. 위 목록의 마감순 정렬은 그대로 유효합니다. '
@@ -3841,7 +3901,7 @@
         '<div class="rounded-md bg-primary/5 border border-primary/10 p-sm">'
         + '<div class="flex items-center justify-between mb-xxs">'
         + '<p class="text-caption-strong text-primary flex items-center gap-xxs">'
-        + '<span class="material-symbols-outlined text-[14px] ms-fill">auto_awesome</span>Gemini 주간 브리핑</p>'
+        + '<span class="material-symbols-outlined text-[14px] ms-fill">auto_awesome</span>' + (cached.demo ? '협의용 데모 브리핑' : 'AI 주간 브리핑') + '</p>'
         + '<button class="text-caption text-muted hover:text-primary" onclick="document.getElementById(\'aiBriefOut\').classList.add(\'hidden\')" aria-label="브리핑 접기">'
         + '<span class="material-symbols-outlined text-[16px]">expand_less</span></button>'
         + '</div>'
@@ -3958,30 +4018,67 @@
 
     /* ═══════════════════════════════════════════════════════════════════════
        ④-2 AI 새 일정 추가 — 업무 메신저 쪽지(텍스트·캡처)를 붙여넣으면
-            Gemini가 날짜·시간·제목·분류만 구조화(JSON)해 일정으로 변환
+            AI 서버가 날짜·시간·제목·분류만 구조화(JSON)해 일정으로 변환
        설계 원칙
        - 파일 첨부가 아니라 '붙여넣기(Ctrl+V)' 한 동작으로 끝낸다
-       - AI 응답은 responseMimeType=application/json 강제 → 파싱 실패 최소화
+       - AI 응답은 responseFormat=json 계약 → 파싱 실패 최소화
        - 바로 등록하지 않고 미리보기 체크리스트를 거친다(잘못 추출 방지)
        - 인사말·서명·연락처는 버리고 실무 정보(제목/일시/장소/준비물)만 담는다
        ═══════════════════════════════════════════════════════════════════════ */
-    async function askGeminiJSON(parts, systemPrompt) {
-      requireAiBackend();
-      const res = await fetch('https://generativelanguage.googleapis.com/v1beta/models/' + GEMINI_MODEL + ':generateContent', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'x-goog-api-key': GEMINI_KEY },
-        body: JSON.stringify({
-          systemInstruction: { parts: [{ text: systemPrompt }] },
-          contents: [{ role: 'user', parts }],
-          generationConfig: { temperature: 0.1, maxOutputTokens: 1300, responseMimeType: 'application/json' }
-        }),
-        signal: AbortSignal.timeout(30000)
-      });
-      if (!res.ok) throw new Error('HTTP ' + res.status);
-      const j = await res.json();
-      const txt = ((j.candidates || [])[0]?.content?.parts || []).map(p => p.text || '').join('');
-      if (!txt.trim()) throw new Error('빈 응답');
-      return JSON.parse(txt);
+    function demoAiEvents(parts) {
+      const merged = (parts || []).map(p => p && p.text ? p.text : '').join('\n');
+      const message = merged.includes('\n쪽지:\n') ? merged.split('\n쪽지:\n').pop().trim() : merged.trim();
+      const lines = message.split(/\r?\n/).map(v => v.trim()).filter(Boolean);
+      const dateFull = message.match(/(20\d{2})[.\/-]\s*(\d{1,2})[.\/-]\s*(\d{1,2})/);
+      const dateShort = message.match(/(?:^|\s)(\d{1,2})[.\/-]\s*(\d{1,2})(?:\D|$)/);
+      let date = fmt(addDays(today, 2));
+      if (dateFull) date = dateFull[1] + '-' + String(dateFull[2]).padStart(2, '0') + '-' + String(dateFull[3]).padStart(2, '0');
+      else if (dateShort) date = today.getFullYear() + '-' + String(dateShort[1]).padStart(2, '0') + '-' + String(dateShort[2]).padStart(2, '0');
+      const timeMatch = message.match(/([01]?\d|2[0-3]):([0-5]\d)/);
+      const placeMatch = message.match(/장소\s*[:：]\s*([^\n]+)/);
+      const titleLine = lines.find(line => /(협의|연수|회의|제출|행사|상담|점검)/.test(line));
+      const title = (titleLine || '교직원 업무 협의회').replace(/^(제목|내용)\s*[:：]\s*/, '').slice(0, 40);
+      const startHour = timeMatch ? Number(timeMatch[1]) : 9;
+      return {
+        __demo: true,
+        events: [{
+          title,
+          date,
+          dateEnd: '',
+          allDay: !timeMatch,
+          timeS: timeMatch ? String(startHour).padStart(2, '0') + ':' + timeMatch[2] : '09:00',
+          timeE: timeMatch ? String(Math.min(startHour + 1, 23)).padStart(2, '0') + ':' + timeMatch[2] : '10:00',
+          cat: '개인',
+          place: placeMatch ? placeMatch[1].trim().slice(0, 40) : '시청각실',
+          memo: '협의용 데모 추출 · 실제 내용 분석은 AI 서버 연결 후 제공'
+        }]
+      };
+    }
+
+    async function askAiJSON(parts, systemPrompt) {
+      const canCallBackend = location.protocol !== 'file:' || Boolean(API_BASE);
+      if (canCallBackend) {
+        try {
+          const res = await fetch(API_BASE + '/api/ai/generate', {
+            method: 'POST',
+            credentials: 'same-origin',
+            headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+            body: JSON.stringify({ task: 'calendar-extract', parts, systemPrompt, responseFormat: 'json' }),
+            signal: AbortSignal.timeout(30000)
+          });
+          if (!res.ok) throw new Error('HTTP ' + res.status);
+          const json = await res.json();
+          const data = json.data || json;
+          if (!data || typeof data !== 'object') throw new Error('빈 응답');
+          data.__demo = false;
+          return data;
+        } catch (error) {
+          if (!DEMO_FALLBACK_ENABLED) throw error;
+          console.warn('[AI 일정 추출] 서버 호출 실패 — 협의용 데모 결과로 전환합니다.', error);
+        }
+      }
+      if (!DEMO_FALLBACK_ENABLED) throw new Error('AI 서버가 연결되지 않았습니다.');
+      return demoAiEvents(parts);
     }
 
     const AI_EV_SYS =
@@ -4025,6 +4122,7 @@
     }
 
     let aiParsed = [];   // 미리보기 중인 추출 결과
+    let aiPasteIsDemo = false;
 
     async function runAiPaste(parts, kindLabel) {
       const st = document.getElementById('aiPasteStatus');
@@ -4035,7 +4133,8 @@
         + '<span class="ai-spin material-symbols-outlined text-[18px] text-primary">progress_activity</span>'
         + '<span class="text-caption text-body">' + kindLabel + '에서 일정을 찾고 있습니다… (5~10초)</span></div>';
       try {
-        const raw = await askGeminiJSON(parts, AI_EV_SYS);
+        const raw = await askAiJSON(parts, AI_EV_SYS);
+        aiPasteIsDemo = raw.__demo === true;
         aiParsed = normalizeAiEvents(raw);
         st.classList.add('hidden');
         if (!aiParsed.length) {
@@ -4047,7 +4146,6 @@
         }
         renderAiPreview();
       } catch (err) {
-        if (err.code === 'AI_BACKEND_PENDING') { showAiBackendPending(st, '일정은 아래 입력란에서 직접 등록할 수 있습니다.'); return; }
         st.innerHTML = '<p class="text-caption text-body flex items-center gap-xxs">'
           + '<span class="material-symbols-outlined text-[15px] text-warning">wifi_off</span>'
           + 'AI 연결이 어렵습니다(' + esc(err.message) + '). 아래에 직접 입력해 주세요.</p>';
@@ -4061,7 +4159,7 @@
         '<div class="rounded-md border border-primary/30 bg-primary/5 p-sm">'
         + '<p class="text-caption-strong text-primary mb-xs flex items-center gap-xxs">'
         + '<span class="material-symbols-outlined text-[15px] ms-fill">auto_awesome</span>'
-        + aiParsed.length + '개 일정을 찾았습니다 — 확인 후 등록하세요</p>'
+        + aiParsed.length + '개 일정을 찾았습니다' + (aiPasteIsDemo ? ' · 협의용 데모 추출' : '') + ' — 확인 후 등록하세요</p>'
         + '<ul class="space-y-xxs mb-sm">'
         + aiParsed.map((e, i) =>
           '<li><label class="flex items-start gap-xs p-xs rounded-sm bg-canvas border border-hairline cursor-pointer hover:border-primary transition-colors">'
@@ -4099,6 +4197,7 @@
 
     function resetAiPaste() {
       aiParsed = [];
+      aiPasteIsDemo = false;
       document.getElementById('aiPasteStatus').classList.add('hidden');
       document.getElementById('aiPastePreview').classList.add('hidden');
       document.getElementById('aiPastePreview').innerHTML = '';
@@ -4492,7 +4591,7 @@
      ①-0 ★★ AI 새 일정 (핵심) : 새 일정 모달 맨 위 'AI 붙여넣기 존'
         - 업무 메신저 쪽지를 복사(글) 또는 캡처(화면)해서 Ctrl+V 한 번이면 끝
           (파일 첨부 아님 — 클립보드 붙여넣기만 사용. 이미지가 있으면 이미지 우선)
-        - Gemini JSON 모드(responseMimeType=application/json)로 구조화 추출:
+        - /api/ai/generate의 JSON 응답 계약으로 구조화 추출:
           title/date/dateEnd/allDay/timeS/timeE/cat/place/memo
         - 규칙: 상대 날짜(내일·다음 주 월요일·8/12(화)) → 오늘 기준 절대 변환,
           "~까지 제출"은 종일 마감 일정, 시간 명시 시 종료 없으면 +1시간,
@@ -4501,7 +4600,7 @@
         - 실측 검증: 쪽지 1건에서 연수(15:00~16:00)와 마감(종일) 2건 분리 추출,
           "내일 오후 2시"→익일 14:00, 캡처 이미지에서 10:00~11:30 추출,
           일정 없는 인사글은 0건 + 안내 문구. 실패 시 직접 입력으로 자연 폴백
-        [서버 참고] 프록시 이전 시 이 호출도 /api/ai-proxy 경유로. 프롬프트는 aiEvPrompt() 참조
+        [서버 참고] 현재 /api/ai/generate 프록시를 우선 호출하고, 협의 환경에서만 데모 폴백. 프롬프트는 aiEvPrompt() 참조
      ① 새 일정 : 툴바 [새 일정] / 날짜 패널 본문의 [이 날짜에 일정 추가] 대형 버튼 /
         빈 날짜 칸 더블클릭
         - 제목·메모·종일·시작/종료일(기간 일정 지원)·시간·분류·색상 8+·장소
@@ -4522,7 +4621,7 @@
         선택은 ef_school 로 저장되어 다음 방문에도 유지
      ⑦ 첫 화면 = 달력 : 헤더를 한 줄로 줄이고 KPI 4종은 달력 아래로 이동
 
-  ● ★ AI 도우미 (Google Gemini 실연동 — gemini-2.5-flash)
+  ● ★ AI 도우미 (동일 출처 서버 프록시 우선 + 협의용 데모 폴백)
      ① 업무 모달 4번째 탭 [AI 도우미]
         - [기안문 초안 생성] : 업무의 절차·근거·서식·학교 정보를 프롬프트로 전달,
           내부결재 기안문(제목/관련/본문/붙임, 개조식 격식체) 초안 생성
@@ -4534,10 +4633,10 @@
         - 앞으로 2주 업무 목록을 전달해 '이번 주 핵심 3가지 / 미리 준비할 것 /
           한 줄 응원'을 200자 내외로 브리핑. 하루 1회 캐시
      ③ 실패 시(오프라인·한도 초과)
-        - 화면이 깨지지 않고 안내 + [다시 시도] 버튼 표시.
-          처리 매뉴얼 탭 등 나머지 기능은 그대로 동작 (오늘의한끼 USB 제출본과 동일 원칙)
-     ④ [서버 참고] 데모 편의상 API 키가 클라이언트에 있음.
-        운영 시 반드시 서버 프록시(/api/ai-proxy)로 이전할 것 (neis-proxy.js 패턴)
+        - 협의 환경에서는 `협의용 데모` 표시가 붙은 고정 결과로 전체 흐름을 유지.
+        - 운영에서는 demoFallback=false로 차단하고 오류·재시도 UI를 표시.
+     ④ 브라우저에는 외부 공급자 키와 모델명이 없다.
+        /api/ai/generate가 인증·권한·RAG·사용량 제한·모델 선택을 담당한다.
 
 
 ■ 4. 색상 규칙 — ★ 사용자가 '색상 기준'을 직접 고릅니다

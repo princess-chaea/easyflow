@@ -11,15 +11,37 @@
  */
 
 const EF_SCHOOL = (() => {
-  const NEIS_BASE = 'https://open.neis.go.kr/hub/schoolInfo';
+  // 외부 NEIS 키는 브라우저에 두지 않는다. 운영 서버가 같은 출처의
+  // /api/neis/schools를 제공하거나 EF_CONFIG.apiBase로 API 주소를 주입한다.
+  const CONFIG = window.EF_CONFIG || {};
+  const API_BASE = CONFIG.apiBase || '';
+  // 프론트 협의회에서는 서버가 없어도 검색→선택 흐름을 끝까지 확인한다.
+  // 운영 배포에서는 window.EF_CONFIG.demoFallback = false 로 반드시 끈다.
+  const DEMO_FALLBACK_ENABLED = CONFIG.demoFallback === true
+    || (CONFIG.demoFallback == null && location.protocol === 'file:');
   const GB_CODE   = 'R10';  // 경상북도교육청
   const DEBOUNCE  = 280;    // ms
 
-  // 나이스 교육정보 개방 포털 API키 (하루 1000건)
-  const API_KEY = '04f275416e194b508bbd3ad51e42d887';
-
   let _timer = null;
   let _lastQuery = '';
+
+  const DEMO_SCHOOLS = [
+    { SCHUL_NM: '아천초등학교', SCHUL_KND_SC_NM: '초등학교', LCTN_SC_NM: '경상북도', ORG_RDNMA: '김천시 협의용 예시 주소', SD_SCHUL_CODE: 'DEMO-S001', ATPT_OFCDC_SC_CODE: GB_CODE, __demo: true },
+    { SCHUL_NM: '안동중학교', SCHUL_KND_SC_NM: '중학교', LCTN_SC_NM: '경상북도', ORG_RDNMA: '안동시 협의용 예시 주소', SD_SCHUL_CODE: 'DEMO-S002', ATPT_OFCDC_SC_CODE: GB_CODE, __demo: true },
+    { SCHUL_NM: '구미고등학교', SCHUL_KND_SC_NM: '고등학교', LCTN_SC_NM: '경상북도', ORG_RDNMA: '구미시 협의용 예시 주소', SD_SCHUL_CODE: 'DEMO-S003', ATPT_OFCDC_SC_CODE: GB_CODE, __demo: true },
+    { SCHUL_NM: '포항여자중학교', SCHUL_KND_SC_NM: '중학교', LCTN_SC_NM: '경상북도', ORG_RDNMA: '포항시 협의용 예시 주소', SD_SCHUL_CODE: 'DEMO-S004', ATPT_OFCDC_SC_CODE: GB_CODE, __demo: true }
+  ];
+
+  const escapeHtml = value => String(value == null ? '' : value).replace(/[&<>"']/g, c => ({
+    '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+  }[c]));
+
+  function demoSchools(keyword) {
+    const kw = keyword.trim();
+    return DEMO_SCHOOLS.filter(s =>
+      s.SCHUL_NM.includes(kw) || s.ORG_RDNMA.includes(kw) || s.SCHUL_KND_SC_NM.includes(kw)
+    ).slice(0, 8);
+  }
 
   /**
    * 경북교육청 산하 기관 및 부서 데이터
@@ -129,17 +151,24 @@ const EF_SCHOOL = (() => {
   /** NEIS API 호출 → 학교 배열 반환 */
   async function fetchSchools(keyword) {
     if (!keyword || keyword.trim().length < 1) return [];
-    const url = `${NEIS_BASE}?KEY=${API_KEY}&Type=json&pIndex=1&pSize=12&ATPT_OFCDC_SC_CODE=${GB_CODE}&SCHUL_NM=${encodeURIComponent(keyword.trim())}`;
+    const url = `${API_BASE}/api/neis/schools?query=${encodeURIComponent(keyword.trim())}&officeCode=${GB_CODE}&limit=12`;
     try {
-      const res = await fetch(url);
-      if (!res.ok) return [];
+      const res = await fetch(url, { credentials: 'same-origin', headers: { Accept: 'application/json' } });
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const json = await res.json();
-      const rows = json?.schoolInfo?.[1]?.row;
+      const rows = json.schools || json?.schoolInfo?.[1]?.row;
+      fetchSchools.lastSource = 'live';
       return Array.isArray(rows) ? rows : [];
     } catch {
-      return [];
+      if (!DEMO_FALLBACK_ENABLED) {
+        fetchSchools.lastSource = 'error';
+        return [];
+      }
+      fetchSchools.lastSource = 'demo';
+      return demoSchools(keyword);
     }
   }
+  fetchSchools.lastSource = 'idle';
 
   /** 드롭다운 엘리먼트 생성/갱신 */
   function buildDropdown(anchor, schools, onPick) {
@@ -179,9 +208,10 @@ const EF_SCHOOL = (() => {
           ${s.SCHUL_KND_SC_NM === '초등학교' ? '초' : s.SCHUL_KND_SC_NM === '중학교' ? '중' : s.SCHUL_KND_SC_NM === '고등학교' ? '고' : s.SCHUL_KND_SC_NM === '기관·부서' ? '청' : '기'}
         </span>
         <span class="flex-1 min-w-0">
-          <span class="block text-[14px] font-bold text-ink truncate">${s.SCHUL_NM}</span>
-          <span class="block text-[12px] text-muted truncate">${s.LCTN_SC_NM}${s.ORG_RDNMA ? ' · ' + s.ORG_RDNMA : ''}</span>
+          <span class="block text-[14px] font-bold text-ink truncate">${escapeHtml(s.SCHUL_NM)}</span>
+          <span class="block text-[12px] text-muted truncate">${escapeHtml(s.LCTN_SC_NM)}${s.ORG_RDNMA ? ' · ' + escapeHtml(s.ORG_RDNMA) : ''}</span>
         </span>
+        ${s.__demo ? '<span class="text-[10px] font-bold text-amber-700 bg-amber-50 border border-amber-200 rounded-full px-2 py-0.5 shrink-0">데모</span>' : ''}
         <span class="text-[11px] text-muted shrink-0 hidden group-hover:block">선택</span>
       </button>`).join('');
 
@@ -255,7 +285,10 @@ const EF_SCHOOL = (() => {
       _timer = setTimeout(async () => {
         const [neisSchools, orgs] = await Promise.all([fetchSchools(q), Promise.resolve(searchOrgData(q))]);
         const schools = [...orgs, ...neisSchools];
-        setStatus(schools.length ? `${schools.length}개 학교·기관 검색됨` : '검색 결과가 없습니다', false);
+        const demoNote = fetchSchools.lastSource === 'demo'
+          ? (neisSchools.length ? ' · 학교는 데모 데이터' : ' · 데모 학교 목록 기준')
+          : '';
+        setStatus(schools.length ? `${schools.length}개 학교·기관 검색됨${demoNote}` : `검색 결과가 없습니다${demoNote}`, false);
 
         buildDropdown(input, schools, (school) => {
           input.value = school.SCHUL_NM;
@@ -275,8 +308,9 @@ const EF_SCHOOL = (() => {
           input.dataset.schoolCode = school.SD_SCHUL_CODE;
           input.dataset.schoolType = school.SCHUL_KND_SC_NM;
           input.dataset.schoolAddr = school.ORG_RDNMA || '';
+          input.dataset.demo = school.__demo ? 'true' : 'false';
 
-          setStatus(`✓ ${school.SCHUL_NM} 선택됨`);
+          setStatus(`✓ ${school.SCHUL_NM} 선택됨${school.__demo ? ' · 데모 데이터' : ''}`);
           if (typeof options.onSelect === 'function') options.onSelect(school);
         });
       }, DEBOUNCE);
