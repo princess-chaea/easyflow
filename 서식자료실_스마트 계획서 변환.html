@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 
 <html lang="ko">
 <head>
@@ -139,6 +139,39 @@
         .page-header p { font-size: 15px; color: rgba(17,18,20,0.7); }
 
         .card { background: #ffffff; border: 1px solid #e5e8eb; border-radius: 16px; padding: 32px; margin-bottom: 24px; }
+
+        .agent-badge { display:inline-flex; align-items:center; gap:5px; padding:5px 10px; border-radius:999px; font-size:12px; font-weight:700; background:#fff7e6; color:#8a5200; border:1px solid #f2ce8d; }
+        .agent-steps { display:grid; grid-template-columns:repeat(5, 1fr); gap:8px; margin:20px 0; }
+        .agent-step { padding:10px 8px; border-radius:10px; background:#f2f4f6; color:#868b94; text-align:center; font-size:12px; font-weight:700; }
+        .agent-step.active { background:#eaf1ff; color:#003893; outline:2px solid rgba(0,56,147,.18); }
+        .agent-panel { border:1px solid #e5e8eb; border-radius:12px; padding:18px; background:#f8f9fa; margin-top:14px; }
+        .agent-panel textarea { width:100%; min-height:90px; padding:12px; border:1px solid #c9ccd3; border-radius:9px; resize:vertical; font:inherit; box-sizing:border-box; }
+        .agent-btn { border:0; border-radius:999px; padding:10px 18px; font-size:13px; font-weight:700; cursor:pointer; background:#003893; color:#fff; }
+        .agent-btn.secondary { background:#eef1f5; color:#111214; }
+        .agent-btn.danger { background:#fff0f0; color:#b42318; }
+        .agent-btn:disabled { opacity:.45; cursor:not-allowed; }
+        .agent-plan-item { display:flex; gap:10px; align-items:flex-start; padding:12px; border:1px solid #e5e8eb; border-radius:10px; background:#fff; margin-top:8px; }
+        .agent-plan-item input { margin-top:3px; accent-color:#003893; }
+        .agent-plan-copy { flex:1; min-width:0; }
+        .agent-plan-meta { display:flex; gap:6px; flex-wrap:wrap; margin-top:8px; }
+        .agent-signal { display:inline-flex; align-items:center; gap:4px; padding:4px 7px; border-radius:999px; font-size:11px; font-weight:700; }
+        .agent-signal.safe { color:#05603a; background:#ecfdf3; border:1px solid #a6e3c7; }
+        .agent-signal.warn { color:#8a5200; background:#fff7e6; border:1px solid #f2ce8d; }
+        .agent-signal.info { color:#003893; background:#eaf1ff; border:1px solid #c7d3f0; }
+        .agent-checks { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:8px; margin-top:12px; }
+        .agent-check { padding:10px; border:1px solid #e5e8eb; border-radius:9px; background:#fff; font-size:12px; color:#4e535e; line-height:1.55; }
+        .agent-contract { margin-top:12px; border:1px solid #d6dae1; border-radius:10px; background:#fff; }
+        .agent-contract summary { cursor:pointer; padding:11px 12px; font-size:12px; font-weight:700; color:#003893; }
+        .agent-contract pre { max-height:260px; overflow:auto; margin:0; padding:12px; border-top:1px solid #e5e8eb; background:#111827; color:#e5eefc; font:11px/1.55 Consolas, monospace; white-space:pre-wrap; word-break:break-word; }
+        .agent-diff { display:grid; grid-template-columns:1fr 32px 1fr auto; gap:12px; align-items:start; padding:14px 0; border-top:1px solid #e5e8eb; }
+        .agent-diff del { color:#9b1c1c; background:#fff0f0; text-decoration:none; display:block; padding:10px; border-radius:8px; }
+        .agent-diff ins { color:#05603a; background:#ecfdf3; text-decoration:none; display:block; padding:10px; border-radius:8px; }
+        .agent-decision-summary { font-size:12px; color:#4e535e; align-self:center; }
+        .agent-receipt-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:8px; margin:12px 0; }
+        .agent-receipt-item { padding:10px; border-radius:9px; background:#fff; border:1px solid #a6e3c7; }
+        .agent-receipt-item span { display:block; font-size:11px; color:#4e535e; margin-bottom:3px; }
+        .agent-receipt-item strong { font-size:13px; color:#111214; }
+        @media (max-width: 760px) { .agent-steps { grid-template-columns:1fr; } .agent-diff { grid-template-columns:1fr; } .agent-diff-arrow { display:none; } .agent-checks,.agent-receipt-grid { grid-template-columns:1fr; } }
 
         .upload-zone { border: 2px dashed #c9ccd3; border-radius: 12px; padding: 48px 24px; text-align: center; transition: all 0.2s ease; }
         .upload-zone.dragover { border-color: #003893; background: rgba(0, 56, 147, 0.04); }
@@ -337,10 +370,10 @@
 </div>
 </div>
 <div class="relative h-full flex flex-col justify-start group/col">
-<a class="font-nav-link text-nav-link transition-colors h-[64px] flex items-center gap-xxs whitespace-nowrap group-hover/col:text-primary group-hover/col:font-bold text-on-surface-variant hover:text-primary" href="인생도서관_업무가이드.html">
+<a class="font-nav-link text-nav-link transition-colors h-[64px] flex items-center gap-xxs whitespace-nowrap group-hover/col:text-primary group-hover/col:font-bold text-on-surface-variant hover:text-primary" href="인생도서관_업무체크리스트.html">
                 인생 도서관 <span class="material-symbols-outlined text-[18px]">expand_more</span>
 </a>
-<div class="absolute top-[64px] left-1/2 -translate-x-1/2 pt-md pb-md min-w-[160px] flex flex-col items-center gap-sm opacity-0 invisible group-hover/mega:opacity-100 group-hover/mega:visible transition-all duration-200 z-50 group-hover/col:bg-surface-container h-[290px] rounded-b-lg"><a class="font-nav-link text-[16px] text-on-surface-variant hover:text-primary transition-colors whitespace-nowrap px-sm py-1 w-full text-center" href="인생도서관_업무가이드.html">업무 가이드</a><a class="font-nav-link text-[16px] text-on-surface-variant hover:text-primary transition-colors whitespace-nowrap px-sm py-1 w-full text-center" href="AI업무어시스턴트_챗봇.html">AI 상담 (챗봇)</a><a class="font-nav-link text-[16px] text-on-surface-variant hover:text-primary transition-colors whitespace-nowrap px-sm py-1 w-full text-center" href="인생도서관_마이페이지.html">멘토 찾기·신청</a><a class="font-nav-link text-[16px] text-on-surface-variant hover:text-primary transition-colors whitespace-nowrap px-sm py-1 w-full text-center" href="인생도서관_멘토상담함.html">멘토 상담함</a><a class="font-nav-link text-[16px] text-on-surface-variant hover:text-primary transition-colors whitespace-nowrap px-sm py-1 w-full text-center" href="인생도서관_장학사 및 업무담당자 통합 대시보드.html">인생 도서관 기록</a></div>
+<div class="absolute top-[64px] left-1/2 -translate-x-1/2 pt-md pb-md min-w-[160px] flex flex-col items-center gap-sm opacity-0 invisible group-hover/mega:opacity-100 group-hover/mega:visible transition-all duration-200 z-50 group-hover/col:bg-surface-container h-[290px] rounded-b-lg"><a class="font-nav-link text-[16px] text-on-surface-variant hover:text-primary transition-colors whitespace-nowrap px-sm py-1 w-full text-center" href="인생도서관_업무체크리스트.html">업무 가이드</a><a class="font-nav-link text-[16px] text-on-surface-variant hover:text-primary transition-colors whitespace-nowrap px-sm py-1 w-full text-center" href="AI업무어시스턴트_챗봇.html">AI 상담 (챗봇)</a><a class="font-nav-link text-[16px] text-on-surface-variant hover:text-primary transition-colors whitespace-nowrap px-sm py-1 w-full text-center" href="인생도서관_마이페이지.html">멘토 찾기·신청</a><a class="font-nav-link text-[16px] text-on-surface-variant hover:text-primary transition-colors whitespace-nowrap px-sm py-1 w-full text-center" href="인생도서관_멘토상담함.html">멘토 상담함</a><a class="font-nav-link text-[16px] text-on-surface-variant hover:text-primary transition-colors whitespace-nowrap px-sm py-1 w-full text-center" href="인생도서관_장학사 및 업무담당자 통합 대시보드.html">인생 도서관 기록</a></div>
 </div>
 <div class="relative h-full flex flex-col justify-start group/col">
 <a class="font-nav-link text-nav-link transition-colors h-[64px] flex items-center gap-xxs whitespace-nowrap group-hover/col:text-primary group-hover/col:font-bold text-primary font-bold relative" href="서식자료실_통합검색.html">
@@ -425,43 +458,168 @@
 <!-- 표준 페이지 헤더 영역 -->
 <div class="page-header">
 <h1>스마트 계획서 변환</h1>
-<p>교사가 전년도 결재 계획서(HWP)를 업로드하면 당해 연도 날짜와 정보로 자동 변환해 줍니다.</p>
+<p>권장 흐름은 열려 있는 문서를 감지해 계획을 먼저 검토하고, 승인한 변경만 적용하는 방식입니다. 아래 협의용 데모로 전체 동선을 확인할 수 있습니다.</p>
+</div>
+<div class="card" id="document-agent-demo">
+<div style="display:flex;justify-content:space-between;gap:16px;align-items:flex-start;flex-wrap:wrap">
+<div>
+<h2 style="font-size:20px;font-weight:800;color:#111214;margin-bottom:6px">열린 한/글 문서에서 바로 수정 <span style="color:#003893">(권장)</span></h2>
+<p style="font-size:14px;color:#4e535e;line-height:1.65">inlineAI식으로 현재 문서를 감지하고, 수정 계획과 변경 전후를 확인합니다. 실제 연동 시 수락한 내용만 반영하도록 계약을 검토하는 데모입니다.</p>
+</div>
+<span class="agent-badge">🧪 협의용 데모 · 로컬 에이전트 미연결</span>
+</div>
+
+<div class="agent-steps" aria-label="열린 문서 수정 단계">
+<div class="agent-step active" data-agent-step="1">1. 문서 감지</div>
+<div class="agent-step" data-agent-step="2">2. 지시</div>
+<div class="agent-step" data-agent-step="3">3. 계획 검토</div>
+<div class="agent-step" data-agent-step="4">4. 변경 비교</div>
+<div class="agent-step" data-agent-step="5">5. 저장</div>
+</div>
+
+<div class="agent-panel">
+<div style="display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap">
+<div>
+<strong style="font-size:14px;color:#111214">현재 한/글에서 열려 있는 문서</strong>
+<p id="agent-detect-status" style="font-size:13px;color:#868b94;margin-top:4px">로컬 문서 에이전트 연결 전이므로 데모 문서를 감지합니다.</p>
+</div>
+<button class="agent-btn" id="btn-agent-detect" type="button">데모 문서 감지</button>
+</div>
+<div id="agent-detected" style="display:none;margin-top:14px;padding:14px;border-radius:10px;background:#fff;border:1px solid #c7d3f0">
+<div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap">
+<span style="font-size:28px">📄</span>
+<div style="flex:1;min-width:220px">
+<strong style="display:block;color:#111214">2025학년도_AI디지털활용_연수계획.hwpx</strong>
+<span style="font-size:12px;color:#4e535e">한/글 · HWPX · 선택 영역 없음 · 수정 전 자동 백업 예정</span>
+</div>
+<span style="font-size:11px;font-weight:700;color:#05603a;background:#ecfdf3;padding:5px 9px;border-radius:999px">데모 감지 완료</span>
+</div>
+</div>
+</div>
+
+<div class="agent-panel" id="agent-instruction" style="display:none">
+<div style="display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:8px">
+<strong style="font-size:14px;color:#111214">계획 모드 · 무엇을 바꿀까요?</strong>
+<span style="font-size:11px;font-weight:700;color:#003893;background:#eaf1ff;padding:5px 9px;border-radius:999px">아직 문서를 수정하지 않음</span>
+</div>
+<textarea id="agent-prompt">2025학년도를 2026학년도로 바꾸고, 연수 일시는 2026년 7월 5일로 수정해 줘. 주요 내용에는 AI 디지털 교과서 실습을 추가하고 나머지 서식은 유지해 줘.</textarea>
+<div style="display:flex;justify-content:flex-end;margin-top:10px">
+<button class="agent-btn" id="btn-agent-plan" type="button">수정 계획 만들기</button>
+</div>
+</div>
+
+<div class="agent-panel" id="agent-plan" style="display:none">
+<div style="display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap">
+<div>
+<strong style="font-size:14px;color:#111214">계획 모드 · 적용 전 확인</strong>
+<p style="font-size:12px;color:#868b94;margin-top:4px">체크한 변경만 수정 모드로 넘깁니다. 이 단계에서는 원문이 바뀌지 않습니다.</p>
+</div>
+<span class="agent-badge" id="agent-plan-count">선택 3/3건</span>
+</div>
+<label class="agent-plan-item"><input checked type="checkbox" data-agent-change="year"><span class="agent-plan-copy"><strong>연도 표현 4곳</strong><br><small>제목·본문·붙임의 2025학년도 → 2026학년도</small><span class="agent-plan-meta"><span class="agent-signal info">근거: 사용자 지시</span><span class="agent-signal safe">안정 앵커 4곳</span><span class="agent-signal safe">위험 낮음</span></span></span></label>
+<label class="agent-plan-item"><input checked type="checkbox" data-agent-change="date"><span class="agent-plan-copy"><strong>행사 일시 1곳</strong><br><small>2025. 7. 5.(토) → 2026. 7. 5.(일)</small><span class="agent-plan-meta"><span class="agent-signal info">근거: 사용자 지시</span><span class="agent-signal safe">요일 검산 완료</span><span class="agent-signal safe">위험 낮음</span></span></span></label>
+<label class="agent-plan-item"><input checked type="checkbox" data-agent-change="content"><span class="agent-plan-copy"><strong>주요 내용 1곳</strong><br><small>기존 문장에 AI 디지털 교과서(AIDT) 실습 및 적용 반영</small><span class="agent-plan-meta"><span class="agent-signal info">근거: 사용자 지시</span><span class="agent-signal safe">표 구조 보존</span><span class="agent-signal warn">줄 넘침 확인 필요</span></span></span></label>
+<div class="agent-checks" aria-label="실제 적용 전 실행 게이트">
+<div class="agent-check"><strong>✓ 리비전 충돌 차단</strong><br>계획과 적용 직전 문서 지문이 같아야 합니다.</div>
+<div class="agent-check"><strong>✓ 선택 영역 밖 보존</strong><br>허용된 앵커 이외의 문단·표·스타일은 변경하지 않습니다.</div>
+<div class="agent-check"><strong>△ 레이아웃 위험 검사</strong><br>본문 길이·표 셀 예산·예상 페이지 변화를 실제 엔진이 판정합니다.</div>
+<div class="agent-check"><strong>✓ 개인정보 최소 전송</strong><br>선택 영역과 사용자가 고른 근거만 서버에 전달합니다.</div>
+</div>
+<p id="agent-plan-summary" style="font-size:12px;color:#4e535e;margin-top:10px" aria-live="polite">선택 3건 · 낮은 위험 2건 · 확인 필요 1건</p>
+<details class="agent-contract">
+<summary>백엔드 연동 계약용 DocumentPatch JSON 보기</summary>
+<pre id="agent-contract-preview"></pre>
+</details>
+<div style="display:flex;justify-content:flex-end;gap:8px;margin-top:12px;flex-wrap:wrap">
+<button class="agent-btn secondary" id="btn-agent-download-plan" type="button">계획 JSON 내려받기</button>
+<button class="agent-btn secondary" id="btn-agent-replan" type="button">지시 다시 쓰기</button>
+<button class="agent-btn" id="btn-agent-apply" type="button">선택한 계획 적용하기</button>
+</div>
+</div>
+
+<div class="agent-panel" id="agent-diff" style="display:none">
+<div style="display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:8px">
+<div>
+<strong style="font-size:14px;color:#111214">수정 모드 · 변경 전후 비교</strong>
+<p style="font-size:12px;color:#868b94;margin-top:4px">각 변경을 수락하거나 거절한 뒤 결정을 확정하고 영수증을 만듭니다. 데모에서는 실제 문서를 저장하지 않습니다.</p>
+</div>
+<span style="font-size:11px;font-weight:700;color:#8a5200;background:#fff7e6;padding:5px 9px;border-radius:999px">원본은 아직 보존 중</span>
+</div>
+<div class="agent-diff" data-diff-row data-change-id="year" data-decision="pending">
+<del><b>제목</b><br>2025학년도 AI 디지털 활용 선도학교 연수 계획서</del><span class="agent-diff-arrow">→</span><ins><b>제목</b><br>2026학년도 AI 디지털 활용 선도학교 연수 계획서</ins>
+<div style="display:flex;gap:6px;flex-wrap:wrap"><button class="agent-btn secondary" data-decision-btn="accept" type="button">수락</button><button class="agent-btn danger" data-decision-btn="reject" type="button">거절</button></div>
+</div>
+<div class="agent-diff" data-diff-row data-change-id="date" data-decision="pending">
+<del><b>일시</b><br>2025. 7. 5.(토)</del><span class="agent-diff-arrow">→</span><ins><b>일시</b><br>2026. 7. 5.(일)</ins>
+<div style="display:flex;gap:6px;flex-wrap:wrap"><button class="agent-btn secondary" data-decision-btn="accept" type="button">수락</button><button class="agent-btn danger" data-decision-btn="reject" type="button">거절</button></div>
+</div>
+<div class="agent-diff" data-diff-row data-change-id="content" data-decision="pending">
+<del><b>주요 내용</b><br>에듀테크 활용 수업 역량 강화 연수</del><span class="agent-diff-arrow">→</span><ins><b>주요 내용</b><br>AI 디지털 교과서(AIDT) 실습 및 적용</ins>
+<div style="display:flex;gap:6px;flex-wrap:wrap"><button class="agent-btn secondary" data-decision-btn="accept" type="button">수락</button><button class="agent-btn danger" data-decision-btn="reject" type="button">거절</button></div>
+</div>
+<div style="display:flex;justify-content:space-between;gap:8px;margin-top:12px;flex-wrap:wrap">
+<div style="display:flex;gap:8px"><button class="agent-btn secondary" id="btn-agent-accept-all" type="button">전체 수락</button><button class="agent-btn danger" id="btn-agent-reject-all" type="button">전체 거절</button></div>
+<span class="agent-decision-summary" id="agent-decision-summary" aria-live="polite">결정 대기 3건</span>
+<button class="agent-btn" disabled id="btn-agent-save" type="button">승인 결과 확정·영수증 만들기</button>
+</div>
+</div>
+
+<div id="agent-done" style="display:none;margin-top:14px;padding:18px;border-radius:12px;background:#ecfdf3;border:1px solid #a6e3c7">
+<strong style="display:block;color:#05603a;margin-bottom:6px">✓ 승인 결과와 변경 영수증을 만들었습니다.</strong>
+<p style="font-size:13px;color:#275d47;line-height:1.6">이 화면은 프론트 계약 데모이며 실제 문서는 수정하지 않았습니다. 로컬 에이전트 연결 후 동일한 영수증에 백업·재열기·패키지 검증의 실제 결과가 들어갑니다.</p>
+<div class="agent-receipt-grid">
+<div class="agent-receipt-item"><span>승인한 변경</span><strong id="agent-receipt-accepted">0건</strong></div>
+<div class="agent-receipt-item"><span>거절·제외</span><strong id="agent-receipt-rejected">0건</strong></div>
+<div class="agent-receipt-item"><span>문서 I/O</span><strong>미수행(데모)</strong></div>
+<div class="agent-receipt-item"><span>백업</span><strong>백엔드 실행 대기</strong></div>
+<div class="agent-receipt-item"><span>재열기 검증</span><strong>not_performed</strong></div>
+<div class="agent-receipt-item"><span>원본 보존</span><strong>프론트에서 변경 없음</strong></div>
+</div>
+<button class="agent-btn secondary" id="btn-agent-download-receipt" type="button">변경 영수증 JSON 내려받기</button>
+</div>
+
+<p style="font-size:12px;color:#868b94;line-height:1.65;margin-top:16px">실제 가능성: HWP/HWPX는 Windows 로컬 에이전트 + 한컴 Automation PoC가 선행되어야 합니다. ODT는 LibreOffice UNO 어댑터를 1차 기준으로 검증하며, 한/글에서 연 ODT의 재저장은 호환성 시험 전까지 지원으로 표시하지 않습니다.</p>
+</div>
+
+<div style="margin:28px 0 12px">
+<h2 style="font-size:18px;font-weight:800;color:#111214">파일 업로드형 미리보기 <span style="font-size:12px;color:#868b94;font-weight:500">대안 흐름</span></h2>
+<p style="font-size:13px;color:#4e535e;margin-top:5px">로컬 에이전트를 설치할 수 없는 환경에서는 파일명과 사용자가 입력한 값으로 HTML 미리보기를 구성합니다.</p>
 </div>
 <div class="card">
 <div class="upload-zone" id="drop-zone">
 <div class="upload-icon">📄</div>
-<div class="upload-text">전년도 계획서 (HWP) 파일을 이곳에 드래그 하세요</div>
-<div class="upload-subtext">또는 버튼을 클릭하여 내 PC에서 파일을 선택해주세요.</div>
+<div class="upload-text">전년도 계획서 (HWP/HWPX) 파일을 이곳에 드래그하세요</div>
+<div class="upload-subtext">현재 프로토타입은 파일명만 사용하며 문서 본문은 업로드하지 않습니다.</div>
 <input accept=".hwp,.hwpx" class="hidden" id="planFileInput" type="file"/>
 <button class="btn-upload" onclick="document.getElementById('planFileInput').click()">파일 선택하기</button>
 </div>
 <!-- 진척도(프로그레스 바) -->
 <div class="progress-section" id="progress-section">
 <div class="progress-header">
-<span id="progress-msg">전년도 HWP 문서 구조 분석 중...</span>
+<span id="progress-msg">선택한 파일 확인 중...</span>
 <span id="progress-percent">0%</span>
 </div>
 <div class="progress-bar-bg">
 <div class="progress-bar-fill" id="progress-bar"></div>
 </div>
-<div class="progress-status-text" id="progress-submsg">파일을 안전하게 업로드하고 있습니다. 잠시만 기다려주세요.</div>
+<div class="progress-status-text" id="progress-submsg">프로토타입 미리보기를 준비하고 있습니다.</div>
 </div>
 </div>
 <div class="card">
 <h3 style="margin-bottom: 12px; font-size: 15px; color: #1e293b; font-weight: 700;">변환 전후 설정</h3>
 <div class="preview-container">
 <div class="preview-box before">
-<div class="preview-header">원본 문서 인식 정보</div>
+<div class="preview-header">선택 파일 및 예시 정보</div>
 <div class="document-mockup">
 <div>
 <div class="mockup-row">
-<strong>문서 제목:</strong> <span class="placeholder-text" id="doc-title">(HWP 파일 업로드 시 자동 인식)</span>
+<strong>문서 제목:</strong> <span class="placeholder-text" id="doc-title">(파일 선택 후 예시 정보 표시)</span>
 </div>
 <div class="mockup-row">
-<strong>일시:</strong> <span class="placeholder-text" id="doc-date">(HWP 파일 업로드 시 자동 인식)</span>
+<strong>일시:</strong> <span class="placeholder-text" id="doc-date">(파일 선택 후 예시 정보 표시)</span>
 </div>
 <div class="mockup-row">
-<strong>내용:</strong> <span class="placeholder-text" id="doc-content">(HWP 파일 업로드 시 자동 인식)</span>
+<strong>내용:</strong> <span class="placeholder-text" id="doc-content">(파일 선택 후 예시 정보 표시)</span>
 </div>
 </div>
 </div>
@@ -494,7 +652,7 @@
 <input id="new-content" placeholder="변경할 내용 입력" type="text"/>
 </div>
 </div>
-<button class="btn-convert" id="btn-convert">문서 변환하기</button>
+<button class="btn-convert" id="btn-convert">미리보기 적용하기</button>
 </div>
 </div>
 </div>
@@ -524,9 +682,9 @@
 </div>
 </div>
 <div class="result-download-card" id="result-card">
-<h4>✨ 문서 갱신 및 변환이 완료되었습니다!</h4>
-<p>올해 연도 정보가 반영된 새로운 계획서 파일이 준비되었습니다. 아래 버튼을 눌러 다운로드하세요.</p>
-<button class="btn-download-file" onclick="downloadConvertedPlan()">📥 변환된 파일 다운로드 (.hwp)</button>
+<h4>✨ 계획서 미리보기가 준비되었습니다.</h4>
+<p>입력한 내용을 확인하고 HTML 미리보기 문서로 내려받을 수 있습니다. HWP/HWPX 산출물은 백엔드 연동 후 제공됩니다.</p>
+<button class="btn-download-file" onclick="downloadConvertedPlan()">📥 HTML 미리보기 다운로드 (.html)</button>
 </div>
 </div></div></main>
     <!-- Footer -->
@@ -546,6 +704,304 @@
 </div>
 </footer>
 <script>
+        /* 열린 문서 계획·수정 흐름 — 프론트 협의용 결정론적 데모.
+           실제 문서 제어는 DOCUMENT_AGENT_SPEC.md의 로컬 에이전트 계약으로 교체한다. */
+        const agentDetected = document.getElementById('agent-detected');
+        const agentInstruction = document.getElementById('agent-instruction');
+        const agentPlan = document.getElementById('agent-plan');
+        const agentDiff = document.getElementById('agent-diff');
+        const agentDone = document.getElementById('agent-done');
+        const agentSave = document.getElementById('btn-agent-save');
+        const agentPlanCount = document.getElementById('agent-plan-count');
+        const agentPlanSummary = document.getElementById('agent-plan-summary');
+        const agentContractPreview = document.getElementById('agent-contract-preview');
+        const agentDecisionSummary = document.getElementById('agent-decision-summary');
+        let latestAgentReceipt = null;
+
+        const agentChangeCatalog = {
+            year: {
+                id: 'op_year',
+                op: 'replace_text',
+                anchor: { type: 'stable_text_group', beforeHash: 'demo:sha256:year-targets' },
+                before: '2025학년도',
+                text: '2026학년도',
+                expectedMatches: 4,
+                reason: '사용자 지시에 따라 학년도 표현을 통일',
+                evidenceIds: ['ev_user_instruction'],
+                risk: { level: 'low', flags: [] }
+            },
+            date: {
+                id: 'op_date',
+                op: 'replace_text',
+                anchor: { type: 'field', field: '행사일시', beforeHash: 'demo:sha256:event-date' },
+                before: '2025. 7. 5.(토)',
+                text: '2026. 7. 5.(일)',
+                reason: '사용자 지정 날짜와 계산한 요일을 반영',
+                evidenceIds: ['ev_user_instruction'],
+                risk: { level: 'low', flags: [] }
+            },
+            content: {
+                id: 'op_content',
+                op: 'replace_table_cell',
+                anchor: { type: 'field', field: '주요내용', beforeHash: 'demo:sha256:main-content' },
+                before: '에듀테크 활용 수업 역량 강화 연수',
+                text: 'AI 디지털 교과서(AIDT) 실습 및 적용',
+                reason: '사용자가 요청한 연수 실습 내용을 반영',
+                evidenceIds: ['ev_user_instruction'],
+                risk: { level: 'review', flags: ['LAYOUT_REVIEW_REQUIRED'] }
+            }
+        };
+
+        function getSelectedAgentChangeIds() {
+            return Array.from(agentPlan.querySelectorAll('[data-agent-change]'))
+                .filter(function (check) { return check.checked; })
+                .map(function (check) { return check.dataset.agentChange; });
+        }
+
+        function buildAgentPatch() {
+            const selectedIds = getSelectedAgentChangeIds();
+            return {
+                schema: 'easyflow.document-patch/v1',
+                patchId: 'ptc_demo_20260815_001',
+                documentId: 'demo:hwpx:ai-training-plan',
+                baseRevision: 'demo:sha256:before-revision',
+                mode: 'plan',
+                demo: true,
+                summary: document.getElementById('agent-prompt').value.trim(),
+                evidence: [{
+                    id: 'ev_user_instruction',
+                    type: 'user_instruction',
+                    title: '사용자가 입력한 수정 지시',
+                    sourceSentToModel: true
+                }],
+                preservationPolicy: {
+                    changeOnlyApprovedAnchors: true,
+                    preserveTableAndParagraphStyles: true,
+                    requireRevisionMatch: true,
+                    requireRecoverableBackup: true
+                },
+                privacyPolicy: {
+                    inputScope: 'selected_context_only',
+                    sendWholeDocumentByDefault: false
+                },
+                operationGroups: selectedIds,
+                operations: selectedIds.map(function (id) {
+                    return Object.assign({ groupId: id }, agentChangeCatalog[id]);
+                }),
+                expiresAt: 'demo:issued-by-backend'
+            };
+        }
+
+        function renderAgentPlanContract() {
+            const selectedIds = getSelectedAgentChangeIds();
+            const reviewCount = selectedIds.filter(function (id) {
+                return agentChangeCatalog[id].risk.level === 'review';
+            }).length;
+            agentPlanCount.textContent = '선택 ' + selectedIds.length + '/3건';
+            agentPlanSummary.textContent = '선택 ' + selectedIds.length + '건 · 낮은 위험 ' +
+                (selectedIds.length - reviewCount) + '건 · 확인 필요 ' + reviewCount + '건';
+            agentContractPreview.textContent = JSON.stringify(buildAgentPatch(), null, 2);
+        }
+
+        function downloadAgentJson(filename, value) {
+            const blob = new Blob([JSON.stringify(value, null, 2)], { type: 'application/json;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = filename;
+            document.body.appendChild(link);
+            link.click();
+            link.remove();
+            URL.revokeObjectURL(url);
+        }
+
+        function setAgentStep(step) {
+            document.querySelectorAll('[data-agent-step]').forEach(function (el) {
+                el.classList.toggle('active', Number(el.dataset.agentStep) === step);
+            });
+        }
+
+        agentPlan.querySelectorAll('[data-agent-change]').forEach(function (check) {
+            check.addEventListener('change', renderAgentPlanContract);
+        });
+        document.getElementById('agent-prompt').addEventListener('input', renderAgentPlanContract);
+        document.getElementById('btn-agent-download-plan').addEventListener('click', function () {
+            if (!getSelectedAgentChangeIds().length) {
+                EF_MODAL.alert('내려받을 변경 계획을 하나 이상 선택해 주세요.');
+                return;
+            }
+            downloadAgentJson('easyflow-document-patch-demo.json', buildAgentPatch());
+        });
+        renderAgentPlanContract();
+
+        document.getElementById('btn-agent-detect').addEventListener('click', function () {
+            const button = this;
+            const status = document.getElementById('agent-detect-status');
+            button.disabled = true;
+            button.textContent = '감지 중...';
+            status.textContent = '활성 창과 문서 형식을 확인하는 흐름을 재현하고 있습니다.';
+            setTimeout(function () {
+                agentDetected.style.display = 'block';
+                agentInstruction.style.display = 'block';
+                status.textContent = '협의용 HWPX 문서를 감지했습니다. 실제 파일 내용은 읽지 않았습니다.';
+                button.textContent = '데모 문서 감지 완료';
+                setAgentStep(2);
+                agentInstruction.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }, 550);
+        });
+
+        document.getElementById('btn-agent-plan').addEventListener('click', function () {
+            const prompt = document.getElementById('agent-prompt').value.trim();
+            if (!prompt) {
+                EF_MODAL.alert('수정 지시를 입력해 주세요.');
+                return;
+            }
+            latestAgentReceipt = null;
+            agentDone.style.display = 'none';
+            agentSave.textContent = '승인 결과 확정·영수증 만들기';
+            renderAgentPlanContract();
+            agentPlan.style.display = 'block';
+            setAgentStep(3);
+            agentPlan.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        });
+
+        document.getElementById('btn-agent-replan').addEventListener('click', function () {
+            agentPlan.style.display = 'none';
+            agentDiff.style.display = 'none';
+            agentDone.style.display = 'none';
+            latestAgentReceipt = null;
+            agentSave.textContent = '승인 결과 확정·영수증 만들기';
+            setAgentStep(2);
+            document.getElementById('agent-prompt').focus();
+        });
+
+        document.getElementById('btn-agent-apply').addEventListener('click', function () {
+            const selectedIds = getSelectedAgentChangeIds();
+            if (!selectedIds.length) {
+                EF_MODAL.alert('적용할 변경을 하나 이상 선택해 주세요.');
+                return;
+            }
+            const rows = Array.from(agentDiff.querySelectorAll('[data-diff-row]'));
+            rows.forEach(function (row) {
+                const selected = selectedIds.includes(row.dataset.changeId);
+                row.style.display = selected ? '' : 'none';
+                row.dataset.decision = selected ? 'pending' : 'skipped';
+                row.querySelectorAll('[data-decision-btn]').forEach(function (button) {
+                    button.disabled = false;
+                    button.textContent = button.dataset.decisionBtn === 'accept' ? '수락' : '거절';
+                });
+                row.style.opacity = '1';
+            });
+            latestAgentReceipt = null;
+            agentSave.textContent = '승인 결과 확정·영수증 만들기';
+            updateAgentSave();
+            agentDiff.style.display = 'block';
+            agentDone.style.display = 'none';
+            setAgentStep(4);
+            agentDiff.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        });
+
+        function updateAgentSave() {
+            const activeRows = Array.from(agentDiff.querySelectorAll('[data-diff-row]')).filter(function (row) {
+                return row.dataset.decision !== 'skipped';
+            });
+            const acceptedCount = activeRows.filter(function (row) { return row.dataset.decision === 'accept'; }).length;
+            const rejectedCount = activeRows.filter(function (row) { return row.dataset.decision === 'reject'; }).length;
+            const pendingCount = activeRows.filter(function (row) { return row.dataset.decision === 'pending'; }).length;
+            agentDecisionSummary.textContent = '수락 ' + acceptedCount + '건 · 거절 ' + rejectedCount +
+                '건 · 결정 대기 ' + pendingCount + '건';
+            agentSave.disabled = !activeRows.length || pendingCount > 0;
+        }
+
+        function decideAgentRow(row, decision) {
+            row.dataset.decision = decision;
+            row.querySelectorAll('[data-decision-btn]').forEach(function (button) {
+                const chosen = button.dataset.decisionBtn === decision;
+                button.disabled = true;
+                if (chosen) button.textContent = decision === 'accept' ? '수락됨' : '거절됨';
+            });
+            row.style.opacity = decision === 'reject' ? '0.58' : '1';
+            updateAgentSave();
+        }
+
+        agentDiff.querySelectorAll('[data-decision-btn]').forEach(function (button) {
+            button.addEventListener('click', function () {
+                decideAgentRow(button.closest('[data-diff-row]'), button.dataset.decisionBtn);
+            });
+        });
+
+        document.getElementById('btn-agent-accept-all').addEventListener('click', function () {
+            agentDiff.querySelectorAll('[data-diff-row]').forEach(function (row) {
+                if (row.dataset.decision !== 'skipped') decideAgentRow(row, 'accept');
+            });
+        });
+
+        document.getElementById('btn-agent-reject-all').addEventListener('click', function () {
+            agentDiff.querySelectorAll('[data-diff-row]').forEach(function (row) {
+                if (row.dataset.decision !== 'skipped') decideAgentRow(row, 'reject');
+            });
+        });
+
+        function buildAgentReceipt() {
+            const decisions = Array.from(agentDiff.querySelectorAll('[data-diff-row]')).map(function (row) {
+                return {
+                    groupId: row.dataset.changeId,
+                    operationId: agentChangeCatalog[row.dataset.changeId].id,
+                    decision: row.dataset.decision
+                };
+            });
+            const counts = decisions.reduce(function (result, item) {
+                result[item.decision] = (result[item.decision] || 0) + 1;
+                return result;
+            }, { accept: 0, reject: 0, skipped: 0 });
+            return {
+                schema: 'easyflow.document-apply-receipt/v1',
+                receiptId: 'rcp_demo_20260815_001',
+                patchId: buildAgentPatch().patchId,
+                documentId: buildAgentPatch().documentId,
+                demo: true,
+                outcome: 'demo_only',
+                documentChanged: false,
+                generatedAt: new Date().toISOString(),
+                decisions: decisions,
+                counts: counts,
+                revision: {
+                    before: 'demo:sha256:before-revision',
+                    after: null,
+                    matchVerified: false
+                },
+                validations: {
+                    backup: 'not_performed',
+                    packageIntegrity: 'not_performed',
+                    reopenInHancom: 'not_performed',
+                    visualLayout: 'not_performed',
+                    untouchedParts: 'not_verified'
+                },
+                warning: '프론트 계약 데모 결과이며 실제 문서를 수정하거나 검증하지 않았습니다.'
+            };
+        }
+
+        agentSave.addEventListener('click', function () {
+            latestAgentReceipt = buildAgentReceipt();
+            document.getElementById('agent-receipt-accepted').textContent =
+                latestAgentReceipt.counts.accept + '건';
+            document.getElementById('agent-receipt-rejected').textContent =
+                (latestAgentReceipt.counts.reject + latestAgentReceipt.counts.skipped) + '건';
+            agentDone.style.display = 'block';
+            agentSave.disabled = true;
+            agentSave.textContent = '변경 영수증 생성 완료';
+            setAgentStep(5);
+            agentDone.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        });
+
+        document.getElementById('btn-agent-download-receipt').addEventListener('click', function () {
+            if (!latestAgentReceipt) {
+                EF_MODAL.alert('먼저 변경별 수락·거절을 완료해 주세요.');
+                return;
+            }
+            downloadAgentJson('easyflow-document-apply-receipt-demo.json', latestAgentReceipt);
+        });
+
         const dropZone = document.getElementById('drop-zone');
         const progressSection = document.getElementById('progress-section');
         const progressBar = document.getElementById('progress-bar');
@@ -671,8 +1127,8 @@
             renderCalendar(currentYear, currentMonth);
         });
 
-        // 실제 HWP 파싱은 불가하므로 내용은 예시 값을 유지하되, 사용자가 실제로 업로드한
-        // 파일명만큼은 화면에 그대로 반영해 "무엇을 업로드했는지"와 결과가 무관하지 않게 한다.
+        // 현재 프론트 프로토타입은 파일 본문을 읽지 않으며 내용은 예시 값을 유지한다. 사용자가 선택한
+        // 파일명만 화면에 반영하고, 실제 파싱·변환은 백엔드 문서 API로 교체해야 한다.
         function simulateUpload(file) {
             const uploadedName = file ? file.name : '2025학년도 AI 디지털 활용 선도학교 연수 계획서.hwp';
             const baseName = uploadedName.replace(/\.(hwp|hwpx)$/i, '');
@@ -689,17 +1145,17 @@
                 progressPercent.innerText = width + '%';
 
                 if (width === 30) {
-                    progressMsg.innerText = "문서 메타데이터 추출 중...";
-                    progressSubmsg.innerText = "전년도 결재 계획서의 본문 텍스트를 파싱하고 있습니다.";
+                    progressMsg.innerText = "선택 파일 정보 확인 중...";
+                    progressSubmsg.innerText = "현재는 파일명만 사용하며 본문은 읽지 않습니다.";
                 } else if (width === 70) {
-                    progressMsg.innerText = "당해 연도 정보 자동 매핑 중...";
-                    progressSubmsg.innerText = "연도, 날짜 및 내용 정보를 2026학년도 기준으로 정렬 중입니다.";
+                    progressMsg.innerText = "예시 변환 항목 준비 중...";
+                    progressSubmsg.innerText = "사용자가 직접 확인하고 수정할 항목을 표시합니다.";
                 }
 
                 if (width >= 100) {
                     clearInterval(interval);
-                    progressMsg.innerText = "문서 분석 및 데이터 갱신 완료!";
-                    progressSubmsg.innerText = "원본 문서 정보가 성공적으로 인식되었습니다.";
+                    progressMsg.innerText = "미리보기 준비 완료!";
+                    progressSubmsg.innerText = "표시된 값은 예시이며 원본 본문 분석 결과가 아닙니다.";
 
                     setTimeout(() => {
                         docTitle.innerHTML = '<span class="result-text">' + escapeHtml(uploadedName) + '</span>';
@@ -748,11 +1204,11 @@
         });
 
         btnConvert.addEventListener('click', () => {
-            btnConvert.innerText = "변환 처리 중...";
+            btnConvert.innerText = "미리보기 적용 중...";
             btnConvert.disabled = true;
 
             setTimeout(() => {
-                btnConvert.innerText = "문서 변환하기";
+                btnConvert.innerText = "미리보기 적용하기";
                 btnConvert.disabled = false;
                 resultCard.style.display = 'block';
                 resultCard.scrollIntoView({ behavior: 'smooth' });
@@ -789,7 +1245,7 @@
             a.click();
             a.remove();
             setTimeout(() => URL.revokeObjectURL(url), 1000);
-            EF_MODAL.alert('변환된 파일 다운로드가 시작되었습니다. (프로토타입 특성상 실제 HWP가 아닌 HTML 문서로 제공됩니다.)');
+            EF_MODAL.alert('HTML 미리보기 다운로드가 시작되었습니다. 실제 HWP/HWPX 생성은 백엔드 문서 처리 연동 후 제공됩니다.');
         }
 
         updateLivePreview();

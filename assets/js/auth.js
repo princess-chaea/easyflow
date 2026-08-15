@@ -230,23 +230,28 @@ const ROLE_GATED_LINKS = [
             });
         }
 
-        // Load School Search Script (NEIS API)
-        const ssScript = document.createElement('script');
-        ssScript.src = 'assets/js/school-search.js';
-        document.body.appendChild(ssScript);
-
-        // Load Profile Modal Script dynamically (after school-search)
-        ssScript.onload = () => {
+        // Load School Search Script (NEIS API). Some public pages, including
+        // signup, already include it explicitly, so reuse that script instead
+        // of evaluating its top-level const declarations twice.
+        const loadProfileModal = () => {
+            if (document.querySelector('script[src="assets/js/profile-modal.js"]')) return;
             const pmScript = document.createElement('script');
             pmScript.src = 'assets/js/profile-modal.js';
             document.body.appendChild(pmScript);
         };
-        // Fallback if school-search.js already loaded
-        ssScript.onerror = () => {
-            const pmScript = document.createElement('script');
-            pmScript.src = 'assets/js/profile-modal.js';
-            document.body.appendChild(pmScript);
-        };
+        const existingSchoolSearch = document.querySelector('script[src="assets/js/school-search.js"]');
+        if (window.EF_SCHOOL) {
+            loadProfileModal();
+        } else if (existingSchoolSearch) {
+            existingSchoolSearch.addEventListener('load', loadProfileModal, { once: true });
+            existingSchoolSearch.addEventListener('error', loadProfileModal, { once: true });
+        } else {
+            const ssScript = document.createElement('script');
+            ssScript.src = 'assets/js/school-search.js';
+            ssScript.addEventListener('load', loadProfileModal, { once: true });
+            ssScript.addEventListener('error', loadProfileModal, { once: true });
+            document.body.appendChild(ssScript);
+        }
         
     });
 })();
