@@ -304,7 +304,7 @@
                 서식 자료실 <span class="material-symbols-outlined text-[18px]">expand_more</span>
 </a>
 <div class="absolute top-[64px] left-1/2 -translate-x-1/2 pt-md pb-md min-w-[160px] flex flex-col items-center gap-sm opacity-0 invisible group-hover/mega:opacity-100 group-hover/mega:visible transition-all duration-200 z-50 group-hover/col:bg-surface-container h-[290px] rounded-b-lg">
-<a class="font-nav-link text-[16px] text-on-surface-variant hover:text-primary transition-colors whitespace-nowrap px-sm py-1 w-full text-center" href="서식자료실_통합검색.html">통합 검색</a><a class="font-nav-link text-[16px] text-on-surface-variant hover:text-primary transition-colors whitespace-nowrap px-sm py-1 w-full text-center" href="서식 자료실_한글파일서식선택.html">서식 자동 완성</a><a class="font-nav-link text-[16px] text-on-surface-variant hover:text-primary transition-colors whitespace-nowrap px-sm py-1 w-full text-center" href="서식자료실_공문OCR요약.html">공문 분석</a><a class="font-nav-link text-[16px] text-on-surface-variant hover:text-primary transition-colors whitespace-nowrap px-sm py-1 w-full text-center" href="서식자료실_스마트 계획서 변환.html">스마트 계획서 변환</a>
+<a class="font-nav-link text-[16px] text-on-surface-variant hover:text-primary transition-colors whitespace-nowrap px-sm py-1 w-full text-center" href="서식자료실_통합검색.html">통합 검색</a><a class="font-nav-link text-[16px] text-on-surface-variant hover:text-primary transition-colors whitespace-nowrap px-sm py-1 w-full text-center" href="서식 자료실_한글파일서식선택.html">서식 자동 완성</a><a class="font-nav-link text-[16px] text-on-surface-variant hover:text-primary transition-colors whitespace-nowrap px-sm py-1 w-full text-center" href="서식자료실_스마트 계획서 변환.html">스마트 계획서 변환</a><a class="font-nav-link text-[16px] text-on-surface-variant hover:text-primary transition-colors whitespace-nowrap px-sm py-1 w-full text-center" href="서식자료실_지출품의서작성기.html">지출품의서 작성기</a>
 </div>
 </div>
 <div class="relative h-full flex flex-col justify-start group/col">
@@ -3130,7 +3130,7 @@
       box.innerHTML = DEPT_LIST.map(name => {
         const n = tasksOfMonth(y, m).filter(t => t.dept === name).length;
         return '<label class="flex items-center gap-xs py-xs cursor-pointer group">'
-          + '<input type="checkbox" class="dept-cb w-[18px] h-[18px] rounded-xs border-hairline text-primary focus:ring-primary" checked value="' + name + '">'
+          + '<input type="checkbox" class="dept-cb w-[18px] h-[18px] rounded-xs border-hairline text-primary focus:ring-primary"' + (activeDepts.has(name) ? ' checked' : '') + ' value="' + name + '">'
           + '<span class="w-2 h-2 rounded-full shrink-0" style="background:' + DEPTS[name].color + '" aria-hidden="true"></span>'
           + '<span class="text-body-sm text-body group-hover:text-ink transition-colors flex-1">' + name + '</span>'
           + '<span class="font-mono text-caption text-muted tnum" data-count="' + name + '">' + n + '</span>'
@@ -4983,14 +4983,14 @@ function outlookShowState(id) {
 <p class="text-[13px] text-muted mb-lg">기존 일정과 섞이지 않도록 전용 캘린더 생성을 추천드립니다.</p>
 <div class="grid sm:grid-cols-2 gap-base">
 <label class="flex items-start gap-sm p-base border border-hairline rounded-2xl cursor-pointer hover:border-primary transition-colors">
-<input class="mt-1 text-primary focus:ring-primary" name="targetCalendar" type="radio" value="default"/>
+<input class="mt-1 text-primary focus:ring-primary" name="gcalTargetCalendar" type="radio" value="default"/>
 <div>
 <p class="font-bold text-[14px]">기본 캘린더에 추가</p>
 <p class="text-[13px] text-muted">기존 구글 캘린더에 그대로 표시</p>
 </div>
 </label>
 <label class="flex items-start gap-sm p-base border-2 border-primary bg-primary/5 rounded-2xl cursor-pointer">
-<input checked="" class="mt-1 text-primary focus:ring-primary" name="targetCalendar" type="radio" value="new"/>
+<input checked="" class="mt-1 text-primary focus:ring-primary" name="gcalTargetCalendar" type="radio" value="new"/>
 <div>
 <p class="font-bold text-[14px]">전용 캘린더 새로 만들기 <span class="text-primary">(추천)</span></p>
 <p class="text-[13px] text-muted">'이지플로우 학교일정' 별도 캘린더 분리 표시</p>
@@ -5052,14 +5052,14 @@ function outlookShowState(id) {
 </div>
 <div class="grid sm:grid-cols-2 gap-base mb-lg">
 <label class="flex items-start gap-sm p-base border-2 border-primary bg-primary/5 rounded-2xl cursor-pointer">
-<input checked="" class="mt-1 text-primary focus:ring-primary" name="syncMode" type="radio" value="auto"/>
+<input checked="" class="mt-1 text-primary focus:ring-primary" name="gcalSyncMode" type="radio" value="auto"/>
 <div>
 <p class="font-bold text-[14px]">실시간 자동 동기화</p>
 <p class="text-[13px] text-muted">공문 달력 갱신 시 즉시 반영</p>
 </div>
 </label>
 <label class="flex items-start gap-sm p-base border border-hairline rounded-2xl cursor-pointer hover:border-primary transition-colors">
-<input class="mt-1 text-primary focus:ring-primary" name="syncMode" type="radio" value="manual"/>
+<input class="mt-1 text-primary focus:ring-primary" name="gcalSyncMode" type="radio" value="manual"/>
 <div>
 <p class="font-bold text-[14px]">수동 동기화</p>
 <p class="text-[13px] text-muted">'지금 동기화' 클릭 시에만 반영</p>
@@ -5145,14 +5145,14 @@ function outlookShowState(id) {
 <p class="text-[13px] text-muted mb-lg">기존 일정과 섞이지 않도록 전용 캘린더 생성을 추천드립니다.</p>
 <div class="grid sm:grid-cols-2 gap-base">
 <label class="flex items-start gap-sm p-base border border-hairline rounded-2xl cursor-pointer hover:border-primary transition-colors">
-<input class="mt-1 text-primary focus:ring-primary" name="targetCalendar" type="radio" value="default"/>
+<input class="mt-1 text-primary focus:ring-primary" name="outlookTargetCalendar" type="radio" value="default"/>
 <div>
 <p class="font-bold text-[14px]">기본 캘린더에 추가</p>
 <p class="text-[13px] text-muted">기존 Outlook 캘린더에 그대로 표시</p>
 </div>
 </label>
 <label class="flex items-start gap-sm p-base border-2 border-primary bg-primary/5 rounded-2xl cursor-pointer">
-<input checked="" class="mt-1 text-primary focus:ring-primary" name="targetCalendar" type="radio" value="new"/>
+<input checked="" class="mt-1 text-primary focus:ring-primary" name="outlookTargetCalendar" type="radio" value="new"/>
 <div>
 <p class="font-bold text-[14px]">전용 캘린더 새로 만들기 <span class="text-primary">(추천)</span></p>
 <p class="text-[13px] text-muted">'이지플로우 학교일정' 별도 캘린더 분리 표시</p>
@@ -5214,14 +5214,14 @@ function outlookShowState(id) {
 </div>
 <div class="grid sm:grid-cols-2 gap-base mb-lg">
 <label class="flex items-start gap-sm p-base border-2 border-primary bg-primary/5 rounded-2xl cursor-pointer">
-<input checked="" class="mt-1 text-primary focus:ring-primary" name="syncMode" type="radio" value="auto"/>
+<input checked="" class="mt-1 text-primary focus:ring-primary" name="outlookSyncMode" type="radio" value="auto"/>
 <div>
 <p class="font-bold text-[14px]">실시간 자동 동기화</p>
 <p class="text-[13px] text-muted">공문 달력 갱신 시 즉시 반영</p>
 </div>
 </label>
 <label class="flex items-start gap-sm p-base border border-hairline rounded-2xl cursor-pointer hover:border-primary transition-colors">
-<input class="mt-1 text-primary focus:ring-primary" name="syncMode" type="radio" value="manual"/>
+<input class="mt-1 text-primary focus:ring-primary" name="outlookSyncMode" type="radio" value="manual"/>
 <div>
 <p class="font-bold text-[14px]">수동 동기화</p>
 <p class="text-[13px] text-muted">'지금 동기화' 클릭 시에만 반영</p>
@@ -5273,5 +5273,6 @@ function outlookShowState(id) {
     })();
 </script>
 
+<script src="assets/js/calendar-my-department.js"></script>
 </body>
 </html>
