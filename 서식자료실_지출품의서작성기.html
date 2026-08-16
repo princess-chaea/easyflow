@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>지출품의서 작성기 | 이지플로우 (EasyFlow) - 경상북도교육청</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+<style>
+    @font-face { font-family: 'HakgyoansimPoster'; src: url('./font/Hakgyoansim_PosterB.ttf') format('truetype'); font-weight: 700; }
+    @font-face { font-family: 'KerisBaeum'; src: url('./font/KERISBAEUM_R.ttf') format('truetype'); font-weight: 400; }
+    @font-face { font-family: 'KerisBaeum'; src: url('./font/KERISBAEUM_B.ttf') format('truetype'); font-weight: 700; }
+    html { overflow-y: scroll; }
+    body { font-family: 'KerisBaeum', Pretendard, sans-serif; }
+    [hidden] { display: none !important; }
+
+    .expense-stepper { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
+    .expense-step { position: relative; display: flex; align-items: center; gap: 10px; min-height: 58px; padding: 12px 14px; border: 1px solid #e5e8eb; border-radius: 14px; background: #fff; color: #868b94; }
+    .expense-step::after { content: ''; position: absolute; right: -11px; top: 50%; width: 10px; height: 1px; background: #c4c6d4; }
+    .expense-step:last-child::after { display: none; }
+    .expense-step-number { width: 28px; height: 28px; display: grid; place-items: center; flex: none; border-radius: 999px; background: #f2f4f6; font-size: 12px; font-weight: 700; }
+    .expense-step strong { display: block; color: inherit; font-size: 13px; }
+    .expense-step span:last-child { display: block; margin-top: 2px; font-size: 11px; }
+    .expense-step.is-active { border-color: #003893; background: #eef4ff; color: #003893; box-shadow: 0 8px 24px rgba(0, 56, 147, .08); }
+    .expense-step.is-active .expense-step-number { background: #003893; color: #fff; }
+    .expense-step.is-complete { border-color: #a6e3c7; color: #05603a; background: #f2fff8; }
+    .expense-step.is-complete .expense-step-number { background: #00a261; color: #fff; }
+
+    .expense-content-grid { display: grid; grid-template-columns: minmax(0, 1fr) 360px; gap: 24px; align-items: start; }
+    .expense-card { background: #fff; border: 1px solid #e5e8eb; border-radius: 20px; padding: 24px; box-shadow: 0 5px 18px rgba(17, 18, 20, .035); }
+    .expense-card + .expense-card { margin-top: 18px; }
+    .expense-card-title { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; margin-bottom: 18px; }
+    .expense-card-title h2 { display: flex; align-items: center; gap: 8px; color: #111214; font-size: 19px; font-weight: 700; }
+    .expense-card-title p { margin-top: 5px; color: #686d77; font-size: 13px; line-height: 1.6; }
+
+    .expense-mode-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+    .expense-mode-card { min-height: 142px; padding: 16px; text-align: left; border: 1px solid #d9dce2; border-radius: 16px; background: #fff; transition: .18s ease; }
+    .expense-mode-card:hover { border-color: #7f9ac9; transform: translateY(-1px); }
+    .expense-mode-card.is-selected { border: 2px solid #003893; background: #f4f7ff; box-shadow: 0 8px 24px rgba(0, 56, 147, .08); }
+    .expense-mode-card .material-symbols-outlined { color: #003893; font-size: 24px; }
+    .expense-mode-card strong { display: block; margin-top: 10px; color: #111214; font-size: 14px; }
+    .expense-mode-card span:last-child { display: block; margin-top: 6px; color: #686d77; font-size: 12px; line-height: 1.55; }
+    .expense-mode-summary { display: flex; align-items: flex-start; gap: 10px; margin-top: 14px; padding: 12px 14px; border-radius: 12px; background: #f8f9fa; color: #4e535e; font-size: 12px; line-height: 1.6; }
+    .expense-mode-summary strong { color: #003893; }
+
+    .expense-dropzone { min-height: 210px; display: grid; place-items: center; padding: 30px 20px; border: 2px dashed #c4c6d4; border-radius: 18px; background: #fbfcfd; text-align: center; transition: .18s ease; }
+    .expense-dropzone:hover, .expense-dropzone.is-dragging { border-color: #003893; background: #f4f7ff; }
+    .expense-upload-icon { width: 58px; height: 58px; display: grid; place-items: center; margin: 0 auto 12px; border-radius: 18px; background: #eaf1ff; color: #003893; }
+    .expense-upload-icon .material-symbols-outlined { font-size: 31px; }
+    .expense-file-button { margin-top: 15px; padding: 10px 18px; border-radius: 999px; background: #003893; color: #fff; font-size: 13px; font-weight: 700; }
+    .expense-file-selected { width: 100%; display: flex; align-items: center; gap: 14px; text-align: left; }
+    .expense-file-selected .file-icon { width: 50px; height: 50px; display: grid; place-items: center; flex: none; border-radius: 14px; background: #eaf1ff; color: #003893; }
+    .expense-file-selected .file-copy { flex: 1; min-width: 0; }
+    .expense-file-selected .file-copy strong { display: block; overflow: hidden; color: #111214; font-size: 14px; text-overflow: ellipsis; white-space: nowrap; }
+    .expense-file-selected .file-copy span { display: block; margin-top: 4px; color: #868b94; font-size: 12px; }
+    .expense-file-remove { width: 36px; height: 36px; display: grid; place-items: center; border-radius: 999px; color: #868b94; }
+    .expense-file-remove:hover { background: #fff1f0; color: #df2c2c; }
+    .expense-action-row { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-top: 15px; flex-wrap: wrap; }
+    .expense-primary-button, .expense-secondary-button { min-height: 42px; display: inline-flex; align-items: center; justify-content: center; gap: 7px; padding: 10px 18px; border-radius: 12px; font-size: 13px; font-weight: 700; transition: .16s ease; }
+    .expense-primary-button { background: #003893; color: #fff; }
+    .expense-primary-button:hover { background: #002463; }
+    .expense-primary-button:disabled { cursor: not-allowed; background: #9eb9e5; }
+    .expense-secondary-button { border: 1px solid #d9dce2; background: #fff; color: #343840; }
+    .expense-secondary-button:hover { border-color: #003893; color: #003893; background: #f7f9ff; }
+    .expense-status { display: flex; align-items: flex-start; gap: 9px; color: #686d77; font-size: 12px; line-height: 1.55; }
+    .expense-status .material-symbols-outlined { color: #003893; font-size: 18px; }
+    .expense-spinner { width: 17px; height: 17px; border: 2px solid rgba(255, 255, 255, .45); border-top-color: #fff; border-radius: 50%; animation: expense-spin .8s linear infinite; }
+    @keyframes expense-spin { to { transform: rotate(360deg); } }
+
+    .expense-result-head { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 10px; margin-bottom: 18px; }
+    .expense-summary-box { padding: 13px 14px; border: 1px solid #e5e8eb; border-radius: 13px; background: #f8f9fa; min-width: 0; }
+    .expense-summary-box span { display: block; color: #868b94; font-size: 11px; }
+    .expense-summary-box strong { display: block; overflow: hidden; margin-top: 5px; color: #111214; font-size: 13px; text-overflow: ellipsis; white-space: nowrap; }
+    .expense-table-wrap { overflow-x: auto; border: 1px solid #e5e8eb; border-radius: 14px; }
+    .expense-table { width: 100%; min-width: 820px; border-collapse: collapse; }
+    .expense-table th { padding: 11px 10px; background: #f8f9fa; color: #686d77; font-size: 11px; font-weight: 700; text-align: left; white-space: nowrap; }
+    .expense-table td { padding: 8px; border-top: 1px solid #eef0f3; vertical-align: middle; }
+    .expense-table-input { width: 100%; min-width: 86px; border: 1px solid transparent; border-radius: 8px; background: transparent; padding: 7px 8px; color: #111214; font-size: 12px; }
+    .expense-table-input:focus { border-color: #003893; background: #fff; outline: none; box-shadow: 0 0 0 2px rgba(0, 56, 147, .08); }
+    .expense-amount-cell { color: #003893; font-size: 12px; font-weight: 700; white-space: nowrap; }
+    .expense-row-remove { width: 32px; height: 32px; display: grid; place-items: center; border-radius: 8px; color: #9a9ea6; }
+    .expense-row-remove:hover { background: #fff1f0; color: #df2c2c; }
+    .expense-row-remove .material-symbols-outlined { font-size: 18px; }
+    .expense-table-actions { display: flex; justify-content: space-between; gap: 10px; margin-top: 12px; flex-wrap: wrap; }
+
+    .expense-draft-card { margin-top: 18px; padding: 18px; border: 1px solid #c7d3f0; border-radius: 16px; background: #f8faff; }
+    .expense-form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .expense-field label { display: block; margin-bottom: 6px; color: #343840; font-size: 12px; font-weight: 700; }
+    .expense-field input, .expense-field textarea { width: 100%; border: 1px solid #d9dce2; border-radius: 11px; background: #fff; color: #111214; font-size: 13px; line-height: 1.65; }
+    .expense-field input:focus, .expense-field textarea:focus { border-color: #003893; outline: none; box-shadow: 0 0 0 3px rgba(0, 56, 147, .08); }
+    .expense-field textarea { min-height: 260px; resize: vertical; white-space: pre-wrap; }
+    .expense-copy-row { display: flex; justify-content: flex-end; gap: 8px; margin-top: 8px; }
+    .expense-warning { display: flex; align-items: flex-start; gap: 9px; margin-top: 16px; padding: 12px 14px; border: 1px solid #f1d69d; border-radius: 12px; background: #fff9eb; color: #73551b; font-size: 12px; line-height: 1.55; }
+
+    .expense-chat { position: sticky; top: 88px; overflow: hidden; border: 1px solid #dce2ed; border-radius: 20px; background: #fff; box-shadow: 0 12px 34px rgba(17, 18, 20, .08); }
+    .expense-chat-header { padding: 18px; background: linear-gradient(135deg, #002463, #003893); color: #fff; }
+    .expense-chat-title { display: flex; align-items: center; gap: 10px; font-size: 16px; font-weight: 700; }
+    .expense-chat-status { display: flex; align-items: center; gap: 6px; margin-top: 7px; color: #dbe7ff; font-size: 11px; }
+    .expense-chat-status::before { content: ''; width: 7px; height: 7px; border-radius: 999px; background: #44d28b; }
+    .expense-chat-messages { height: 430px; overflow-y: auto; padding: 16px; background: #f8f9fa; }
+    .chat-row { display: flex; margin-bottom: 12px; }
+    .chat-row-user { justify-content: flex-end; }
+    .chat-bubble { max-width: 88%; padding: 11px 13px; border-radius: 15px; font-size: 12px; line-height: 1.6; white-space: pre-wrap; }
+    .chat-bubble-assistant { border: 1px solid #e2e6ed; border-top-left-radius: 5px; background: #fff; color: #343840; }
+    .chat-bubble-user { border-top-right-radius: 5px; background: #003893; color: #fff; }
+    .chat-actions { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+    .chat-action-button { padding: 6px 9px; border: 1px solid #c7d3f0; border-radius: 999px; background: #f4f7ff; color: #003893; font-size: 11px; font-weight: 700; }
+    .expense-chat-prompts { display: flex; gap: 6px; overflow-x: auto; padding: 10px 12px 0; background: #fff; }
+    .expense-chat-prompt { flex: none; padding: 6px 9px; border: 1px solid #e1e4e9; border-radius: 999px; color: #4e535e; font-size: 10px; white-space: nowrap; }
+    .expense-chat-input { display: flex; align-items: flex-end; gap: 8px; padding: 12px; background: #fff; }
+    .expense-chat-input textarea { flex: 1; min-height: 42px; max-height: 100px; resize: none; border: 1px solid #d9dce2; border-radius: 12px; padding: 10px 11px; font-size: 12px; line-height: 1.45; }
+    .expense-chat-input textarea:focus { border-color: #003893; outline: none; box-shadow: 0 0 0 3px rgba(0, 56, 147, .08); }
+    .expense-chat-send { width: 42px; height: 42px; display: grid; place-items: center; flex: none; border-radius: 12px; background: #003893; color: #fff; }
+
+    #expenseToast[data-type="error"] { background: #b42318; }
+    #expenseToast:not([data-type="error"]) { background: #111214; }
+
+    @media (max-width: 1180px) {
+        .expense-content-grid { grid-template-columns: 1fr; }
+        .expense-chat { position: static; }
+        .expense-chat-messages { height: 330px; }
+    }
+    @media (max-width: 800px) {
+        .expense-stepper { grid-template-columns: 1fr 1fr; }
+        .expense-step::after { display: none; }
+        .expense-mode-grid { grid-template-columns: 1fr; }
+        .expense-mode-card { min-height: auto; }
+        .expense-result-head { grid-template-columns: 1fr 1fr; }
+        .expense-form-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 520px) {
+        .expense-stepper, .expense-result-head { grid-template-columns: 1fr; }
+        .expense-card { padding: 18px; }
+    }
+</style>
+<script>
+tailwind.config = {
+    theme: {
+        extend: {
+            colors: {
+                primary: '#003893', 'primary-active': '#002463', 'primary-container': '#003893',
+                'on-primary': '#ffffff', 'on-primary-container': '#dbe7ff', ink: '#111214', body: '#4e535e',
+                muted: '#868b94', hairline: '#e5e8eb', surface: '#f8f9fa', 'surface-soft': '#f8f9fa',
+                'surface-strong': '#f2f4f6', 'surface-container': '#f2f4f6', canvas: '#ffffff',
+                danger: '#df2c2c', success: '#00a261', warning: '#ff9000', 'on-surface-variant': '#4e535e'
+            },
+            spacing: { xxs: '4px', xs: '8px', sm: '12px', base: '16px', md: '20px', lg: '24px', xl: '32px', xxl: '48px', section: '96px' },
+            fontFamily: { 'display-sm': ["'HakgyoansimPoster'", 'sans-serif'], 'nav-link': ["'KerisBaeum'", 'sans-serif'] }
+        }
+    }
+};
+</script>
+<script src="assets/js/auth.js"></script>
+</head>
+<body class="bg-surface-soft text-ink min-h-screen">
+<nav class="fixed top-0 w-full z-50 h-[64px] bg-canvas border-b border-hairline">
+<div class="max-w-[1600px] w-full mx-auto h-full flex justify-between items-center px-lg">
+<div class="flex items-center gap-[60px]">
+<a class="font-display-sm font-semibold text-primary tracking-tight whitespace-nowrap text-[26px]" href="index.html">이지플로우 (EasyFlow)</a>
+<div class="hidden md:flex gap-[80px] group/mega h-[64px] items-center relative">
+<div class="absolute top-[64px] left-1/2 -translate-x-1/2 w-[100vw] bg-white shadow-md border-b border-hairline opacity-0 invisible group-hover/mega:opacity-100 group-hover/mega:visible transition-all duration-200 z-40 h-[310px]"></div>
+<div class="relative h-full flex flex-col justify-start"><a class="font-nav-link text-[18px] text-on-surface-variant hover:text-primary transition-colors h-[64px] flex items-center" href="index.html">홈</a></div>
+<div class="relative h-full flex flex-col justify-start group/col">
+<a class="font-nav-link text-[18px] transition-colors h-[64px] flex items-center gap-xxs whitespace-nowrap group-hover/col:text-primary text-on-surface-variant" href="업무배송_스마트공문달력.html">업무 배송 <span class="material-symbols-outlined text-[18px]">expand_more</span></a>
+<div class="absolute top-[64px] left-1/2 -translate-x-1/2 pt-md pb-md min-w-[170px] flex flex-col items-center gap-sm opacity-0 invisible group-hover/mega:opacity-100 group-hover/mega:visible transition-all duration-200 z-50 group-hover/col:bg-surface-container h-[310px] rounded-b-lg">
+<a class="font-nav-link text-[16px] text-on-surface-variant hover:text-primary px-sm py-1 whitespace-nowrap" href="업무배송_스마트공문달력.html">스마트 공문 달력</a><a class="font-nav-link text-[16px] text-on-surface-variant hover:text-primary px-sm py-1 whitespace-nowrap" href="업무배송_업무우편함.html">업무 우편함</a><a class="font-nav-link text-[16px] text-on-surface-variant hover:text-primary px-sm py-1 whitespace-nowrap" href="업무배송_업무발송.html">업무 발송</a><a class="font-nav-link text-[16px] text-on-surface-variant hover:text-primary px-sm py-1 whitespace-nowrap" href="업무배송_맞춤형업무가이드.html">맞춤형 업무 가이드</a>
+</div></div>
+<div class="relative h-full flex flex-col justify-start group/col">
+<a class="font-nav-link text-[18px] transition-colors h-[64px] flex items-center gap-xxs whitespace-nowrap group-hover/col:text-primary text-on-surface-variant" href="인생도서관_업무체크리스트.html">인생 도서관 <span class="material-symbols-outlined text-[18px]">expand_more</span></a>
+<div class="absolute top-[64px] left-1/2 -translate-x-1/2 pt-md pb-md min-w-[180px] flex flex-col items-center gap-sm opacity-0 invisible group-hover/mega:opacity-100 group-hover/mega:visible transition-all duration-200 z-50 group-hover/col:bg-surface-container h-[310px] rounded-b-lg">
+<a class="font-nav-link text-[16px] text-on-surface-variant hover:text-primary px-sm py-1 whitespace-nowrap" href="인생도서관_업무체크리스트.html">업무 체크리스트</a><a class="font-nav-link text-[16px] text-on-surface-variant hover:text-primary px-sm py-1 whitespace-nowrap" href="AI업무어시스턴트_챗봇.html">AI 상담 (챗봇)</a><a class="font-nav-link text-[16px] text-on-surface-variant hover:text-primary px-sm py-1 whitespace-nowrap" href="인생도서관_마이페이지.html">멘토 찾기·신청</a><a class="font-nav-link text-[16px] text-on-surface-variant hover:text-primary px-sm py-1 whitespace-nowrap" href="인생도서관_멘토상담함.html">멘토 상담함</a><a class="font-nav-link text-[16px] text-on-surface-variant hover:text-primary px-sm py-1 whitespace-nowrap" href="인생도서관_장학사 및 업무담당자 통합 대시보드.html">인생 도서관 기록</a>
+</div></div>
+<div class="relative h-full flex flex-col justify-start group/col">
+<a class="font-nav-link text-[18px] transition-colors h-[64px] flex items-center gap-xxs whitespace-nowrap text-primary font-bold relative" href="서식자료실_통합검색.html">서식 자료실 <span class="material-symbols-outlined text-[18px]">expand_more</span><span class="absolute left-[-22px] right-0 -bottom-[2px] h-[2px] bg-primary"></span></a>
+<div class="absolute top-[64px] left-1/2 -translate-x-1/2 pt-md pb-md min-w-[190px] flex flex-col items-center gap-sm opacity-0 invisible group-hover/mega:opacity-100 group-hover/mega:visible transition-all duration-200 z-50 group-hover/col:bg-surface-container h-[310px] rounded-b-lg">
+<a class="font-nav-link text-[16px] text-on-surface-variant hover:text-primary px-sm py-1 whitespace-nowrap" href="서식자료실_통합검색.html">통합 검색</a><a class="font-nav-link text-[16px] text-on-surface-variant hover:text-primary px-sm py-1 whitespace-nowrap" href="서식 자료실_한글파일서식선택.html">서식 자동 완성</a><a class="font-nav-link text-[16px] text-on-surface-variant hover:text-primary px-sm py-1 whitespace-nowrap" href="서식자료실_스마트 계획서 변환.html">스마트 계획서 변환</a><a class="font-nav-link text-[16px] text-primary font-bold px-sm py-1 whitespace-nowrap" href="서식자료실_지출품의서작성기.html">지출품의서 작성기</a>
+</div></div>
+<div class="relative h-full flex flex-col justify-start group/col">
+<a class="font-nav-link text-[18px] transition-colors h-[64px] flex items-center gap-xxs whitespace-nowrap group-hover/col:text-primary text-on-surface-variant" href="안내센터_공지사항.html">안내센터 <span class="material-symbols-outlined text-[18px]">expand_more</span></a>
+<div class="absolute top-[64px] left-1/2 -translate-x-1/2 pt-md pb-md min-w-[170px] flex flex-col items-center gap-sm opacity-0 invisible group-hover/mega:opacity-100 group-hover/mega:visible transition-all duration-200 z-50 group-hover/col:bg-surface-container h-[310px] rounded-b-lg">
+<a class="font-nav-link text-[16px] text-on-surface-variant hover:text-primary px-sm py-1" href="안내센터_공지사항.html">공지사항</a><a class="font-nav-link text-[16px] text-on-surface-variant hover:text-primary px-sm py-1" href="안내센터_시스템 안내.html">이용 안내</a><a class="font-nav-link text-[16px] text-on-surface-variant hover:text-primary px-sm py-1" href="안내센터_1대1문의관리.html">1:1 문의</a>
+</div></div>
+</div></div>
+<div class="flex items-center gap-base">
+<a aria-label="알림" class="p-xs text-on-surface-variant hover:bg-surface-strong rounded-full" href="업무배송_업무우편함.html"><span class="material-symbols-outlined">notifications</span></a>
+<div class="relative group">
+<div class="w-10 h-10 rounded-full bg-surface-container overflow-hidden cursor-pointer border border-hairline hover:ring-2 ring-primary/20 profile-dropdown-trigger"><img alt="사용자 프로필" class="w-full h-full object-cover" src="https://api.dicebear.com/7.x/avataaars/svg?seed=EasyFlow"></div>
+<div class="absolute top-full right-0 mt-xs w-48 bg-white rounded-xl shadow-xl border border-hairline opacity-0 invisible transition-all duration-200 z-50 p-xs profile-dropdown-menu">
+<a class="block px-base py-sm text-[15px] hover:bg-surface-soft rounded-lg flex items-center gap-2" href="공통_프로필수정.html"><span class="material-symbols-outlined text-[18px]">person</span> 프로필 설정</a>
+<a class="block px-base py-sm text-[15px] hover:bg-surface-soft rounded-lg flex items-center gap-2 text-danger" href="공통_로그인.html"><span class="material-symbols-outlined text-[18px]">logout</span> 로그아웃</a>
+</div></div>
+</div></div>
+</nav>
+
+<main class="pt-[64px]">
+<div class="w-full max-w-[1600px] mx-auto px-lg py-xl flex flex-col md:flex-row gap-xl">
+<aside class="w-[220px] shrink-0 bg-surface-soft p-lg -ml-lg rounded-2xl hidden md:block" id="main-lnb">
+<h2 class="font-nav-link text-[22px] font-bold text-ink mb-md pb-sm border-b-2 border-ink">서식 자료실</h2>
+<ul class="flex flex-col gap-1">
+<li><a class="font-nav-link block px-sm py-sm rounded-lg text-[16px] text-on-surface-variant hover:bg-surface hover:text-ink" href="서식자료실_통합검색.html">통합 검색</a></li>
+<li><a class="font-nav-link block px-sm py-sm rounded-lg text-[16px] text-on-surface-variant hover:bg-surface hover:text-ink" href="서식 자료실_한글파일서식선택.html">서식 자동 완성</a></li>
+
+<li><a class="font-nav-link block px-sm py-sm rounded-lg text-[16px] text-on-surface-variant hover:bg-surface hover:text-ink" href="서식자료실_스마트 계획서 변환.html">스마트 계획서 변환</a></li>
+<li><a class="font-nav-link block px-sm py-sm rounded-lg text-[16px] bg-primary text-white font-bold" href="서식자료실_지출품의서작성기.html">지출품의서 작성기</a></li>
+</ul>
+</aside>
+
+<div class="flex-1 min-w-0">
+<header class="mb-lg">
+<div class="flex items-center gap-xs mb-xs flex-wrap"><span class="inline-flex items-center gap-1 px-sm py-[5px] rounded-full bg-primary/10 text-primary text-[12px] font-bold"><span class="material-symbols-outlined text-[15px]">account_balance</span>K-에듀파인 지원</span><span class="px-sm py-[5px] rounded-full bg-success/10 text-success text-[12px] font-bold">견적서 기반</span></div>
+<h1 class="text-[30px] font-bold text-ink mb-xs">지출품의서 작성기</h1>
+<p class="text-[15px] text-ink/70 leading-relaxed">견적서를 올리면 품목과 금액을 확인하여 K-에듀파인 업로드용 품목내역과 지출품의서 초안을 만들어드립니다.</p>
+</header>
+
+<section class="expense-stepper mb-lg" aria-label="지출품의서 작성 단계">
+<div class="expense-step" data-expense-step="1"><span class="expense-step-number">1</span><span><strong>유형 선택</strong><span>관련 문서 여부</span></span></div>
+<div class="expense-step" data-expense-step="2"><span class="expense-step-number">2</span><span><strong>견적서 첨부</strong><span>파일 확인</span></span></div>
+<div class="expense-step" data-expense-step="3"><span class="expense-step-number">3</span><span><strong>AI 분석</strong><span>품목·금액 추출</span></span></div>
+<div class="expense-step" data-expense-step="4"><span class="expense-step-number">4</span><span><strong>검토·다운로드</strong><span>품의서·CSV</span></span></div>
+</section>
+
+<div class="expense-content-grid">
+<div>
+<section class="expense-card">
+<div class="expense-card-title"><div><h2><span class="material-symbols-outlined text-primary">rule</span>작성 유형을 선택하세요</h2><p>견적서를 먼저 올려도 되고, 원하는 결과 형식을 먼저 선택해도 됩니다.</p></div></div>
+<div class="expense-mode-grid">
+<button class="expense-mode-card" type="button" data-expense-mode="A" aria-pressed="true"><span class="material-symbols-outlined">link</span><strong>유형 A</strong><span>관련 문서번호가 있는 품의서 초안</span></button>
+<button class="expense-mode-card" type="button" data-expense-mode="B" aria-pressed="false"><span class="material-symbols-outlined">article</span><strong>유형 B</strong><span>관련 문서번호가 없는 품의서 초안</span></button>
+<button class="expense-mode-card" type="button" data-expense-mode="ITEMS" aria-pressed="false"><span class="material-symbols-outlined">table_view</span><strong>품목내역 파일만</strong><span>K-에듀파인 업로드용 CSV만 생성</span></button>
+</div>
+<div class="expense-mode-summary"><span class="material-symbols-outlined text-primary text-[18px]">info</span><span><strong id="expenseModeSummary">유형 A · 관련 문서 있음</strong><br><span id="expenseModeDescription">관련 문서번호를 나중에 입력할 수 있는 품의서 초안을 만듭니다.</span></span></div>
+</section>
+
+<section class="expense-card">
+<div class="expense-card-title"><div><h2><span class="material-symbols-outlined text-primary">upload_file</span>견적서를 올려주세요</h2><p>분석 대상은 지금 올린 견적서 한 건입니다. 참고 자료의 예시 업체명이나 금액은 사용하지 않습니다.</p></div></div>
+<div class="expense-dropzone" id="expenseDropzone">
+<div id="expenseFileEmpty">
+<div class="expense-upload-icon"><span class="material-symbols-outlined">document_scanner</span></div>
+<strong class="block text-[15px] text-ink">파일을 이곳에 끌어놓거나 선택하세요</strong>
+<span class="block mt-xs text-[12px] text-muted">PDF, 이미지, HWP/HWPX, 엑셀, CSV · 최대 20MB</span>
+<button class="expense-file-button" id="expenseFileButton" type="button">견적서 파일 선택</button>
+</div>
+<div class="expense-file-selected" id="expenseFileSelected" hidden>
+<div class="file-icon"><span class="material-symbols-outlined">description</span></div>
+<div class="file-copy"><strong id="expenseFileName"></strong><span id="expenseFileMeta"></span></div>
+<button class="expense-file-remove" id="expenseFileRemove" type="button" aria-label="첨부 파일 제거"><span class="material-symbols-outlined">close</span></button>
+</div>
+<input id="expenseFileInput" type="file" accept=".pdf,.hwp,.hwpx,.xlsx,.xls,.csv,.jpg,.jpeg,.png,.webp" hidden>
+</div>
+<div class="expense-action-row">
+<div class="expense-status"><span class="material-symbols-outlined">shield</span><span id="expenseAnalyzeStatus">분석할 견적서 파일을 선택해 주세요.</span></div>
+<div class="flex gap-xs flex-wrap">
+<button class="expense-secondary-button" id="expenseManualButton" type="button"><span class="material-symbols-outlined text-[17px]">edit_note</span>품목 직접 입력</button>
+<button class="expense-primary-button" id="expenseAnalyzeButton" type="button" disabled><span class="expense-spinner" id="expenseAnalyzeSpinner" hidden></span><span class="material-symbols-outlined text-[18px]">auto_awesome</span><span id="expenseAnalyzeLabel">견적서 분석 시작</span></button>
+</div></div>
+</section>
+
+<section class="expense-card" id="expenseResult" hidden>
+<div class="expense-card-title"><div><h2><span class="material-symbols-outlined text-primary">fact_check</span>분석 결과를 검토하세요</h2><p>품명·규격·단위·수량·예상단가를 직접 수정할 수 있습니다. 빈 규격과 단위는 추측하여 채우지 않습니다.</p></div></div>
+<div class="expense-result-head">
+<div class="expense-summary-box"><span>분석 파일</span><strong id="expenseSourceFile"></strong></div>
+<div class="expense-summary-box"><span>공급업체</span><strong id="expenseSupplier"></strong></div>
+<div class="expense-summary-box"><span>견적일</span><strong id="expenseQuoteDate"></strong></div>
+<div class="expense-summary-box"><span>합계</span><strong id="expenseTotalAmount">0원</strong></div>
+</div>
+<div class="flex items-center justify-between gap-sm mb-sm"><strong class="text-[14px] text-ink">품목내역 <span class="text-primary" id="expenseItemCount">0건</span></strong><span class="text-[11px] text-muted">금액 = 수량 × 예상단가</span></div>
+<div class="expense-table-wrap">
+<table class="expense-table">
+<thead><tr><th>내용</th><th>규격</th><th>단위</th><th>수량</th><th>예상단가</th><th>합계</th><th><span class="sr-only">삭제</span></th></tr></thead>
+<tbody id="expenseItemsBody"></tbody>
+</table>
+</div>
+<div class="expense-table-actions">
+<button class="expense-secondary-button" id="expenseAddItem" type="button"><span class="material-symbols-outlined text-[17px]">add</span>품목 추가</button>
+<button class="expense-secondary-button" id="expenseRegenerate" type="button"><span class="material-symbols-outlined text-[17px]">refresh</span>품의서 다시 생성</button>
+</div>
+
+<div class="expense-draft-card" id="draftResultPanel">
+<div class="flex items-center justify-between gap-sm mb-md"><div><strong class="block text-[15px] text-ink">K-에듀파인 복사용 품의서 초안</strong><span class="block mt-1 text-[11px] text-muted">번호와 붙임 문구가 유지되도록 일반 텍스트로 제공합니다.</span></div><span class="px-sm py-1 rounded-full bg-warning/10 text-warning text-[11px] font-bold">검수 필요</span></div>
+<div class="expense-form-grid mb-sm">
+<div class="expense-field"><label for="expenseDraftTitle">제목</label><input id="expenseDraftTitle" type="text"></div>
+<div class="expense-field"><label for="expensePurpose">목적</label><input id="expensePurpose" type="text"></div>
+</div>
+<div class="expense-field"><label for="expenseDraftBody">본문 및 종결 문구</label><textarea id="expenseDraftBody"></textarea></div>
+<div class="expense-copy-row"><button class="expense-secondary-button" id="expenseCopyTitle" type="button"><span class="material-symbols-outlined text-[17px]">content_copy</span>제목 복사</button><button class="expense-secondary-button" id="expenseCopyBody" type="button"><span class="material-symbols-outlined text-[17px]">content_copy</span>본문 복사</button></div>
+</div>
+
+<div class="expense-warning"><span class="material-symbols-outlined text-[19px]">warning</span><span><strong>최종 확인이 필요합니다.</strong> AI가 읽은 품목·수량·단가·합계와 관련 문서번호를 원본 견적서 및 실제 결재 자료와 대조한 뒤 사용하세요.</span></div>
+<div class="flex justify-end gap-xs flex-wrap mt-md"><button class="expense-secondary-button" id="expenseDownloadDraft" type="button"><span class="material-symbols-outlined text-[17px]">description</span>품의서 초안 TXT</button><button class="expense-primary-button" id="expenseDownloadCsv" type="button"><span class="material-symbols-outlined text-[18px]">download</span>K-에듀파인 품목내역 CSV</button></div>
+</section>
+</div>
+
+<aside class="expense-chat" aria-label="지출품의 AI 비서">
+<div class="expense-chat-header"><div class="expense-chat-title"><span class="material-symbols-outlined">smart_toy</span>지출품의 AI 비서</div><div class="expense-chat-status">작성 흐름 안내 중</div></div>
+<div class="expense-chat-messages" id="expenseChatMessages" aria-live="polite"></div>
+<div class="expense-chat-prompts"><button class="expense-chat-prompt" type="button" data-chat-prompt="유형 A로 진행할게">관련 문서 있음</button><button class="expense-chat-prompt" type="button" data-chat-prompt="유형 B로 진행할게">관련 문서 없음</button><button class="expense-chat-prompt" type="button" data-chat-prompt="품목내역 파일만 만들어줘">품목내역만</button><button class="expense-chat-prompt" type="button" data-chat-prompt="견적서 올릴게">견적서 올리기</button></div>
+<div class="expense-chat-input"><textarea id="expenseChatInput" rows="1" placeholder="예: 유형 A로 견적서 분석해 줘"></textarea><button class="expense-chat-send" id="expenseChatSend" type="button" aria-label="메시지 보내기"><span class="material-symbols-outlined">send</span></button></div>
+</aside>
+</div>
+</div>
+</div>
+</main>
+
+<footer class="w-full mt-section px-lg max-w-[1600px] mx-auto flex flex-col gap-base pb-xl border-t border-hairline pt-xl opacity-70">
+<div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-base"><span class="text-[16px] font-bold" data-ef="footer.org">경상북도교육청</span><div class="flex flex-wrap gap-base"><a class="text-[12px] text-body hover:underline" href="공통_개인정보처리방침.html">개인정보처리방침</a><a class="text-[12px] text-body hover:underline" href="공통_이용약관.html">이용약관</a><a class="text-[12px] text-body hover:underline" href="공통_이메일무단수집거부.html">이메일무단수집거부</a><a class="text-[12px] text-body hover:underline" href="공통_찾아오시는길.html">찾아오시는길</a></div></div>
+<div class="flex flex-col md:flex-row justify-between items-start md:items-center border-t border-hairline/50 pt-base"><p class="text-[12px] text-on-surface-variant" data-ef="footer.copyright">© 경상북도교육청. All Rights Reserved.</p><p class="text-[12px] text-muted" data-ef="footer.address">경북 안동시 풍천면 도청대로 511 | 대표전화 054-805-3000</p></div>
+</footer>
+
+<div class="fixed bottom-lg left-1/2 -translate-x-1/2 z-[200] flex items-center gap-xs px-lg py-sm rounded-full text-white shadow-xl transition-all duration-300 translate-y-24 opacity-0 pointer-events-none" id="expenseToast" role="status"><span class="material-symbols-outlined text-[18px]" data-toast-icon>check_circle</span><span class="text-[13px] font-bold" data-toast-text></span></div>
+
+<script src="assets/js/expense-proposal.js"></script>
+<script>
+(function () {
+    ['org', 'address', 'copyright'].forEach(function (field) {
+        var value = localStorage.getItem('ef_footer_' + field);
+        var target = document.querySelector('[data-ef="footer.' + field + '"]');
+        if (value && target) target.textContent = value;
+    });
+})();
+</script>
+</body>
+</html>

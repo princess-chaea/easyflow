@@ -1,19 +1,22 @@
-# 이지플로우(EasyFlow) 백엔드 연동 가이드
+﻿# 이지플로우(EasyFlow) 백엔드 연동 가이드
 
 이 문서는 현재 정적 HTML/Tailwind 프로토타입(빌드 시스템 없음, 백엔드 없음, localStorage·명시적 데모 데이터 중심이며
 일부 기능은 동일 출처 API 프록시 계약을 선반영)으로 만들어진 프론트엔드를 실제 백엔드에 연결하기 위한 참고 자료입니다. 백엔드 담당자가 이 문서만
 보고도 "지금 무엇이 진짜 동작하고 무엇이 가짜인지", "어떤 데이터를 어떤 모양으로 저장해야 하는지"를 파악할 수
 있도록 정리했습니다.
 
-> **2026-08-15 인계 기준**: 현재 상태와 구현 계약은 이 문서의 최신 상태 표, `BACKEND_API_CONTRACT.md`,
-> `DOCUMENT_AGENT_SPEC.md`를 우선한다. 과거 오류 분석은 회귀 방지 기록이며 현재 동작으로 해석하지 않는다.
+> **2026-08-17 인계 기준**: 백엔드 기본 전달물은 이 문서와 `BACKEND_API_CONTRACT.md` 두 개다.
+> 로컬 HWP 문서 에이전트를 함께 개발할 때만 `DOCUMENT_AGENT_SPEC.md`와 `THIRD_PARTY_NOTICES.md`를 추가한다.
+> 과거 오류 분석은 회귀 방지 기록이며 현재 동작으로 해석하지 않는다.
 
-- API 요청·응답·오류·파일 정책: [`BACKEND_API_CONTRACT.md`](BACKEND_API_CONTRACT.md)
-- 열려 있는 HWP/HWPX/ODT 계획·수정 모드: [`DOCUMENT_AGENT_SPEC.md`](DOCUMENT_AGENT_SPEC.md)
-- 프론트 협의용 데모 흐름과 운영 전환: [`FRONTEND_REVIEW_GUIDE.md`](FRONTEND_REVIEW_GUIDE.md)
+- 필수 — 구현 범위·현재 상태·우선순위: 이 문서
+- 필수 — API 요청·응답·오류·파일 정책: [`BACKEND_API_CONTRACT.md`](BACKEND_API_CONTRACT.md)
+- 선택 — 열린 HWP/HWPX/ODT 계획·수정 모드: [`DOCUMENT_AGENT_SPEC.md`](DOCUMENT_AGENT_SPEC.md)
+- 선택 — 문서 엔진·라이선스 검토: [`THIRD_PARTY_NOTICES.md`](THIRD_PARTY_NOTICES.md)
+- 프론트 내부 참고 — 협의용 데모 흐름: [`FRONTEND_REVIEW_GUIDE.md`](FRONTEND_REVIEW_GUIDE.md)
 
-최초 조사: 2026-08-05 / 최신 검증: 2026-08-15. 프론트엔드 전체 39개 페이지(관리자 11 + 업무배송 4 + 서식자료실 6 + 인생도서관 5 +
-안내센터 3 + 공통 인증/법적고지 8 + 홈 1 + 챗봇 1) 및 `assets/js/` 공유 모듈 6개를 전수 조사했습니다.
+최초 조사: 2026-08-05 / 최신 검증: 2026-08-17. 프론트엔드 전체 40개 페이지(관리자 11 + 업무배송 4 + 서식자료실 7 + 인생도서관 5 +
+안내센터 3 + 공통 인증/법적고지 8 + 홈 1 + 챗봇 1) 및 `assets/js/` 공유 모듈 13개를 점검했습니다.
 
 **2026-08-06 업데이트**: 아래 항목 중 "백엔드 연결과 무관한 프론트엔드 자체 버그"였던 6건(1.1, 1.2, 1.3,
 1.7, 1.9, 3.2, 3.3 — 정확히는 1.1/1.7/1.9/3.3이 한 그룹, 1.2·1.3이 한 그룹, 3.2가 한 그룹)은 **모두 수정
@@ -81,6 +84,24 @@ AI챗봇, 안내센터 2개, 서버관리자 3개)를 병렬로 마지막 점검
 - 업무 체크리스트 HWPX 내보내기의 깨진 결과 기호 문자열을 `×`·`△`·`○`으로 복원했다.
 - 로그인 폼으로 세션을 만든 뒤 전체 HTML 39개를 Edge에서 다시 열어 확인했다. 로그인 이탈·빈 화면·탐색 오류·
   JavaScript 런타임 예외는 각각 0건이었다. 중복 DOM `id`와 실제 깨진 상대경로도 각각 0건이다.
+
+## 0-B. 2026-08-17 협의회 후속 UI/UX 반영
+
+- 업무발송에 작성자 기준 등록 목록과 묶음 단위 수정·삭제를 추가했다. 백엔드는 작성 권한, 수정 충돌,
+  관계 테이블 교체, 소프트 삭제·감사 로그를 구현해야 한다.
+- 업무우편함의 `내 업무 분야`와 `주관 부서` 용어를 구분하고, 스마트공문달력에 저장형 `내 부서` 선택과
+  `내 부서만` 필터를 추가했다.
+- Google·Outlook 연동 대상은 각각 `새 별도 캘린더`가 기본 선택되도록 라디오 그룹 충돌을 수정했다.
+  실제 OAuth·토큰·캘린더 생성·동기화는 여전히 백엔드 작업이다.
+- 멘토 대화별 `AI 지식 개선 활용` 선택을 추가했다. 기본은 제외이며, 멘토가 명시적으로 요청할 때만
+  익명화 요약 검토 후보가 된다. 원문을 자동 학습시키지 않는다.
+- 서식자료실 사용자 메뉴를 `통합 검색 / 서식 자동 완성 / 스마트 계획서 변환 / 지출품의서 작성기` 네 개로
+  단순화했다. 종전 공문 분석 경로는 통합 검색의 `공문 분석` 탭으로 이동한다.
+- 통합 공문 분석은 실제 파일을 `/api/documents/analyze`로 보내도록 준비했다. 서버가 없을 때는 내용을
+  추측하지 않고 `서버 연결 필요`를 표시한다.
+- 스마트 계획서에 `새 계획 만들기 / 현재 계획 수정` 대화형 도우미를 추가했다. `/api/documents/assistant`
+  응답의 수정 지시는 자동 적용하지 않고 기존 검토·승인 흐름으로 넘긴다.
+- 지출품의서 작성기의 견적 분석 API 작업은 4.3.3과 `BACKEND_API_CONTRACT.md` 7.1에 반영했다.
 
 ---
 ## 0. 가장 먼저 읽을 것 — 실제 동작과 백엔드 필요 기능의 경계
@@ -277,6 +298,7 @@ localStorage 키 분석을 기반으로 도출한 최소 테이블 목록입니�
 - `inquiries` (id, user_id, type, title, content, status, answer, answered_by, answered_at, created_at)
 - `mentoring_requests` (id, requester_id, assigned_mentor_id, category, title, status, created_at, completed_at) — 현재 프론트의 단일 답변이 아닌 대화 스레드의 상위 엔터티
 - `mentoring_messages` (id, request_id, sender_id, message_type, content, attachment_id, created_at) — `messages[]` 이관 대상
+- `mentoring_knowledge_preferences` (thread_id, status, scope, decided_by, decided_at, revoked_at) — 기본 제외, 익명화 요약 검토 요청과 철회 이력
 - `mentor_expertise` (mentor_id, category_code, scope_type, scope_id, active) — 분야별 다중 멘토 배정
 - `mentor_slots` (id, mentor_id, starts_at, ends_at, status) 및 `appointments` (id, slot_id, request_id, mentee_id, platform, join_link, meeting_id, status)
 - `consult_logs` (id, request_id, mentor_id, category, consulted_at, summary, action, status) — 상담일지·월별 출력의 원천 데이터
@@ -290,6 +312,7 @@ localStorage 키 분석을 기반으로 도출한 최소 테이블 목록입니�
 - `mail_bookmarks` (user_id, mail_id)
 - `mail_reads` (user_id, mail_id, read_at) — 현재는 메일 자체의 전역 속성처럼 처리되어 사용자별 읽음 상태가 없음
 - `personal_events` (id, user_id, title, date, memo) — 스마트공문달력의 개인 일정
+- `user_preferences` (user_id, key, value, updated_at) — `내 부서` 등 사용자별 보기·필터 기본값
 - `home_widget_layouts` (user_id, widget_id, size, sort_order) — 홈 위젯 배치
 - `saved_resources` (id, user_id, filename, size, saved_at) — 마이페이지 "저장한 자료" (실제 파일 스토리지 필요)
 - `site_settings` (key, value) — 푸터 기관명/주소/저작권, 개인정보 담당부서/DPO 연락처 등 (현재
@@ -407,21 +430,27 @@ roleRequests/ef_inquiries/ef_mentoring/ef_notices/ef_mentor_roster를 실제로 
 
 ### 4.1 업무 배송
 
-**업무배송_스마트공문달력.html** (5,174줄, 최대 파일)
+**업무배송_스마트공문달력.html**
 학사일정(NEIS 실시간) + 연간 업무배송 캘린더(정적 TASKS 173건) + 개인 일정 + AI 도우미 통합 달력.
-`TASKS`의 마감일은 실제 날짜가 아니라 알고리즘으로 요일에 분산 배치한 값(개발자가 주석으로 "서버 구현 시
-실제 배송일로 대체" 명시). Google/Outlook 캘린더 "연동"은 완전 가짜(계정명 하드코딩,
-`syncNow()`는 스피너만). 필요 테이블: `personal_events`, `calendar_task_completions`,
-`calendar_connections`(실제 OAuth2 구현 시). NEIS/AI는 서버 프록시로.
+`TASKS`의 마감일은 실제 날짜가 아니라 알고리즘으로 분산한 값이므로 서버 구현 시 실제 배송일로 대체한다.
+2026-08-17에 `내 부서` 선택·`내 부서만` 필터를 추가했고 `ef_my_department_<email>`에 임시 저장한다.
+Google과 Outlook은 각각 `새 별도 캘린더`가 기본값이 되도록 프론트 라디오 그룹을 분리했다. 계정명·동기화는
+여전히 데모이므로 `personal_events`, `calendar_task_completions`, `calendar_connections`, OAuth2 토큰
+암호화·갱신과 사용자 기본 캘린더 설정이 필요하다. NEIS/AI는 서버 프록시로 연결한다.
 
 **업무배송_업무우편함.html**
-구독 태그(30개 업무분야) 기반 수신함 + 책갈피로 개인 달력 표시. `ef_mail_data`를 업무발송.html과
-공유하지만 1.1 버그로 실제 수신되는 메일은 거의 없고, 최초 12건 시드 데이터만 보임. 상세 모달 "서식
-다운로드" 버튼은 완전히 죽어있음. XSS 이슈 있음(1.7).
+업무 분야 기반 수신함 + 책갈피로 개인 달력 표시. 2026-08-17에 수신 기준은 `내 업무 분야`, 발신 조직은
+`주관 부서`로 용어를 통일하고 목록·상세 배지도 같은 기준으로 정리했다. `ef_mail_data`를 업무발송과 공유하며
+발송·수정·삭제가 실제 반영된다. 현재 첨부 바이너리와 사용자 간 공유는 없으므로 백엔드 전환 시
+`dispatches`, `dispatch_targets`, `dispatch_reads`, `mail_subscriptions`, 파일 스토리지로 옮긴다.
 
 **업무배송_업무발송.html**
-업무배송 담당자 전용 발송 화면. 3.3의 다중파일/링크/시기 필드 유실 버그 있음. `dispatches` +
-`dispatch_files`(+ `dispatch_categories`) 테이블 필요.
+업무배송 담당자 전용 발송 화면. 다중파일·링크·시기 필드 저장을 보완했고, 2026-08-17에는 화면 아래
+"내가 등록한 업무" 목록과 업무 분야 묶음 단위 수정·삭제를 추가했다. 현재는 `ef_mail_data`에서 실제로
+등록·수정·삭제되며 새 데이터에는 `dispatchGroupId`, `senderEmail`, `updatedAt`을 기록한다. 백엔드는
+`dispatches` + `dispatch_files`(+ `dispatch_categories`) 테이블과 `PATCH/DELETE /api/dispatches/{id}`를
+구현하고 작성자·업무배송 담당자·서버관리자 권한, 수정 충돌, 수신자 읽음/책갈피 유지, 소프트 삭제·감사
+정책을 적용해야 한다.
 
 **업무배송_맞춤형업무가이드.html** *(이번 세션에 신규 구현)*
 "오늘의 필수 업무" 우선순위 목록 + 이번 주 학사일정 + AI 추천 배너로 구성된 대시보드. 현재는 전부
@@ -488,15 +517,23 @@ UI는 카테고리 선택 → 채팅 → AI 응답 흐름을 갖췄지만, **AI 
 출력" 인쇄 모달과 실제로 연동되어(로그인 멘토 + 선택한 달 기준으로 필터링) 더 이상 하드코딩된 3줄이
 아님(작성자 이름도 `EF_MENTOR_ROSTER`에서 가져옴).
 
+✅ **2026-08-17 개인정보 선택 추가**: 대화별 `AI 지식 개선 활용`은 기본 `excluded/none`이며 담당 멘토가
+직접 선택할 때만 `review_requested/anonymized_summary_only`로 바뀐다. 프론트는 의사결정만
+`ef_mentoring_knowledge_preferences`에 저장한다. 백엔드는 원문 대화를 학습 데이터로 자동 전환하지 말고
+익명화 요약 생성, 개인정보 제거, 사람 검토, 감사 로그와 철회를 `PATCH /api/mentoring/threads/{id}/knowledge-use`
+정책으로 구현한다.
+
 **인생도서관_장학사 및 업무담당자 통합 대시보드.html** *(이번 세션에 접근권을 장학사 전용으로 수정)*
 전체가 정적 KPI/차트(총 상담 128건, 처리완료율 92% 등)입니다. 실제 `ef_mentoring`/`ef_inquiries`
 데이터를 집계해서 보여주는 통계 API가 필요합니다(3.4 참고).
 
 ### 4.3 서식 자료실
 
-6개 페이지(통합검색 / 서식선택 / 학교정보확인 / 생성완료 / 공문OCR요약 / 스마트계획서변환) 중 검색·폼 연결·
-미리보기는 프론트에서 동작하지만, 실제 OCR/AI 문서 생성은 아직 없다. 체크리스트 페이지의 내장 HWPX 템플릿
-치환만 실제 HWPX 산출물이며, 생성완료·스마트계획서는 HTML 미리보기로 명확히 표시한다.
+물리 파일은 기존 단계·호환 경로를 포함해 7개지만 사용자에게 보이는 메뉴는 `통합 검색 / 서식 자동 완성 /
+스마트 계획서 변환 / 지출품의서 작성기` 네 개로 단순화했다. 종전 `공문OCR요약` 주소는 통합 검색의
+`#document-analysis` 탭으로 리디렉션한다. 검색·폼 연결·미리보기는 프론트에서 동작하지만 실제 OCR/AI 문서
+생성은 아직 없다. 체크리스트 페이지의 내장 HWPX 템플릿 치환과 자체 호스팅 웹 편집만 실제 문서 바이트를
+처리하며, 생성완료·스마트계획서의 HTML 미리보기는 실제 HWP/HWPX 산출물로 간주하지 않는다.
 공통적으로 필요한 백엔드: 서식 템플릿 저장소(`templates` 테이블 + 실제 HWP/HWPX 바이너리 스토리지), 문서
 생성 서비스(템플릿 + 사용자 입력값 병합 → 실제 파일 산출), OCR/문서이해 LLM 파이프라인, 검색 엔진(키워드 +
 벡터 검색). ~~마법사 3단계는 상태 연결이 끊겨 있음~~ → 2026-08-06 sessionStorage로 연결 완료(3.2 참고,
@@ -582,6 +619,36 @@ Docufinder는 현재 비프로덕션 평가 전용이고, Canine89 및 jkf87의 
 `THIRD_PARTY_NOTICES.md`와 SBOM에 기록한다. 현재 실제 반입한 `rhwp` 식별값과 MIT 전문도 이 파일에
 기록되어 있다. “GitHub에서 공개됨”, “무료”, “개인 개발”은 라이선스 증거로
 사용하지 않는다. 상세 근거와 엔진별 역할은 `DOCUMENT_AGENT_SPEC.md` 14~15절이 단일 기준이다.
+
+### 4.3.3 2026-08-17 추가 — 지출품의서 작성기 견적 분석 API
+
+**프론트 구현 완료**: `서식자료실_지출품의서작성기.html`과 `assets/js/expense-proposal.js`에
+작성 유형 A(관련 문서번호 있음)·B(관련 문서번호 없음)·품목 내역만 생성하는 3개 흐름을 구현했다.
+UTF-8 CSV 견적서는 브라우저에서 직접 분석하며 품목 수정, 합계 재계산, 품의서 초안, TXT 및
+K-에듀파인용 UTF-8 BOM CSV 다운로드까지 동작한다.
+
+**백엔드 필수 작업(우선순위 높음)**:
+
+1. `POST /api/expense-proposals/analyze` multipart API를 구현한다.
+2. PDF·이미지·HWP/HWPX·XLS/XLSX에서 업체명, 견적일, 품목, 규격, 단위, 수량, 단가를 추출한다.
+3. 제목·업체·품목·금액은 현재 요청의 견적서에서만 가져오며 예시 문서 값을 섞지 않는다.
+4. 규격·단위가 없으면 빈 문자열을 반환하고, 관련 문서번호 유무는 추론하지 않는다.
+5. 항목별 금액과 합계를 서버에서 재계산하고 견적서 합계와 다르면 검토 경고를 반환한다.
+6. 파일 시그니처·MIME·20MB 제한·악성코드·조직 권한·보존기간을 검증하고 모델 키와 프롬프트는
+   서버에만 둔다.
+
+정확한 요청·응답 스키마와 오류 처리 기준은 `BACKEND_API_CONTRACT.md`의
+`7.1 지출품의서 견적 분석`을 단일 기준으로 사용한다. 별도 계약 문서를 추가로 전달할 필요는 없다.
+
+### 4.3.4 2026-08-17 추가 — 통합 공문 분석과 계획서 AI 도우미
+
+- `서식자료실_통합검색.html#document-analysis`: 파일 선택·검증·상태 UI는 구현됐다. 운영에서는
+  `POST /api/documents/analyze`가 요약, 할 일, 기한, 관련 서식을 반환한다. 서버 미연결 시에는 고정 요약을
+  보여주지 않고 분석하지 않았음을 명시한다.
+- `서식자료실_스마트 계획서 변환.html`: `새 계획 만들기`와 `현재 계획 수정` 대화를 제공한다.
+  `POST /api/documents/assistant`가 답변과 `proposedInstruction`을 반환하며 수정 지시는 기존 변경 검토
+  흐름으로 전달한다. 전체 문서를 기본 전송하거나 응답을 자동 적용하지 않는다.
+- 정확한 형식은 `BACKEND_API_CONTRACT.md` 7.2~7.3을 단일 기준으로 사용한다.
 
 ### 4.4 안내센터
 
@@ -678,10 +745,10 @@ CMS/문서 테이블 설계 필요(현재는 카드 링크 몇 개뿐).
   유실~~ 은 2026-08-06 수정 완료)
 - 생성완료(STEP3): 입력값을 채운 HTML 미리보기를 다운로드한다. ✅ 2026-08-15 실제 형식에 맞게 파일명·버튼을
   `.html`로 표시하고 HWPX 버튼은 백엔드 연동 전까지 비활성화했다.
-- ~~공문OCR요약: 업로드 내용과 무관하게 고정 요약 출력, 필터/재시도/상세보기/FAB 무반응~~ ✅ 2026-08-07
-  수정 완료(업로드 파일명은 실제 반영, 필터/재시도/상세보기/FAB 실동작 — 요약 "내용" 자체는 여전히 목업)
-- 스마트계획서변환: 업로드 파일 본문은 읽지 않고 파일명과 사용자가 입력한 값으로 HTML 미리보기를 만든다.
-  ✅ 2026-08-15 실제 HWP 분석처럼 보이던 진행 문구와 `.hwp` 다운로드 표기를 정직한 프로토타입 안내로 수정했다.
+- 공문 분석은 2026-08-17 통합 검색 탭으로 합쳤고 `/api/documents/analyze` 연동을 준비했다. 서버 미연결 시
+  고정 요약을 출력하지 않고 `서버 연결 필요`로 정직하게 안내한다.
+- 스마트계획서변환은 자체 호스팅 편집과 요청 검토 UI가 동작하며, 2026-08-17 대화형 계획서 도우미를
+  추가했다. 실제 AI 초안·분석은 `/api/documents/assistant`와 문서 에이전트 연결 전까지 생성하지 않는다.
 - ~~마이페이지: "다운로드"/"회의실 입장하기" 토스트만 뜸~~ 화상상담 회의 정보는 2026-08-06에 이미 실제
   표시로 교체됨(1.5 위 3.5 참고). "저장한 자료"는 실제로 localStorage에 저장/삭제되는 기능이었으나
   2026-08-07에 파일명 저장형 XSS(이스케이프 누락)를 발견해 수정함.
@@ -711,13 +778,15 @@ CMS/문서 테이블 설계 필요(현재는 카드 링크 몇 개뿐).
 | `avatar_<email>` | base64 dataURL | profile-modal.js |
 | `ef_inquiries` | 배열, 각 항목에 `answeredBy`(문자열, 이메일)/`answeredAt`(문자열, YYYY.MM.DD) 포함 | assets/js/inquiries.js (✅ 2026-08-07 답변자/답변일 자동 기록 추가) |
 | `ef_mentoring` | 배열 `[{id, email, mentorEmail, mentorName, category, title, status, messages[]}]` | assets/js/mentoring.js (✅ 2026-08-06 "쪽지 1건-답변 1건"→대화 스레드로 재구성, `content`/`answer` 필드는 `messages[]`로 대체됨) |
+| `ef_mentoring_knowledge_preferences` | 객체 `{threadId: {status, scope, explicit, decidedBy, decidedAt}}` | mentor-knowledge-preference.js(기본 제외, 익명화 요약 검토 요청 의사만 임시 저장) |
 | `ef_checklist_progress_<org>` | 중첩 객체(period→sector→category→item) | 인생도서관_업무체크리스트.html |
 | `ef_notices` | 배열 | 안내센터_공지사항.html, _상세.html |
 | `ef_home_widgets_<email>` | 배열 `[{id, size}]` | index.html |
-| `ef_mail_data` | 배열 | 업무배송_업무발송.html, _업무우편함.html |
+| `ef_mail_data` | 배열(신규 건은 `dispatchGroupId`, `senderEmail`, `updatedAt` 포함) | 업무배송_업무발송.html, _업무우편함.html |
 | `ef_mailSubscriptions_<user>` | 배열 | 업무배송_업무우편함.html |
 | `ef_mailCalendarBookmarks_<user>` | 배열 | 업무배송_업무우편함.html |
 | `ef_events`, `ef_done`, `ef_settings`, `ef_school`, `ef_depts`, `ef_ai_cache`, `ef_sideopen` | 각각 다름 | 업무배송_스마트공문달력.html |
+| `ef_my_department_<email>` | 문자열(부서명) | calendar-my-department.js(사용자별 `내 부서` 필터 기본값) |
 | `ef_saved_resources` | 배열 | 인생도서관_마이페이지.html |
 | `ef_chat_history_<email>` | 배열 `[{id, title, date, html}]` | AI업무어시스턴트_챗봇.html (서버 이전 시 HTML 대신 구조화 메시지 저장) |
 | `ef_mentor_slots` | 배열 `[{id, mentorEmail, date, time, booked}]` | assets/js/mentoring.js (`EF_APPOINTMENT`, ✅ 2026-08-06 신규, 멘토별 분리) |
@@ -732,6 +801,9 @@ CMS/문서 테이블 설계 필요(현재는 카드 링크 몇 개뿐).
 | `ef_security_mfa_enabled`, `ef_security_pw_expiry_days`, `ef_security_concurrent_limit` | 각각 boolean/숫자 문자열 | 서버관리자_보안설정.html (✅ 2026-08-07 신규, 마찬가지로 실배포 시 서버 정책 필요) |
 | `ef_rag_source_status` | 객체 `{sourceId: 'optimal'}` | 서버관리자_RAG데이터관리.html (✅ 2026-08-07 신규, Reconnect 상태 유지용) |
 | `ef_rag_school_uploads_<org>` | 배열 `[{name, size, uploadedAt}]` | 학교관리자_RAG데이터갱신.html (✅ 2026-08-07 신규, 파일명/크기만 — 실제 바이너리 스토리지 아님) |
+
+스마트 계획서의 `ef_smart_plan_brief`는 새 계획 요청을 같은 탭에만 잠시 보관하는 `sessionStorage` 값이다.
+영속 데이터 원천으로 이관하지 말고 `/api/documents/assistant` 요청이 성공하면 폐기한다.
 
 ---
 

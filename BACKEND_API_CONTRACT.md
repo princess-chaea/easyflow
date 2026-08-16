@@ -1,4 +1,4 @@
-# EasyFlow 백엔드 API 계약 초안
+﻿# EasyFlow 백엔드 API 계약 초안
 
 작성 기준: 2026-08-15
 상태: 프론트엔드-백엔드 구현 경계 확정용 초안
@@ -96,6 +96,7 @@
 - `GET /api/mentoring/threads?mine=true&status=&cursor=`
 - `POST /api/mentoring/threads/{id}/messages`
 - `POST /api/mentoring/threads/{id}/complete`
+- `PATCH /api/mentoring/threads/{id}/knowledge-use`
 - `GET /api/mentors?category=`
 - `GET /api/mentors/{id}/slots?from=&to=`
 - `POST /api/appointments`
@@ -103,11 +104,17 @@
 
 멘토링 상태값은 `new`, `in_progress`, `completed`, `cancelled`로 저장하고 한국어 표시는 프론트에서 매핑한다. 메시지는 HTML이 아니라 일반 텍스트 또는 서버에서 정화한 제한 Markdown으로 저장한다.
 
+지식 개선 활용은 기본값을 `excluded`로 둔다. 담당 멘토가 명시적으로 요청한 경우에만
+`{ "status": "review_requested", "scope": "anonymized_summary_only" }`를 받으며, 원문 대화는 모델
+학습 데이터로 직접 사용하지 않는다. 서버는 개인정보 제거, 사람 검토, 감사 로그와 철회 이력을 강제한다.
+
 ## 4. 업무배송·달력
 
 - `POST /api/dispatches`
 - `GET /api/dispatches?category=&department=&from=&to=&cursor=`
 - `GET /api/dispatches/{id}`
+- `PATCH /api/dispatches/{id}`
+- `DELETE /api/dispatches/{id}`
 - `POST /api/dispatches/{id}/reads`
 - `POST /api/dispatches/{id}/bookmarks`
 - `DELETE /api/dispatches/{id}/bookmarks`
@@ -117,6 +124,9 @@
 - `DELETE /api/calendar/events/{id}`
 
 한 번의 업무발송은 `dispatch` 한 건으로 저장하고 대상 부서·업무 분야는 관계 테이블로 분리한다. 읽음 상태는 수신자별 `dispatch_reads`로 저장한다.
+수정·삭제는 작성자, 업무배송 담당자 또는 서버관리자만 허용한다. `PATCH`로 업무 분야를 변경할 때는
+대상 관계를 한 트랜잭션에서 교체하고 기존 수신자의 읽음·책갈피 처리 정책을 명시한다. `DELETE`는 감사 로그와
+복구 정책을 적용한 소프트 삭제를 기본으로 하며, 모든 쓰기 요청은 최신 리비전 또는 `updatedAt` 충돌을 검사한다.
 
 ## 5. NEIS 프록시
 
@@ -194,6 +204,8 @@
 - `GET /api/files/{id}` — 권한 검사 후 다운로드 또는 짧은 만료 URL 반환
 - `POST /api/documents/draft`
 - `POST /api/documents/convert`
+- `POST /api/documents/analyze`
+- `POST /api/documents/assistant`
 - `GET /api/document-jobs/{id}`
 - `GET /api/templates`
 - `POST /api/templates/{id}/render`
@@ -207,6 +219,124 @@
 - 암호화·DRM 문서는 명확한 `DOCUMENT_UNSUPPORTED` 처리
 - 원본·산출물의 조직별 격리, 보존기간, 삭제 정책
 - 같은 변환 요청의 중복 실행을 막는 idempotency key
+
+### 7.1 지출품의서 견적 분석
+
+`POST /api/expense-proposals/analyze`
+
+요청은 `multipart/form-data`이다.
+
+- `file`: PDF, HWP/HWPX, XLS/XLSX, CSV, JPG/JPEG/PNG/WebP 견적서. 최대 20MB.
+- `draftType`: `A`(관련 문서번호 있음), `B`(관련 문서번호 없음), `items_only` 중 하나.
+
+성공 응답:
+
+```json
+{
+  "data": {
+    "source": {
+      "fileName": "견적서.pdf",
+      "supplier": "업체명",
+      "quoteDate": "2026-08-17"
+    },
+    "items": [
+      {
+        "content": "프린터 토너",
+        "specification": "검정",
+        "unit": "개",
+        "quantity": 2,
+        "unitPrice": 50000,
+        "amount": 100000
+      }
+    ],
+    "totalAmount": 100000,
+    "suggestedTitle": "프린터 토너 구입",
+    "purpose": "원활한 행정 업무 추진",
+    "warnings": []
+  }
+}
+```
+
+분석 규칙:
+
+- 제목·업체·품목·수량·단가·금액은 현재 요청의 `file`에서만 추출한다.
+- 공문서 편람과 공공언어 자료는 문체·형식 검증에만 사용하고 예시 값을 결과에 섞지 않는다.
+- 관련 문서번호 유무를 견적서에서 추론하지 않는다. `draftType=A`일 때만 프론트가 수정 가능한
+  문서번호 입력란을 표시한다.
+- 규격·단위를 확인할 수 없으면 빈 문자열로 반환하며 추측값을 채우지 않는다.
+- 항목별 `amount`와 `totalAmount`를 재계산한다. 견적서 표기 합계와 다르면 `warnings`에
+  `TOTAL_MISMATCH`를 포함하거나 공통 형식의 `VALIDATION_ERROR`를 반환한다.
+- 모델 프롬프트와 공급자 키는 서버에만 둔다. 파일의 MIME·시그니처·악성코드와 조직별 권한·보존기간을
+  검증한다.
+- K-에듀파인 CSV는 프론트가 `내용,규격,단위,수량,예상단가` 순서로 생성한다.
+
+오류 코드:
+
+- `FILE_TOO_LARGE`: 20MB 초과
+- `UNSUPPORTED_DOCUMENT`: 지원하지 않거나 암호화·DRM된 문서
+- `DOCUMENT_PARSE_FAILED`: 문서 구조/OCR 분석 실패
+- `NO_QUOTE_ITEMS`: 품목을 찾지 못함
+- `VALIDATION_ERROR`: 수량·단가·합계 검증 실패
+
+### 7.2 통합 공문 분석
+
+`POST /api/documents/analyze`
+
+`multipart/form-data`로 `file`과 `mode=official_document_summary`를 받는다. PDF, HWP/HWPX,
+DOC/DOCX, JPG/JPEG/PNG를 허용하며 최대 크기는 20MB이다.
+
+```json
+{
+  "data": {
+    "summary": "공문의 목적과 핵심 내용",
+    "actionItems": ["담당자가 해야 할 일"],
+    "dueDates": [{ "label": "제출 기한", "date": "2026-08-31" }],
+    "suggestedTemplates": [{ "id": "template_...", "name": "관련 서식명" }]
+  }
+}
+```
+
+업로드한 현재 문서에서 확인되지 않은 사실·기한·서식은 추측하지 않는다. 암호화·DRM·파싱 실패는 7.1과
+같은 공통 문서 오류 코드를 사용한다. 조직별 접근권한, 악성코드 검사, 원본 보존기간과 삭제 정책을 적용한다.
+
+### 7.3 계획서 AI 도우미
+
+`POST /api/documents/assistant`
+
+```json
+{
+  "intent": "plan",
+  "message": "교직원 대상 AI 활용 연수 계획을 7월 중 2시간 실습 중심으로 만들어 줘.",
+  "documentContext": null
+}
+```
+
+기존 계획을 수정할 때는 `intent=edit`과 다음 최소 문맥만 보낸다.
+
+```json
+{
+  "intent": "edit",
+  "message": "2025학년도를 2026학년도로 바꾸고 표는 유지해 줘.",
+  "documentContext": {
+    "documentId": "doc_...",
+    "inputScope": "selected_context_only"
+  }
+}
+```
+
+응답:
+
+```json
+{
+  "data": {
+    "reply": "요청을 검토 가능한 수정 지시로 정리했습니다.",
+    "proposedInstruction": "2025학년도를 2026학년도로 변경하고 표와 나머지 서식은 유지한다."
+  }
+}
+```
+
+`intent`는 `plan` 또는 `edit`만 허용한다. `message` 길이와 문서 접근권한을 검증하고, 전체 문서를 기본
+전송하지 않는다. 수정 제안은 자동 적용하지 않고 기존 `DocumentPatch` 승인 흐름으로 넘긴다.
 
 ## 8. 로컬 문서 에이전트
 
@@ -239,9 +369,11 @@
 | `roleRequests` | role_requests |
 | `ef_inquiries` | inquiries, inquiry_messages |
 | `ef_mentoring`, `ef_mentor_roster` | mentoring_threads/messages, mentor_assignments |
+| `ef_mentoring_knowledge_preferences` | mentoring_knowledge_preferences, audit_logs |
 | `ef_mentor_slots`, `ef_appointments` | mentor_slots, appointments |
 | `ef_mail_data` | dispatches, dispatch_targets, dispatch_reads |
 | `ef_events`, `ef_done` | calendar_events, task_completions |
+| `ef_my_department_*` | user_preferences 또는 organization_memberships |
 | `ef_chat_history_*` | chat_sessions, chat_messages |
 | `ef_checklist_progress_*` | checklist_runs, checklist_answers |
 | `ef_notices` | notices |

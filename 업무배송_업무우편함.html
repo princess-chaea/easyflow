@@ -305,7 +305,7 @@
                 서식 자료실 <span class="material-symbols-outlined text-[18px]">expand_more</span>
 </a>
 <div class="absolute top-[64px] left-1/2 -translate-x-1/2 pt-md pb-md min-w-[160px] flex flex-col items-center gap-sm opacity-0 invisible group-hover/mega:opacity-100 group-hover/mega:visible transition-all duration-200 z-50 group-hover/col:bg-surface-container h-[290px] rounded-b-lg">
-<a class="font-nav-link text-[16px] text-on-surface-variant hover:text-primary transition-colors whitespace-nowrap px-sm py-1 w-full text-center" href="서식자료실_통합검색.html">통합 검색</a><a class="font-nav-link text-[16px] text-on-surface-variant hover:text-primary transition-colors whitespace-nowrap px-sm py-1 w-full text-center" href="서식 자료실_한글파일서식선택.html">서식 자동 완성</a><a class="font-nav-link text-[16px] text-on-surface-variant hover:text-primary transition-colors whitespace-nowrap px-sm py-1 w-full text-center" href="서식자료실_공문OCR요약.html">공문 분석</a><a class="font-nav-link text-[16px] text-on-surface-variant hover:text-primary transition-colors whitespace-nowrap px-sm py-1 w-full text-center" href="서식자료실_스마트 계획서 변환.html">스마트 계획서 변환</a>
+<a class="font-nav-link text-[16px] text-on-surface-variant hover:text-primary transition-colors whitespace-nowrap px-sm py-1 w-full text-center" href="서식자료실_통합검색.html">통합 검색</a><a class="font-nav-link text-[16px] text-on-surface-variant hover:text-primary transition-colors whitespace-nowrap px-sm py-1 w-full text-center" href="서식 자료실_한글파일서식선택.html">서식 자동 완성</a><a class="font-nav-link text-[16px] text-on-surface-variant hover:text-primary transition-colors whitespace-nowrap px-sm py-1 w-full text-center" href="서식자료실_스마트 계획서 변환.html">스마트 계획서 변환</a><a class="font-nav-link text-[16px] text-on-surface-variant hover:text-primary transition-colors whitespace-nowrap px-sm py-1 w-full text-center" href="서식자료실_지출품의서작성기.html">지출품의서 작성기</a>
 </div>
 </div>
 <div class="relative h-full flex flex-col justify-start group/col">
@@ -377,22 +377,22 @@
 <div class="mb-lg flex flex-col sm:flex-row sm:items-end sm:justify-between gap-sm">
 <div>
 <h1 class="text-[28px] font-bold text-ink mb-xs">업무 우편함</h1>
-<p class="text-[15px] text-ink/70">내가 구독 중인 업무 분야로 배송된 서식·공문·자료가 모두 도착합니다. <span class="material-symbols-outlined text-[14px] align-middle">bookmark</span> 책갈피로 표시된 업무만 나의 학사일정 달력에 반영됩니다.</p>
+<p class="text-[15px] text-ink/70">내 업무 분야로 배송된 서식·공문·자료가 모두 도착합니다. <span class="material-symbols-outlined text-[14px] align-middle">bookmark</span> 책갈피로 표시된 업무만 나의 학사일정 달력에 반영됩니다.</p>
 </div>
 <div class="flex items-center gap-xs">
 <button class="mailbox-tab px-md py-xs rounded-full text-[14px] font-bold transition-colors bg-primary text-white" data-filter="all" onclick="filterMail('all', this)">전체 <span class="opacity-80" id="tabCountAll">0</span></button>
 <button class="mailbox-tab px-md py-xs rounded-full text-[14px] font-bold transition-colors text-ink/60 hover:bg-surface-strong" data-filter="unread" onclick="filterMail('unread', this)">안 읽음 <span class="opacity-70" id="tabCountUnread">0</span></button>
 </div>
 </div>
-<!-- 구독 중인 업무 분야 -->
+<!-- 내 업무 분야 -->
 <details class="bg-white rounded-2xl border border-gray-200 shadow-sm mb-base group">
 <summary class="flex items-center justify-between p-md cursor-pointer select-none list-none">
-<span class="flex items-center gap-xs text-[14px] font-bold text-ink"><span class="material-symbols-outlined text-[18px] text-primary">tune</span>구독 중인 업무 분야 <span class="font-normal text-ink/50" id="subCountLabel">(30/30개 구독 중)</span></span>
+<span class="flex items-center gap-xs text-[14px] font-bold text-ink"><span class="material-symbols-outlined text-[18px] text-primary">tune</span>내 업무 분야 <span class="font-normal text-ink/50" id="subCountLabel">(30/30개 선택)</span></span>
 <span class="material-symbols-outlined text-muted transition-transform group-open:rotate-180">expand_more</span>
 </summary>
 <div class="px-md pb-md border-t border-gray-100 pt-sm">
 <div class="flex items-center justify-between mb-sm">
-<p class="text-[12px] text-ink/50">선택한 분야로 발송된 업무만 우편함에 표시됩니다. (초등 기준)</p>
+<p class="text-[12px] text-ink/50">내가 맡거나 관심 있는 분야를 선택하세요. 업무를 보낸 곳은 “주관 부서”로 구분합니다. (초등 기준)</p>
 <div class="flex items-center gap-xs shrink-0">
 <button class="text-[12px] text-primary hover:underline" onclick="setAllSubscriptions(true)">전체 선택</button>
 <span class="text-ink/20">|</span>
@@ -528,7 +528,7 @@
                 btn.classList.toggle('border-hairline', !on);
                 btn.classList.toggle('text-body', !on);
             });
-            document.getElementById('subCountLabel').textContent = '(' + subscribed.size + '/' + TASK_CATEGORY_TAGS.length + '개 구독 중)';
+            document.getElementById('subCountLabel').textContent = '(' + subscribed.size + '/' + TASK_CATEGORY_TAGS.length + '개 선택)';
         }
         function setAllSubscriptions(on) {
             subscribed = new Set(on ? TASK_CATEGORY_TAGS : []);
@@ -576,7 +576,7 @@
             document.getElementById('tabCountUnread').textContent = visible.filter(m => !m.read).length;
 
             if (!visible.length) {
-                listEl.innerHTML = '<div class="py-xxl text-center"><span class="material-symbols-outlined text-[40px] text-muted-soft">mark_email_unread</span><p class="text-body-sm text-ink/50 mt-xs">구독 중인 업무 분야가 없습니다. 위에서 관심 있는 분야를 선택해 주세요.</p></div>';
+                listEl.innerHTML = '<div class="py-xxl text-center"><span class="material-symbols-outlined text-[40px] text-muted-soft">mark_email_unread</span><p class="text-body-sm text-ink/50 mt-xs">선택한 내 업무 분야가 없습니다. 위에서 맡거나 관심 있는 분야를 선택해 주세요.</p></div>';
                 return;
             }
 
@@ -588,7 +588,7 @@
                     + '<span class="mt-1 w-2 h-2 rounded-full shrink-0 ' + (m.read ? 'bg-transparent' : 'bg-primary') + '" title="' + (m.read ? '' : '안 읽음') + '"></span>'
                     + '<div class="flex-1 min-w-0">'
                     + '<div class="flex flex-wrap items-center gap-xs mb-1">'
-                    + '<span class="px-xs py-0.5 rounded-md text-[12px] font-bold ' + deptBadge + '">' + esc(m.dept) + '</span>'
+                    + '<span class="px-xs py-0.5 rounded-md text-[12px] font-bold ' + deptBadge + '">주관 · ' + esc(m.dept) + '</span>'
                     + '<span class="px-xs py-0.5 rounded-md text-[12px] font-bold bg-surface-soft text-ink/60">#' + esc(m.category) + '</span>'
                     + '<span class="text-[13px] text-ink/50">' + esc(m.date) + ' 발송</span>'
                     + '</div>'
@@ -662,7 +662,7 @@
 
         function openMailDetail(item) {
             mailDetailModal.dataset.mailId = item.dataset.mailId;
-            document.getElementById('mdDept').textContent = item.dataset.dept;
+            document.getElementById('mdDept').textContent = '주관 부서 · ' + item.dataset.dept;
             document.getElementById('mdDate').textContent = item.dataset.date + ' 발송';
             document.getElementById('mdTitle').textContent = item.dataset.title;
             document.getElementById('mdDesc').textContent = item.dataset.desc;
