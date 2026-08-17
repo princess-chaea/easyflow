@@ -83,10 +83,10 @@ async function openFile(file) {
         await validateFile(file);
         setStatus('웹 편집기를 준비하는 중입니다. 처음 한 번은 조금 걸릴 수 있습니다...');
         const activeEditor = await ensureEditor();
-        setStatus('문서를 여는 중입니다...');
+        setStatus('문서를 여는 중입니다. 필요한 로컬 글꼴이 있으면 감지 안내가 표시됩니다...');
         const result = await activeEditor.loadFile(await file.arrayBuffer(), file.name, {
             skipUnsavedGuard: false,
-            suppressDialogs: true
+            suppressDialogs: false
         });
         currentFile = file;
         fileName.textContent = file.name;
