@@ -41,11 +41,12 @@
         const style = document.createElement('style');
         style.textContent = [
             '.document-discovery{display:grid;gap:20px}',
-            '.discovery-hero{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(300px,.8fr);gap:20px;align-items:start}',
+            '.discovery-hero{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(300px,.8fr);gap:20px;align-items:stretch}',
             '.discovery-card{background:#fff;border:1px solid #e5e8eb;border-radius:20px;padding:24px;box-shadow:0 6px 20px rgba(17,18,20,.04)}',
-            '.discovery-drop{min-height:0;border:2px dashed #c4c6d4;border-radius:16px;background:#fbfcfd;padding:14px 16px;display:flex;align-items:center;gap:13px;text-align:left;cursor:pointer;transition:.18s ease}',
+            '.discovery-upload-card{display:flex;flex-direction:column}',
+            '.discovery-drop{flex:1;min-height:180px;margin-top:18px;border:2px dashed #c4c6d4;border-radius:16px;background:#fbfcfd;padding:22px 24px;display:flex;align-items:center;justify-content:center;gap:15px;text-align:left;cursor:pointer;transition:.18s ease}',
             '.discovery-drop:hover,.discovery-drop.is-dragging{border-color:#003893;background:#f4f7ff}',
-            '.discovery-drop-copy{flex:1;min-width:0}.discovery-drop-copy strong{display:block;color:#111214;font-size:14px}.discovery-drop-copy span{display:block;margin-top:3px;color:#868b94;font-size:11px}.discovery-drop.has-files{padding:10px 14px}',
+            '.discovery-drop-copy{min-width:0}.discovery-drop-copy strong{display:block;color:#111214;font-size:14px}.discovery-drop-copy span{display:block;margin-top:3px;color:#868b94;font-size:11px}.discovery-drop.has-files{flex:none;min-height:72px;padding:10px 14px}',
             '.discovery-file-list{display:grid;gap:8px;margin-top:12px}',
             '.discovery-file{display:flex;align-items:center;gap:10px;border:1px solid #e5e8eb;border-radius:12px;padding:10px 12px;background:#fff}',
             '.discovery-flow{display:grid;gap:10px;margin-top:18px}',
@@ -61,8 +62,8 @@
             '.discovery-recommendation{display:grid;grid-template-columns:auto 1fr auto;gap:14px;align-items:start;border:1px solid #e5e8eb;border-radius:16px;padding:16px;background:#fff}',
             '.discovery-type{border-radius:999px;background:#eaf1ff;color:#003893;padding:5px 9px;font-size:10px;font-weight:800;white-space:nowrap}',
             '.discovery-link{align-self:center;color:#003893;font-size:12px;font-weight:800;white-space:nowrap}',
-            '@media(max-width:1050px){.discovery-hero{grid-template-columns:1fr}}',
-            '@media(max-width:640px){.discovery-card{padding:18px}.discovery-drop{align-items:flex-start;flex-wrap:wrap}.discovery-query{flex-direction:column}.discovery-recommendation{grid-template-columns:1fr}.discovery-link{justify-self:start}}'
+            '@media(max-width:1050px){.discovery-hero{grid-template-columns:1fr}.discovery-drop{min-height:150px}}',
+            '@media(max-width:640px){.discovery-card{padding:18px}.discovery-drop{min-height:132px;margin-top:14px;padding:18px;align-items:center;flex-wrap:wrap}.discovery-drop.has-files{min-height:68px}.discovery-query{flex-direction:column}.discovery-recommendation{grid-template-columns:1fr}.discovery-link{justify-self:start}}'
         ].join('');
         document.head.appendChild(style);
 
@@ -70,7 +71,7 @@
         root.id = 'documentDiscovery';
 
         const hero = el('div', 'discovery-hero');
-        const uploadCard = el('section', 'discovery-card');
+        const uploadCard = el('section', 'discovery-card discovery-upload-card');
         uploadCard.append(
             heading('document_search', '공문과 업무 문서를 올려주세요', '캡처 이미지, 공문, 계획서, 서식을 최대 5개까지 함께 비교할 수 있습니다.')
         );
