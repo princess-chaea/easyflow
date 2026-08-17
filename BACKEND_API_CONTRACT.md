@@ -1,4 +1,4 @@
-﻿# EasyFlow 백엔드 API 계약 초안
+# EasyFlow 백엔드 API 계약 초안
 
 작성 기준: 2026-08-15
 상태: 프론트엔드-백엔드 구현 경계 확정용 초안
@@ -204,7 +204,8 @@
 - `GET /api/files/{id}` — 권한 검사 후 다운로드 또는 짧은 만료 URL 반환
 - `POST /api/documents/draft`
 - `POST /api/documents/convert`
-- `POST /api/documents/analyze`
+- `POST /api/documents/analyze` — 기존 단일 공문 요약 호환용
+- `POST /api/documents/recommend` — AI 문서 탐색·관련 자료 추천
 - `POST /api/documents/assistant`
 - `GET /api/document-jobs/{id}`
 - `GET /api/templates`
@@ -278,45 +279,91 @@
 - `NO_QUOTE_ITEMS`: 품목을 찾지 못함
 - `VALIDATION_ERROR`: 수량·단가·합계 검증 실패
 
-### 7.2 통합 공문 분석
+### 7.2 AI 문서 탐색·관련 자료 추천
 
-`POST /api/documents/analyze`
+`POST /api/documents/recommend`
 
-`multipart/form-data`로 `file`과 `mode=official_document_summary`를 받는다. PDF, HWP/HWPX,
-DOC/DOCX, JPG/JPEG/PNG를 허용하며 최대 크기는 20MB이다.
+`multipart/form-data` 요청이다.
+
+- `files`: PDF, HWP/HWPX, DOC/DOCX, JPG/JPEG/PNG/WebP. 최대 5개, 파일당 20MB.
+- `query`: 사용자가 찾고 싶은 업무·자료를 적는 선택 문자열.
+- `mode`: `related_document_recommendation` 고정.
+
+성공 응답:
 
 ```json
 {
   "data": {
-    "summary": "공문의 목적과 핵심 내용",
-    "actionItems": ["담당자가 해야 할 일"],
-    "dueDates": [{ "label": "제출 기한", "date": "2026-08-31" }],
-    "suggestedTemplates": [{ "id": "template_...", "name": "관련 서식명" }]
+    "analysis": {
+      "documentType": "공문",
+      "summary": "현장체험학습 운영과 안전 점검 자료 제출을 요청하는 공문",
+      "keywords": ["현장체험학습", "안전점검", "운영계획"],
+      "sourceRefs": [
+        { "documentId": "upload_01", "page": 1, "excerpt": "안전관리 계획 및 점검표 제출" }
+      ]
+    },
+    "recommendations": [
+      {
+        "id": "template_...",
+        "type": "서식",
+        "title": "현장체험학습 안전점검표",
+        "reason": "업로드 문서가 안전관리 계획과 점검표 제출을 요구합니다.",
+        "evidence": [
+          { "documentId": "upload_01", "page": 1, "excerpt": "안전관리 계획 및 점검표 제출" }
+        ],
+        "url": "서식자료실_스마트 계획서 변환.html",
+        "score": 0.91
+      }
+    ]
   }
 }
 ```
 
-업로드한 현재 문서에서 확인되지 않은 사실·기한·서식은 추측하지 않는다. 암호화·DRM·파싱 실패는 7.1과
-같은 공통 문서 오류 코드를 사용한다. 조직별 접근권한, 악성코드 검사, 원본 보존기간과 삭제 정책을 적용한다.
+처리 규칙:
+
+1. 문서 파싱/OCR로 본문과 페이지 위치를 추출한다.
+2. 등록 자료의 제목·본문·태그에 대한 키워드 검색과 의미 검색을 각각 수행한다.
+3. 두 검색 결과는 RRF(Reciprocal Rank Fusion) 등 명시적인 병합 정책으로 합친다.
+4. 추천마다 업로드 문서의 페이지·관련 문장과 추천 이유를 반환한다.
+5. 파일명만 보고 내용을 추측하거나 추천하지 않는다. 파싱 실패 시 `DOCUMENT_PARSE_FAILED`를 반환한다.
+6. 추천 대상에 대한 조직 권한과 공개 범위를 검사한 뒤 접근 가능한 URL만 반환한다.
+7. 모델은 요약·추천 설명에만 사용할 수 있으며, 원문에 없는 기한·요구 서식·사실을 만들지 않는다.
+
+`chrisryugj/Docufinder`의 파싱·키워드/벡터 검색·결과 병합 구조는 기술 검토에 참고할 수 있지만,
+현재 라이선스는 Business Source License 1.1이고 Additional Use Grant가 비프로덕션 개발·시험·평가로
+제한된다. Change Date인 2030-04-15 전에는 해당 코드를 운영 서비스에 복사·번들·배포하지 않는다.
+백엔드는 위 공개 동작을 독립 구현한 검색 어댑터 경계로 만들고, 실제 검색 엔진은 별도 라이선스 승인을 거친다.
 
 ### 7.3 계획서 AI 도우미
 
 `POST /api/documents/assistant`
 
+계획 모드와 수정 모드는 하나의 `conversationId`를 공유한다. 모드 전환은 새 대화를 만들지 않으며,
+계획 모드에서 정리한 내용을 `planContext`로 이어받는다.
+
+계획 요청:
+
 ```json
 {
+  "conversationId": "conv_...",
   "intent": "plan",
   "message": "교직원 대상 AI 활용 연수 계획을 7월 중 2시간 실습 중심으로 만들어 줘.",
+  "planContext": [],
   "documentContext": null
 }
 ```
 
-기존 계획을 수정할 때는 `intent=edit`과 다음 최소 문맥만 보낸다.
+수정 요청:
 
 ```json
 {
+  "conversationId": "conv_...",
   "intent": "edit",
-  "message": "2025학년도를 2026학년도로 바꾸고 표는 유지해 줘.",
+  "message": "계획 내용으로 본문을 수정하고 표와 서식은 유지해 줘.",
+  "planContext": [
+    "교직원 대상 AI 활용 연수",
+    "7월 중 2시간, 실습 중심"
+  ],
   "documentContext": {
     "documentId": "doc_...",
     "inputScope": "selected_context_only"
@@ -329,14 +376,31 @@ DOC/DOCX, JPG/JPEG/PNG를 허용하며 최대 크기는 20MB이다.
 ```json
 {
   "data": {
-    "reply": "요청을 검토 가능한 수정 지시로 정리했습니다.",
-    "proposedInstruction": "2025학년도를 2026학년도로 변경하고 표와 나머지 서식은 유지한다."
+    "conversationId": "conv_...",
+    "reply": "계획 맥락을 반영해 수정 후보 3곳을 찾았습니다.",
+    "planContext": [
+      "교직원 대상 AI 활용 연수",
+      "7월 중 2시간, 실습 중심"
+    ],
+    "proposedInstruction": "연수 목적·일정·주요 활동을 계획 맥락에 맞게 바꾸고 표와 나머지 서식은 유지한다.",
+    "changes": [
+      {
+        "id": "schedule",
+        "label": "연수 일정",
+        "before": "2025. 7. 5.",
+        "after": "2026년 7월 중 2시간",
+        "evidence": "사용자가 계획 모드에서 정리한 일정"
+      }
+    ]
   }
 }
 ```
 
-`intent`는 `plan` 또는 `edit`만 허용한다. `message` 길이와 문서 접근권한을 검증하고, 전체 문서를 기본
-전송하지 않는다. 수정 제안은 자동 적용하지 않고 기존 `DocumentPatch` 승인 흐름으로 넘긴다.
+`intent`는 `plan` 또는 `edit`만 허용한다. 서버는 같은 사용자·조직·문서에 속한 대화인지 검증하고,
+`message`와 `planContext` 길이를 제한한다. 모드 전환용 안내 문장을 대화 메시지로 저장하거나 중복 반환하지
+않는다. 전체 문서를 기본 전송하지 않으며, 수정 제안은 자동 적용하지 않고 기존 `DocumentPatch` 승인 흐름으로
+넘긴다. 프론트는 `changes[]`를 먼저 보여주고 사용자가 명시적으로 확인한 변경만 웹 편집기 또는 문서
+에이전트에 전달한다.
 
 ## 8. 로컬 문서 에이전트
 

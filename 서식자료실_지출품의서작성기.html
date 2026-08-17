@@ -26,7 +26,7 @@
     .expense-step.is-complete { border-color: #a6e3c7; color: #05603a; background: #f2fff8; }
     .expense-step.is-complete .expense-step-number { background: #00a261; color: #fff; }
 
-    .expense-content-grid { display: grid; grid-template-columns: minmax(0, 1fr) 360px; gap: 24px; align-items: start; }
+    .expense-content-grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: 24px; align-items: start; }
     .expense-card { background: #fff; border: 1px solid #e5e8eb; border-radius: 20px; padding: 24px; box-shadow: 0 5px 18px rgba(17, 18, 20, .035); }
     .expense-card + .expense-card { margin-top: 18px; }
     .expense-card-title { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; margin-bottom: 18px; }
@@ -92,34 +92,9 @@
     .expense-copy-row { display: flex; justify-content: flex-end; gap: 8px; margin-top: 8px; }
     .expense-warning { display: flex; align-items: flex-start; gap: 9px; margin-top: 16px; padding: 12px 14px; border: 1px solid #f1d69d; border-radius: 12px; background: #fff9eb; color: #73551b; font-size: 12px; line-height: 1.55; }
 
-    .expense-chat { position: sticky; top: 88px; overflow: hidden; border: 1px solid #dce2ed; border-radius: 20px; background: #fff; box-shadow: 0 12px 34px rgba(17, 18, 20, .08); }
-    .expense-chat-header { padding: 18px; background: linear-gradient(135deg, #002463, #003893); color: #fff; }
-    .expense-chat-title { display: flex; align-items: center; gap: 10px; font-size: 16px; font-weight: 700; }
-    .expense-chat-status { display: flex; align-items: center; gap: 6px; margin-top: 7px; color: #dbe7ff; font-size: 11px; }
-    .expense-chat-status::before { content: ''; width: 7px; height: 7px; border-radius: 999px; background: #44d28b; }
-    .expense-chat-messages { height: 430px; overflow-y: auto; padding: 16px; background: #f8f9fa; }
-    .chat-row { display: flex; margin-bottom: 12px; }
-    .chat-row-user { justify-content: flex-end; }
-    .chat-bubble { max-width: 88%; padding: 11px 13px; border-radius: 15px; font-size: 12px; line-height: 1.6; white-space: pre-wrap; }
-    .chat-bubble-assistant { border: 1px solid #e2e6ed; border-top-left-radius: 5px; background: #fff; color: #343840; }
-    .chat-bubble-user { border-top-right-radius: 5px; background: #003893; color: #fff; }
-    .chat-actions { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
-    .chat-action-button { padding: 6px 9px; border: 1px solid #c7d3f0; border-radius: 999px; background: #f4f7ff; color: #003893; font-size: 11px; font-weight: 700; }
-    .expense-chat-prompts { display: flex; gap: 6px; overflow-x: auto; padding: 10px 12px 0; background: #fff; }
-    .expense-chat-prompt { flex: none; padding: 6px 9px; border: 1px solid #e1e4e9; border-radius: 999px; color: #4e535e; font-size: 10px; white-space: nowrap; }
-    .expense-chat-input { display: flex; align-items: flex-end; gap: 8px; padding: 12px; background: #fff; }
-    .expense-chat-input textarea { flex: 1; min-height: 42px; max-height: 100px; resize: none; border: 1px solid #d9dce2; border-radius: 12px; padding: 10px 11px; font-size: 12px; line-height: 1.45; }
-    .expense-chat-input textarea:focus { border-color: #003893; outline: none; box-shadow: 0 0 0 3px rgba(0, 56, 147, .08); }
-    .expense-chat-send { width: 42px; height: 42px; display: grid; place-items: center; flex: none; border-radius: 12px; background: #003893; color: #fff; }
-
     #expenseToast[data-type="error"] { background: #b42318; }
     #expenseToast:not([data-type="error"]) { background: #111214; }
 
-    @media (max-width: 1180px) {
-        .expense-content-grid { grid-template-columns: 1fr; }
-        .expense-chat { position: static; }
-        .expense-chat-messages { height: 330px; }
-    }
     @media (max-width: 800px) {
         .expense-stepper { grid-template-columns: 1fr 1fr; }
         .expense-step::after { display: none; }
@@ -173,7 +148,7 @@ tailwind.config = {
 <div class="relative h-full flex flex-col justify-start group/col">
 <a class="font-nav-link text-[18px] transition-colors h-[64px] flex items-center gap-xxs whitespace-nowrap text-primary font-bold relative" href="서식자료실_통합검색.html">서식 자료실 <span class="material-symbols-outlined text-[18px]">expand_more</span><span class="absolute left-[-22px] right-0 -bottom-[2px] h-[2px] bg-primary"></span></a>
 <div class="absolute top-[64px] left-1/2 -translate-x-1/2 pt-md pb-md min-w-[190px] flex flex-col items-center gap-sm opacity-0 invisible group-hover/mega:opacity-100 group-hover/mega:visible transition-all duration-200 z-50 group-hover/col:bg-surface-container h-[310px] rounded-b-lg">
-<a class="font-nav-link text-[16px] text-on-surface-variant hover:text-primary px-sm py-1 whitespace-nowrap" href="서식자료실_통합검색.html">통합 검색</a><a class="font-nav-link text-[16px] text-on-surface-variant hover:text-primary px-sm py-1 whitespace-nowrap" href="서식 자료실_한글파일서식선택.html">서식 자동 완성</a><a class="font-nav-link text-[16px] text-on-surface-variant hover:text-primary px-sm py-1 whitespace-nowrap" href="서식자료실_스마트 계획서 변환.html">스마트 계획서 변환</a><a class="font-nav-link text-[16px] text-primary font-bold px-sm py-1 whitespace-nowrap" href="서식자료실_지출품의서작성기.html">지출품의서 작성기</a>
+<a class="font-nav-link text-[16px] text-on-surface-variant hover:text-primary px-sm py-1 whitespace-nowrap" href="서식자료실_통합검색.html">AI 문서 탐색</a><a class="font-nav-link text-[16px] text-on-surface-variant hover:text-primary px-sm py-1 whitespace-nowrap" href="서식자료실_스마트 계획서 변환.html">스마트 계획서</a><a class="font-nav-link text-[16px] text-primary font-bold px-sm py-1 whitespace-nowrap" href="서식자료실_지출품의서작성기.html">지출품의서 작성기</a>
 </div></div>
 <div class="relative h-full flex flex-col justify-start group/col">
 <a class="font-nav-link text-[18px] transition-colors h-[64px] flex items-center gap-xxs whitespace-nowrap group-hover/col:text-primary text-on-surface-variant" href="안내센터_공지사항.html">안내센터 <span class="material-symbols-outlined text-[18px]">expand_more</span></a>
@@ -197,10 +172,10 @@ tailwind.config = {
 <aside class="w-[220px] shrink-0 bg-surface-soft p-lg -ml-lg rounded-2xl hidden md:block" id="main-lnb">
 <h2 class="font-nav-link text-[22px] font-bold text-ink mb-md pb-sm border-b-2 border-ink">서식 자료실</h2>
 <ul class="flex flex-col gap-1">
-<li><a class="font-nav-link block px-sm py-sm rounded-lg text-[16px] text-on-surface-variant hover:bg-surface hover:text-ink" href="서식자료실_통합검색.html">통합 검색</a></li>
-<li><a class="font-nav-link block px-sm py-sm rounded-lg text-[16px] text-on-surface-variant hover:bg-surface hover:text-ink" href="서식 자료실_한글파일서식선택.html">서식 자동 완성</a></li>
+<li><a class="font-nav-link block px-sm py-sm rounded-lg text-[16px] text-on-surface-variant hover:bg-surface hover:text-ink" href="서식자료실_통합검색.html">AI 문서 탐색</a></li>
 
-<li><a class="font-nav-link block px-sm py-sm rounded-lg text-[16px] text-on-surface-variant hover:bg-surface hover:text-ink" href="서식자료실_스마트 계획서 변환.html">스마트 계획서 변환</a></li>
+
+<li><a class="font-nav-link block px-sm py-sm rounded-lg text-[16px] text-on-surface-variant hover:bg-surface hover:text-ink" href="서식자료실_스마트 계획서 변환.html">스마트 계획서</a></li>
 <li><a class="font-nav-link block px-sm py-sm rounded-lg text-[16px] bg-primary text-white font-bold" href="서식자료실_지출품의서작성기.html">지출품의서 작성기</a></li>
 </ul>
 </aside>
@@ -215,7 +190,7 @@ tailwind.config = {
 <section class="expense-stepper mb-lg" aria-label="지출품의서 작성 단계">
 <div class="expense-step" data-expense-step="1"><span class="expense-step-number">1</span><span><strong>유형 선택</strong><span>관련 문서 여부</span></span></div>
 <div class="expense-step" data-expense-step="2"><span class="expense-step-number">2</span><span><strong>견적서 첨부</strong><span>파일 확인</span></span></div>
-<div class="expense-step" data-expense-step="3"><span class="expense-step-number">3</span><span><strong>AI 분석</strong><span>품목·금액 추출</span></span></div>
+<div class="expense-step" data-expense-step="3"><span class="expense-step-number">3</span><span><strong>견적서 분석</strong><span>품목·금액 추출</span></span></div>
 <div class="expense-step" data-expense-step="4"><span class="expense-step-number">4</span><span><strong>검토·다운로드</strong><span>품의서·CSV</span></span></div>
 </section>
 
@@ -286,16 +261,10 @@ tailwind.config = {
 </div>
 
 <div class="expense-warning"><span class="material-symbols-outlined text-[19px]">warning</span><span><strong>최종 확인이 필요합니다.</strong> AI가 읽은 품목·수량·단가·합계와 관련 문서번호를 원본 견적서 및 실제 결재 자료와 대조한 뒤 사용하세요.</span></div>
-<div class="flex justify-end gap-xs flex-wrap mt-md"><button class="expense-secondary-button" id="expenseDownloadDraft" type="button"><span class="material-symbols-outlined text-[17px]">description</span>품의서 초안 TXT</button><button class="expense-primary-button" id="expenseDownloadCsv" type="button"><span class="material-symbols-outlined text-[18px]">download</span>K-에듀파인 품목내역 CSV</button></div>
+<div class="flex justify-end gap-xs flex-wrap mt-md"><button class="expense-primary-button" id="expenseDownloadCsv" type="button"><span class="material-symbols-outlined text-[18px]">download</span>K-에듀파인 품목내역 CSV</button></div>
 </section>
 </div>
 
-<aside class="expense-chat" aria-label="지출품의 AI 비서">
-<div class="expense-chat-header"><div class="expense-chat-title"><span class="material-symbols-outlined">smart_toy</span>지출품의 AI 비서</div><div class="expense-chat-status">작성 흐름 안내 중</div></div>
-<div class="expense-chat-messages" id="expenseChatMessages" aria-live="polite"></div>
-<div class="expense-chat-prompts"><button class="expense-chat-prompt" type="button" data-chat-prompt="유형 A로 진행할게">관련 문서 있음</button><button class="expense-chat-prompt" type="button" data-chat-prompt="유형 B로 진행할게">관련 문서 없음</button><button class="expense-chat-prompt" type="button" data-chat-prompt="품목내역 파일만 만들어줘">품목내역만</button><button class="expense-chat-prompt" type="button" data-chat-prompt="견적서 올릴게">견적서 올리기</button></div>
-<div class="expense-chat-input"><textarea id="expenseChatInput" rows="1" placeholder="예: 유형 A로 견적서 분석해 줘"></textarea><button class="expense-chat-send" id="expenseChatSend" type="button" aria-label="메시지 보내기"><span class="material-symbols-outlined">send</span></button></div>
-</aside>
 </div>
 </div>
 </div>
