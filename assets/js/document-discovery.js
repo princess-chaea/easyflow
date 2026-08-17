@@ -30,7 +30,7 @@
         if (child !== pageHeader) child.hidden = true;
     });
 
-    const state = { files: [], busy: false };
+    const state = { files: [], busy: false, workCategory: '' };
     const ui = buildWorkspace();
     pageHeader.insertAdjacentElement('afterend', ui.root);
     bindEvents();
@@ -41,10 +41,11 @@
         const style = document.createElement('style');
         style.textContent = [
             '.document-discovery{display:grid;gap:20px}',
-            '.discovery-hero{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(300px,.8fr);gap:20px;align-items:stretch}',
+            '.discovery-hero{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(300px,.8fr);gap:20px;align-items:start}',
             '.discovery-card{background:#fff;border:1px solid #e5e8eb;border-radius:20px;padding:24px;box-shadow:0 6px 20px rgba(17,18,20,.04)}',
-            '.discovery-drop{min-height:210px;border:2px dashed #c4c6d4;border-radius:18px;background:#fbfcfd;padding:28px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;cursor:pointer;transition:.18s ease}',
+            '.discovery-drop{min-height:0;border:2px dashed #c4c6d4;border-radius:16px;background:#fbfcfd;padding:14px 16px;display:flex;align-items:center;gap:13px;text-align:left;cursor:pointer;transition:.18s ease}',
             '.discovery-drop:hover,.discovery-drop.is-dragging{border-color:#003893;background:#f4f7ff}',
+            '.discovery-drop-copy{flex:1;min-width:0}.discovery-drop-copy strong{display:block;color:#111214;font-size:14px}.discovery-drop-copy span{display:block;margin-top:3px;color:#868b94;font-size:11px}.discovery-drop.has-files{padding:10px 14px}',
             '.discovery-file-list{display:grid;gap:8px;margin-top:12px}',
             '.discovery-file{display:flex;align-items:center;gap:10px;border:1px solid #e5e8eb;border-radius:12px;padding:10px 12px;background:#fff}',
             '.discovery-flow{display:grid;gap:10px;margin-top:18px}',
@@ -54,13 +55,14 @@
             '.discovery-query input{flex:1;min-width:0;border:1px solid #d9dce2;border-radius:12px;padding:12px 14px;font-size:14px}',
             '.discovery-primary{min-height:44px;display:inline-flex;align-items:center;justify-content:center;gap:7px;border-radius:12px;background:#003893;color:#fff;padding:10px 18px;font-size:13px;font-weight:800}',
             '.discovery-primary:disabled{opacity:.45;cursor:not-allowed}',
-            '.discovery-chip{border:1px solid #d9dce2;border-radius:999px;background:#fff;padding:6px 10px;font-size:11px;color:#4e535e}',
-            '.discovery-results{min-height:330px}',
+            '.discovery-work-label{display:flex;align-items:center;gap:6px;margin-top:12px;color:#343840;font-size:12px;font-weight:800}.discovery-work-list{display:flex;flex-wrap:wrap;gap:7px;margin-top:8px}.discovery-example{margin-top:8px;color:#747985;font-size:11px;line-height:1.55}',
+            '.discovery-chip{border:1px solid #d9dce2;border-radius:999px;background:#fff;padding:7px 11px;font-size:11px;color:#4e535e;transition:.15s ease}.discovery-chip:hover,.discovery-chip.is-selected{border-color:#003893;background:#eaf1ff;color:#003893}.discovery-chip.is-selected{font-weight:800}',
+            '.discovery-results{min-height:210px}',
             '.discovery-recommendation{display:grid;grid-template-columns:auto 1fr auto;gap:14px;align-items:start;border:1px solid #e5e8eb;border-radius:16px;padding:16px;background:#fff}',
             '.discovery-type{border-radius:999px;background:#eaf1ff;color:#003893;padding:5px 9px;font-size:10px;font-weight:800;white-space:nowrap}',
             '.discovery-link{align-self:center;color:#003893;font-size:12px;font-weight:800;white-space:nowrap}',
             '@media(max-width:1050px){.discovery-hero{grid-template-columns:1fr}}',
-            '@media(max-width:640px){.discovery-card{padding:18px}.discovery-query{flex-direction:column}.discovery-recommendation{grid-template-columns:1fr}.discovery-link{justify-self:start}}'
+            '@media(max-width:640px){.discovery-card{padding:18px}.discovery-drop{align-items:flex-start;flex-wrap:wrap}.discovery-query{flex-direction:column}.discovery-recommendation{grid-template-columns:1fr}.discovery-link{justify-self:start}}'
         ].join('');
         document.head.appendChild(style);
 
@@ -77,15 +79,15 @@
         dropzone.tabIndex = 0;
         dropzone.setAttribute('role', 'button');
         dropzone.setAttribute('aria-label', '분석할 문서 파일 선택');
-        const dropIcon = icon('upload_file', '40px');
-        dropIcon.style.color = '#003893';
+        const dropIcon = icon('upload_file', '27px');
+        dropIcon.style.cssText = 'width:42px;height:42px;display:grid;place-items:center;flex:none;border-radius:12px;background:#eaf1ff;color:#003893';
+        const dropCopy = el('span', 'discovery-drop-copy');
         const dropTitle = el('strong');
-        dropTitle.textContent = '파일을 끌어놓거나 클릭해 선택하세요';
-        dropTitle.style.cssText = 'margin-top:10px;color:#111214;font-size:15px';
+        dropTitle.textContent = '분석할 문서를 선택하세요';
         const dropHelp = el('span');
-        dropHelp.textContent = 'PDF, HWP/HWPX, DOC/DOCX, JPG/PNG · 파일당 최대 20MB';
-        dropHelp.style.cssText = 'margin-top:5px;color:#868b94;font-size:11px';
-        dropzone.append(dropIcon, dropTitle, dropHelp);
+        dropHelp.textContent = 'PDF, HWP/HWPX, DOC/DOCX, JPG/PNG · 최대 5개 · 파일당 20MB';
+        dropCopy.append(dropTitle, dropHelp);
+        dropzone.append(dropIcon, dropCopy, icon('add_circle', '22px'));
         const fileInput = el('input');
         fileInput.type = 'file';
         fileInput.multiple = true;
@@ -132,17 +134,39 @@
         analyzeButton.id = 'documentDiscoveryAnalyze';
         analyzeButton.append(icon('auto_awesome', '18px'), document.createTextNode('분석하고 추천받기'));
         queryWrap.append(queryInput, analyzeButton);
-        const quick = el('div');
-        quick.style.cssText = 'display:flex;flex-wrap:wrap;gap:7px;margin-top:10px';
-        ['학교운영위원회 계획과 서식', '현장체험학습 안전 서류', '방과후학교 계약 관련 자료', '예산 품의 참고 문서'].forEach(function (prompt) {
+        const example = el('p', 'discovery-example');
+        example.textContent = '입력 예시: 현장체험학습 공문에서 제출 서류를 확인하고 안전계획서·동의서 찾기';
+        const workLabel = el('div', 'discovery-work-label');
+        workLabel.append(icon('workspaces', '17px'), document.createTextNode('자주 찾는 학교 업무'));
+        const quick = el('div', 'discovery-work-list');
+        [
+            ['academic', '학사 운영', '학사 일정과 교육과정 운영에 필요한 계획서와 서식'],
+            ['student', '학생 생활', '학생 생활교육과 상담 업무에 필요한 서식'],
+            ['field-trip', '현장체험학습', '현장체험학습 운영에 필요한 안전 서류와 계획서'],
+            ['after-school', '방과후학교', '방과후학교 운영과 강사 계약에 필요한 자료'],
+            ['committee', '학교운영위원회', '학교운영위원회 안건 처리에 필요한 계획과 서식'],
+            ['budget', '예산·계약·품의', '예산 집행과 계약 및 품의에 필요한 참고 문서'],
+            ['safety', '안전·보건', '학교 안전과 보건 업무에 필요한 점검표와 계획서'],
+            ['training', '교직원 연수', '교직원 연수 운영에 필요한 계획서와 결과 서식']
+        ].forEach(function (option) {
             const button = el('button', 'discovery-chip');
             button.type = 'button';
-            button.textContent = prompt;
-            button.addEventListener('click', function () { queryInput.value = prompt; queryInput.focus(); });
+            button.dataset.workCategory = option[0];
+            button.setAttribute('aria-pressed', 'false');
+            button.textContent = option[1];
+            button.addEventListener('click', function () {
+                state.workCategory = option[0];
+                Array.from(quick.children).forEach(function (chip) {
+                    const selected = chip === button;
+                    chip.classList.toggle('is-selected', selected);
+                    chip.setAttribute('aria-pressed', String(selected));
+                });
+                queryInput.value = option[2];
+                queryInput.focus();
+            });
             quick.appendChild(button);
         });
-        requestCard.append(queryWrap, quick);
-
+        requestCard.append(queryWrap, example, workLabel, quick);
         const resultCard = el('section', 'discovery-card discovery-results');
         const resultHeader = el('div');
         resultHeader.style.cssText = 'display:flex;justify-content:space-between;gap:12px;align-items:flex-start;margin-bottom:16px';
@@ -158,7 +182,7 @@
         resultCard.append(resultHeader, result);
 
         root.append(hero, requestCard, resultCard);
-        return { root, dropzone, fileInput, fileList, queryInput, analyzeButton, status, result };
+        return { root, dropzone, fileInput, fileList, queryInput, quick, analyzeButton, status, result };
     }
 
     function bindEvents() {
@@ -175,6 +199,13 @@
         ui.dropzone.addEventListener('drop', function (event) { addFiles(event.dataTransfer.files); });
         ui.fileInput.addEventListener('change', function () { addFiles(ui.fileInput.files); ui.fileInput.value = ''; });
         ui.analyzeButton.addEventListener('click', analyzeAndRecommend);
+        ui.queryInput.addEventListener('input', function () {
+            state.workCategory = '';
+            Array.from(ui.quick.children).forEach(function (chip) {
+                chip.classList.remove('is-selected');
+                chip.setAttribute('aria-pressed', 'false');
+            });
+        });
         ui.queryInput.addEventListener('keydown', function (event) {
             if (event.key === 'Enter') { event.preventDefault(); analyzeAndRecommend(); }
         });
@@ -193,6 +224,7 @@
 
     function renderFiles() {
         ui.fileList.replaceChildren();
+        ui.dropzone.classList.toggle('has-files', state.files.length > 0);
         if (!state.files.length) return;
         state.files.forEach(function (file, index) {
             const row = el('div', 'discovery-file');
@@ -229,6 +261,7 @@
             const body = new FormData();
             state.files.forEach(function (file) { body.append('files', file, file.name); });
             body.append('query', query);
+            body.append('workCategory', state.workCategory);
             body.append('mode', 'related_document_recommendation');
             const response = await fetch(API_BASE + '/api/documents/recommend', { method: 'POST', credentials: 'same-origin', body: body });
             if (!response.ok) throw new Error('HTTP_' + response.status);
@@ -314,7 +347,7 @@
 
     function renderNotice(iconName, titleText, descriptionText) {
         const empty = el('div');
-        empty.style.cssText = 'min-height:230px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;color:#686d77';
+        empty.style.cssText = 'min-height:145px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;color:#686d77';
         const noticeIcon = icon(iconName, '42px');
         noticeIcon.style.color = '#9a9ea6';
         const title = el('strong');

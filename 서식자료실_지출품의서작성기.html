@@ -43,11 +43,12 @@
     .expense-mode-summary { display: flex; align-items: flex-start; gap: 10px; margin-top: 14px; padding: 12px 14px; border-radius: 12px; background: #f8f9fa; color: #4e535e; font-size: 12px; line-height: 1.6; }
     .expense-mode-summary strong { color: #003893; }
 
-    .expense-dropzone { min-height: 210px; display: grid; place-items: center; padding: 30px 20px; border: 2px dashed #c4c6d4; border-radius: 18px; background: #fbfcfd; text-align: center; transition: .18s ease; }
+    .expense-dropzone { min-height: 0; display: grid; place-items: center; padding: 14px 16px; border: 2px dashed #c4c6d4; border-radius: 16px; background: #fbfcfd; text-align: left; transition: .18s ease; }
     .expense-dropzone:hover, .expense-dropzone.is-dragging { border-color: #003893; background: #f4f7ff; }
-    .expense-upload-icon { width: 58px; height: 58px; display: grid; place-items: center; margin: 0 auto 12px; border-radius: 18px; background: #eaf1ff; color: #003893; }
-    .expense-upload-icon .material-symbols-outlined { font-size: 31px; }
-    .expense-file-button { margin-top: 15px; padding: 10px 18px; border-radius: 999px; background: #003893; color: #fff; font-size: 13px; font-weight: 700; }
+    #expenseFileEmpty { width: 100%; display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: 13px; }
+    .expense-upload-icon { width: 42px; height: 42px; display: grid; place-items: center; margin: 0; border-radius: 12px; background: #eaf1ff; color: #003893; }
+    .expense-upload-icon .material-symbols-outlined { font-size: 25px; }
+    .expense-file-button { margin: 0; padding: 10px 18px; border-radius: 999px; background: #003893; color: #fff; font-size: 13px; font-weight: 700; white-space: nowrap; }
     .expense-file-selected { width: 100%; display: flex; align-items: center; gap: 14px; text-align: left; }
     .expense-file-selected .file-icon { width: 50px; height: 50px; display: grid; place-items: center; flex: none; border-radius: 14px; background: #eaf1ff; color: #003893; }
     .expense-file-selected .file-copy { flex: 1; min-width: 0; }
@@ -55,6 +56,10 @@
     .expense-file-selected .file-copy span { display: block; margin-top: 4px; color: #868b94; font-size: 12px; }
     .expense-file-remove { width: 36px; height: 36px; display: grid; place-items: center; border-radius: 999px; color: #868b94; }
     .expense-file-remove:hover { background: #fff1f0; color: #df2c2c; }
+    .expense-context-field { display:grid; grid-template-columns:auto minmax(0,1fr); align-items:center; gap:12px; margin-top:12px; }
+    .expense-context-field span { color:#343840; font-size:12px; font-weight:700; }
+    .expense-context-field input { width:100%; min-width:0; padding:9px 11px; border:1px solid #d9dce2; border-radius:10px; background:#fff; color:#111214; font-size:12px; }
+    .expense-context-field input:focus { border-color:#003893; outline:none; box-shadow:0 0 0 3px rgba(0,56,147,.08); }
     .expense-action-row { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-top: 15px; flex-wrap: wrap; }
     .expense-primary-button, .expense-secondary-button { min-height: 42px; display: inline-flex; align-items: center; justify-content: center; gap: 7px; padding: 10px 18px; border-radius: 12px; font-size: 13px; font-weight: 700; transition: .16s ease; }
     .expense-primary-button { background: #003893; color: #fff; }
@@ -106,6 +111,9 @@
     @media (max-width: 520px) {
         .expense-stepper, .expense-result-head { grid-template-columns: 1fr; }
         .expense-card { padding: 18px; }
+        .expense-context-field { grid-template-columns:1fr; gap:6px; }
+        #expenseFileEmpty { grid-template-columns: auto minmax(0, 1fr); }
+        .expense-file-button { grid-column: 1 / -1; width: 100%; }
     }
 </style>
 <script>
@@ -211,8 +219,7 @@ tailwind.config = {
 <div class="expense-dropzone" id="expenseDropzone">
 <div id="expenseFileEmpty">
 <div class="expense-upload-icon"><span class="material-symbols-outlined">document_scanner</span></div>
-<strong class="block text-[15px] text-ink">파일을 이곳에 끌어놓거나 선택하세요</strong>
-<span class="block mt-xs text-[12px] text-muted">PDF, 이미지, HWP/HWPX, 엑셀, CSV · 최대 20MB</span>
+<div><strong class="block text-[14px] text-ink">견적서 한 개를 선택하세요</strong><span class="block mt-1 text-[11px] text-muted">PDF, 이미지, HWP/HWPX, 엑셀, CSV · 최대 20MB</span></div>
 <button class="expense-file-button" id="expenseFileButton" type="button">견적서 파일 선택</button>
 </div>
 <div class="expense-file-selected" id="expenseFileSelected" hidden>
@@ -222,6 +229,7 @@ tailwind.config = {
 </div>
 <input id="expenseFileInput" type="file" accept=".pdf,.hwp,.hwpx,.xlsx,.xls,.csv,.jpg,.jpeg,.png,.webp" hidden>
 </div>
+<label class="expense-context-field" for="expenseWorkContext"><span>사용 업무(선택)</span><input id="expenseWorkContext" type="text" maxlength="80" placeholder="예: 교무실 정보화 업무, 과학 수업 준비"></label>
 <div class="expense-action-row">
 <div class="expense-status"><span class="material-symbols-outlined">shield</span><span id="expenseAnalyzeStatus">분석할 견적서 파일을 선택해 주세요.</span></div>
 <div class="flex gap-xs flex-wrap">

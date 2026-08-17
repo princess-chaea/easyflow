@@ -4,8 +4,8 @@
     const header = document.querySelector('.page-header');
     const review = document.getElementById('document-agent-demo');
     const editor = document.getElementById('web-hwp-editor-card');
-    const prompt = document.getElementById('agent-prompt');
-    if (!header || !review || !editor || !prompt) return;
+
+    if (!header || !editor) return;
 
     const STORAGE_KEY = 'ef_smart_plan_workspace';
     const saved = readState();
@@ -25,7 +25,11 @@
     injectStyles();
     const ui = createWorkspace();
     header.insertAdjacentElement('afterend', ui.root);
-    ui.left.append(editor, review);
+    if (review) {
+        review.hidden = true;
+        review.setAttribute('aria-hidden', 'true');
+    }
+    ui.left.append(editor);
     ui.right.append(ui.chat);
     ui.planButton.addEventListener('click', function () { setMode('plan'); });
     ui.editButton.addEventListener('click', function () { setMode('edit'); });
@@ -187,10 +191,8 @@
             renderMode();
             addMessage('assistant', '계획 조건을 대화 맥락에 저장했습니다. AI 서버가 연결되기 전에는 초안을 임의로 만들지 않습니다. 수정 모드로 전환하면 이 내용을 포함해 변경 후보를 준비합니다.');
         } else {
-            const changes = defaultChanges();
-            showCandidates(composeInstruction(message), changes);
-            addMessage('assistant', '계획 모드의 내용과 이번 요청을 합쳐 왼쪽에 변경 후보를 표시했습니다. 아직 문서에는 반영하지 않았습니다. 후보를 선택한 뒤 “선택한 내용 확인하기”를 눌러 바뀔 문장을 확인하세요.');
-            showChangeNotice(changes);
+            showCandidates(composeInstruction(message), []);
+            addMessage('assistant', '수정 요청을 정리했습니다. AI 서버가 연결되면 현재 문서에서 정확한 변경 위치와 바뀔 문장을 찾아 보여드립니다. 지금은 내용을 임의로 만들거나 문서에 반영하지 않습니다.');
         }
         if (error && error.message !== 'LOCAL_PREVIEW') console.warn('계획서 도우미 요청 실패', error);
     }
@@ -208,54 +210,30 @@
     }
 
     function showCandidates(instruction, changes) {
-        prompt.value = instruction;
-        prompt.dispatchEvent(new Event('input', { bubbles: true }));
-        const detected = document.getElementById('agent-detected');
-        const detect = document.getElementById('btn-agent-detect');
-        const plan = document.getElementById('btn-agent-plan');
-        const openPlan = function () {
-            if (plan) plan.click();
-            setTimeout(function () {
-                const panel = document.getElementById('agent-plan');
-                if (panel) panel.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            }, 80);
-        };
-        if (detected && detected.style.display === 'none' && detect) {
-            detect.click();
-            setTimeout(openPlan, 650);
-        } else {
-            openPlan();
-        }
-        showChangeNotice(changes || defaultChanges());
-    }
-
-    function defaultChanges() {
-        return [
-            { id: 'year', label: '제목·본문의 연도 표현' },
-            { id: 'date', label: '일정과 요일' },
-            { id: 'content', label: '주요 활동 문장' }
-        ];
+        state.pendingInstruction = instruction;
+        showChangeNotice(Array.isArray(changes) ? changes : []);
+        editor.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
 
     function showChangeNotice(changes) {
         const old = ui.chat.querySelector('.smart-plan-change-notice');
         if (old) old.remove();
+        const items = Array.isArray(changes) ? changes : [];
         const notice = make('div', 'smart-plan-change-notice');
-        notice.append(make('strong', '', '왼쪽에서 확인할 변경 후보'));
+        notice.append(make('strong', '', items.length ? '웹 편집기에서 확인할 변경 후보' : '수정 요청 접수'));
         const list = make('div', 'smart-plan-change-list');
-        (Array.isArray(changes) ? changes : []).forEach(function (change) {
+        items.forEach(function (change) {
             const button = make('button', '', change.label || change.summary || change.id || '변경 후보');
             button.type = 'button';
             button.addEventListener('click', function () {
-                const target = document.querySelector('[data-agent-change="' + escapeSelector(change.id || '') + '"]') || document.getElementById('agent-plan');
-                if (target) target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                editor.scrollIntoView({ behavior: 'smooth', block: 'start' });
             });
             list.append(button);
         });
-        notice.append(list, make('small', '', '후보만 제시되었습니다. 실제 반영 전 바뀔 문장을 한 번 더 확인합니다.'));
+        if (!items.length) list.append(make('span', '', 'AI 서버 연결 후 현재 문서에서 변경 위치를 찾습니다.'));
+        notice.append(list, make('small', '', items.length ? '후보만 제시되었습니다. 실제 반영 전 바뀔 문장을 한 번 더 확인합니다.' : '입력한 요청은 유지되며, 임의의 연도·날짜·문장을 만들지 않습니다.'));
         ui.context.insertAdjacentElement('afterend', notice);
     }
-
     function addMessage(role, text) {
         const row = make('div', 'smart-plan-message ' + role);
         const bubble = make('div', 'smart-plan-bubble');
@@ -311,11 +289,6 @@
         if (className) node.className = className;
         if (typeof text === 'string') node.textContent = text;
         return node;
-    }
-
-    function escapeSelector(value) {
-        if (window.CSS && typeof window.CSS.escape === 'function') return window.CSS.escape(value);
-        return String(value).replace(/[^a-zA-Z0-9_-]/g, '');
     }
 
     function injectStyles() {

@@ -229,6 +229,7 @@
 
 - `file`: PDF, HWP/HWPX, XLS/XLSX, CSV, JPG/JPEG/PNG/WebP 견적서. 최대 20MB.
 - `draftType`: `A`(관련 문서번호 있음), `B`(관련 문서번호 없음), `items_only` 중 하나.
+- `workContext`: 사용자가 적은 학교 업무·사용 맥락 선택 문자열(최대 80자). 예: `교무실 정보화 업무`.
 
 성공 응답:
 
@@ -252,7 +253,7 @@
     ],
     "totalAmount": 100000,
     "suggestedTitle": "프린터 토너 구입",
-    "purpose": "원활한 행정 업무 추진",
+    "purpose": "교무실 정보화 업무 추진을 위한 프린터 토너 구입",
     "warnings": []
   }
 }
@@ -265,6 +266,8 @@
 - 관련 문서번호 유무를 견적서에서 추론하지 않는다. `draftType=A`일 때만 프론트가 수정 가능한
   문서번호 입력란을 표시한다.
 - 규격·단위를 확인할 수 없으면 빈 문자열로 반환하며 추측값을 채우지 않는다.
+- `purpose`는 `workContext`와 실제 추출 품목의 성격을 함께 반영해 생성한다. `workContext`가 비어 있으면
+  품목 분류에 근거한 보수적인 문구를 반환하며, 예시 목적 문구를 고정값으로 넣지 않는다.
 - 항목별 `amount`와 `totalAmount`를 재계산한다. 견적서 표기 합계와 다르면 `warnings`에
   `TOTAL_MISMATCH`를 포함하거나 공통 형식의 `VALIDATION_ERROR`를 반환한다.
 - 모델 프롬프트와 공급자 키는 서버에만 둔다. 파일의 MIME·시그니처·악성코드와 조직별 권한·보존기간을
@@ -287,6 +290,7 @@
 
 - `files`: PDF, HWP/HWPX, DOC/DOCX, JPG/JPEG/PNG/WebP. 최대 5개, 파일당 20MB.
 - `query`: 사용자가 찾고 싶은 업무·자료를 적는 선택 문자열.
+- `workCategory`: 클릭한 학교 업무 분류. 빈 문자열 또는 `academic`, `student`, `field-trip`, `after-school`, `committee`, `budget`, `safety`, `training` 중 하나.
 - `mode`: `related_document_recommendation` 고정.
 
 성공 응답:
@@ -322,7 +326,7 @@
 처리 규칙:
 
 1. 문서 파싱/OCR로 본문과 페이지 위치를 추출한다.
-2. 등록 자료의 제목·본문·태그에 대한 키워드 검색과 의미 검색을 각각 수행한다.
+2. `workCategory`가 있으면 조직 권한 필터 전에 해당 업무 분야를 검색 부스트로 사용하고, 등록 자료의 제목·본문·태그에 대한 키워드 검색과 의미 검색을 각각 수행한다.
 3. 두 검색 결과는 RRF(Reciprocal Rank Fusion) 등 명시적인 병합 정책으로 합친다.
 4. 추천마다 업로드 문서의 페이지·관련 문장과 추천 이유를 반환한다.
 5. 파일명만 보고 내용을 추측하거나 추천하지 않는다. 파싱 실패 시 `DOCUMENT_PARSE_FAILED`를 반환한다.

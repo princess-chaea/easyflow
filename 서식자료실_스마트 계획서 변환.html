@@ -186,15 +186,29 @@
         .web-editor-card { border-color:#c7d3f0; box-shadow:0 8px 24px rgba(0,56,147,.06); }
         .web-editor-intro { display:flex; justify-content:space-between; align-items:flex-start; gap:16px; flex-wrap:wrap; }
         .web-editor-notice { margin:16px 0; padding:13px 15px; border-radius:10px; border:1px solid #f2ce8d; background:#fff7e6; color:#714400; font-size:13px; line-height:1.65; }
-        .web-editor-drop { padding:34px 20px; border:2px dashed #9fb5db; border-radius:12px; background:#f7faff; text-align:center; transition:.2s ease; }
+        .web-editor-drop { display:flex; align-items:center; gap:14px; padding:14px 16px; border:2px dashed #9fb5db; border-radius:12px; background:#f7faff; text-align:left; transition:.2s ease; }
         .web-editor-drop.dragover { border-color:#003893; background:#eaf1ff; }
+        .web-editor-drop-icon { width:42px; height:42px; display:grid; place-items:center; flex:none; border-radius:12px; background:#eaf1ff; font-size:24px; }
+        .web-editor-drop-copy { flex:1; min-width:0; }
+        .web-editor-drop-copy strong { display:block; font-size:14px; color:#111214; }
+        .web-editor-drop-copy span { display:block; margin-top:3px; font-size:12px; color:#6b7280; }
         .web-editor-status { margin-top:12px; min-height:22px; color:#4e535e; font-size:13px; line-height:1.6; }
         .web-editor-status.success { color:#05603a; }
         .web-editor-status.error { color:#b42318; }
         .web-editor-toolbar { display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap; margin:18px 0 10px; }
         .web-editor-actions { display:flex; gap:8px; flex-wrap:wrap; }
         .web-editor-frame { min-height:720px; border:1px solid #d6dae1; border-radius:12px; overflow:hidden; background:#f2f4f6; }
-        @media (max-width: 760px) { .agent-steps { grid-template-columns:1fr; } .agent-diff { grid-template-columns:1fr; } .agent-diff-arrow { display:none; } .agent-checks,.agent-receipt-grid,.teacher-result-fields { grid-template-columns:1fr; } .teacher-result-field:last-child { grid-column:auto; } .web-editor-frame { min-height:580px; } }
+        .web-editor-card:fullscreen { width:100vw; height:100vh; margin:0; padding:14px; border:0; border-radius:0; background:#fff; display:flex; flex-direction:column; overflow:hidden; }
+        .web-editor-card:fullscreen .web-editor-intro,
+        .web-editor-card:fullscreen .web-editor-notice,
+        .web-editor-card:fullscreen .web-editor-drop,
+        .web-editor-card:fullscreen > .web-editor-status,
+        .web-editor-card:fullscreen > p:last-child { display:none !important; }
+        .web-editor-card:fullscreen #web-hwp-workspace { flex:1; min-height:0; display:flex; flex-direction:column; }
+        .web-editor-card:fullscreen .web-editor-toolbar { flex:none; margin:0 0 8px; }
+        .web-editor-card:fullscreen .web-editor-frame { flex:1; min-height:0; height:auto; }
+        .web-editor-card:fullscreen .web-editor-frame > iframe { height:100% !important; }
+        @media (max-width: 760px) { .agent-steps { grid-template-columns:1fr; } .agent-diff { grid-template-columns:1fr; } .agent-diff-arrow { display:none; } .agent-checks,.agent-receipt-grid,.teacher-result-fields { grid-template-columns:1fr; } .teacher-result-field:last-child { grid-column:auto; } .web-editor-drop { align-items:flex-start; flex-wrap:wrap; } .web-editor-drop .agent-btn { width:100%; } .web-editor-frame { min-height:580px; } }
 
         .upload-zone { border: 2px dashed #c9ccd3; border-radius: 12px; padding: 48px 24px; text-align: center; transition: all 0.2s ease; }
         .upload-zone.dragover { border-color: #003893; background: rgba(0, 56, 147, 0.04); }
@@ -482,7 +496,7 @@
 <h1>스마트 계획서</h1>
 <p>왼쪽에서 한글 문서를 직접 편집하고, 오른쪽 AI와 계획을 세운 뒤 변경할 부분을 검토하세요.</p>
 </div>
-<div class="card" id="document-agent-demo">
+<div class="card" id="document-agent-demo" hidden aria-hidden="true">
 <div style="display:flex;justify-content:space-between;gap:16px;align-items:flex-start;flex-wrap:wrap">
 <div>
 <h2 style="font-size:20px;font-weight:800;color:#111214;margin-bottom:6px">AI와 함께 계획서 다듬기</h2>
@@ -618,9 +632,9 @@
 </div>
 <div class="web-editor-notice"><strong>안심하고 시험하세요</strong><br>웹앱에 포함된 오픈소스 편집기가 파일을 브라우저 안에서 처리하며, 파일 내용은 서버로 업로드하지 않습니다. 시연에는 원본 대신 사본을 사용해 주세요. 원본 파일은 덮어쓰지 않습니다.</div>
 <div class="web-editor-drop" id="web-hwp-drop-zone">
-<div style="font-size:36px;margin-bottom:8px">📝</div>
-<strong style="display:block;font-size:16px;color:#111214;margin-bottom:5px">HWP/HWPX 파일을 놓아주세요</strong>
-<span style="display:block;font-size:13px;color:#6b7280;margin-bottom:16px">또는 아래 버튼으로 파일을 선택하세요. 최대 50MB</span>
+<span class="web-editor-drop-icon" aria-hidden="true">📝</span>
+<span class="web-editor-drop-copy"><strong>HWP/HWPX 파일 한 개를 열어주세요</strong>
+<span>끌어놓거나 파일을 선택하세요 · 최대 50MB</span></span>
 <input id="web-hwp-file" type="file" accept=".hwp,.hwpx" hidden>
 <button class="agent-btn" id="btn-web-hwp-open" type="button">내 한글 파일 열기</button>
 </div>
@@ -633,6 +647,7 @@
 </div>
 <div class="web-editor-actions">
 <button class="agent-btn secondary" id="btn-web-hwp-reopen" type="button">다른 파일 열기</button>
+<button class="agent-btn secondary" id="btn-web-hwp-fullscreen" type="button" aria-pressed="false"><span class="material-symbols-outlined" aria-hidden="true">fullscreen</span><span>전체화면</span></button>
 <button class="agent-btn secondary" id="btn-web-hwp-save-hwp" type="button">HWP 수정본 저장</button>
 <button class="agent-btn" id="btn-web-hwp-save-hwpx" type="button">HWPX 수정본 저장</button>
 </div>

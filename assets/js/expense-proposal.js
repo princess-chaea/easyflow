@@ -94,6 +94,7 @@
         byId('expenseResult').hidden = true;
         byId('expenseFileEmpty').hidden = true;
         byId('expenseFileSelected').hidden = false;
+        byId('expenseDropzone').classList.add('has-file');
         byId('expenseFileName').textContent = file.name;
         byId('expenseFileMeta').textContent = extension.toUpperCase() + ' · ' + formatBytes(file.size);
         byId('expenseAnalyzeButton').disabled = false;
@@ -108,6 +109,7 @@
         byId('expenseFileInput').value = '';
         byId('expenseFileEmpty').hidden = false;
         byId('expenseFileSelected').hidden = true;
+        byId('expenseDropzone').classList.remove('has-file');
         byId('expenseAnalyzeButton').disabled = true;
         byId('expenseResult').hidden = true;
         byId('expenseAnalyzeStatus').textContent = '분석할 견적서 파일을 선택해 주세요.';
@@ -216,6 +218,7 @@
         const body = new FormData();
         body.append('file', file, file.name);
         body.append('draftType', state.mode === 'ITEMS' ? 'items_only' : state.mode);
+        body.append('workContext', byId('expenseWorkContext').value.trim());
 
         const controller = new AbortController();
         const timeout = window.setTimeout(() => controller.abort(), 45000);
@@ -359,12 +362,19 @@
         return parts.join('');
     }
 
-    function suggestPurpose(items) {
-        const text = items.map(item => item.content).join(' ').toLowerCase();
-        if (/도서|교구|학습|실험|수업|교육/.test(text)) return '원활한 교육 활동 지원';
-        if (/청소|위생|시설|보수|안전|소독/.test(text)) return '쾌적하고 안전한 교육 환경 조성';
-        if (/프린터|토너|컴퓨터|복사|사무|문구/.test(text)) return '원활한 행정 업무 추진';
-        return '원활한 학교 업무 추진';
+    function suggestPurpose(items, workContext) {
+        const names = items.map(item => String(item.content || '').trim()).filter(Boolean);
+        const text = names.join(' ').toLowerCase();
+        const context = String(workContext || '').replace(/\s+/g, ' ').trim();
+        if (context) return context + ' 추진을 위한 ' + (names[0] || '필요 물품') + ' 구입';
+        if (/마우스|키보드|모니터|노트북|태블릿|컴퓨터|프린터|복사기|토너|usb|케이블|공유기|네트워크|소프트웨어/.test(text)) return '학교 정보화 및 행정 업무의 원활한 추진';
+        if (/도서|교구|학습|실험|수업|교육|과학|미술|음악|체육/.test(text)) return '학생 교육 활동의 원활한 운영 지원';
+        if (/청소|세제|위생|방역|소독|마스크|보건/.test(text)) return '쾌적하고 위생적인 교육 환경 조성';
+        if (/시설|보수|수리|전구|조명|공구|소방|안전/.test(text)) return '안전하고 쾌적한 교육 환경 조성';
+        if (/연수|행사|회의|홍보|현수막/.test(text)) return '학교 행사 및 교직원 업무의 원활한 운영';
+        if (/사무|문구|용지|파일|봉투|스테이플러/.test(text)) return '학교 행정 업무의 원활한 추진';
+        const representative = names[0] || '필요 물품';
+        return representative + ' 구입을 통한 학교 업무 지원';
     }
 
     function suggestTitle(items) {
@@ -385,12 +395,15 @@
         byId('expenseItemCount').textContent = state.result.items.length + '건';
     }
 
-    function buildDraft() {
+    function buildDraft(options) {
         if (!state.result) return;
         recalculateResult();
         const items = state.result.items;
-        const title = byId('expenseDraftTitle').value.trim() || state.result.suggestedTitle || suggestTitle(items);
-        const purpose = byId('expensePurpose').value.trim() || state.result.purpose || suggestPurpose(items);
+        const refreshSuggestions = Boolean(options && options.refreshSuggestions);
+        const suggestedTitle = refreshSuggestions ? suggestTitle(items) : (state.result.suggestedTitle || suggestTitle(items));
+        const suggestedPurpose = refreshSuggestions ? suggestPurpose(items, byId('expenseWorkContext').value) : (state.result.purpose || suggestPurpose(items, byId('expenseWorkContext').value));
+        const title = refreshSuggestions ? suggestedTitle : (byId('expenseDraftTitle').value.trim() || suggestedTitle);
+        const purpose = refreshSuggestions ? suggestedPurpose : (byId('expensePurpose').value.trim() || suggestedPurpose);
         const representative = items[0] ? items[0].content : '물품';
         const otherCount = Math.max(0, items.length - 1);
         const amount = state.result.totalAmount;
@@ -498,7 +511,7 @@
         byId('expenseSupplier').textContent = state.result.source.supplier || '견적서에서 확인 필요';
         byId('expenseQuoteDate').textContent = state.result.source.quoteDate || '견적서에서 확인 필요';
         byId('expenseDraftTitle').value = state.result.suggestedTitle || suggestTitle(state.result.items);
-        byId('expensePurpose').value = state.result.purpose || suggestPurpose(state.result.items);
+        byId('expensePurpose').value = state.result.purpose || suggestPurpose(state.result.items, byId('expenseWorkContext').value);
         byId('draftResultPanel').hidden = state.mode === 'ITEMS';
         renderItemsTable();
         buildDraft();
@@ -582,7 +595,7 @@
 
         byId('expenseAddItem').addEventListener('click', addItem);
         byId('expenseRegenerate').addEventListener('click', () => {
-            buildDraft();
+            buildDraft({ refreshSuggestions: true });
             showToast('수정한 품목 기준으로 품의서를 다시 만들었습니다.');
         });
         byId('expenseDownloadCsv').addEventListener('click', downloadItemsCsv);

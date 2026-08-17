@@ -5,6 +5,7 @@ const MAX_FILE_SIZE = 50 * 1024 * 1024;
 const fileInput = document.getElementById('web-hwp-file');
 const openButton = document.getElementById('btn-web-hwp-open');
 const reopenButton = document.getElementById('btn-web-hwp-reopen');
+const fullscreenButton = document.getElementById('btn-web-hwp-fullscreen');
 const saveHwpButton = document.getElementById('btn-web-hwp-save-hwp');
 const saveHwpxButton = document.getElementById('btn-web-hwp-save-hwpx');
 const dropZone = document.getElementById('web-hwp-drop-zone');
@@ -12,6 +13,7 @@ const status = document.getElementById('web-hwp-status');
 const workspace = document.getElementById('web-hwp-workspace');
 const fileName = document.getElementById('web-hwp-filename');
 const pageInfo = document.getElementById('web-hwp-page-info');
+const editorCard = document.getElementById('web-hwp-editor-card');
 
 let editor = null;
 let currentFile = null;
@@ -25,6 +27,7 @@ function setStatus(message, type) {
 function setBusy(busy, message) {
     openButton.disabled = busy;
     reopenButton.disabled = busy;
+    fullscreenButton.disabled = busy || !currentFile;
     saveHwpButton.disabled = busy || !currentFile;
     saveHwpxButton.disabled = busy || !currentFile;
     if (message) setStatus(message);
@@ -67,7 +70,7 @@ async function ensureEditor() {
     const module = await import(RHWP_MODULE_URL);
     editor = await module.createEditor('#web-hwp-editor', {
         studioUrl: RHWP_STUDIO_URL,
-        renderer: 'canvas2d',
+        renderer: 'auto',
         height: '720px',
         requestTimeoutMs: 90000
     });
@@ -92,6 +95,7 @@ async function openFile(file) {
             : await activeEditor.pageCount();
         pageInfo.textContent = count + '쪽 · 편집한 뒤 원하는 형식으로 수정본을 저장하세요.';
         setStatus('문서를 열었습니다. 아래 편집 화면에서 바로 수정할 수 있습니다.', 'success');
+        dropZone.hidden = true;
         workspace.hidden = false;
         workspace.scrollIntoView({ behavior: 'smooth', block: 'start' });
     } catch (error) {
@@ -103,6 +107,27 @@ async function openFile(file) {
     }
 }
 
+function updateFullscreenButton() {
+    const active = document.fullscreenElement === editorCard;
+    fullscreenButton.setAttribute('aria-pressed', String(active));
+    const icon = fullscreenButton.querySelector('.material-symbols-outlined');
+    const label = fullscreenButton.querySelector('span:last-child');
+    if (icon) icon.textContent = active ? 'fullscreen_exit' : 'fullscreen';
+    if (label) label.textContent = active ? '전체화면 닫기' : '전체화면';
+}
+
+async function toggleFullscreen() {
+    try {
+        if (!document.fullscreenElement) {
+            if (!editorCard.requestFullscreen) throw new Error('FULLSCREEN_UNAVAILABLE');
+            await editorCard.requestFullscreen();
+        } else {
+            await document.exitFullscreen();
+        }
+    } catch (error) {
+        setStatus('이 브라우저에서는 전체화면을 열 수 없습니다. 브라우저를 최신 버전으로 업데이트해 주세요.', 'error');
+    }
+}
 function downloadBytes(bytes, format) {
     const baseName = currentFile.name.replace(/\.(hwp|hwpx)$/i, '');
     const outputName = baseName + '_수정본.' + format;
@@ -150,6 +175,8 @@ async function saveFile(format) {
 
 openButton.addEventListener('click', function () { fileInput.click(); });
 reopenButton.addEventListener('click', function () { fileInput.click(); });
+fullscreenButton.addEventListener('click', toggleFullscreen);
+document.addEventListener('fullscreenchange', updateFullscreenButton);
 fileInput.addEventListener('change', function () {
     if (fileInput.files && fileInput.files[0]) openFile(fileInput.files[0]);
 });
