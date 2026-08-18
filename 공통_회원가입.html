@@ -443,6 +443,10 @@
                     firstErrorElement.focus();
                 }
             } else {
+                const signupEmail = emailInput.value.trim().includes('@') ? emailInput.value.trim() : emailInput.value.trim() + '@gbe.kr';
+                localStorage.setItem('org_' + signupEmail, orgSearchInput.value.trim());
+                localStorage.setItem('school_code_' + signupEmail, orgSchoolCode.value.trim());
+                if (orgSearchInput.dataset.schoolType) localStorage.setItem('school_type_' + signupEmail, orgSearchInput.dataset.schoolType);
                 // 선택한 관리자/멘토 권한을 승인 대기열에 등록 (서버관리자_역할관리.html에서 승인/반려 처리)
                 const requestedRoles = Array.from(document.querySelectorAll('input[name="role"]:checked')).map(cb => cb.value);
                 if (requestedRoles.length) {

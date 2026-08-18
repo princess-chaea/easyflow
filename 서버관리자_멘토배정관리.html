@@ -379,16 +379,13 @@
 <p class="font-caption text-caption text-muted" data-ef="footer.address">경북 안동시 풍천면 도청대로 511 | 대표전화 054-805-3000</p>
 </div>
 </footer>
+<script src='assets/js/work-categories.js'></script>
 <script>
-    // 초등 기준 업무 분야 태그 (30종) — 업무배송_업무발송.html/인생도서관_마이페이지.html과 동일
-    const TASK_CATEGORY_TAGS = [
-        '교무', '학적', '연구', '학력', '학생부',
-        '인성', '진로', '민주', '생활', '생명',
-        '자치', '복지', '늘봄', '다문화', '체육',
-        '안전', '체험', '정보', '특수', '과학',
-        '영재', '환경', '문화예술', '학부모', '보건',
-        '영양', '상담', '독서', '국제', '영어'
-    ];
+    // 서버관리자는 유·초등과 중·고등의 전체 업무 분야를 배정할 수 있다.
+    const TASK_CATEGORY_TAGS = EF_WORK_CATEGORIES.all.slice();
+    Array.from(document.querySelectorAll('span')).forEach(span => {
+        if (span.textContent.includes('기준, 1개 이상 선택')) span.textContent = '(유·초등·중·고등 전체, 1개 이상 선택)';
+    });
     let rosterSelectedCategories = [];
     let rosterEditingEmail = null; // null이면 신규 추가, 값이 있으면 그 이메일의 배정을 수정
 

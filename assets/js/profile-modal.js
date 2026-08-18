@@ -47,6 +47,7 @@
     // Retrieve stored org and rank or default to empty
     let userOrg = localStorage.getItem(`org_${currentUser}`) || '';
     let userRank = localStorage.getItem(`rank_${currentUser}`) || '';
+    let userSchoolType = localStorage.getItem(`school_type_${currentUser}`) || '';
     
     const allRoles = ['학교 관리자', '업무배송 담당자', '멘토', '장학사', '서버 관리자'];
     const normalizeRole = r => r.replace(/\s+/g, '');
@@ -183,9 +184,16 @@
 
     document.body.insertAdjacentHTML('beforeend', modalHTML);
 
+    const profileOrgInput = document.getElementById('pmOrgInput');
+    if (userSchoolType) profileOrgInput.dataset.schoolType = userSchoolType;
+
     // NEIS 학교 자동완성 초기화 (school-search.js가 로드된 경우에만)
     if (window.EF_SCHOOL) {
-        EF_SCHOOL.initSchoolSearch('pmOrgInput', 'pmOrgSchoolCode');
+        EF_SCHOOL.initSchoolSearch('pmOrgInput', 'pmOrgSchoolCode', {
+            onSelect(school) {
+                profileOrgInput.dataset.schoolType = school.SCHUL_KND_SC_NM || '';
+            }
+        });
     }
 
     const overlay = document.getElementById('profileModalOverlay');
@@ -231,6 +239,17 @@
         const rankInput = document.getElementById('pmRankInput');
         localStorage.setItem('org_' + currentUser, orgInput.value.trim());
         localStorage.setItem('rank_' + currentUser, rankInput.value.trim());
+        let selectedSchoolType = orgInput.dataset.schoolType || '';
+        if (!selectedSchoolType) {
+            const organizationName = orgInput.value.trim();
+            if (/유치원/.test(organizationName)) selectedSchoolType = '유치원';
+            else if (/초등학교|초등/.test(organizationName)) selectedSchoolType = '초등학교';
+            else if (/중학교|중등/.test(organizationName)) selectedSchoolType = '중학교';
+            else if (/고등학교|고등/.test(organizationName)) selectedSchoolType = '고등학교';
+            else if (/교육청|교육지원청|교육원|연구원|센터|기관|부서/.test(organizationName)) selectedSchoolType = '기관·부서';
+        }
+        if (selectedSchoolType) localStorage.setItem('school_type_' + currentUser, selectedSchoolType);
+        else localStorage.removeItem('school_type_' + currentUser);
         showToast('프로필이 저장되었습니다.');
         closeModal();
     });

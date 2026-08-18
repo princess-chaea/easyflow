@@ -274,6 +274,13 @@ const EF_SCHOOL = (() => {
     };
 
     input.addEventListener('input', () => {
+      input.dataset.schoolCode = '';
+      input.dataset.schoolType = '';
+      input.dataset.schoolAddr = '';
+      if (hiddenId) {
+        const selectedCode = document.getElementById(hiddenId);
+        if (selectedCode) selectedCode.value = '';
+      }
       const q = input.value.trim();
       if (_timer) clearTimeout(_timer);
       if (q === _lastQuery) return;
