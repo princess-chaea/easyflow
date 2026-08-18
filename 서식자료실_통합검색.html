@@ -548,16 +548,10 @@
 <p class="font-caption text-caption text-muted" data-ef="footer.address">경북 안동시 풍천면 도청대로 511 | 대표전화 054-805-3000</p>
 </div>
 </footer>
+<script src='assets/js/work-categories.js'></script>
 <script>
-    // 초등 기준 업무 분야 태그 (30종) — 업무배송_업무발송.html의 관련 업무 분야와 동일
-    const TAG_FILTER_LIST = [
-        '교무', '학적', '연구', '학력', '학생부',
-        '인성', '진로', '민주', '생활', '생명',
-        '자치', '복지', '늘봄', '다문화', '체육',
-        '안전', '체험', '정보', '특수', '과학',
-        '영재', '환경', '문화예술', '학부모', '보건',
-        '영양', '상담', '독서', '국제', '영어'
-    ];
+    // 로그인 사용자의 학교급에 따라 유·초등 또는 중·고등 업무 분야를 사용한다.
+    const TAG_FILTER_LIST = EF_WORK_CATEGORIES.forCurrentUser();
     (function renderTagFilterList() {
         const wrap = document.getElementById('tagFilterList');
         TAG_FILTER_LIST.forEach(tag => {

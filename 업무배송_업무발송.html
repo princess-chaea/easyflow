@@ -480,16 +480,10 @@
 <span class="material-symbols-outlined text-green-400">check_circle</span>
         업무 우편이 성공적으로 등록(배송)되었습니다.
     </div>
+<script src='assets/js/work-categories.js'></script>
 <script>
-        // 초등 기준 업무 분야 태그 (30종)
-        const TASK_CATEGORY_TAGS = [
-            '교무', '학적', '연구', '학력', '학생부',
-            '인성', '진로', '민주', '생활', '생명',
-            '자치', '복지', '늘봄', '다문화', '체육',
-            '안전', '체험', '정보', '특수', '과학',
-            '영재', '환경', '문화예술', '학부모', '보건',
-            '영양', '상담', '독서', '국제', '영어'
-        ];
+        // 로그인 사용자의 학교급에 따라 유·초등 또는 중·고등 업무 분야를 사용한다.
+        const TASK_CATEGORY_TAGS = EF_WORK_CATEGORIES.forCurrentUser();
         (function renderTaskCategoryList() {
             const wrap = document.getElementById('taskCategoryList');
             TASK_CATEGORY_TAGS.forEach(tag => {

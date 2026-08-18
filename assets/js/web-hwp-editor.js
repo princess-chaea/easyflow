@@ -95,6 +95,9 @@ async function openFile(file) {
             : await activeEditor.pageCount();
         pageInfo.textContent = count + '쪽 · 편집한 뒤 원하는 형식으로 수정본을 저장하세요.';
         setStatus('문서를 열었습니다. 아래 편집 화면에서 바로 수정할 수 있습니다.', 'success');
+        window.dispatchEvent(new CustomEvent('ef:smart-plan-file-opened', {
+            detail: { file, pageCount: count, openedAt: new Date().toISOString() }
+        }));
         dropZone.hidden = true;
         workspace.hidden = false;
         workspace.scrollIntoView({ behavior: 'smooth', block: 'start' });

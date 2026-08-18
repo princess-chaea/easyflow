@@ -87,6 +87,17 @@
 }
 ```
 
+`GET /api/users/me`의 `organization`에는 `schoolType`과 `workCategoryGroup`도 포함한다.
+`schoolType`은 `kindergarten`, `elementary`, `middle`, `high`, `office` 중 하나이며 서버가 NEIS 학교 정보
+또는 기관 원장으로 결정한다. 사용자가 임의 문자열로 바꾸게 하지 않는다. `workCategoryGroup`은
+유치원·초등학교의 `early`, 중학교·고등학교의 `secondary`, 교육청·행정기관의 `common` 중 하나다.
+
+- `GET /api/work-categories?group=early|secondary|common`
+
+`early`는 기존 초등 기준 30개 분야를, `secondary`는 중등 길라잡이 기준 29개 분야를 반환한다.
+중등 분류에는 `교육과정`이 있고 `늘봄`, `문화예술`은 없다. `common`은 행정실·교원인사 등 공통 업무가
+정의되기 전까지 두 목록의 합집합을 관리자 화면에만 반환한다. 프론트에 배열을 중복 하드코딩하지 않는다.
+
 ## 3. 문의·멘토링
 
 - `POST /api/inquiries`
@@ -124,6 +135,9 @@
 - `DELETE /api/calendar/events/{id}`
 
 한 번의 업무발송은 `dispatch` 한 건으로 저장하고 대상 부서·업무 분야는 관계 테이블로 분리한다. 읽음 상태는 수신자별 `dispatch_reads`로 저장한다.
+업무 분야 선택지는 발신자의 조직 학교급을 기준으로 `early` 또는 `secondary` 목록을 사용한다. 수신함은
+수신자 조직의 `workCategoryGroup`에 속하지 않는 분야를 기본 화면에서 제외한다. 서버관리자는 멘토 배정 등
+광역 관리 화면에서 두 목록의 합집합을 사용할 수 있다.
 수정·삭제는 작성자, 업무배송 담당자 또는 서버관리자만 허용한다. `PATCH`로 업무 분야를 변경할 때는
 대상 관계를 한 트랜잭션에서 교체하고 기존 수신자의 읽음·책갈피 처리 정책을 명시한다. `DELETE`는 감사 로그와
 복구 정책을 적용한 소프트 삭제를 기본으로 하며, 모든 쓰기 요청은 최신 리비전 또는 `updatedAt` 충돌을 검사한다.
@@ -179,6 +193,88 @@
 - `POST /api/rag/sources`
 - `POST /api/rag/sources/{id}/reindex`
 - `GET /api/ai/jobs/{id}`
+
+### 6.1 사용자 참여형 RAG 제출·승인 계약
+
+일반 파일 업로드와 RAG 제공 동의는 분리한다. `POST /api/files` 또는 문서 분석 API에 파일을 올렸다는
+사실만으로 `rag_sources`를 만들거나 운영 검색 인덱스에 추가하면 안 된다. 기본 상태는 개인 자료이며 사용자가
+자료별로 명시적인 검토 요청을 제출해야 한다.
+
+사용자 API:
+
+- `POST /api/resources` — 업로드된 `fileId`와 메타데이터로 기본 `PRIVATE` 사용자 자료 생성
+- `GET /api/me/resources?cursor=` — 내 자료와 개인 사용·RAG 검토 여부 조회
+- `POST /api/resources/{resourceId}/rag-submissions` — 자료별 RAG 검토 요청
+- `GET /api/me/rag-submissions?status=&cursor=` — 내 요청과 검토 상태 조회
+- `GET /api/me/rag-submissions/{id}` — 관리자 의견, 승인 범위, 색인 상태 조회
+- `POST /api/me/rag-submissions/{id}/withdraw` — 검토 요청 취소 또는 활성 자료 활용 철회
+- `POST /api/me/rag-submissions/{id}/resubmit` — 보완한 새 파일 버전으로 재신청
+
+제출 본문은 `requestedScope`, `category`, `title`, `description`, `schoolLevels[]`, `referenceYear`,
+`documentFamilyId`, `effectiveAt`, `expiresAt`, `replacesSourceId`와 권리·개인정보·RAG 검토 요청 확인값을 받는다. RAG 요청 확인값은 서버에서 반드시
+참인지 검사하고 동의 시각·문구 버전·요청자를 별도 이벤트로 기록한다. 사전 선택값이나 다른 파일에서 받은
+과거 동의를 재사용하지 않는다.
+
+`schoolLevels[]`의 기본값은 `all`, `early`, `secondary`다. `early`는 유치원·초등학교, `secondary`는
+중학교·고등학교, `all`은 학교급 공통이다. 특정 학교급에만 적용되는 예외 자료는 `kindergarten`,
+`elementary`, `middle`, `high`를 추가로 사용할 수 있다. `all`은 파일을 여러 범위에 복제 저장한다는 뜻이
+아니다. `referenceYear`는 업로드 연도가 아니라 문서의 적용 연도다. `documentFamilyId`는 같은 업무의
+연도별 개정본과 초안·최종본을 연결한다.
+
+관리자 API:
+
+- `GET /api/admin/rag/submissions?scope=organization&status=SUBMITTED&cursor=` — 관할 승인 대기함
+- `GET /api/admin/rag/submissions/{id}` — 원문 미리보기와 보안·개인정보·중복·OCR 검사 결과
+- `GET /api/admin/rag/similarity-groups?scope=organization&status=SUBMITTED` — 해시·제목·본문 유사도로 묶은 관할 검토 단위
+- `POST /api/admin/rag/similarity-groups/{id}/representative` — 묶음의 대표 자료 버전 선택
+- `POST /api/admin/rag/similarity-groups/{id}/consolidate` — 대표본 승인과 중복·개정본 통합 결정을 한 트랜잭션으로 저장
+- `POST /api/admin/rag/submissions/{id}/reviews` — 승인, 보완 요청 또는 반려
+- `POST /api/admin/rag/submissions/{id}/promotion-requests` — 학교 자료의 광역 공유 승격 요청
+- `POST /api/admin/rag/sources/{id}/suspend` — 검색 즉시 중지
+- `POST /api/admin/rag/sources/{id}/reactivate` — 권한 재검사 후 재활성화
+- `POST /api/admin/rag/sources/{id}/replace` — 새 버전 제출; 새 승인 전 기존 버전을 자동 교체하지 않음
+
+검토 본문은 `decision`, `approvedScope`, `reason`, `expiresAt`을 받는다. `decision`은 `approve`,
+`request_changes`, `reject` 중 하나다. 학교관리자는 자기 조직 범위만 승인할 수 있고 `regional` 또는
+`global` 범위는 서버관리자 2차 승인이 필요하다. 요청자와 승인자를 분리하는 2인 검토를 기본으로 하며
+예외 정책도 감사 로그에 기록한다.
+
+운영 절차는 `사용자 검토 요청 → 학교관리자 학교 범위 승인 → 서버관리자 광역 범위 승인`의 세 단계로
+유지한다. 학교관리자가 광역 범위를 직접 승인할 수 없고, 서버관리자가 학교 승인 전 자료를 건너뛰어 승인할 수 없다.
+
+유사자료 통합 본문은 `representativeResourceVersionId`, `memberSubmissionIds[]`, `reason`을 받는다.
+대표본이 아닌 항목은 삭제하지 않고 `mergedIntoSubmissionId`와 결정 이력을 남긴다. 같은 파일 해시의 완전
+중복은 한 원본만 보관할 수 있으며, 제목만 비슷한 자료는 자동 삭제하지 않고 관리자에게 후보로만 제시한다.
+
+상태는 `PRIVATE`, `SUBMITTED`, `UNDER_REVIEW`, `CHANGES_REQUESTED`, `REJECTED`, `APPROVED`,
+`INDEXING`, `ACTIVE`, `SUSPENDED`, `WITHDRAWN`을 사용한다.
+
+서버 강제 규칙:
+
+1. `APPROVED` 이전에는 운영 검색 인덱스용 청크·임베딩 생성 작업을 시작할 수 없다. 악성코드·텍스트 추출 등
+   사전 검사는 격리된 작업공간에서 실행하며 결과를 AI 답변에 사용하지 않는다.
+2. 승인 시 비동기 색인 작업을 만들고 `202 Accepted`와 `jobId`를 반환한다. 작업 성공 후에만 `ACTIVE`가 된다.
+3. AI 검색은 세션 사용자, 조직, 역할, `approvedScope`, 소스 상태와 버전을 매 요청마다 확인한다.
+4. 답변 근거에는 `sourceId`, `sourceVersionId`, `title`, `page`, `anchor`, `excerpt`를 반환한다.
+5. 철회·중지는 즉시 검색 필터에 반영한다. 이후 원본 보존정책에 맞춰 청크·임베딩 삭제 작업을 실행하고
+   완료·실패를 감사 로그와 사용자 상태 화면에 남긴다.
+6. 원문 해시가 바뀌면 새 버전으로 간주해 재검토한다. 이전 승인을 새 바이트에 자동 승계하지 않는다.
+7. 학교관리자는 다른 조직의 제출 원문·검사 결과를 조회할 수 없다.
+8. HWP/HWPX 원본과 PDF 파생본은 하나의 `resourceVersion`으로 연결한다. 원본은 증빙·재변환용으로 보존하고
+   PDF는 페이지 인용이 가능한 추출 대상으로 사용한다.
+9. 업무별 분할본을 그대로 합친 총괄본은 `indexEnabled=false`로 보관하고 분할본만 색인한다. 총괄본과
+   분할본을 동시에 색인해 동일 문단이 중복 검색되지 않도록 한다.
+10. 모든 청크에 `documentFamilyId`, `schoolLevels`, `referenceYear`, `category`, `sourceVersionId`,
+   `page`, `approvedScope`를 상속한다. 최신 승인본을 기본 검색하고 과거 연도는 명시적 연도 질의에만 확장한다.
+11. 유치원·초등학교 사용자의 검색 허용 학교급은 `early + all`, 중학교·고등학교 사용자는
+   `secondary + all`이다. 세부 예외 태그가 있으면 실제 `schoolType`과 일치할 때만 추가한다. 학교급 필터는
+   벡터 유사도 계산 후가 아니라 검색 후보 생성 전에 강제한다.
+
+상담 자료는 원문을 제출할 수 없다. `mentoring_knowledge_preferences.status=review_requested`인 상담에 한해
+개인정보 제거 작업이 끝난 요약본을 별도 `resource`로 만들고 같은 승인 절차를 적용한다.
+
+기존 `POST /api/rag/sources`는 서버관리자가 공식 시스템 자료를 등록하는 용도로 제한한다. 일반 사용자와
+학교 자료는 이 엔드포인트를 직접 호출하지 않고 제출·검토 계약을 통과해야 한다.
 
 일정 도우미 텍스트 응답:
 
@@ -290,7 +386,8 @@
 
 - `files`: PDF, HWP/HWPX, DOC/DOCX, JPG/JPEG/PNG/WebP. 최대 5개, 파일당 20MB.
 - `query`: 사용자가 찾고 싶은 업무·자료를 적는 선택 문자열.
-- `workCategory`: 클릭한 학교 업무 분류. 빈 문자열 또는 `academic`, `student`, `field-trip`, `after-school`, `committee`, `budget`, `safety`, `training` 중 하나.
+- `workCategory`: 클릭한 학교 업무 분류. 빈 문자열 또는 `/api/work-categories`에서 현재 사용자의
+  `workCategoryGroup`으로 받은 값 중 하나.
 - `mode`: `related_document_recommendation` 고정.
 
 성공 응답:
@@ -326,7 +423,9 @@
 처리 규칙:
 
 1. 문서 파싱/OCR로 본문과 페이지 위치를 추출한다.
-2. `workCategory`가 있으면 조직 권한 필터 전에 해당 업무 분야를 검색 부스트로 사용하고, 등록 자료의 제목·본문·태그에 대한 키워드 검색과 의미 검색을 각각 수행한다.
+2. 서버가 세션 사용자의 조직 학교급으로 `early + all` 또는 `secondary + all` RAG 범위를 먼저 제한한다.
+   그 뒤 `workCategory`가 있으면 해당 업무 분야를 검색 부스트로 사용하고, 등록 자료의 제목·본문·태그에
+   대한 키워드 검색과 의미 검색을 각각 수행한다.
 3. 두 검색 결과는 RRF(Reciprocal Rank Fusion) 등 명시적인 병합 정책으로 합친다.
 4. 추천마다 업로드 문서의 페이지·관련 문장과 추천 이유를 반환한다.
 5. 파일명만 보고 내용을 추측하거나 추천하지 않는다. 파싱 실패 시 `DOCUMENT_PARSE_FAILED`를 반환한다.
@@ -446,6 +545,8 @@
 | `ef_checklist_progress_*` | checklist_runs, checklist_answers |
 | `ef_notices` | notices |
 | `ef_saved_resources` | saved_resources |
+| `ef_rag_school_uploads_*` | files, rag_sources, rag_source_versions, rag_jobs |
+| 사용자 자료 RAG 검토 상태(신규) | rag_submissions, rag_reviews, rag_consent_events, audit_logs |
 | `ef_footer_*`, `ef_contact_*`, `ef_dpo_*` | site_settings |
 | `ef_security_*` | 서버 보안 정책 저장소 및 감사 로그 |
 
@@ -457,3 +558,8 @@
 - 파일 업로드 실패, 중복 요청, 변환 타임아웃, 모델 오류가 사용자에게 구분되어 표시된다.
 - 프론트 소스와 네트워크 응답 어디에도 외부 공급자 키가 나타나지 않는다.
 - 모델 응답과 저장된 사용자 데이터가 HTML로 무검증 삽입되지 않는다.
+- 일반 파일 업로드만으로 조직 RAG 소스가 생성되지 않으며 명시적 제출과 관리자 승인 없이는 검색되지 않는다.
+- 학교 범위 승인 자료가 다른 조직 사용자에게 검색되지 않는 통합 테스트가 있다.
+- RAG 제출의 보완·반려·재신청·철회와 승인 후 색인 실패 상태가 사용자·관리자 화면에 일관되게 표시된다.
+- 중지·철회한 소스는 즉시 새 검색에서 제외되고 청크·임베딩 삭제 결과를 감사할 수 있다.
+- 승인된 RAG 답변 근거에 소스·버전·페이지·문단 앵커가 포함된다.

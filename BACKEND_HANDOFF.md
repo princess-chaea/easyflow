@@ -103,6 +103,48 @@ AI챗봇, 안내센터 2개, 서버관리자 3개)를 병렬로 마지막 점검
   `conversationId`와 계획 맥락을 공유하고, 수정 후보는 자동 적용하지 않고 기존 검토·승인 흐름으로 넘긴다.
 - 지출품의서 작성기의 견적 분석 API 작업은 4.3.3과 `BACKEND_API_CONTRACT.md` 7.1에 반영했다.
 
+## 0-C. 2026-08-18 사용자 참여형 RAG 운영 요구사항
+
+- 운영자가 준비한 공식 자료뿐 아니라 일반 사용자가 추가한 자료도 RAG 후보가 될 수 있다. 단, 업무 처리용
+  파일 업로드와 RAG 제공은 별개이며 기본값은 항상 `개인 자료·RAG 미반영`이다.
+- 사용자가 자료별로 `AI 참고자료 반영 검토 요청`을 명시적으로 선택한 경우에만 승인 절차를 시작한다.
+  일괄 동의, 사전 선택, 업로드 즉시 벡터화는 금지한다.
+- 사용자 자료의 현행 진입점은 인생도서관 마이페이지가 아니라 `서식자료실 → 스마트 계획서 → 참고자료·RAG 후보`다.
+  작업 중 연 파일과 추가 참고자료는 개인 자료로 모이며, 묶음별 검토 요청 전에는 학교 승인함에 나타나지 않는다.
+- 우리 학교 범위는 학교관리자가 승인하고, 교육지원청·교육청 전체 범위 승격은 서버관리자가 2차 승인한다.
+  승인 전 자료는 운영 검색 인덱스에 들어가거나 AI 답변에 사용되면 안 된다.
+- 상태는 `PRIVATE → SUBMITTED → UNDER_REVIEW → APPROVED → INDEXING → ACTIVE`를 기본으로 하며,
+  `CHANGES_REQUESTED`, `REJECTED`, `SUSPENDED`, `WITHDRAWN`을 지원한다.
+- 사용자는 검토 요청을 취소하거나 활성 자료의 활용 동의를 철회할 수 있다. 철회 시 즉시 검색을 차단하고
+  원본 보존정책에 따라 청크·임베딩까지 삭제하며 결과를 감사 로그에 남긴다.
+- 현재 학교관리자 RAG 화면의 업로드 직후 `벡터화 완료` 표시는 프로토타입 연출일 뿐이다. 백엔드 연결 시
+  일반 사용자 제출은 `검토 대기`로 표시하고 승인 이후에만 실제 색인을 실행한다.
+- SHA-256 완전 중복은 한 건으로 합치고 제목·본문이 비슷한 자료와 연도별 개정본은 `documentFamilyId`로 묶는다.
+  학교관리자는 대표본을 선택해 학교 범위로 승인하고 서버관리자는 학교 승인본 중 광역 대표본을 승인한다.
+- RAG 원본 인수인계 구조는 `RAG_소스파일/README.md`를 따른다. 업무별 분할본의 단순 합본은 보관만 하고
+  HWP/HWPX 원본과 연결된 업무별 PDF만 검색 색인에 넣는다.
+- 전체 운영안, 역할별 화면, 메뉴별 완성 기능과 완료 기준은 `SERVICE_FUNCTION_AND_USER_RAG_GUIDE.md`,
+  API 상태·요청 계약은 `BACKEND_API_CONTRACT.md` 6.1을 단일 기준으로 사용한다.
+
+## 0-D. 2026-08-18 학교급별 업무 분류
+
+- `assets/js/work-categories.js`를 학교 업무 분야의 프론트 단일 기준으로 추가했다.
+- 유치원·초등학교는 기존 초등 기준 30개 분야를 함께 사용한다.
+- 중학교·고등학교는 중등 학교업무 길라잡이 기준 29개 분야를 함께 사용한다. 유·초등 목록과 비교하면
+  `교육과정`이 추가되고 `늘봄`, `문화예술`이 제외된다.
+- `공통`은 별도의 학교 종류가 아니라 모든 학교급에서 함께 검색할 RAG 적용 범위다. 행정실 업무,
+  교원인사처럼 학교급 구분이 필요 없는 자료를 우선 수용한다.
+- 업무 우편함, 업무 발송, AI 문서 탐색, 멘토 신청, 스마트 계획서 RAG 요청, 학교관리자 RAG 등록은
+  로그인 사용자의 조직 학교급에 맞는 분류를 표시한다. 서버관리자 멘토 배정은 두 목록의 합집합을 표시한다.
+- 현재 프론트는 `school_type_<email>`을 임시 저장하고 조직명으로 보완 추론한다. 백엔드는 NEIS 또는 기관
+  원장의 신뢰 가능한 `organization.school_type`을 세션 사용자 정보로 제공해야 하며 클라이언트 값을 신뢰하지 않는다.
+- RAG 검색 후보는 유치원·초등학교에서 `early + all`, 중학교·고등학교에서 `secondary + all`로 제한한다.
+  이 필터는 의미 유사도 검색 전에 서버가 강제한다.
+- `업무배송_스마트공문달력.html`의 173개 `TASKS`는 기존 초등 협의용 정적 데이터다. 프론트에서 제목만
+  중등 업무처럼 바꾸지 않는다. 백엔드는 중등 길라잡이 분할 PDF를 구조화한 실제 업무 데이터에
+  `workCategoryGroup=secondary`를 부여하고, `/api/worktasks`에서 로그인 조직의 그룹에 맞춰 공급한다.
+  유·초등은 `early + all`, 중·고등은 `secondary + all`만 반환해야 한다.
+
 ---
 ## 0. 가장 먼저 읽을 것 — 실제 동작과 백엔드 필요 기능의 경계
 
@@ -133,6 +175,8 @@ AI챗봇, 안내센터 2개, 서버관리자 3개)를 병렬로 마지막 점검
 | 달력 AI 기안·코칭·브리핑·쪽지 일정 추출 | 업무배송_스마트공문달력.html | `/api/ai/generate` 우선, 로컬 파일/명시적 개발 설정에서만 협의용 데모, 텍스트 결과 캐시는 `ef_ai_cache` |
 | 계획서 예시 다듬기 UI | 서식자료실_스마트 계획서 변환.html | 요청·수정 항목 선택·제안 문장 직접 수정·반영/원래대로·결과 미리보기 실동작. 내부 계약 JSON은 사용자에게 숨김 |
 | HWP/HWPX 웹 편집 | 서식자료실_스마트 계획서 변환.html, assets/js/web-hwp-editor.js, rhwp/, assets/vendor/rhwp-editor/ | 자체 호스팅 브라우저 편집·HWP/HWPX 수정본 저장 실동작. 서버 업로드 없음 |
+| 스마트 계획서 참고자료 묶음·RAG 검토 요청 | 서식자료실_스마트 계획서 변환.html, assets/js/smart-plan-rag-sources.js, assets/js/rag-contributions.js | `ef_smart_plan_sources_<email>`, `ef_rag_submissions_v1` 프론트 계약 데모. 파일 바이너리·실제 색인은 없음 |
+| 학교 승인·광역 승격 검토 | 학교관리자_RAG데이터갱신.html, 서버관리자_RAG데이터관리.html, assets/js/school-rag-review.js, assets/js/server-rag-review.js | 같은 제출 데이터를 역할별로 검토하는 프론트 계약 데모. 백엔드 권한·감사 로그 필요 |
 
 나머지 화면에도 검색·필터·CSV·localStorage 기반 상호작용은 일부 있지만, 서버 인증·공유 DB·파일 바이너리 저장·
 실제 OCR/LLM/RAG·실측 인프라 지표는 없다. 서식자료실 스마트 계획서의 자체 호스팅 웹 편집기와 체크리스트
@@ -290,7 +334,7 @@ HWPX 내보내기는 예외적으로 브라우저에서 실제 문서 바이트�
 
 localStorage 키 분석을 기반으로 도출한 최소 테이블 목록입니다. 정확한 컬럼은 섹션 4/6 참고.
 
-- `organizations` (id, name, organization_type, neis_school_code, parent_id, active) — 학교·교육지원청 등 데이터 격리 단위
+- `organizations` (id, name, organization_type, school_type, work_category_group, neis_school_code, parent_id, active) — 학교·교육지원청 등 데이터 격리 단위와 유초등·중고등 분류 기준
 - `users` (id, email, password_hash, name, dept, rank, avatar_url, created_at)
 - `organization_memberships` (user_id, organization_id, membership_type, active_from, active_to) — 사용자의 소속은 문자열 `org`가 아닌 이 테이블로 관리
 - `role_requests` (id, user_id, requested_role, status, created_at)
@@ -315,6 +359,12 @@ localStorage 키 분석을 기반으로 도출한 최소 테이블 목록입니�
 - `user_preferences` (user_id, key, value, updated_at) — `내 부서` 등 사용자별 보기·필터 기본값
 - `home_widget_layouts` (user_id, widget_id, size, sort_order) — 홈 위젯 배치
 - `saved_resources` (id, user_id, filename, size, saved_at) — 마이페이지 "저장한 자료" (실제 파일 스토리지 필요)
+- `rag_submissions` (id, resource_id, requested_by, requested_scope, status, submitted_at, withdrawn_at) — 사용자 자료의 RAG 검토 요청과 철회
+- `document_families` (id, representative_version_id, school_levels, reference_year, category) — 완전 중복·유사자료·연도별 개정본과 대표본 연결
+- `rag_reviews` (id, submission_id, reviewer_id, decision, reason, approved_scope, reviewed_at) — 학교·서버관리자 승인/보완/반려 이력
+- `rag_sources` / `rag_source_versions` (id, organization_id, source_type, status, version, content_hash, effective_at, expires_at) — 승인된 지식 원천과 버전
+- `rag_jobs` / `rag_chunks` (source_version_id, job_type, status, page, anchor, embedding_ref) — 승인 후 변환·OCR·색인 작업과 인용 근거
+- `rag_consent_events` (submission_id, actor_id, action, scope, created_at) — 사용자 선택·범위 변경·철회 이력
 - `site_settings` (key, value) — 푸터 기관명/주소/저작권, 개인정보 담당부서/DPO 연락처 등 (현재
   서버관리자_푸터관리.html이 다루는 것 전부)
 - `calendar_task_completions` (user_id, task_id, completed_at) — 스마트공문달력의 173개 정적 TASKS 완료 체크
@@ -324,6 +374,8 @@ localStorage 키 분석을 기반으로 도출한 최소 테이블 목록입니�
 - 업무발송 첨부파일(현재 프론트는 다중 파일·링크 메타데이터를 시뮬레이션하지만 실제 바이너리를 저장하지 않음)
 - 마이페이지 "자료 추가하기"
 - 서식 자동완성 마법사 최종 산출물(HWP/HWPX/PDF)
+- 사용자가 RAG 검토를 요청한 자료도 먼저 `saved_resources`/`files`에 개인 자료로 저장한다. 업로드 자체로
+  RAG 등록하지 않으며 별도의 `rag_submissions` 승인 절차를 통과한 버전만 색인한다.
 - 공문 OCR 업로드 원본
 - 스마트 계획서 변환 업로드 원본
 - 프로필 아바타(현재 base64 dataURL을 localStorage에 직접 저장 — 용량 제한 있음, 실제로는 S3/Object
@@ -535,6 +587,8 @@ UI는 카테고리 선택 → 채팅 → AI 응답 흐름을 갖췄지만, **AI 
 
 - `AI 문서 탐색`: 공문 캡처·공문·계획서·서식을 최대 5개까지 올리고, 찾는 업무 문장과 선택한 학교 업무 분류(`workCategory`)로 관련 서식·계획서를 추천받는 단일 흐름.
 - `스마트 계획서`: 왼쪽 HWP/HWPX 웹 편집기와 변경 검토, 오른쪽 계획/수정 공유 대화.
+- `스마트 계획서 참고자료·RAG 후보`: 작업 파일과 참고자료를 개인 자료로 모으고, 해시 중복 제거와 유사 버전
+  묶음을 보여준다. 학교급·기준연도·업무분야·공유 범위·권리·개인정보 확인 후 묶음별 검토 요청을 제출한다.
 - `지출품의서 작성기`: 견적 분석, 품목 검토, 제목·본문 복사, K-에듀파인 품목 CSV.
 
 검색·OCR·의미 검색·AI 응답은 실제 백엔드가 필요하다. 브라우저만으로 실제 문서 바이트를 처리하는 기능은
@@ -670,6 +724,9 @@ CMS/문서 테이블 설계 필요(현재는 카드 링크 몇 개뿐).
   현재 검색 필터가 적용된 인원 표를 실제 CSV로 내보냄.
 - 학교관리자_RAG데이터갱신 — 원래 업로드 UI 자체가 없는 빈 페이지였던 것을 신규로 구성(드래그앤드롭 +
   업로드 이력이 `ef_rag_school_uploads_<org>`에 저장·복원됨, 파일명/크기만 — 바이너리 스토리지는 아님).
+  백엔드 결합 시에는 `RAG 자료 검토·갱신` 역할로 확장해 우리 학교 사용자의 검토 요청, 자동 보안·개인정보
+  검사 결과, 승인/보완/반려, 학교 범위 활성화, 광역 공유 승격 요청, 중지·교체·만료를 처리한다. 업로드 즉시
+  `벡터화 완료`로 전환하는 현재 연출은 제거한다.
 
 여전히 CPU/메모리/트래픽/실시간 노드 상태 같은 **진짜 인프라 지표**는 백엔드(실제 모니터링 시스템 연동)
 없이는 불가능하므로 목업으로 남아 있습니다. 백엔드 설계 시 이 부분만 실제 쿼리/모니터링 연동으로 교체하면
@@ -745,6 +802,7 @@ CMS/문서 테이블 설계 필요(현재는 카드 링크 몇 개뿐).
 | `grantedRoles_<email>` | 배열 | auth.js, profile-modal.js, 서버관리자_역할관리.html |
 | `roleRequests` | 배열 `[{email, requestedRole}]` | 회원가입, profile-modal.js, 역할관리.html |
 | `org_<email>`, `rank_<email>` | 문자열 | profile-modal.js(✅ 저장 동작, 백엔드에서는 organization_id·profile 필드로 이관) |
+| `school_type_<email>`, `school_code_<email>` | 문자열 | 회원가입·profile-modal.js·work-categories.js. 학교급별 업무 분류 데모이며 백엔드 조직 원장으로 이관 |
 | `avatar_<email>` | base64 dataURL | profile-modal.js |
 | `ef_inquiries` | 배열, 각 항목에 `answeredBy`(문자열, 이메일)/`answeredAt`(문자열, YYYY.MM.DD) 포함 | assets/js/inquiries.js (✅ 2026-08-07 답변자/답변일 자동 기록 추가) |
 | `ef_mentoring` | 배열 `[{id, email, mentorEmail, mentorName, category, title, status, messages[]}]` | assets/js/mentoring.js (✅ 2026-08-06 "쪽지 1건-답변 1건"→대화 스레드로 재구성, `content`/`answer` 필드는 `messages[]`로 대체됨) |
@@ -771,6 +829,8 @@ CMS/문서 테이블 설계 필요(현재는 카드 링크 몇 개뿐).
 | `ef_security_mfa_enabled`, `ef_security_pw_expiry_days`, `ef_security_concurrent_limit` | 각각 boolean/숫자 문자열 | 서버관리자_보안설정.html (✅ 2026-08-07 신규, 마찬가지로 실배포 시 서버 정책 필요) |
 | `ef_rag_source_status` | 객체 `{sourceId: 'optimal'}` | 서버관리자_RAG데이터관리.html (✅ 2026-08-07 신규, Reconnect 상태 유지용) |
 | `ef_rag_school_uploads_<org>` | 배열 `[{name, size, uploadedAt}]` | 학교관리자_RAG데이터갱신.html (✅ 2026-08-07 신규, 파일명/크기만 — 실제 바이너리 스토리지 아님) |
+| `ef_smart_plan_sources_<email>` | 배열 `[{id, name, hash, groupId, duplicateCount, role}]` | 스마트 계획서 참고자료·유사 버전 묶음 데모. 실제 파일 저장소가 아님 |
+| `ef_rag_submissions_v1` | 배열 `[{resourceId, documentFamilyId, schoolLevels, referenceYear, requestedScope, status, schoolReview, serverReview}]` | 사용자 제출 → 학교 승인 → 서버 광역 승인 계약 데모. 운영 DB로 이관 필요 |
 
 스마트 계획서의 `ef_smart_plan_workspace`는 `mode`, 최근 `planNotes` 최대 12개, `conversationId`를
 같은 탭의 `sessionStorage`에 보관한다. 영속 데이터 원천이 아니며 서버 대화 세션이 기준이다.
